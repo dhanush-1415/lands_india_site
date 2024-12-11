@@ -9,16 +9,16 @@ export default function Nav() {
       {menuItems.map((item, index) => (
         <li
           key={index}
-          className={`dropdown2 ${
-            item.links.some(
-              (el) => el.href.split("/")[1] == pathname.split("/")[1]
-            )
-              ? "current"
-              : ""
-          }`}
+          // className={`dropdown ${
+          //   item.links.some(
+          //     (el) => el.href.split("/")[1] == pathname.split("/")[1]
+          //   )
+          //     ? "current"
+          //     : ""
+          // }`}
         >
-          <a>{item.title}</a>
-          <ul>
+          <a href={item.link}>{item.title}</a>
+          {/* <ul>
             {item.links.map((link, linkIndex) => (
               <li
                 key={linkIndex}
@@ -32,7 +32,7 @@ export default function Nav() {
               </li>
             ))}
           </ul>
-          <div className="dropdown2-btn"></div>
+          <div className="dropdown2-btn"></div> */}
         </li>
       ))}
     </>

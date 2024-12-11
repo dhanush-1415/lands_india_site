@@ -30,7 +30,7 @@ export default function Header1({
               <div className="inner-header-left">
                 <div className="logo-box flex">
                   <div className="logo">
-                    <Link to={`/`}>
+                    {/* <Link to={`/`}>
                       <img
                         alt="logo"
                         width={166}
@@ -45,7 +45,8 @@ export default function Header1({
                         height={48}
                         src="/images/logo/logo@2x-white.png"
                       />
-                    </Link>
+                    </Link> */}
+                    <h4>Lands India</h4>
                   </div>
                 </div>
                 <div className="nav-outer flex align-center">
@@ -86,7 +87,7 @@ export default function Header1({
                   </svg>
                   Sign in
                 </a>
-                <div className="flat-bt-top">
+                {/* <div className="flat-bt-top">
                   <Link className="tf-btn primary" to={`/add-property`}>
                     <svg
                       width={21}
@@ -105,7 +106,7 @@ export default function Header1({
                     </svg>
                     Submit Property
                   </Link>
-                </div>
+                </div> */}
               </div>
               <div
                 className="mobile-nav-toggler mobile-button"
@@ -133,14 +134,15 @@ export default function Header1({
         <div className="menu-backdrop" />
         <nav className="menu-box">
           <div className="nav-logo">
-            <Link to={`/`}>
+            {/* <Link to={`/`}>
               <img
                 alt="nav-logo"
                 width={174}
                 height={44}
                 src="/images/logo/logo@2x.png"
               />
-            </Link>
+            </Link> */}
+            <h4>Lands India</h4>
           </div>
           <div className="bottom-canvas">
             <div className="login-box flex align-center">
@@ -155,11 +157,11 @@ export default function Header1({
             <div className="menu-outer">
               <MobileNav />
             </div>
-            <div className="button-mobi-sell">
+            {/* <div className="button-mobi-sell">
               <Link className="tf-btn primary" to={`/add-property`}>
                 Submit Property
               </Link>
-            </div>
+            </div> */}
             <div className="mobi-icon-box">
               <div className="box d-flex align-items-center">
                 <span className="icon icon-phone2" />
