@@ -5,11 +5,11 @@ import "rc-slider/assets/index.css";
 import WOW from "./utlis/wow";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages";
-import HomePage2 from "./pages/homes/home-02";
-import HomePage3 from "./pages/homes/home-03";
-import HomePage4 from "./pages/homes/home-04";
-import HomePage5 from "./pages/homes/home-05";
-import HomePage6 from "./pages/homes/home-06";
+// import HomePage2 from "./pages/homes/home-02";
+// import HomePage3 from "./pages/homes/home-03";
+// import HomePage4 from "./pages/homes/home-04";
+// import HomePage5 from "./pages/homes/home-05";
+// import HomePage6 from "./pages/homes/home-06";
 import { useEffect } from "react";
 import LoginModals from "./components/modals/LoginModals";
 import Register from "./components/modals/Register";
@@ -67,12 +67,30 @@ function App() {
           <Routes>
             <Route path="/">
               <Route index element={<Home />} />
-              <Route path="home-02" element={<HomePage2 />} />
+              {/* <Route path="home-02" element={<HomePage2 />} />
 
               <Route path="home-03" element={<HomePage3 />} />
               <Route path="home-04" element={<HomePage4 />} />
               <Route path="home-05" element={<HomePage5 />} />
-              <Route path="home-06" element={<HomePage6 />} />
+              <Route path="home-06" element={<HomePage6 />} /> */}
+
+
+
+
+
+              <Route path="properties" element={<SidebarGridPage />} />
+              <Route
+                path="property-details"
+                element={<PropertyDetailsPageV1 />}
+              />
+
+
+
+
+
+
+
+
 
               <Route
                 path="property-halfmap-grid"
@@ -86,7 +104,7 @@ function App() {
               <Route path="topmap-list" element={<TopmapListPage />} />
               <Route path="sidebar-grid" element={<SidebarGridPage />} />
               <Route path="sidebar-list" element={<SidebarListPage />} />
-
+    
               <Route
                 path="property-details-v1/:id"
                 element={<PropertyDetailsPageV1 />}
