@@ -30,7 +30,7 @@ export default function FilterTab({
   }, []);
   return (
     <div className="flat-tab flat-tab-form">
-      <ul className={tabClass} role="tablist">
+      {/* <ul className={tabClass} role="tablist">
         <li className="nav-tab-item" role="presentation">
           <a
             href="#forRent"
@@ -45,7 +45,7 @@ export default function FilterTab({
             For Sale
           </a>
         </li>
-      </ul>
+      </ul> */}
       <div className="tab-content">
         <div className="tab-pane fade active show" role="tabpanel">
           <div className="form-sl">

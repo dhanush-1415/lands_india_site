@@ -46,23 +46,23 @@ export default function Header1({
                         src="/images/logo/logo@2x-white.png"
                       />
                     </Link> */}
-                    <h4>Lands India</h4>
+                    <h6 className="fw-bold">Lands India</h6>
                   </div>
                 </div>
-                <div className="nav-outer flex align-center">
-                  {/* Main Menu */}
-                  <nav className="main-menu show navbar-expand-md">
-                    <div
-                      className="navbar-collapse collapse clearfix"
-                      id="navbarSupportedContent"
-                    >
-                      <ul className="navigation clearfix">
-                        <Nav />
-                      </ul>
-                    </div>
-                  </nav>
-                  {/* Main Menu End*/}
-                </div>
+              </div>
+              <div className="nav-outer flex align-center">
+                {/* Main Menu */}
+                <nav className="main-menu show navbar-expand-md">
+                  <div
+                    className="navbar-collapse collapse clearfix"
+                    id="navbarSupportedContent"
+                  >
+                    <ul className="navigation clearfix">
+                      <Nav />
+                    </ul>
+                  </div>
+                </nav>
+                {/* Main Menu End*/}
               </div>
               <div className="inner-header-right header-account">
                 <a

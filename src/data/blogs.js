@@ -4,8 +4,8 @@ export const blogPosts = [
     imgSrc: "/images/blog/blog-10.jpg",
     alt: "img-blog",
     date: "January 28, 2024",
-    author: "Jerome Bell",
-    category: "Furniture",
+    author: "Sundar Rajan",
+    category: "Real Estate",
     title: "Building gains into housing stocks and how to trade the sector",
     description:
       "The average contract interest rate for 30-year fixed-rate mortgages with conforming loan balances...",
@@ -15,24 +15,61 @@ export const blogPosts = [
     imgSrc: "/images/blog/blog-11.jpg",
     alt: "img-blog",
     date: "January 28, 2024",
-    author: "Jerome Bell",
-    category: "Furniture",
-    title: "Building gains into housing stocks and how to trade the sector",
+    author: "Anjali Nair",
+    category: "Investment",
+    title: "How to evaluate property markets in South India for long-term gains",
     description:
-      "The average contract interest rate for 30-year fixed-rate mortgages with conforming loan balances...",
+      "The impact of local economy, infrastructure development, and demographic trends in shaping the property market...",
   },
   {
     id: 3,
     imgSrc: "/images/blog/blog-12.jpg",
     alt: "img-blog",
     date: "January 28, 2024",
-    author: "Jerome Bell",
-    category: "Furniture",
-    title: "Building gains into housing stocks and how to trade the sector",
+    author: "Ravi Shankar",
+    category: "Finance",
+    title: "The future of commercial real estate and tech-driven investments",
     description:
-      "The average contract interest rate for 30-year fixed-rate mortgages with conforming loan balances...",
+      "Exploring how technology and shifting economic dynamics are revolutionizing the commercial property investment landscape...",
   },
 ];
+
+
+// export const blogPosts = [
+//   {
+//     id: 1,
+//     imgSrc: "/images/blog/blog-10.jpg",
+//     alt: "img-blog",
+//     date: "January 28, 2024",
+//     author: "Jerome Bell",
+//     category: "Furniture",
+//     title: "Building gains into housing stocks and how to trade the sector",
+//     description:
+//       "The average contract interest rate for 30-year fixed-rate mortgages with conforming loan balances...",
+//   },
+//   {
+//     id: 2,
+//     imgSrc: "/images/blog/blog-11.jpg",
+//     alt: "img-blog",
+//     date: "January 28, 2024",
+//     author: "Jerome Bell",
+//     category: "Furniture",
+//     title: "Building gains into housing stocks and how to trade the sector",
+//     description:
+//       "The average contract interest rate for 30-year fixed-rate mortgages with conforming loan balances...",
+//   },
+//   {
+//     id: 3,
+//     imgSrc: "/images/blog/blog-12.jpg",
+//     alt: "img-blog",
+//     date: "January 28, 2024",
+//     author: "Jerome Bell",
+//     category: "Furniture",
+//     title: "Building gains into housing stocks and how to trade the sector",
+//     description:
+//       "The average contract interest rate for 30-year fixed-rate mortgages with conforming loan balances...",
+//   },
+// ];
 
 export const blogPosts2 = [
   {

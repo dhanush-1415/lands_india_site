@@ -17,7 +17,7 @@ export default function LoginModals() {
             </div>
             <form onSubmit={(e) => e.preventDefault()} className="form-account ">
               <div className="title-box">
-                <h2 className="text-[24px]">Login</h2>
+                <h5 className="text-[24px]">Login</h5>
                 <span
                   className="close-modal icon-close2"
                   data-bs-dismiss="modal"
