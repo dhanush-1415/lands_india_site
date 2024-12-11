@@ -22,8 +22,8 @@ export default function AboutUsPage() {
       <About />
       <Slider1 />
       <Agents />
-      <Brands />
-      <Benefit />
+      {/* <Brands /> */}
+      {/* <Benefit /> */}
       <Testimonials2 />
       <Banner />
       <Footer1 />

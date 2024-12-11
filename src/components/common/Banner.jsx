@@ -10,7 +10,7 @@ export default function Banner() {
             <div className="box-title">
               <div className="text-subtitle text-primary">Become Partners</div>
               <h3 className="mt-4 fw-8">
-                List your Properties on Homelengo, join Us Now!
+                List your Properties on LandsIndia, join Us Now!
               </h3>
             </div>
             <Link
