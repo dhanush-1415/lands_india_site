@@ -15,9 +15,9 @@ export default function LoginModals() {
                 height={980}
               />
             </div>
-            <form onSubmit={(e) => e.preventDefault()} className="form-account">
+            <form onSubmit={(e) => e.preventDefault()} className="form-account ">
               <div className="title-box">
-                <h4>Login</h4>
+                <h2 className="text-[24px]">Login</h2>
                 <span
                   className="close-modal icon-close2"
                   data-bs-dismiss="modal"
@@ -25,7 +25,7 @@ export default function LoginModals() {
               </div>
               <div className="box">
                 <fieldset className="box-fieldset">
-                  <label htmlFor="name">Account</label>
+                  <label htmlFor="name">Email</label>
                   <div className="ip-field">
                     <svg
                       className="icon"
@@ -45,7 +45,7 @@ export default function LoginModals() {
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="Your name"
+                      placeholder="Your email"
                     />
                   </div>
                 </fieldset>
@@ -92,27 +92,6 @@ export default function LoginModals() {
                     Register
                   </a>
                 </div>
-              </div>
-              <p className="box text-center caption-2">or login with</p>
-              <div className="group-btn">
-                <a href="#" className="btn-social">
-                  <img
-                    alt="img"
-                    src="/images/logo/google.jpg"
-                    width={37}
-                    height={36}
-                  />
-                  Google
-                </a>
-                <a href="#" className="btn-social">
-                  <img
-                    alt="img"
-                    src="/images/logo/fb.jpg"
-                    width={31}
-                    height={30}
-                  />
-                  Facebook
-                </a>
               </div>
             </form>
           </div>
