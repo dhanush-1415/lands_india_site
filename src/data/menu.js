@@ -24,6 +24,11 @@ export const menuItems = [
     link:'/contact',
 
   },
+  {
+    title: "Dashboard",
+    link:'/dashboard',
+
+  },
 ];
 
 
