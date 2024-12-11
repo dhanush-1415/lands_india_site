@@ -139,15 +139,14 @@ export default function Contact() {
                   <li className="box">
                     <h6 className="title">Address:</h6>
                     <p className="text-variant-1">
-                      101 E 129th St, East Chicago, IN 46312 <br />
-                      United States
+                      1st street, Chennai, Tamil nadu, India
                     </p>
                   </li>
                   <li className="box">
                     <h6 className="title">Infomation:</h6>
                     <p className="text-variant-1">
-                      1-333-345-6868 <br />
-                      hi.themesflat@gmail.com
+                      +91-9898989898<br />
+                      landsindia@gmail.com
                     </p>
                   </li>
                   <li className="box">
@@ -192,7 +191,7 @@ export default function Contact() {
                           </svg>
                         </a>
                       </li>
-                      <li>
+                      {/* <li>
                         <a href="#" className="item">
                           <svg
                             width={20}
@@ -207,7 +206,7 @@ export default function Contact() {
                             />
                           </svg>
                         </a>
-                      </li>
+                      </li> */}
                       <li>
                         <a href="#" className="item">
                           <svg
@@ -224,7 +223,7 @@ export default function Contact() {
                           </svg>
                         </a>
                       </li>
-                      <li>
+                      {/* <li>
                         <a href="#" className="item">
                           <svg
                             width={14}
@@ -239,7 +238,7 @@ export default function Contact() {
                             />
                           </svg>
                         </a>
-                      </li>
+                      </li> */}
                     </ul>
                   </li>
                 </ul>
@@ -248,7 +247,7 @@ export default function Contact() {
           </div>
         </div>
       </section>
-      <section className="">
+      {/* <section className="">
         <div
           id="map-contact"
           className="map-contact"
@@ -257,7 +256,7 @@ export default function Contact() {
         >
           <ContactMap />
         </div>
-      </section>
+      </section> */}
     </>
   );
 }

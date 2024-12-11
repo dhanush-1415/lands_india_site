@@ -18,7 +18,7 @@ export default function ContactPage() {
       {/* <Header1 /> */}
       <PageTitle3 />
       <Contact />
-      <Faqs />
+      {/* <Faqs /> */}
       <Banner />
       <Footer1 />
     </>

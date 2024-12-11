@@ -10,14 +10,14 @@ export default function Banner() {
             <div className="box-title">
               <div className="text-subtitle text-primary">Become Partners</div>
               <h3 className="mt-4 fw-8">
-                List your Properties on Homelengo, join Us Now!
+                List your Properties on Lands India, join Us Now!
               </h3>
             </div>
             <Link
               to={`/contact`}
               className="tf-btn btn-view primary size-1 hover-btn-view"
             >
-              Become A Hosting <span className="icon icon-arrow-right2" />
+              Join <span className="icon icon-arrow-right2" />
             </Link>
           </div>
           <div className="box-right">
@@ -25,7 +25,7 @@ export default function Banner() {
               alt="image"
               src="/images/banner/banner.png"
               width={748}
-              height={380}
+              height={280}
             />
           </div>
         </div>
