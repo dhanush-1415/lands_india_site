@@ -8,9 +8,9 @@ export default function Benefit() {
         <div className="content-left img-animation wow">
           <img
             className="lazyload"
-            data-src="/images/banner/img-w-text1.jpg"
+            data-src="https://i.pinimg.com/736x/40/6f/24/406f249cea2c19a38706dd7d69cc602c.jpg"
             alt=""
-            src="/images/banner/img-w-text1.jpg"
+            src="https://i.pinimg.com/736x/40/6f/24/406f249cea2c19a38706dd7d69cc602c.jpg"
             width={950}
             height={908}
           />
