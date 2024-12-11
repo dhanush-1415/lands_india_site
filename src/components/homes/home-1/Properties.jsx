@@ -51,7 +51,7 @@ export default function Properties() {
                     <div className="homelengo-box">
                       <div className="archive-top">
                         <Link
-                          to={`/property-details-v1/${property.id}`}
+                          to={`/property-details/${property.id}`}
                           className="images-group"
                         >
                           <div className="images-style">
@@ -100,7 +100,7 @@ export default function Properties() {
                         <div className="content-top">
                           <h6 className="text-capitalize">
                             <Link
-                              to={`/property-details-v1/${property.id}`}
+                              to={`/property-details/${property.id}`}
                               className="link"
                             >
                               {property.title}

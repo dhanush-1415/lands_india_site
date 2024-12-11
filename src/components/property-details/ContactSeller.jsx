@@ -4,8 +4,9 @@ export default function ContactSeller() {
   return (
     <>
       {" "}
-      <h5 className="title fw-6">Contact Sellers</h5>
-      <div className="box-avatar">
+      {/* <h5 className="title fw-6">Contact Sellers</h5> */}
+      <h5 className="title fw-6">Request Quote</h5>
+      {/* <div className="box-avatar">
         <div className="avatar avt-100 round">
           <img
             alt="avatar"
@@ -27,7 +28,7 @@ export default function ContactSeller() {
             </li>
           </ul>
         </div>
-      </div>
+      </div> */}
       <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
         <div className="ip-group">
           <input type="text" placeholder="Jony Dane" className="form-control" />
@@ -57,11 +58,18 @@ export default function ContactSeller() {
             defaultValue={""}
           />
         </div>
-        <button
+        {/* <button
           type="submit"
           className="tf-btn btn-view primary hover-btn-view w-100"
         >
           Find Properties
+          <span className="icon icon-arrow-right2" />
+        </button> */}
+        <button
+          type="submit"
+          className="tf-btn btn-view primary hover-btn-view w-100"
+        >
+          Submit
           <span className="icon icon-arrow-right2" />
         </button>
       </form>

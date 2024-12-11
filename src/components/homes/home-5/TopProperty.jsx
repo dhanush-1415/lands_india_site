@@ -43,7 +43,7 @@ export default function TopProperty() {
                   </ul>
                   <h4 className="title">
                     <Link
-                      to={`/property-details-v1/${property.id}`}
+                      to={`/property-details/${property.id}`}
                       className="link"
                     >
                       {property.title}

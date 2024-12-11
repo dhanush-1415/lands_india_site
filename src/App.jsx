@@ -85,7 +85,10 @@ function App() {
                 path="property-details"
                 element={<PropertyDetailsPageV1 />}
               />
-
+              <Route
+                path="property-details/:id"
+                element={<PropertyDetailsPageV1 />}
+              />
 
 
 

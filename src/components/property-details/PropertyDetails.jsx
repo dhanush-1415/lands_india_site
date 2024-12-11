@@ -27,51 +27,51 @@ export default function PropertyDetails() {
               <div className="single-property-element single-property-overview">
                 <Overview />
               </div>
-              <div className="single-property-element single-property-video">
+              {/* <div className="single-property-element single-property-video">
                 <Video />
-              </div>
-              <div className="single-property-element single-property-info">
+              </div> */}
+              {/* <div className="single-property-element single-property-info">
                 <Details />
-              </div>
-              <div className="single-property-element single-property-feature">
+              </div> */}
+              {/* <div className="single-property-element single-property-feature">
                 <Features />
-              </div>
-              <div className="single-property-element single-property-map">
+              </div> */}
+              {/* <div className="single-property-element single-property-map">
                 <MapLocation />
-              </div>
-              <div className="single-property-element single-property-floor">
+              </div> */}
+              {/* <div className="single-property-element single-property-floor">
                 <FloorPlan />
               </div>
               <div className="single-property-element single-property-attachments">
                 <AttachMents />
-              </div>
-              <div className="single-property-element single-property-explore">
+              </div> */}
+              {/* <div className="single-property-element single-property-explore">
                 <Explore />
-              </div>
-              <div className="single-property-element single-property-loan">
+              </div> */}
+              {/* <div className="single-property-element single-property-loan">
                 <LoanCalculator />
-              </div>
-              <div className="single-property-element single-property-nearby">
+              </div> */}
+              {/* <div className="single-property-element single-property-nearby">
                 <Nearby />
               </div>
               <div className="single-property-element single-wrapper-review">
                 <GuestReview />
-              </div>
+              </div> */}
             </div>
             <div className="col-xl-4 col-lg-5">
               <div className="single-sidebar fixed-sidebar">
                 <div className="widget-box single-property-contact">
                   <ContactSeller />
                 </div>
-                <div className="flat-tab flat-tab-form widget-filter-search widget-box">
+                {/* <div className="flat-tab flat-tab-form widget-filter-search widget-box">
                   <WidgetBox />
-                </div>
-                <div className="widget-box single-property-whychoose">
+                </div> */}
+                {/* <div className="widget-box single-property-whychoose">
                   <WhyChoose />
                 </div>
                 <div className="box-latest-property">
                   <LeatestProperties />
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
