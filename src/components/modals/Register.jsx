@@ -17,7 +17,7 @@ export default function Register() {
             </div>
             <form onSubmit={(e) => e.preventDefault()} className="form-account">
               <div className="title-box">
-                <h4>Register</h4>
+                <h2 className="text-[24px]">Register</h2>
                 <span
                   className="close-modal icon-close2"
                   data-bs-dismiss="modal"
@@ -124,6 +124,40 @@ export default function Register() {
                     />
                   </div>
                 </fieldset>
+                <fieldset className="box-fieldset w-[80%]">
+                  <label htmlFor="pass">User Type</label>
+                  <div className="ip-field  d-flex justify-content-between align-items-center ">
+                    <div className="ip-field">
+                      
+                      <input
+                        type="radio"
+                      />
+                      <label className="ml-2 ">Buyer</label>
+                    </div>
+                    <div className="ip-field">
+                      
+                      <input
+                        type="radio"
+                      />
+                      <label className="ml-2 ">Seller</label>
+                    </div>
+                    <div className="ip-field">
+                      
+                      <input
+                        type="radio"
+                      />
+                      <label className="ml-2 ">Agent</label>
+                    </div>
+                    <div className="ip-field">
+                      
+                      <input
+                        type="radio"
+                      />
+                      <label className="ml-2 ">B2B</label>
+                    </div>
+
+                  </div>
+                </fieldset>
               </div>
               <div className="box box-btn">
                 <Link to={`/dashboard`} className="tf-btn primary w-100">
@@ -140,27 +174,7 @@ export default function Register() {
                   </a>
                 </div>
               </div>
-              <p className="box text-center caption-2">or login with</p>
-              <div className="group-btn">
-                <a href="#" className="btn-social">
-                  <img
-                    alt="img"
-                    src="/images/logo/google.jpg"
-                    width={37}
-                    height={36}
-                  />
-                  Google
-                </a>
-                <a href="#" className="btn-social">
-                  <img
-                    alt="img"
-                    src="/images/logo/fb.jpg"
-                    width={31}
-                    height={30}
-                  />
-                  Facebook
-                </a>
-              </div>
+             
             </form>
           </div>
         </div>
