@@ -13,7 +13,7 @@ const metadata = {
 export default function MyFavoritePage() {
   return (
     <>
-      <MetaComponent meta={metadata} />
+      <MetaComponent  />
       <div className="layout-wrap">
         {/* <Header2 /> */}
         <SidebarMenu />

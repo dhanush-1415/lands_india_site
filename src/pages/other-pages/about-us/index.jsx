@@ -17,7 +17,7 @@ const metadata = {
 export default function AboutUsPage() {
   return (
     <>
-      <MetaComponent meta={metadata} />
+      <MetaComponent />
       {/* <Header1 /> */}
       <About />
       <Slider1 />

@@ -12,7 +12,7 @@ const metadata = {
 export default function DashboardPage() {
   return (
     <>
-      <MetaComponent meta={metadata} />
+      <MetaComponent />
       <div className="layout-wrap">
         {/* <Header1 /> */}
         <SidebarMenu />

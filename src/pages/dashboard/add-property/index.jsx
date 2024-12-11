@@ -12,7 +12,7 @@ const metadata = {
 export default function AddPropertyPage() {
   return (
     <>
-      <MetaComponent meta={metadata} />
+      <MetaComponent />
       <div className="layout-wrap">
         {/* <Header2 /> */}
         <SidebarMenu />
