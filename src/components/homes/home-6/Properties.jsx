@@ -11,7 +11,7 @@ export default function Properties() {
           <div className="col-lg-6 col-md-6">
             <div className="homelengo-box">
               <div className="archive-top">
-                <Link to={`/property-details-v1`} className="images-group">
+                <Link to={`/property-details`} className="images-group">
                   <div className="images-style">
                     <img
                       className="lazyload"
@@ -58,7 +58,7 @@ export default function Properties() {
               <div className="archive-bottom">
                 <div className="content-top">
                   <h6 className="text-capitalize">
-                    <Link to={`/property-details-v1`} className="link">
+                    <Link to={`/property-details`} className="link">
                       Casa Lomas de Machalí Machas
                     </Link>
                   </h6>
@@ -100,7 +100,7 @@ export default function Properties() {
           <div className="col-lg-6 col-md-6">
             <div className="homelengo-box">
               <div className="archive-top">
-                <Link to={`/property-details-v1`} className="images-group">
+                <Link to={`/property-details`} className="images-group">
                   <div className="images-style">
                     <img
                       className="lazyload"
@@ -147,7 +147,7 @@ export default function Properties() {
               <div className="archive-bottom">
                 <div className="content-top">
                   <h6 className="text-capitalize">
-                    <Link to={`/property-details-v1`} className="link">
+                    <Link to={`/property-details`} className="link">
                       Casa Lomas de Machalí Machas
                     </Link>
                   </h6>
@@ -189,7 +189,7 @@ export default function Properties() {
           <div className="col-lg-6 col-md-6">
             <div className="homelengo-box">
               <div className="archive-top">
-                <Link to={`/property-details-v1`} className="images-group">
+                <Link to={`/property-details`} className="images-group">
                   <div className="images-style">
                     <img
                       className="lazyload"
@@ -236,7 +236,7 @@ export default function Properties() {
               <div className="archive-bottom">
                 <div className="content-top">
                   <h6 className="text-capitalize">
-                    <Link to={`/property-details-v1`} className="link">
+                    <Link to={`/property-details`} className="link">
                       Casa Lomas de Machalí Machas
                     </Link>
                   </h6>
@@ -278,7 +278,7 @@ export default function Properties() {
           <div className="col-lg-6 col-md-6">
             <div className="homelengo-box">
               <div className="archive-top">
-                <Link to={`/property-details-v1`} className="images-group">
+                <Link to={`/property-details`} className="images-group">
                   <div className="images-style">
                     <img
                       className="lazyload"
@@ -325,7 +325,7 @@ export default function Properties() {
               <div className="archive-bottom">
                 <div className="content-top">
                   <h6 className="text-capitalize">
-                    <Link to={`/property-details-v1`} className="link">
+                    <Link to={`/property-details`} className="link">
                       Casa Lomas de Machalí Machas
                     </Link>
                   </h6>
@@ -367,7 +367,7 @@ export default function Properties() {
           <div className="col-lg-6 col-md-6">
             <div className="homelengo-box">
               <div className="archive-top">
-                <Link to={`/property-details-v1`} className="images-group">
+                <Link to={`/property-details`} className="images-group">
                   <div className="images-style">
                     <img
                       className="lazyload"
@@ -414,7 +414,7 @@ export default function Properties() {
               <div className="archive-bottom">
                 <div className="content-top">
                   <h6 className="text-capitalize">
-                    <Link to={`/property-details-v1`} className="link">
+                    <Link to={`/property-details`} className="link">
                       Casa Lomas de Machalí Machas
                     </Link>
                   </h6>
@@ -456,7 +456,7 @@ export default function Properties() {
           <div className="col-lg-6 col-md-6">
             <div className="homelengo-box">
               <div className="archive-top">
-                <Link to={`/property-details-v1`} className="images-group">
+                <Link to={`/property-details`} className="images-group">
                   <div className="images-style">
                     <img
                       className="lazyload"
@@ -503,7 +503,7 @@ export default function Properties() {
               <div className="archive-bottom">
                 <div className="content-top">
                   <h6 className="text-capitalize">
-                    <Link to={`/property-details-v1`} className="link">
+                    <Link to={`/property-details`} className="link">
                       Casa Lomas de Machalí Machas
                     </Link>
                   </h6>

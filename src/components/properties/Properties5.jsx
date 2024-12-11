@@ -384,7 +384,7 @@ export default function Properties5() {
                         <div className="homelengo-box">
                           <div className="archive-top">
                             <Link
-                              to={`/property-details-v1`}
+                              to={`/property-details`}
                               className="images-group"
                             >
                               <div className="images-style">
@@ -433,7 +433,7 @@ export default function Properties5() {
                             <div className="content-top">
                               <h6 className="text-capitalize">
                                 <Link
-                                  to={`/property-details-v1`}
+                                  to={`/property-details`}
                                   className="link"
                                 >
                                   {elm.title}
@@ -503,7 +503,7 @@ export default function Properties5() {
                         <div className="homelengo-box list-style-1 line">
                           <div className="archive-top">
                             <Link
-                              to={`/property-details-v1`}
+                              to={`/property-details`}
                               className="images-group"
                             >
                               <div className="images-style">
@@ -527,7 +527,7 @@ export default function Properties5() {
                             <div className="content-top">
                               <h6 className="text-capitalize">
                                 <Link
-                                  to={`/property-details-v1`}
+                                  to={`/property-details`}
                                   className="link text-line-clamp-1"
                                 >
                                   {elm.title}

@@ -463,7 +463,7 @@ export default function Properties4() {
                   {properties2.slice(0, 5).map((elm, i) => (
                     <li key={i} className="latest-property-item">
                       <Link
-                        to={`/property-details-v1/${elm.id}`}
+                        to={`/property-details/${elm.id}`}
                         className="images-style"
                       >
                         <img
@@ -476,7 +476,7 @@ export default function Properties4() {
                       <div className="content">
                         <div className="text-capitalize text-btn">
                           <Link
-                            to={`/property-details-v1/${elm.id}`}
+                            to={`/property-details/${elm.id}`}
                             className="link"
                           >
                             {elm.title}
@@ -527,7 +527,7 @@ export default function Properties4() {
                         <div className="homelengo-box">
                           <div className="archive-top">
                             <Link
-                              to={`/property-details-v1`}
+                              to={`/property-details/${elm.id}`}
                               className="images-group"
                             >
                               <div className="images-style">
@@ -576,7 +576,7 @@ export default function Properties4() {
                             <div className="content-top">
                               <h6 className="text-capitalize">
                                 <Link
-                                  to={`/property-details-v1`}
+                                  to={`/property-details/${elm.id}`}
                                   className="link"
                                 >
                                   {elm.title}
@@ -641,7 +641,7 @@ export default function Properties4() {
                       <div className="homelengo-box list-style-1 list-style-2 line">
                         <div className="archive-top">
                           <Link
-                            to={`/property-details-v1`}
+                            to={`/property-details/${elm.id}`}
                             className="images-group"
                           >
                             <div className="images-style">
@@ -665,7 +665,7 @@ export default function Properties4() {
                           <div className="content-top">
                             <h6 className="text-capitalize">
                               <Link
-                                to={`/property-details-v1`}
+                                to={`/property-details/${elm.id}`}
                                 className="link text-line-clamp-1"
                               >
                                 {elm.title}

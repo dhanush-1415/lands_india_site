@@ -169,7 +169,7 @@ export default function Header1({
               </div>
               <div className="box d-flex align-items-center">
                 <span className="icon icon-mail" />
-                <div>themesflat@gmail.com</div>
+                <div>landsindia@gmail.com</div>
               </div>
             </div>
           </div>

@@ -39,7 +39,7 @@ export default function MyFavorite() {
                           <div className="content">
                             <div className="title">
                               <Link
-                                to={`/property-details-v1/${elm.id}`}
+                                to={`/property-details/${elm.id}`}
                                 className="link"
                               >
                                 {elm.title}

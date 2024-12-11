@@ -9,8 +9,8 @@ export default function DetailsTitle1({ propertyItem = allProperties[0] }) {
           <div className="content-top d-flex justify-content-between align-items-center">
             <h3 className="title link fw-8">{propertyItem.title}</h3>
             <div className="box-price d-flex align-items-end">
-              <h3 className="fw-8">$250,00</h3>
-              <span className="body-1 text-variant-1">/month</span>
+              <h3 className="fw-8">₹25,000,00</h3>
+              {/* <span className="body-1 text-variant-1">/month</span> */}
             </div>
           </div>
           <div className="content-bottom">
@@ -40,12 +40,12 @@ export default function DetailsTitle1({ propertyItem = allProperties[0] }) {
                 <p className="meta-item">
                   <span className="icon icon-mapPin" />
                   <span className="text-variant-1">
-                    145 Brooklyn Ave, Califonia, New York
+                    145 New Ave, Anna Nagar, Chennai
                   </span>
                 </p>
               </div>
             </div>
-            <ul className="icon-box">
+            {/* <ul className="icon-box">
               <li>
                 <a href="#" className="item">
                   <svg
@@ -126,7 +126,7 @@ export default function DetailsTitle1({ propertyItem = allProperties[0] }) {
                   </svg>
                 </a>
               </li>
-            </ul>
+            </ul> */}
           </div>
         </div>
       </div>

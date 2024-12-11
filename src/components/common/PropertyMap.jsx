@@ -268,7 +268,7 @@ export default function PropertyMap() {
                         <span className="text">{getLocation.address}</span>
                       </p>
                       <div className="title">
-                        <Link to={`/property-details-v1/${getLocation.id}`}>
+                        <Link to={`/property-details/${getLocation.id}`}>
                           {getLocation.title}
                         </Link>
                       </div>
