@@ -15,7 +15,7 @@ export default function PricingPage() {
   return (
     <>
       <MetaComponent meta={metadata} />
-      <Header1 />
+      {/* <Header1 /> */}
       <PageTitle2 />
       <Pricing />
       <Faqs />

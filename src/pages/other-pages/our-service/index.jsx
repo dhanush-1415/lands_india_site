@@ -17,7 +17,7 @@ export default function OurServicePage() {
   return (
     <>
       <MetaComponent meta={metadata} />
-      <Header1 />
+      {/* <Header1 /> */}
       <PageTitle />
       <Services />
       <Brands />

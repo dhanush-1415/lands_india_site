@@ -18,7 +18,7 @@ export default function AboutUsPage() {
   return (
     <>
       <MetaComponent meta={metadata} />
-      <Header1 />
+      {/* <Header1 /> */}
       <About />
       <Slider1 />
       <Agents />

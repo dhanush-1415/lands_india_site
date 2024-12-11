@@ -20,7 +20,7 @@ export default function Home() {
   return (
     <>
       <MetaComponent meta={metadata} />
-      <Header1 />
+      {/* <Header1 /> */}
       <Hero />
       <Properties />
       <Locations />

@@ -11,7 +11,7 @@ export default function PropertyHalfmapListPage() {
   return (
     <>
       <MetaComponent meta={metadata} />
-      <Header1 />
+      {/* <Header1 /> */}
       <Properties2 />
     </>
   );

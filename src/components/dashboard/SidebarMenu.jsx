@@ -39,14 +39,15 @@ export default function SidebarMenu() {
   return (
     <div className="sidebar-menu-dashboard">
       <Link to={`/`} className="logo-box">
-        <img
+        {/* <img
           alt=""
           src="/images/logo/logo-footer@2x.png"
           width={332}
           height={96}
-        />
+        /> */}
+        <h3 className="text-white">Lands India</h3>
       </Link>
-      <div className="user-box">
+      {/* <div className="user-box">
         <p className="fw-6">Profile</p>
         <div className="user">
           <div className="icon-box">
@@ -84,7 +85,7 @@ export default function SidebarMenu() {
             <div className="text-white fw-6">themesflat@gmail...</div>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="menu-box">
         <div className="title fw-6">Menu</div>
         <ul className="box-menu-dashboard">
@@ -174,7 +175,7 @@ export default function SidebarMenu() {
               Profile
             </Link>
           </li>
-          <li
+          {/* <li
             className={`nav-menu-item ${
               pathname == "/reviews" ? "active" : ""
             }`}
@@ -208,7 +209,7 @@ export default function SidebarMenu() {
               </svg>
               Reviews
             </Link>
-          </li>
+          </li> */}
 
           <li
             className={`nav-menu-item ${
@@ -252,7 +253,7 @@ export default function SidebarMenu() {
               My properties
             </Link>
           </li>
-          <li
+          {/* <li
             className={`nav-menu-item ${
               pathname == "/my-favorites" ? "active" : ""
             }`}
@@ -286,9 +287,9 @@ export default function SidebarMenu() {
               </svg>
               My favorite
             </Link>
-          </li>
+          </li> */}
 
-          <li
+          {/* <li
             className={`nav-menu-item ${
               pathname == "/message" ? "active" : ""
             }`}
@@ -336,7 +337,7 @@ export default function SidebarMenu() {
               </svg>
               Message
             </Link>
-          </li>
+          </li> */}
           <li
             className={`nav-menu-item ${
               pathname == "/add-property" ? "active" : ""

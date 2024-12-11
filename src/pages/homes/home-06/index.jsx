@@ -13,7 +13,7 @@ export default function HomePage6() {
   return (
     <>
       <MetaComponent meta={metadata} />
-      <Header1 />
+      {/* <Header1 /> */}
       <Categories />
       <Properties />
     </>

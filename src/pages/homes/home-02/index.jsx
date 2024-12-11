@@ -21,7 +21,7 @@ export default function HomePage2() {
   return (
     <>
       <MetaComponent meta={metadata} />
-      <Header1 />
+      {/* <Header1 /> */}
       <Hero />
       <Categories />
       <Properties />

@@ -15,7 +15,7 @@ export default function MyFavoritePage() {
     <>
       <MetaComponent meta={metadata} />
       <div className="layout-wrap">
-        <Header2 />
+        {/* <Header2 /> */}
         <SidebarMenu />
         <MyFavorite />
         <div className="overlay-dashboard" />

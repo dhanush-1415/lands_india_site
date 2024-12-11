@@ -41,6 +41,7 @@ import MyFavoritePage from "./pages/dashboard/my-favorites";
 import ReviewPage from "./pages/dashboard/reviews";
 import MyProfilePage from "./pages/dashboard/my-profile";
 import AddPropertyPage from "./pages/dashboard/add-property";
+import Header1 from "./components/headers/Header1";
 
 function App() {
   const { pathname } = useLocation();
@@ -64,6 +65,7 @@ function App() {
     <>
       <div id="wrapper">
         <div id="pagee" className="clearfix">
+        <Header1 />
           <Routes>
             <Route path="/">
               <Route index element={<Home />} />

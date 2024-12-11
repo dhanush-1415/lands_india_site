@@ -13,7 +13,7 @@ export default function MessagePage() {
     <>
       <MetaComponent meta={metadata} />
       <div className="layout-wrap">
-        <Header2 />
+        {/* <Header2 /> */}
         <SidebarMenu />
         <Messages />
         <div className="overlay-dashboard" />

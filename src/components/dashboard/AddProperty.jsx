@@ -3,13 +3,14 @@ import DropdownSelect from "../common/DropdownSelect";
 
 export default function AddProperty() {
   const [isDragging, setIsDragging] = useState(false); // Track drag state
-  const [images, setImages] = useState([
-    "/images/home/house-18.jpg",
-    "/images/home/house-23.jpg",
-    "/images/home/house-14.jpg",
-    "/images/home/house-32.jpg",
-    "/images/home/house-33.jpg",
-  ]);
+  const [images, setImages] = useState([]);
+  // [
+  //   "/images/home/house-18.jpg",
+  //   "/images/home/house-23.jpg",
+  //   "/images/home/house-14.jpg",
+  //   "/images/home/house-32.jpg",
+  //   "/images/home/house-33.jpg",
+  // ]
 
   const handleImageChange = (e, index) => {
     const file = e.target.files[0];
@@ -115,7 +116,29 @@ export default function AddProperty() {
           </div>
         </div>
         <div className="widget-box-2 mb-20">
-          <h5 className="title">Information</h5>
+          {/* <h5 className="title">Price</h5> */}
+          <div className="box-price-property">
+            <div className="box grid-2 gap-30">
+              <fieldset className="box-fieldset">
+                <label htmlFor="neighborhood">
+                  Category
+                </label>
+
+                <DropdownSelect options={["House", "Land", "Villa"]} />
+              </fieldset>
+            <fieldset className="box-fieldset">
+                <label htmlFor="neighborhood">
+                  Sub Category
+                </label>
+
+                <DropdownSelect options={["None"]} />
+              </fieldset>
+            </div>
+            
+          </div>
+        </div>
+        <div className="widget-box-2 mb-20">
+          {/* <h5 className="title">Information</h5> */}
           <div className="box-info-property">
             <fieldset className="box box-fieldset">
               <label htmlFor="title">
@@ -151,7 +174,7 @@ export default function AddProperty() {
               <fieldset className="box-fieldset">
                 <label htmlFor="zip">
                   {" "}
-                  Zip Code:<span>*</span>{" "}
+                  Pin Code:<span>*</span>{" "}
                 </label>
                 <input
                   type="text"
@@ -166,7 +189,7 @@ export default function AddProperty() {
                 </label>
 
                 <DropdownSelect
-                  options={["United States", "United Kingdom", "Russia"]}
+                  options={["India"]}
                 />
               </fieldset>
             </div>
@@ -177,9 +200,9 @@ export default function AddProperty() {
                   Province/State:<span>*</span>{" "}
                 </label>
 
-                <DropdownSelect options={["None", "Texas", "New York"]} />
+                <DropdownSelect options={["Tamil Nadu", "Kerala", "Andhra"]} />
               </fieldset>
-              <fieldset className="box-fieldset">
+              {/* <fieldset className="box-fieldset">
                 <label htmlFor="neighborhood">
                   Neighborhood:<span>*</span>
                 </label>
@@ -187,9 +210,9 @@ export default function AddProperty() {
                 <DropdownSelect
                   options={["None", "Little Italy", "Bedford Park"]}
                 />
-              </fieldset>
+              </fieldset> */}
             </div>
-            <div className="box box-fieldset">
+            {/* <div className="box box-fieldset">
               <label htmlFor="location">
                 Location:<span>*</span>
               </label>
@@ -213,10 +236,10 @@ export default function AddProperty() {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
-            </div>
+            </div> */}
           </div>
         </div>
-        <div className="widget-box-2 mb-20">
+        {/* <div className="widget-box-2 mb-20">
           <h5 className="title">Price</h5>
           <div className="box-price-property">
             <div className="box grid-2 gap-30">
@@ -253,8 +276,8 @@ export default function AddProperty() {
               </fieldset>
             </div>
           </div>
-        </div>
-        <div className="widget-box-2 mb-20">
+        </div> */}
+        {/* <div className="widget-box-2 mb-20">
           <h5 className="title">Addtional Infomation</h5>
           <div className="box grid-3 gap-30">
             <fieldset className="box-fieldset">
@@ -358,8 +381,8 @@ export default function AddProperty() {
               <input type="text" className="form-control" />
             </fieldset>
           </div>
-        </div>
-        <div className="widget-box-2 mb-20">
+        </div> */}
+        {/* <div className="widget-box-2 mb-20">
           <h5 className="title">
             Amenities<span>*</span>
           </h5>
@@ -502,8 +525,8 @@ export default function AddProperty() {
               </div>
             </div>
           </div>
-        </div>
-        <div className="widget-box-2 mb-20">
+        </div> */}
+        {/* <div className="widget-box-2 mb-20">
           <h5 className="title">Virtual Tour 360</h5>
           <div className="box-radio-check">
             <div className="text-btn mb-16">Virtual Tour Type:</div>
@@ -535,8 +558,8 @@ export default function AddProperty() {
             <label htmlFor="embedded">Embedded Code Virtual 360</label>
             <textarea className="textarea" defaultValue={""} />
           </fieldset>
-        </div>
-        <div className="widget-box-2 mb-20">
+        </div> */}
+        {/* <div className="widget-box-2 mb-20">
           <h5 className="title">Videos</h5>
           <fieldset className="box-fieldset">
             <label htmlFor="video" className="text-btn">
@@ -548,8 +571,8 @@ export default function AddProperty() {
               placeholder="Youtube, vimeo url"
             />
           </fieldset>
-        </div>
-        <div className="widget-box-2 mb-20">
+        </div> */}
+        {/* <div className="widget-box-2 mb-20">
           <h5 className="title">Floors</h5>
           <div className="box-radio-check">
             <div className="text-btn mb-16">Enable Floor Plan:</div>
@@ -655,8 +678,8 @@ export default function AddProperty() {
               <span className="icon icon-plus" />
             </a>
           </div>
-        </div>
-        <div className="widget-box-2 mb-20">
+        </div> */}
+        {/* <div className="widget-box-2 mb-20">
           <h5 className="title">Agent Infomation</h5>
           <div className="box-radio-check">
             <div className="text-btn mb-16">Choose type agent information?</div>
@@ -684,18 +707,18 @@ export default function AddProperty() {
               </label>
             </fieldset>
           </div>
-        </div>
+        </div> */}
         <div className="box-btn">
           <a href="#" className="tf-btn primary">
             Add Property
           </a>
-          <a href="#" className="tf-btn btn-line">
+          {/* <a href="#" className="tf-btn btn-line">
             Save &amp; Preview
-          </a>
+          </a> */}
         </div>
       </div>
       <div className="footer-dashboard">
-        <p>Copyright © 2024 Home Lengo</p>
+        <p>Copyright © 2024 Lands India</p>
       </div>
     </div>
   );

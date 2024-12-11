@@ -13,7 +13,7 @@ export default function MyPropertyPage() {
     <>
       <MetaComponent meta={metadata} />
       <div className="layout-wrap">
-        <Header2 />
+        {/* <Header2 /> */}
         <SidebarMenu />
         <MyProperty />
         <div className="overlay-dashboard" />

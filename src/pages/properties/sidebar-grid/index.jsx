@@ -12,7 +12,7 @@ export default function SidebarGridPage() {
   return (
     <>
       <MetaComponent meta={metadata} />
-      <Header1 />
+      {/* <Header1 /> */}
       <Properties4 />
       <Footer1 />
     </>

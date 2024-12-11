@@ -14,7 +14,7 @@ export default function AddPropertyPage() {
     <>
       <MetaComponent meta={metadata} />
       <div className="layout-wrap">
-        <Header2 />
+        {/* <Header2 /> */}
         <SidebarMenu />
         <AddProperty />
         <div className="overlay-dashboard" />

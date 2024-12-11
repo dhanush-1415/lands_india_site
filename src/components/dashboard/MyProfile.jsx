@@ -32,7 +32,7 @@ export default function MyProfile() {
           <span className="body-1">Show Dashboard</span>
         </div>
         <div className="widget-box-2">
-          <div className="box">
+          {/* <div className="box">
             <h5 className="title">Account Settings</h5>
             <div className="box-agent-account">
               <h6>Agent Account</h6>
@@ -45,7 +45,7 @@ export default function MyProfile() {
                 Remove Agent Account
               </a>
             </div>
-          </div>
+          </div> */}
           <div className="box">
             <h5 className="title">Avatar</h5>
             <div className="box-agent-avt">
@@ -72,7 +72,7 @@ export default function MyProfile() {
               </div>
             </div>
           </div>
-          <div className="box">
+          {/* <div className="box">
             <h5 className="title">Agent Poster</h5>
             <div className="box-agent-avt">
               <div className="img-poster">
@@ -97,7 +97,7 @@ export default function MyProfile() {
                 <p>JPEG 100x100</p>
               </div>
             </div>
-          </div>
+          </div> */}
           <h5 className="title">Information</h5>
           <div className="box box-fieldset">
             <label htmlFor="name">
@@ -193,7 +193,7 @@ export default function MyProfile() {
               />
             </div>
           </div>
-          <div className="box box-fieldset">
+          {/* <div className="box box-fieldset">
             <label htmlFor="location">
               Location:<span>*</span>
             </label>
@@ -202,8 +202,8 @@ export default function MyProfile() {
               defaultValue="634 E 236th St, Bronx, NY 10466"
               className="form-control style-1"
             />
-          </div>
-          <div className="box box-fieldset">
+          </div> */}
+          {/* <div className="box box-fieldset">
             <label htmlFor="fb">
               Facebook:<span>*</span>
             </label>
@@ -212,8 +212,8 @@ export default function MyProfile() {
               defaultValue="#"
               className="form-control style-1"
             />
-          </div>
-          <div className="box box-fieldset">
+          </div> */}
+          {/* <div className="box box-fieldset">
             <label htmlFor="tw">
               Twitter:<span>*</span>
             </label>
@@ -222,8 +222,8 @@ export default function MyProfile() {
               defaultValue="#"
               className="form-control style-1"
             />
-          </div>
-          <div className="box box-fieldset">
+          </div> */}
+          {/* <div className="box box-fieldset">
             <label htmlFor="linkedin">
               Linkedin:<span>*</span>
             </label>
@@ -232,7 +232,7 @@ export default function MyProfile() {
               defaultValue="#"
               className="form-control style-1"
             />
-          </div>
+          </div> */}
           <div className="box">
             <a href="#" className="tf-btn primary">
               Save &amp; Update
@@ -297,7 +297,7 @@ export default function MyProfile() {
         </div>
       </div>
       <div className="footer-dashboard">
-        <p>Copyright © 2024 Home Lengo</p>
+        <p>Copyright © 2024 Lands India</p>
       </div>
     </div>
   );
