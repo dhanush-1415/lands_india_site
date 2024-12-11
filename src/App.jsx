@@ -2,7 +2,6 @@ import "../public/scss/styles.scss";
 import "photoswipe/dist/photoswipe.css";
 import "react-modal-video/scss/modal-video.scss";
 import "rc-slider/assets/index.css";
-import "../public/css/index.css"
 import WOW from "./utlis/wow";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages";
