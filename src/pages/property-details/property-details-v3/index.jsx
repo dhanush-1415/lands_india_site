@@ -14,7 +14,7 @@ export default function PropertyDetailsPageV3() {
   return (
     <>
       <MetaComponent meta={metadata} />
-      <Header1 />
+      {/* <Header1 /> */}
       <DetailsTitle1 />
       <Gallery />
       <PropertyDetails />

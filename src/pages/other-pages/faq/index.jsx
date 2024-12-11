@@ -13,7 +13,7 @@ export default function FaqPage() {
   return (
     <>
       <MetaComponent meta={metadata} />
-      <Header1 />
+      {/* <Header1 /> */}
       <PageTitle4 />
       <Faqs />
       <Footer1 />

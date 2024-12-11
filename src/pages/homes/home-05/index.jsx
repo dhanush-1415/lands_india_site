@@ -23,7 +23,7 @@ export default function HomePage5() {
   return (
     <>
       <MetaComponent meta={metadata} />
-      <Header1 parentClass="main-header header-fixed fixed-header header-style-2" />
+      {/* <Header1 parentClass="main-header header-fixed fixed-header header-style-2" /> */}
       <Hero />
       <Filter />
       <Services />

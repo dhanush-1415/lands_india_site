@@ -55,14 +55,14 @@ export default function Dashboard() {
               <span className="icon icon-review" />
             </div>
             <div className="content-box">
-              <div className="title-count text-variant-1">Reviews</div>
+              <div className="title-count text-variant-1">Visitors</div>
               <div className="d-flex align-items-end">
                 <h3 className="fw-8">1.483</h3>
               </div>
             </div>
           </div>
         </div>
-        <div className="wrapper-content row">
+        {/* <div className="wrapper-content row">
           <div className="col-xl-9">
             <div className="widget-box-2 wd-listing">
               <h5 className="title">New Listing</h5>
@@ -504,11 +504,11 @@ export default function Dashboard() {
               </ul>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
-      <div className="footer-dashboard">
+      {/* <div className="footer-dashboard">
         <p>Copyright © 2024 Home Lengo</p>
-      </div>
+      </div> */}
     </div>
   );
 }

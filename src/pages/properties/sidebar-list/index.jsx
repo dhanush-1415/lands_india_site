@@ -13,7 +13,7 @@ export default function SidebarListPage() {
   return (
     <>
       <MetaComponent meta={metadata} />
-      <Header1 />
+      {/* <Header1 /> */}
       <Properties6 />
       <Footer1 />
     </>

@@ -13,7 +13,7 @@ export default function MyProfilePage() {
     <>
       <MetaComponent meta={metadata} />
       <div className="layout-wrap">
-        <Header2 />
+        {/* <Header2 /> */}
         <SidebarMenu />
         <MyProfile />
         <div className="overlay-dashboard" />

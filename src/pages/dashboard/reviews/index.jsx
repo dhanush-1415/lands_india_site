@@ -13,7 +13,7 @@ export default function ReviewPage() {
     <>
       <MetaComponent meta={metadata} />
       <div className="layout-wrap">
-        <Header2 />
+        {/* <Header2 /> */}
         <SidebarMenu />
         <Reviews />
         <div className="overlay-dashboard" />

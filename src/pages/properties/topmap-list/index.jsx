@@ -12,7 +12,7 @@ export default function TopmapListPage() {
   return (
     <>
       <MetaComponent meta={metadata} />
-      <Header1 />
+      {/* <Header1 /> */}
       <Properties5 />
       <Footer1 />
     </>

@@ -22,7 +22,7 @@ export default function HomePage4() {
   return (
     <>
       <MetaComponent meta={metadata} />
-      <Header1 />
+      {/* <Header1 /> */}
       <Hero />
       <Properties />
       <Services />

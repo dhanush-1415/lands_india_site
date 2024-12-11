@@ -12,7 +12,7 @@ export default function MyProperty() {
         <div className="button-show-hide show-mb">
           <span className="body-1">Show Dashboard</span>
         </div>
-        <div className="row">
+        {/* <div className="row">
           <div className="col-md-3">
             <fieldset className="box-fieldset">
               <label htmlFor="title">
@@ -38,7 +38,7 @@ export default function MyProperty() {
               />
             </fieldset>
           </div>
-        </div>
+        </div> */}
         <div className="widget-box-2 wd-listing">
           <h5 className="title">My Properties</h5>
           <div className="wrap-table">
@@ -53,7 +53,7 @@ export default function MyProperty() {
                 </thead>
                 <tbody>
                   {/* col 2 */}
-                  {properties2.slice(1, 6).map((elm, i) => (
+                  {properties2.slice(1, 4).map((elm, i) => (
                     <tr key={i} className="file-delete">
                       <td>
                         <div className="listing-box">
@@ -165,14 +165,14 @@ export default function MyProperty() {
                 </tbody>
               </table>
             </div>
-            <ul className="wd-navigation">
+            {/* <ul className="wd-navigation">
               <Pagination2 />
-            </ul>
+            </ul> */}
           </div>
         </div>
       </div>
       <div className="footer-dashboard">
-        <p>Copyright © 2024 Home Lengo</p>
+        <p>Copyright © 2024 Lands India</p>
       </div>
     </div>
   );

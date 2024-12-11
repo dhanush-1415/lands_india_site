@@ -12,7 +12,7 @@ export default function TopmapGridPage() {
   return (
     <>
       <MetaComponent meta={metadata} />
-      <Header1 />
+      {/* <Header1 /> */}
       <Properties3 />
       <Footer1 />
     </>

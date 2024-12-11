@@ -13,7 +13,7 @@ export default function PropertyDetailsPageV2() {
   return (
     <>
       <MetaComponent meta={metadata} />
-      <Header1 />
+      {/* <Header1 /> */}
       <Slider2 />
       <PropertyDetails2 />
       <Footer1 />

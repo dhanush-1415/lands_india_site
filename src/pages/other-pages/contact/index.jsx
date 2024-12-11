@@ -15,7 +15,7 @@ export default function ContactPage() {
   return (
     <>
       <MetaComponent meta={metadata} />
-      <Header1 />
+      {/* <Header1 /> */}
       <PageTitle3 />
       <Contact />
       <Faqs />

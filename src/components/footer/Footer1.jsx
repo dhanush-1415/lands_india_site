@@ -71,12 +71,14 @@ export default function Footer1() {
           <div className="content-footer-top">
             <div className="footer-logo">
               <Link to={`/`}>
-                <img
+                {/* <img
                   alt="logo"
                   width={166}
                   height={48}
                   src="/images/logo/logo-footer@2x.png"
-                />
+                /> */}
+        <h3 className="text-white">Lands India</h3>
+
               </Link>
             </div>
             <div className="wd-social">
@@ -197,7 +199,7 @@ export default function Footer1() {
                   <li className="mt-12 d-flex align-items-center gap-8">
                     <i className="icon icon-mapPinLine fs-20 text-variant-2" />
                     <p className="text-white">
-                      101 E 129th St, East Chicago, IN 46312, US
+                      Address lines 1, chennai, tamil nadu
                     </p>
                   </li>
                   <li className="mt-12 d-flex align-items-center gap-8">
@@ -206,12 +208,12 @@ export default function Footer1() {
                       href="tel:1-333-345-6868"
                       className="text-white caption-1"
                     >
-                      1-333-345-6868
+                      9900997788
                     </a>
                   </li>
                   <li className="mt-12 d-flex align-items-center gap-8">
                     <i className="icon icon-mail fs-20 text-variant-2" />
-                    <p className="text-white">themesflat@gmail.com</p>
+                    <p className="text-white">landsindia@gmail.com</p>
                   </li>
                 </ul>
               </div>
@@ -239,10 +241,10 @@ export default function Footer1() {
                 </div>
               </div>
             ))}
-            <div className="col-lg-4 col-md-6">
+            {/* <div className="col-lg-4 col-md-6">
               <div className="footer-cl-4 footer-col-block">
                 <div className="fw-7 text-white footer-heading-mobile">
-                  Newsletter
+                  Terms
                 </div>
                 <div className="tf-collapse-content">
                   <p className="mt-12 text-variant-2">
@@ -296,7 +298,7 @@ export default function Footer1() {
                   </form>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -304,9 +306,9 @@ export default function Footer1() {
         <div className="container">
           <div className="content-footer-bottom">
             <div className="copyright">
-              ©{new Date().getFullYear()} Homelengo. All Rights Reserved.
+              ©{new Date().getFullYear()} Lands India. All Rights Reserved.
             </div>
-            <ul className="menu-bottom">
+            {/* <ul className="menu-bottom">
               <li>
                 <Link to={`/our-service`}>Terms Of Services</Link>
               </li>
@@ -316,7 +318,7 @@ export default function Footer1() {
               <li>
                 <Link to={`/contact`}>Cookie Policy</Link>
               </li>
-            </ul>
+            </ul> */}
           </div>
         </div>
       </div>
