@@ -16,13 +16,13 @@ import React from "react";
 
 import MetaComponent from "@/components/common/MetaComponent";
 const metadata = {
-  title: "Home 05 || Homelengo - Real Estate Reactjs Template",
+  title: "Lands India",
   description: "Homelengo - Real Estate Reactjs Template",
 };
 export default function HomePage5() {
   return (
     <>
-      <MetaComponent meta={metadata} />
+      <MetaComponent  />
       {/* <Header1 parentClass="main-header header-fixed fixed-header header-style-2" /> */}
       <Hero />
       <Filter />

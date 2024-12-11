@@ -11,7 +11,7 @@ const metadata = {
 export default function ReviewPage() {
   return (
     <>
-      <MetaComponent meta={metadata} />
+      <MetaComponent />
       <div className="layout-wrap">
         {/* <Header2 /> */}
         <SidebarMenu />

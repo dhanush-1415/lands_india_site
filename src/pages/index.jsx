@@ -12,14 +12,15 @@ import Services from "@/components/homes/home-1/Services";
 import Testimonials from "@/components/common/Testimonials";
 
 import MetaComponent from "@/components/common/MetaComponent";
-const metadata = {
-  title: "Home || Homelengo - Real Estate Reactjs Template",
-  description: "Homelengo - Real Estate Reactjs Template",
-};
+// const metadata = {
+//   title: "Lands India",
+//   description: "Homelengo - Real Estate Reactjs Template",
+// };
 export default function Home() {
   return (
     <>
-      <MetaComponent meta={metadata} />
+    {/* meta={metadata} */}
+      <MetaComponent  />
       {/* <Header1 /> */}
       <Hero />
       <Properties />
