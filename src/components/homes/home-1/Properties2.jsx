@@ -221,7 +221,7 @@ export default function Properties2() {
         </Swiper>
         <div className="text-center sec-btn">
           <Link
-            to={`/sidebar-grid`}
+            to={`/properties`}
             className="tf-btn btn-view primary size-1 hover-btn-view"
           >
             View All Properties

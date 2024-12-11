@@ -107,9 +107,12 @@ export default function Properties4() {
       <div className="container">
         <div className="box-title-listing">
           <div className="box-left">
-            <h3 className="fw-8">Property Listing</h3>
-            <p className="text">
+            <h3 className="fw-8">Properties</h3>
+            {/* <p className="text">
               There are currently {sorted.length} properties.
+            </p> */}
+            <p className="text">
+              {sorted.length}
             </p>
           </div>
           <div className="box-filter-tab">
@@ -238,7 +241,7 @@ export default function Properties4() {
           <div className="col-xl-4 col-lg-5">
             <div className="widget-sidebar fixed-sidebar">
               <div className="flat-tab flat-tab-form widget-filter-search widget-box">
-                <ul className="nav-tab-form" role="tablist">
+                {/* <ul className="nav-tab-form" role="tablist">
                   <li className="nav-tab-item" role="presentation">
                     <a
                       href="#forRent"
@@ -257,7 +260,7 @@ export default function Properties4() {
                       For Sale
                     </a>
                   </li>
-                </ul>
+                </ul> */}
                 <div className="tab-content">
                   <div className="tab-pane fade active show" role="tabpanel">
                     <div className="form-sl">
@@ -342,14 +345,14 @@ export default function Properties4() {
                                       className="fw-6"
                                     >
                                       {" "}
-                                      ${price[0]}{" "}
+                                      ₹{price[0]}{" "}
                                     </span>
                                     <span>-</span>
                                     <span
                                       id="slider-range-value2"
                                       className="fw-6"
                                     >
-                                      ${price[1]}
+                                      ₹{price[1]}
                                     </span>
                                   </div>
                                 </div>
@@ -373,14 +376,14 @@ export default function Properties4() {
                                       className="fw-6"
                                     >
                                       {" "}
-                                      ${size[0]}{" "}
+                                      ₹{size[0]}{" "}
                                     </span>
                                     <span>-</span>
                                     <span
                                       id="slider-range-value2"
                                       className="fw-6"
                                     >
-                                      ${size[1]}
+                                      ₹{size[1]}
                                     </span>
                                   </div>
                                 </div>
@@ -454,7 +457,7 @@ export default function Properties4() {
                   </div>
                 </div>
               </div>
-              <div className="widget-box box-latest-property">
+              {/* <div className="widget-box box-latest-property">
                 <h5 className="fw-6 title">Latest Propeties</h5>
                 <ul>
                   {properties2.slice(0, 5).map((elm, i) => (
@@ -497,13 +500,13 @@ export default function Properties4() {
                           </li>
                         </ul>
                         <div className="mt-10 text-btn">
-                          ${elm.price.toLocaleString()}
+                          ₹{elm.price.toLocaleString()}
                         </div>
                       </div>
                     </li>
                   ))}
                 </ul>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="col-xl-8 col-lg-7 flat-animate-tab">
@@ -610,7 +613,7 @@ export default function Properties4() {
                                 <span>{elm.agent}</span>
                               </div>
                               <h6 className="price">
-                                ${elm.price.toLocaleString()}
+                                ₹{elm.price.toLocaleString()}
                               </h6>
                             </div>
                           </div>
@@ -726,7 +729,7 @@ export default function Properties4() {
                               <span>{elm.agent}</span>
                             </div>
                             <h6 className="price">
-                              ${elm.price.toLocaleString()}
+                              ₹{elm.price.toLocaleString()}
                             </h6>
                           </div>
                         </div>

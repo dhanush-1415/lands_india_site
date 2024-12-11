@@ -147,7 +147,7 @@ export default function Properties() {
               </div>
               <div className="text-center">
                 <Link
-                  to={`/sidebar-grid`}
+                  to={`/properties`}
                   className="tf-btn btn-view primary size-1 hover-btn-view"
                 >
                   View All Properties
