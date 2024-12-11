@@ -137,7 +137,7 @@ export default function Properties() {
                             <span>{property.agent}</span>
                           </div>
                           <h6 className="price">
-                            ${property.price.toFixed(2)}
+                            ₹{property.price.toFixed(2)}
                           </h6>
                         </div>
                       </div>
