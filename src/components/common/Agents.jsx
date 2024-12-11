@@ -21,11 +21,12 @@ export default function Agents() {
                 >
                   <a href="#" className="box-img img-style">
                     <img
-                      className="lazyload"
+                      className="lazyload mh-100"
                       data-src={agent.imgSrc}
                       alt={`image-agent-${agent.name}`}
                       src={agent.imgSrc}
-                      width={450}
+                      // width={450}
+                      style={{ maxHeight: '40px !importent' }}
                       height={450}
                     />
                     <ul className="agent-social">
