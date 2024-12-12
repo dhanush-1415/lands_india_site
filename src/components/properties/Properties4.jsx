@@ -229,7 +229,7 @@ export default function Properties4() {
               onChange={setSortingOption}
               addtionalParentClass="list-sort"
               options={[
-                "Sort by (Default)",
+                "Sort by price",
 
                 "Price Ascending",
                 "Price Descending",
