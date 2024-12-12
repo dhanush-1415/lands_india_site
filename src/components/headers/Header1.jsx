@@ -357,28 +357,46 @@ export default function Header1({
     },
   };
   
+  // const items = [
+  //   {
+  //     img:'https://static.vecteezy.com/system/resources/previews/028/900/473/non_2x/agent-icon-design-free-png.png',
+  //     title: 'Individual',
+  //     description:
+  //       'Discover personalized living spaces crafted to reflect your unique style, preferences, and lifestyle. Our individual property options include state-of-the-art apartments and luxurious villas, offering a range of modern amenities such as 24/7 security, cutting-edge smart home systems, and eco-friendly green energy solutions. Designed for ultimate comfort and convenience, these properties are perfect for families, professionals, and individuals who seek a harmonious blend of luxury, privacy, and practicality. Whether you’re looking for a cozy apartment or an expansive villa, we have the ideal space for you.',
+  //   },
+  //   {
+  //     img:'https://static.vecteezy.com/system/resources/previews/028/900/473/non_2x/agent-icon-design-free-png.png',
+  //     title: 'Project',
+  //     description:
+  //       'Explore our diverse range of real estate projects, thoughtfully designed to meet the dynamic needs of businesses, communities, and future generations. From sleek commercial complexes to large-scale mixed-use developments, our projects emphasize innovation, sustainability, and prime locations. Each property is designed to offer flexible, customizable spaces that cater to the evolving demands of modern enterprises. With long-term value in mind, we provide end-to-end solutions that cater to investors, developers, and end-users alike. Our projects are meticulously planned to create vibrant, sustainable communities that foster growth, connection, and prosperity.',
+  //   },
+  //   {
+  //     img:'https://static.vecteezy.com/system/resources/previews/028/900/473/non_2x/agent-icon-design-free-png.png',
+  //     title: 'Value-Added Services',
+  //     description:
+  //       'Maximize the potential of your real estate investments with our premium suite of value-added services, designed to elevate your experience every step of the way. Whether you require expert property staging to showcase your property’s full potential, high-resolution photography to capture stunning visuals, or in-depth legal and financial guidance to navigate complex transactions, we have you covered. Our comprehensive services also include relocation support, tailored maintenance plans, and personalized strategies designed to ensure a smooth, efficient, and rewarding property experience. We take pride in offering bespoke solutions that align with your unique needs, helping you achieve success in every aspect of your real estate journey.',
+  //   },
+  // ];
+  
+  
   const items = [
     {
-      img:'https://static.vecteezy.com/system/resources/previews/028/900/473/non_2x/agent-icon-design-free-png.png',
+      img: 'https://static.vecteezy.com/system/resources/previews/028/900/473/non_2x/agent-icon-design-free-png.png',
       title: 'Individual',
-      description:
-        'Discover personalized living spaces crafted to reflect your unique style, preferences, and lifestyle. Our individual property options include state-of-the-art apartments and luxurious villas, offering a range of modern amenities such as 24/7 security, cutting-edge smart home systems, and eco-friendly green energy solutions. Designed for ultimate comfort and convenience, these properties are perfect for families, professionals, and individuals who seek a harmonious blend of luxury, privacy, and practicality. Whether you’re looking for a cozy apartment or an expansive villa, we have the ideal space for you.',
+      description: 'Discover a variety of personalized living spaces, from luxurious apartments to spacious villas, all equipped with modern amenities like 24/7 security, smart home technology, and eco-friendly solutions for a comfortable, convenient lifestyle.',
     },
     {
-      img:'https://static.vecteezy.com/system/resources/previews/028/900/473/non_2x/agent-icon-design-free-png.png',
+      img: 'https://static.vecteezy.com/system/resources/previews/028/900/473/non_2x/agent-icon-design-free-png.png',
       title: 'Project',
-      description:
-        'Explore our diverse range of real estate projects, thoughtfully designed to meet the dynamic needs of businesses, communities, and future generations. From sleek commercial complexes to large-scale mixed-use developments, our projects emphasize innovation, sustainability, and prime locations. Each property is designed to offer flexible, customizable spaces that cater to the evolving demands of modern enterprises. With long-term value in mind, we provide end-to-end solutions that cater to investors, developers, and end-users alike. Our projects are meticulously planned to create vibrant, sustainable communities that foster growth, connection, and prosperity.',
+      description: 'Explore our diverse range of real estate projects, including sleek commercial complexes and large-scale mixed-use developments, all designed with a focus on sustainability, flexibility, and prime locations to meet the needs of businesses and investors.',
     },
     {
-      img:'https://static.vecteezy.com/system/resources/previews/028/900/473/non_2x/agent-icon-design-free-png.png',
+      img: 'https://static.vecteezy.com/system/resources/previews/028/900/473/non_2x/agent-icon-design-free-png.png',
       title: 'Value-Added Services',
-      description:
-        'Maximize the potential of your real estate investments with our premium suite of value-added services, designed to elevate your experience every step of the way. Whether you require expert property staging to showcase your property’s full potential, high-resolution photography to capture stunning visuals, or in-depth legal and financial guidance to navigate complex transactions, we have you covered. Our comprehensive services also include relocation support, tailored maintenance plans, and personalized strategies designed to ensure a smooth, efficient, and rewarding property experience. We take pride in offering bespoke solutions that align with your unique needs, helping you achieve success in every aspect of your real estate journey.',
+      description: 'Enhance your real estate experience with a comprehensive suite of value-added services, including expert property staging, high-resolution photography, legal and financial advice, as well as personalized strategies to ensure a smooth and rewarding journey.',
     },
   ];
-  
-  
+
   
 
   return (
@@ -441,8 +459,8 @@ export default function Header1({
                   ))} */}
                   {items.map((item, index) => (
                     <div key={index} style={{ marginBottom: '2rem' }}>
-                      <div className="d-flex align-items-center">
-                        <img src={item.img} width={100} alt="icon" />
+                      <div className="d-flex flex-column justify-content-center align-items-center">
+                        <img src={item.img} width={200} alt="icon" />
                         <Typography variant="h4" fontWeight="bold" px={3}>
                           {item.title}
                         </Typography>
