@@ -7,7 +7,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl'
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import logo from './logo.jpeg'
+import logo from './logo.jpeg';
+import addedValue from './added-value.png';
+import individual from './individual.png';
+import projects from './projects.png';
 import CloseIcon from '@mui/icons-material/Close';
 import InputAdornment from '@mui/material/InputAdornment';
 import PersonIcon from '@mui/icons-material/Person';
@@ -381,17 +384,17 @@ export default function Header1({
   
   const items = [
     {
-      img: 'https://static.vecteezy.com/system/resources/previews/028/900/473/non_2x/agent-icon-design-free-png.png',
+      img: individual,
       title: 'Individual',
       description: 'Discover a variety of personalized living spaces, from luxurious apartments to spacious villas, all equipped with modern amenities like 24/7 security, smart home technology, and eco-friendly solutions for a comfortable, convenient lifestyle.',
     },
     {
-      img: 'https://static.vecteezy.com/system/resources/previews/028/900/473/non_2x/agent-icon-design-free-png.png',
+      img: projects,
       title: 'Project',
       description: 'Explore our diverse range of real estate projects, including sleek commercial complexes and large-scale mixed-use developments, all designed with a focus on sustainability, flexibility, and prime locations to meet the needs of businesses and investors.',
     },
     {
-      img: 'https://static.vecteezy.com/system/resources/previews/028/900/473/non_2x/agent-icon-design-free-png.png',
+      img: addedValue,
       title: 'Value-Added Services',
       description: 'Enhance your real estate experience with a comprehensive suite of value-added services, including expert property staging, high-resolution photography, legal and financial advice, as well as personalized strategies to ensure a smooth and rewarding journey.',
     },

@@ -5,7 +5,26 @@ import { Link } from "react-router-dom";
 import Pagination from "../common/Pagination";
 import Slider from "rc-slider";
 import { allProperties, featureOptions, properties2 } from "@/data/properties";
+
+import { useParams } from "react-router-dom";
+
+
+
 export default function Properties4() {
+
+
+  let params = useParams();
+
+
+  useEffect(()=>{
+    if(params.name === "projects"){
+
+    }
+    if(params.name === "individuals"){
+
+    }
+  },[])
+
   const [price, setPrice] = useState([1800, 5500]);
   const [size, setSize] = useState([800, 2200]);
   const [rooms, setRooms] = useState("All");
