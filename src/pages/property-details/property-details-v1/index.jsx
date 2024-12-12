@@ -94,7 +94,7 @@ export default function PropertyDetailsPageV1() {
       {/* <Header1 /> */}
       <DetailsTitle1 propertyItem={propertyItem.propertyDetails} />
       <Slider1 imageItem={propertyItem.img}/>
-      <PropertyDetails   />
+      <PropertyDetails  propertyDetails={propertyItem.propertyDetails} additionalInformation={propertyItem.additionalInformation} />
       <Footer1 />
     </>
   );
