@@ -24,9 +24,9 @@ export default function PropertyDetails({propertyDetails , additionalInformation
               <div className="single-property-element single-property-desc">
                 <Description propertyDetails={propertyDetails} />
               </div>
-              <div className="single-property-element single-property-overview">
+              {additionalInformation && <div className="single-property-element single-property-overview">
                 <Overview additionalInformation={additionalInformation} />
-              </div>
+              </div>}
               {/* <div className="single-property-element single-property-video">
                 <Video />
               </div> */}

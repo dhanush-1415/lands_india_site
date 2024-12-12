@@ -43,17 +43,17 @@ export default function DetailsTitle1({ propertyItem}) {
                   <li className="meta-item">
                     <i className="icon icon-bed" />
                     <span className="text-variant-1">Beds:</span>
-                    <span className="fw-6">{propertyItem.features.beds}</span>
+                    <span className="fw-6">{propertyItem.features?.beds}</span>
                   </li>
                   <li className="meta-item">
                     <i className="icon icon-bath" />
                     <span className="text-variant-1">Baths:</span>
-                    <span className="fw-6">{propertyItem.features.baths}</span>
+                    <span className="fw-6">{propertyItem.features?.baths}</span>
                   </li>
                   <li className="meta-item">
                     <i className="icon icon-sqft" />
                     <span className="text-variant-1">Sqft:</span>
-                    <span className="fw-6">{propertyItem.features.sqfeet}</span>
+                    <span className="fw-6">{propertyItem.features?.sqfeet}</span>
                   </li>
                 </ul>
               </div>
