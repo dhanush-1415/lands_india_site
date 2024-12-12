@@ -6,29 +6,39 @@ export const menuItems = [
   },
 
   {
-    title: "Properties",
+    title: "Individual",
     link:'/properties',
-
   },
   {
-    title: "Agents",
-    link:'/agents',
+    title: "Projects",
+    link:'/properties',
   },
   {
-    title: "About Us",
-    link:'/about-us',
-
+    title: "Added Value Services",
+    link:'/',
   },
   {
-    title: "Contact Us",
-    link:'/contact',
-
+    title: "Rent/Lease",
+    link:'/properties',
   },
   {
-    title: "Dashboard",
-    link:'/dashboard',
-
+    title: "Sell Property",
+    link:'/',
   },
+  // {
+  //   title: "Login/Register",
+  //   link:'#modalLogin',
+  // },
+  // {
+  //   title: "Contact Us",
+  //   link:'/contact',
+
+  // },
+  // {
+  //   title: "Dashboard",
+  //   link:'/dashboard',
+
+  // },
 ];
 
 
