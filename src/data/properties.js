@@ -10,7 +10,7 @@
 //     baths: 2,
 //     sqft: 1783,
 //     tags: ["Featured", "For Sale"],
-//     avatar: "/images/avatar/avt-png1.png",
+//     avatar: "https://c8.alamy.com/comp/WPAK9M/south-india-house-well-built-in-the-town-of-srirangam-near-trichurirapalli-WPAK9M.jpg",
 //     agent: "Arlene McCoy",
 //     lat: 40.7279707552121,
 //     long: -74.07152705896405,
@@ -40,7 +40,7 @@
 //   },
 //   {
 //     id: 2,
-//     imgSrc: "/images/home/house-2.jpg",
+//     imgSrc: "https://assets.architecturaldigest.in/photos/60a63ab1b872edd1c5ce5840/16:9/w_2580,c_limit/South-India-Kerala-lijo-reny-architects-photos.jpeg",
 //     alt: "img",
 //     address: "145 Brooklyn Ave, California, New York",
 //     title: "Casa Lomas de Machalí Machas",
@@ -76,7 +76,7 @@
 //   },
 //   {
 //     id: 3,
-//     imgSrc: "/images/home/house-3.jpg",
+//     imgSrc: "https://assets.architecturaldigest.in/photos/60a640d2872d3088f2942467/master/pass/Feature.jpeg",
 //     alt: "img",
 //     address: "145 Brooklyn Ave, California, New York",
 //     title: "Casa Lomas de Machalí Machas",
@@ -113,7 +113,7 @@
 //   },
 //   {
 //     id: 4,
-//     imgSrc: "/images/home/house-4.jpg",
+//     imgSrc: "https://img.freepik.com/premium-photo/exterior-view-modern-south-indian-house_1279815-311654.jpg",
 //     address: "145 Brooklyn Ave, California, New York",
 //     tags: ["Featured", "For Sale"],
 //     title: "Casa Lomas de Machalí Machas",
@@ -148,7 +148,7 @@
 //   },
 //   {
 //     id: 5,
-//     imgSrc: "/images/home/house-5.jpg",
+//     imgSrc: "https://e0.pxfuel.com/wallpapers/723/623/desktop-wallpaper-south-indian-style-house-best-home-s-in-india-indian-with-minimalist-home-thumbnail.jpg",
 //     address: "145 Brooklyn Ave, California, New York",
 //     tags: ["Featured", "For Sale"],
 //     title: "Casa Lomas de Machalí Machas",
@@ -179,7 +179,7 @@
 //   },
 //   {
 //     id: 6,
-//     imgSrc: "/images/home/house-6.jpg",
+//     imgSrc: "https://i.pinimg.com/736x/4c/95/ca/4c95cad7a57969a1c4ea317f44bba5ff.jpg",
 //     address: "145 Brooklyn Ave, California, New York",
 //     tags: ["Featured", "For Sale"],
 //     title: "Casa Lomas de Machalí Machas",
@@ -218,7 +218,7 @@
 //     alt: "img",
 //     address: "145 Brooklyn Ave, California, New York",
 //     title: "Casa Lomas de Machalí Machas",
-//     avatar: "/images/avatar/avt-png1.png",
+//     avatar: "https://c8.alamy.com/comp/WPAK9M/south-india-house-well-built-in-the-town-of-srirangam-near-trichurirapalli-WPAK9M.jpg",
 //     agent: "Arlene McCoy",
 //     features: [
 //       "Air Condition",
@@ -246,7 +246,7 @@
 //   },
 //   {
 //     id: 8,
-//     imgSrc: "/images/home/house-8.jpg",
+//     imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZnj4SQSXD_4T9_VaqF-0rXGqNvF19xganGQ&s",
 //     alt: "img",
 //     address: "145 Brooklyn Ave, California, New York",
 //     title: "Casa Lomas de Machalí Machas",
@@ -275,7 +275,7 @@
 //   },
 //   {
 //     id: 9,
-//     imgSrc: "/images/home/house-9.jpg",
+//     imgSrc: "https://img.staticmb.com/mbcontent/images/crop/uploads/2020/10/DMB_Hyderabad_Shamirpet%20open%20plot%20land_0_1200.jpg",
 //     alt: "img",
 //     address: "145 Brooklyn Ave, California, New York",
 //     title: "Casa Lomas de Machalí Machas",
@@ -310,7 +310,7 @@
 //   },
 //   {
 //     id: 10,
-//     imgSrc: "/images/home/house-10.jpg",
+//     imgSrc: "https://images.nobroker.in/images/8a9f8b83934003c901934024ec360596/8a9f8b83934003c901934024ec360596_64577_medium.jpg",
 //     alt: "img",
 //     address: "145 Brooklyn Ave, California, New York",
 //     title: "Casa Lomas de Machalí Machas",
@@ -344,7 +344,7 @@
 //   },
 //   {
 //     id: 11,
-//     imgSrc: "/images/home/house-11.jpg",
+//     imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9iafMw7irxAt4VeTptA8nXLPg6QD1Tm3Ydg&s",
 //     alt: "img",
 //     address: "145 Brooklyn Ave, California, New York",
 //     title: "Casa Lomas de Machalí Machas",
@@ -378,7 +378,7 @@
 //   },
 //   {
 //     id: 12,
-//     imgSrc: "/images/home/house-12.jpg",
+//     imgSrc: "https://5.imimg.com/data5/SELLER/Default/2022/8/RQ/AN/TZ/70149625/kothavalasa-kohinoor-hills-500x500.jpg",
 //     alt: "img",
 //     address: "145 Brooklyn Ave, California, New York",
 //     title: "Casa Lomas de Machalí Machas",
@@ -417,7 +417,7 @@
 // export const properties3 = [
 //   {
 //     id: 13,
-//     imgSrc: "/images/home/house-13.jpg",
+//     imgSrc: "https://assets.architecturaldigest.in/photos/600844cd3a9d9570bc84236e/master/pass/Gurgaon-home-kerala-interior-images-1366x768.jpg",
 //     title: "Casa Lomas de Machalí Machas",
 //     address: "145 Brooklyn Ave, California, New York",
 //     beds: 2,
@@ -442,13 +442,13 @@
 //     type: ["Studio", "Office", "House"],
 //     price: 3246,
 //     agent: "Arlene McCoy",
-//     avatar: "/images/avatar/avt-png1.png",
+//     avatar: "https://c8.alamy.com/comp/WPAK9M/south-india-house-well-built-in-the-town-of-srirangam-near-trichurirapalli-WPAK9M.jpg",
 //     filterOptions: ["Apartment", "Villa"],
 //     tags: ["Featured", "For Sale"],
 //   },
 //   {
 //     id: 14,
-//     imgSrc: "/images/home/house-14.jpg",
+//     imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvw5ZemrHv-kUWjJdpQkTHzEV7Ep7yabJH-g&s",
 //     title: "Casa Lomas de Machalí Machas",
 //     address: "145 Brooklyn Ave, California, New York",
 //     beds: 1,
@@ -480,7 +480,7 @@
 //   },
 //   {
 //     id: 15,
-//     imgSrc: "/images/home/house-15.jpg",
+//     imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvw5ZemrHv-kUWjJdpQkTHzEV7Ep7yabJH-g&s",
 //     title: "Casa Lomas de Machalí Machas",
 //     address: "145 Brooklyn Ave, California, New York",
 //     beds: 4,
@@ -507,7 +507,7 @@
 //     type: ["Villa", "Studio"],
 //     price: 2084,
 //     agent: "Arlene McCoy",
-//     avatar: "/images/avatar/avt-png1.png",
+//     avatar: "https://c8.alamy.com/comp/WPAK9M/south-india-house-well-built-in-the-town-of-srirangam-near-trichurirapalli-WPAK9M.jpg",
 //     filterOptions: ["Apartment", "Office"],
 //     tags: ["Featured", "For Sale"],
 //   },
@@ -546,7 +546,7 @@
 //   },
 //   {
 //     id: 17,
-//     imgSrc: "/images/home/house-17.jpg",
+//     imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvw5ZemrHv-kUWjJdpQkTHzEV7Ep7yabJH-g&s",
 //     title: "Casa Lomas de Machalí Machas",
 //     address: "145 Brooklyn Ave, California, New York",
 //     beds: 3,
@@ -581,7 +581,7 @@
 //   },
 //   {
 //     id: 18,
-//     imgSrc: "/images/home/house-18.jpg",
+//     imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvw5ZemrHv-kUWjJdpQkTHzEV7Ep7yabJH-g&s",
 //     title: "Casa Lomas de Machalí Machas",
 //     address: "145 Brooklyn Ave, California, New York",
 //     beds: 2,
@@ -617,7 +617,7 @@
 // export const properties4 = [
 //   {
 //     id: 19,
-//     imgSrc: "/images/home/house-sm-1.jpg",
+//     imgSrc: "https://dlifeinteriors.com/wp-content/uploads/2022/09/living-room-design-apartment-interior-project-kochi-1024x576.jpg",
 //     alt: "img-property",
 //     title: "Casa Lomas de Machalí Machas",
 //     beds: 4,
@@ -648,7 +648,7 @@
 //   },
 //   {
 //     id: 20,
-//     imgSrc: "/images/home/house-sm-2.jpg",
+//     imgSrc: "https://dlifeinteriors.com/wp-content/uploads/2022/09/living-room-design-apartment-interior-project-kochi-1024x576.jpg",
 //     alt: "img-property",
 //     title: "Casa Lomas de Machalí Machas",
 //     beds: 1,
@@ -683,7 +683,7 @@
 //   },
 //   {
 //     id: 21,
-//     imgSrc: "/images/home/house-sm-3.jpg",
+//     imgSrc: "https://dlifeinteriors.com/wp-content/uploads/2022/09/living-room-design-apartment-interior-project-kochi-1024x576.jpg",
 //     alt: "img-property",
 //     title: "Casa Lomas de Machalí Machas",
 //     beds: 5,
@@ -717,7 +717,7 @@
 //   },
 //   {
 //     id: 22,
-//     imgSrc: "/images/home/house-sm-4.jpg",
+//     imgSrc: "https://dlifeinteriors.com/wp-content/uploads/2022/09/living-room-design-apartment-interior-project-kochi-1024x576.jpg",
 //     alt: "img-property",
 //     title: "Casa Lomas de Machalí Machas",
 //     beds: 3,
@@ -756,7 +756,7 @@
 // export const properties5 = [
 //   {
 //     id: 23,
-//     imgSrc: "/images/home/house-19.jpg",
+//     imgSrc: "https://i.pinimg.com/originals/1e/7c/f5/1e7cf5f26c23a8df84cf4ebfd5209490.jpg",
 //     address: "145 Brooklyn Ave, California, New York",
 //     title: "Casa Lomas de Machalí Machas",
 //     beds: 4,
@@ -764,7 +764,7 @@
 //     baths: 4,
 //     sqft: 1843,
 //     agent: "Arlene McCoy",
-//     avatar: "/images/avatar/avt-png1.png",
+//     avatar: "https://c8.alamy.com/comp/WPAK9M/south-india-house-well-built-in-the-town-of-srirangam-near-trichurirapalli-WPAK9M.jpg",
 //     features: [
 //       "Air Condition",
 //       "Cable TV",
@@ -790,7 +790,7 @@
 //   },
 //   {
 //     id: 24,
-//     imgSrc: "/images/home/house-20.jpg",
+//     imgSrc: "https://i.pinimg.com/originals/1e/7c/f5/1e7cf5f26c23a8df84cf4ebfd5209490.jpg",
 //     address: "145 Brooklyn Ave, California, New York",
 //     title: "Casa Lomas de Machalí Machas",
 //     beds: 3,
@@ -826,7 +826,7 @@
 //   },
 //   {
 //     id: 25,
-//     imgSrc: "/images/home/house-21.jpg",
+//     imgSrc: "https://i.pinimg.com/originals/1e/7c/f5/1e7cf5f26c23a8df84cf4ebfd5209490.jpg",
 //     address: "145 Brooklyn Ave, California, New York",
 //     title: "Casa Lomas de Machalí Machas",
 //     beds: 2,
@@ -861,7 +861,7 @@
 //   },
 //   {
 //     id: 26,
-//     imgSrc: "/images/home/house-22.jpg",
+//     imgSrc: "https://i.pinimg.com/originals/1e/7c/f5/1e7cf5f26c23a8df84cf4ebfd5209490.jpg",
 //     title: "Casa Lomas de Machalí Machas",
 //     address: "145 Brooklyn Ave, California, New York",
 //     beds: 2,
@@ -927,7 +927,7 @@
 //   },
 //   {
 //     id: 28,
-//     imgSrc: "/images/home/house-24.jpg",
+//     imgSrc: "https://assets.architecturaldigest.in/photos/61246efaa500f5a15fb462e9/master/w_1600%2Cc_limit/4%2520homes%2520across%2520India%2520that%2520celebrate%2520South%2520Indian%2520design%2520traditions%25202.jpeg",
 //     title: "Casa Lomas de Machalí Machas",
 //     address: "145 Brooklyn Ave, California, New York",
 //     beds: 5,
@@ -964,7 +964,7 @@
 // export const properties6 = [
 //   {
 //     id: 29,
-//     imgSrc: "/images/home/house-25.jpg",
+//     imgSrc: "https://assets.architecturaldigest.in/photos/61246efaa500f5a15fb462e9/master/w_1600%2Cc_limit/4%2520homes%2520across%2520India%2520that%2520celebrate%2520South%2520Indian%2520design%2520traditions%25202.jpeg",
 //     address: "145 Brooklyn Ave, California, New York",
 //     title: "Casa Lomas de Machalí Machas",
 //     beds: 5,
@@ -972,7 +972,7 @@
 //     baths: 2,
 //     sqft: 1113,
 //     agent: "Arlene McCoy",
-//     avatar: "/images/avatar/avt-png1.png",
+//     avatar: "https://c8.alamy.com/comp/WPAK9M/south-india-house-well-built-in-the-town-of-srirangam-near-trichurirapalli-WPAK9M.jpg",
 //     features: [
 //       "Air Condition",
 //       "Cable TV",
@@ -999,7 +999,7 @@
 //   },
 //   {
 //     id: 30,
-//     imgSrc: "/images/home/house-26.jpg",
+//     imgSrc: "https://assets.architecturaldigest.in/photos/61246efaa500f5a15fb462e9/master/w_1600%2Cc_limit/4%2520homes%2520across%2520India%2520that%2520celebrate%2520South%2520Indian%2520design%2520traditions%25202.jpeg",
 //     address: "145 Brooklyn Ave, California, New York",
 //     title: "Casa Lomas de Machalí Machas",
 //     beds: 2,
@@ -1036,7 +1036,7 @@
 //   },
 //   {
 //     id: 31,
-//     imgSrc: "/images/home/house-27.jpg",
+//     imgSrc: "https://assets.architecturaldigest.in/photos/61246efaa500f5a15fb462e9/master/w_1600%2Cc_limit/4%2520homes%2520across%2520India%2520that%2520celebrate%2520South%2520Indian%2520design%2520traditions%25202.jpeg",
 //     address: "145 Brooklyn Ave, California, New York",
 //     title: "Casa Lomas de Machalí Machas",
 //     beds: 3,
@@ -1044,7 +1044,7 @@
 //     baths: 1,
 //     sqft: 1857,
 //     agent: "Arlene McCoy",
-//     avatar: "/images/avatar/avt-png1.png",
+//     avatar: "https://c8.alamy.com/comp/WPAK9M/south-india-house-well-built-in-the-town-of-srirangam-near-trichurirapalli-WPAK9M.jpg",
 //     features: [
 //       "Air Condition",
 //       "Cable TV",
@@ -1067,7 +1067,7 @@
 //   },
 //   {
 //     id: 32,
-//     imgSrc: "/images/home/house-28.jpg",
+//     imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn4AGIzKPdx3l1UgV9syJaF3k9QXnu-8E2_Q&s",
 //     alt: "img",
 //     address: "145 Brooklyn Ave, California, New York",
 //     title: "Casa Lomas de Machalí Machas",
@@ -1169,7 +1169,7 @@
 // export const properties7 = [
 //   {
 //     id: 35,
-//     imgSrc: "/images/banner/img-w-text4.jpg",
+//     imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn4AGIzKPdx3l1UgV9syJaF3k9QXnu-8E2_Q&s",
 //     title: "Rancho Vista Verde, Santa Barbara",
 //     subtitle: "Top Properties",
 //     beds: 3,
@@ -1204,7 +1204,7 @@
 //   },
 //   {
 //     id: 36,
-//     imgSrc: "/images/banner/img-w-text6.jpg",
+//     imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn4AGIzKPdx3l1UgV9syJaF3k9QXnu-8E2_Q&s",
 //     title: "Rancho Vista Verde, Santa Barbara",
 //     subtitle: "Top Properties",
 //     beds: 3,
@@ -1250,7 +1250,7 @@ export const properties = [
     baths: 2,
     sqft: 1783,
     tags: ["Featured", "For Sale"],
-    avatar: "/images/avatar/avt-png1.png",
+    avatar: "https://c8.alamy.com/comp/WPAK9M/south-india-house-well-built-in-the-town-of-srirangam-near-trichurirapalli-WPAK9M.jpg",
     agent: "Ravi Kumar",
     lat: 40.7279707552121,
     long: -74.07152705896405,
@@ -1274,7 +1274,7 @@ export const properties = [
   },
   {
     id: 2,
-    imgSrc: "/images/home/house-2.jpg",
+    imgSrc: "https://assets.architecturaldigest.in/photos/60a63ab1b872edd1c5ce5840/16:9/w_2580,c_limit/South-India-Kerala-lijo-reny-architects-photos.jpeg",
     alt: "img",
     address: "145 MGR Road, Chennai, Tamil Nadu",
     title: "Casa Lomas de Madurai",
@@ -1309,7 +1309,7 @@ export const properties = [
   },
   {
     id: 3,
-    imgSrc: "/images/home/house-3.jpg",
+    imgSrc: "https://assets.architecturaldigest.in/photos/60a640d2872d3088f2942467/master/pass/Feature.jpeg",
     alt: "img",
     address: "145 MGR Road, Chennai, Tamil Nadu",
     title: "Casa Lomas de Trichy",
@@ -1345,7 +1345,7 @@ export const properties = [
   },
   {
     id: 4,
-    imgSrc: "/images/home/house-4.jpg",
+    imgSrc: "https://img.freepik.com/premium-photo/exterior-view-modern-south-indian-house_1279815-311654.jpg",
     address: "145 MGR Road, Chennai, Tamil Nadu",
     tags: ["Featured", "For Sale"],
     title: "Casa Lomas de Coimbatore",
@@ -1378,7 +1378,7 @@ export const properties = [
   },
   {
     id: 5,
-    imgSrc: "/images/home/house-5.jpg",
+    imgSrc: "https://e0.pxfuel.com/wallpapers/723/623/desktop-wallpaper-south-indian-style-house-best-home-s-in-india-indian-with-minimalist-home-thumbnail.jpg",
     address: "145 MGR Road, Chennai, Tamil Nadu",
     tags: ["Featured", "For Sale"],
     title: "Casa Lomas de Salem",
@@ -1407,7 +1407,7 @@ export const properties = [
   },
   {
     id: 6,
-    imgSrc: "/images/home/house-6.jpg",
+    imgSrc: "https://i.pinimg.com/736x/4c/95/ca/4c95cad7a57969a1c4ea317f44bba5ff.jpg",
     address: "145 MGR Road, Chennai, Tamil Nadu",
     tags: ["Featured", "For Sale"],
     title: "Casa Lomas de Bengaluru",
@@ -1446,7 +1446,7 @@ export const properties2 = [
     alt: "img",
     address: "145 MGR Road, Chennai, Tamil Nadu",
     title: "Casa Lomas de Tirunelveli",
-    avatar: "/images/avatar/avt-png1.png",
+    avatar: "https://c8.alamy.com/comp/WPAK9M/south-india-house-well-built-in-the-town-of-srirangam-near-trichurirapalli-WPAK9M.jpg",
     agent: "Vijayalakshmi Nair",
     features: [
       "Air Condition",
@@ -1473,7 +1473,7 @@ export const properties2 = [
   },
   {
     id: 8,
-    imgSrc: "/images/home/house-8.jpg",
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZnj4SQSXD_4T9_VaqF-0rXGqNvF19xganGQ&s",
     alt: "img",
     address: "145 MGR Road, Chennai, Tamil Nadu",
     title: "Casa Lomas de Erode",
@@ -1502,7 +1502,7 @@ export const properties2 = [
   },
   {
     id: 9,
-    imgSrc: "/images/home/house-9.jpg",
+    imgSrc: "https://img.staticmb.com/mbcontent/images/crop/uploads/2020/10/DMB_Hyderabad_Shamirpet%20open%20plot%20land_0_1200.jpg",
     alt: "img",
     address: "145 MGR Road, Chennai, Tamil Nadu",
     title: "Casa Lomas de Madurai",
@@ -1536,7 +1536,7 @@ export const properties2 = [
   },
   {
     id: 10,
-    imgSrc: "/images/home/house-10.jpg",
+    imgSrc: "https://images.nobroker.in/images/8a9f8b83934003c901934024ec360596/8a9f8b83934003c901934024ec360596_64577_medium.jpg",
     alt: "img",
     address: "145 MGR Road, Chennai, Tamil Nadu",
     title: "Casa Lomas de Vellore",
@@ -1570,7 +1570,7 @@ export const properties2 = [
   },
   {
     id: 11,
-    imgSrc: "/images/home/house-11.jpg",
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9iafMw7irxAt4VeTptA8nXLPg6QD1Tm3Ydg&s",
     alt: "img",
     address: "145 MGR Road, Chennai, Tamil Nadu",
     title: "Casa Lomas de Coimbatore",
@@ -1600,7 +1600,7 @@ export const properties2 = [
   },
   {
     id: 12,
-    imgSrc: "/images/home/house-12.jpg",
+    imgSrc: "https://5.imimg.com/data5/SELLER/Default/2022/8/RQ/AN/TZ/70149625/kothavalasa-kohinoor-hills-500x500.jpg",
     alt: "img",
     address: "145 MGR Road, Chennai, Tamil Nadu",
     title: "Casa Lomas de Tiruppur",
@@ -1637,7 +1637,7 @@ export const properties2 = [
 export const properties3 = [
   {
     id: 13,
-    imgSrc: "/images/home/house-13.jpg",
+    imgSrc: "https://assets.architecturaldigest.in/photos/600844cd3a9d9570bc84236e/master/pass/Gurgaon-home-kerala-interior-images-1366x768.jpg",
     title: "Casa Lomas de Machalí Machas",
     address: "145 MGR Road, Chennai, Tamil Nadu",
     beds: 2,
@@ -1662,13 +1662,13 @@ export const properties3 = [
     type: ["Studio", "Office", "House"],
     price: 3246,
     agent: "Arvind Kumar",
-    avatar: "/images/avatar/avt-png1.png",
+    avatar: "https://c8.alamy.com/comp/WPAK9M/south-india-house-well-built-in-the-town-of-srirangam-near-trichurirapalli-WPAK9M.jpg",
     filterOptions: ["Apartment", "Villa"],
     tags: ["Featured", "For Sale"],
   },
   {
     id: 14,
-    imgSrc: "/images/home/house-14.jpg",
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvw5ZemrHv-kUWjJdpQkTHzEV7Ep7yabJH-g&s",
     title: "Casa Lomas de Machalí Machas",
     address: "145 MGR Road, Chennai, Tamil Nadu",
     beds: 1,
@@ -1699,7 +1699,7 @@ export const properties3 = [
   },
   {
     id: 15,
-    imgSrc: "/images/home/house-15.jpg",
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvw5ZemrHv-kUWjJdpQkTHzEV7Ep7yabJH-g&s",
     title: "Casa Lomas de Machalí Machas",
     address: "145 MGR Road, Chennai, Tamil Nadu",
     beds: 4,
@@ -1724,7 +1724,7 @@ export const properties3 = [
     type: ["Villa", "Studio"],
     price: 2084,
     agent: "Vijay Reddy",
-    avatar: "/images/avatar/avt-png1.png",
+    avatar: "https://c8.alamy.com/comp/WPAK9M/south-india-house-well-built-in-the-town-of-srirangam-near-trichurirapalli-WPAK9M.jpg",
     filterOptions: ["Apartment", "Office"],
     tags: ["Featured", "For Sale"],
   },
@@ -1761,7 +1761,7 @@ export const properties3 = [
   },
   {
     id: 17,
-    imgSrc: "/images/home/house-17.jpg",
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvw5ZemrHv-kUWjJdpQkTHzEV7Ep7yabJH-g&s",
     title: "Casa Lomas de Machalí Machas",
     address: "145 MGR Road, Chennai, Tamil Nadu",
     beds: 3,
@@ -1794,7 +1794,7 @@ export const properties3 = [
   },
   {
     id: 18,
-    imgSrc: "/images/home/house-18.jpg",
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvw5ZemrHv-kUWjJdpQkTHzEV7Ep7yabJH-g&s",
     title: "Casa Lomas de Machalí Machas",
     address: "145 MGR Road, Chennai, Tamil Nadu",
     beds: 2,
@@ -1828,7 +1828,7 @@ export const properties3 = [
 export const properties4 = [
   {
     id: 19,
-    imgSrc: "/images/home/house-sm-1.jpg",
+    imgSrc: "https://dlifeinteriors.com/wp-content/uploads/2022/09/living-room-design-apartment-interior-project-kochi-1024x576.jpg",
     alt: "img-property",
     title: "Casa Lomas de Machalí Machas",
     beds: 4,
@@ -1857,7 +1857,7 @@ export const properties4 = [
   },
   {
     id: 20,
-    imgSrc: "/images/home/house-sm-2.jpg",
+    imgSrc: "https://dlifeinteriors.com/wp-content/uploads/2022/09/living-room-design-apartment-interior-project-kochi-1024x576.jpg",
     alt: "img-property",
     title: "Casa Lomas de Machalí Machas",
     beds: 1,
@@ -1891,7 +1891,7 @@ export const properties4 = [
   },
   {
     id: 21,
-    imgSrc: "/images/home/house-sm-3.jpg",
+    imgSrc: "https://dlifeinteriors.com/wp-content/uploads/2022/09/living-room-design-apartment-interior-project-kochi-1024x576.jpg",
     alt: "img-property",
     title: "Casa Lomas de Machalí Machas",
     beds: 5,
@@ -1925,7 +1925,7 @@ export const properties4 = [
   },
   {
     id: 22,
-    imgSrc: "/images/home/house-sm-4.jpg",
+    imgSrc: "https://dlifeinteriors.com/wp-content/uploads/2022/09/living-room-design-apartment-interior-project-kochi-1024x576.jpg",
     alt: "img-property",
     title: "Casa Lomas de Machalí Machas",
     beds: 3,
@@ -1963,7 +1963,7 @@ export const properties4 = [
 export const properties5 = [
   {
     id: 23,
-    imgSrc: "/images/home/house-19.jpg",
+    imgSrc: "https://i.pinimg.com/originals/1e/7c/f5/1e7cf5f26c23a8df84cf4ebfd5209490.jpg",
     address: "123 Mylapore, Chennai, Tamil Nadu",
     title: "Sri Lakshmi Residency",
     beds: 4,
@@ -1971,7 +1971,7 @@ export const properties5 = [
     baths: 4,
     sqft: 1843,
     agent: "Arunachalam Ramesh",
-    avatar: "/images/avatar/avt-png1.png",
+    avatar: "https://c8.alamy.com/comp/WPAK9M/south-india-house-well-built-in-the-town-of-srirangam-near-trichurirapalli-WPAK9M.jpg",
     features: [
       "Air Condition",
       "Cable TV",
@@ -1996,7 +1996,7 @@ export const properties5 = [
   },
   {
     id: 24,
-    imgSrc: "/images/home/house-20.jpg",
+    imgSrc: "https://i.pinimg.com/originals/1e/7c/f5/1e7cf5f26c23a8df84cf4ebfd5209490.jpg",
     address: "456 T Nagar, Chennai, Tamil Nadu",
     title: "Kumaran Villa",
     beds: 3,
@@ -2031,7 +2031,7 @@ export const properties5 = [
   },
   {
     id: 25,
-    imgSrc: "/images/home/house-21.jpg",
+    imgSrc: "https://i.pinimg.com/originals/1e/7c/f5/1e7cf5f26c23a8df84cf4ebfd5209490.jpg",
     address: "789 Anna Nagar, Chennai, Tamil Nadu",
     title: "Vishnu Residency",
     beds: 2,
@@ -2065,7 +2065,7 @@ export const properties5 = [
   },
   {
     id: 26,
-    imgSrc: "/images/home/house-22.jpg",
+    imgSrc: "https://i.pinimg.com/originals/1e/7c/f5/1e7cf5f26c23a8df84cf4ebfd5209490.jpg",
     title: "Sri Krishna Estates",
     address: "321 Kodambakkam, Chennai, Tamil Nadu",
     beds: 2,
@@ -2130,7 +2130,7 @@ export const properties5 = [
   },
   {
     id: 28,
-    imgSrc: "/images/home/house-24.jpg",
+    imgSrc: "https://assets.architecturaldigest.in/photos/61246efaa500f5a15fb462e9/master/w_1600%2Cc_limit/4%2520homes%2520across%2520India%2520that%2520celebrate%2520South%2520Indian%2520design%2520traditions%25202.jpeg",
     title: "Annapurna Villa",
     address: "123 West Mambalam, Chennai, Tamil Nadu",
     beds: 5,
@@ -2165,7 +2165,7 @@ export const properties5 = [
 export const properties6 = [
   {
     id: 29,
-    imgSrc: "/images/home/house-25.jpg",
+    imgSrc: "https://assets.architecturaldigest.in/photos/61246efaa500f5a15fb462e9/master/w_1600%2Cc_limit/4%2520homes%2520across%2520India%2520that%2520celebrate%2520South%2520Indian%2520design%2520traditions%25202.jpeg",
     address: "123 Mylapore, Chennai, Tamil Nadu",
     title: "Sri Lakshmi Residency",
     beds: 5,
@@ -2173,7 +2173,7 @@ export const properties6 = [
     baths: 2,
     sqft: 1113,
     agent: "Arunachalam Ramesh",
-    avatar: "/images/avatar/avt-png1.png",
+    avatar: "https://c8.alamy.com/comp/WPAK9M/south-india-house-well-built-in-the-town-of-srirangam-near-trichurirapalli-WPAK9M.jpg",
     features: [
       "Air Condition",
       "Cable TV",
@@ -2199,7 +2199,7 @@ export const properties6 = [
   },
   {
     id: 30,
-    imgSrc: "/images/home/house-26.jpg",
+    imgSrc: "https://assets.architecturaldigest.in/photos/61246efaa500f5a15fb462e9/master/w_1600%2Cc_limit/4%2520homes%2520across%2520India%2520that%2520celebrate%2520South%2520Indian%2520design%2520traditions%25202.jpeg",
     address: "456 T Nagar, Chennai, Tamil Nadu",
     title: "Kumaran Villa",
     beds: 2,
@@ -2234,7 +2234,7 @@ export const properties6 = [
   },
   {
     id: 31,
-    imgSrc: "/images/home/house-27.jpg",
+    imgSrc: "https://assets.architecturaldigest.in/photos/61246efaa500f5a15fb462e9/master/w_1600%2Cc_limit/4%2520homes%2520across%2520India%2520that%2520celebrate%2520South%2520Indian%2520design%2520traditions%25202.jpeg",
     address: "789 Anna Nagar, Chennai, Tamil Nadu",
     title: "Vishnu Residency",
     beds: 3,
@@ -2242,7 +2242,7 @@ export const properties6 = [
     baths: 1,
     sqft: 1857,
     agent: "Sundarajan Ganesh",
-    avatar: "/images/avatar/avt-png1.png",
+    avatar: "https://c8.alamy.com/comp/WPAK9M/south-india-house-well-built-in-the-town-of-srirangam-near-trichurirapalli-WPAK9M.jpg",
     features: [
       "Air Condition",
       "Cable TV",
@@ -2264,7 +2264,7 @@ export const properties6 = [
   },
   {
     id: 32,
-    imgSrc: "/images/home/house-28.jpg",
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn4AGIzKPdx3l1UgV9syJaF3k9QXnu-8E2_Q&s",
     address: "321 Kodambakkam, Chennai, Tamil Nadu",
     title: "Sri Krishna Estates",
     beds: 1,
@@ -2299,7 +2299,7 @@ export const properties6 = [
 export const properties7 = [
   {
     id: 35,
-    imgSrc: "/images/banner/img-w-text4.jpg",
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn4AGIzKPdx3l1UgV9syJaF3k9QXnu-8E2_Q&s",
     title: "Sri Lakshmi Villa, Mylapore",
     subtitle: "Top Properties",
     beds: 3,
@@ -2332,7 +2332,7 @@ export const properties7 = [
   },
   {
     id: 36,
-    imgSrc: "/images/banner/img-w-text6.jpg",
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn4AGIzKPdx3l1UgV9syJaF3k9QXnu-8E2_Q&s",
     title: "Kumaran Villa, Kodambakkam",
     subtitle: "Top Properties",
     beds: 3,
