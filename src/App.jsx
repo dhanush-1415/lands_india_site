@@ -81,6 +81,7 @@ function App() {
 
 
               <Route path="properties" element={<SidebarGridPage />} />
+              <Route path="properties/:name" element={<SidebarGridPage />} />
               <Route
                 path="property-details"
                 element={<PropertyDetailsPageV1 />}
