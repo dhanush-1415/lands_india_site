@@ -31,19 +31,19 @@ export default function ContactSeller() {
       </div> */}
       <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
         <div className="ip-group">
-          <input type="text" placeholder="Jony Dane" className="form-control" />
+          <input type="text" placeholder="Name" className="form-control" />
         </div>
         <div className="ip-group">
           <input
             type="text"
-            placeholder="ex 0123456789"
+            placeholder="Phone"
             className="form-control"
           />
         </div>
         <div className="ip-group">
           <input
             type="text"
-            placeholder="themesflat@gmail.com"
+            placeholder="Email"
             className="form-control"
           />
         </div>

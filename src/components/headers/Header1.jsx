@@ -385,17 +385,17 @@ export default function Header1({
   const items = [
     {
       img: individual,
-      title: 'Individual',
+      title: 'Individual Property',
       description: 'Find tailored living spaces, from cozy apartments to elegant villas, featuring modern conveniences such as smart technology, green solutions, and round-the-clock security for a fulfilling lifestyle.',
     },
     {
       img: projects,
-      title: 'Project',
+      title: 'Projects',
       description: 'Discover an array of projects, from dynamic commercial hubs to versatile mixed-use spaces, designed to cater to the demands of businesses, entrepreneurs, and investors alike.',
     },
     {
       img: addedValue,
-      title: 'Value-Added Services',
+      title: 'Added Value Services',
       description: 'Experience seamless real estate journeys with specialized services, including legal, financial, and customized guidance to simplify processes and maximize your outcomes.',
     },
 ];
@@ -416,20 +416,25 @@ export default function Header1({
             color: '#000000',
           }}
         >
-          <CloseIcon />
+        <CloseIcon />
+        <Typography sx={{marginLeft:'5px'}}>
+          Close
+        </Typography>
+          
         </IconButton>
           <Grid height='100vh' 
             sx={{
               display: 'flex',
               alignItems: 'center',
-              backgroundImage: 'url()',
+              // backgroundImage: 'url()',
+              backgroundColor:'#F3F6FB',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               color: '#fff',
             }}
           >
             <Grid container justifyContent='space-between' alignItems='center' sx={{width:'90%',margin:'0px auto'}}>
-              <Grid item xs={12} md={5.9} sx={{display:{xs:'none',sm:'none',md:'block'}}}>
+              <Grid item xs={12} md={5} sx={{display:{xs:'none',sm:'none',md:'block'}}}>
                 <Carousel
                   responsive={responsive}
                   autoPlay
@@ -474,7 +479,7 @@ export default function Header1({
                         </Typography>
                       </div>
                     
-                      <Typography variant="body1" color="#000000" sx={{ marginTop: '1rem' }}>
+                      <Typography variant="body1" color="#000000"  sx={{ marginTop: '1rem', textAlign:'center' }}>
                         {item.description}
                       </Typography>
                     </div>
@@ -864,7 +869,7 @@ export default function Header1({
                         style={{
                           textAlign: 'center',
                           fontWeight: 600,
-                          padding: '27px 0px',
+                          padding: '27px 20px 27px 0px',
                           letterSpacing: '0px',
                           color: '#000000',
                           fontSize: '16px',
@@ -874,7 +879,7 @@ export default function Header1({
                       
                         >
                           <svg
-                            style={{marginBottom:'3px'}}
+                            style={{marginBottom:'3px', marginRight:'4px'}}
                             width={20}
                             height={20}
                             viewBox="0 0 20 20"
@@ -889,7 +894,7 @@ export default function Header1({
                               strokeLinejoin="round"
                             />
                           </svg>
-                          Login
+                          Login/Register
                         </a>
                     </ul>
                   </div>

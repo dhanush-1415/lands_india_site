@@ -37,6 +37,7 @@ export default function DetailsTitle1({ propertyItem}) {
           </div>
           <div className="content-bottom">
             <div className="box-left">
+              {propertyItem?.features &&
               <div className="info-box">
                 <div className="label">Features</div>
                 <ul className="meta">
@@ -57,6 +58,7 @@ export default function DetailsTitle1({ propertyItem}) {
                   </li>
                 </ul>
               </div>
+              }
               <div className="info-box">
                 <div className="label">Location</div>
                 <p className="meta-item">

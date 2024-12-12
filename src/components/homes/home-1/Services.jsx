@@ -21,8 +21,9 @@ export default function Services() {
                   className="lazyload"
                   alt="image-location"
                   src={elm.imageSrc}
-                  width={204}
-                  height={182}
+                  style={{width:'204px',height:'182px',objectFit:'cover'}}
+                  // width={204}
+                  // height={182}
                 />
               </div>
               <div className="content">

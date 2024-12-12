@@ -73,8 +73,8 @@ export default function Slider1({ imageItem }) {
                       alt={image.alt}
                       src={image}
                       width={image.width}
-                      height={image.height}
-                    />
+                      // height={image.height}
+                      style={{objectFit:'cover',height:'400px'}}                    />
                   </a>
                 )}
               </Item>
