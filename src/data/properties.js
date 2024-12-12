@@ -2814,7 +2814,7 @@ export const projectData = [
     },
     squareFeet: "1200 sq",
     propertyDetails: {
-      title: "Beach front plot for sale in ECR , Mamallapuram",
+      title: "Income cottage sale in ECR , Chennai",
       price: "22,00,000",
       postedBy: "Owner",
       postedDate: "jul 18, 2024",
@@ -2852,7 +2852,7 @@ export const projectData = [
     },
     squareFeet: "3500 sq",
     propertyDetails: {
-      title: "Beach front plot for sale in ECR , Mamallapuram",
+      title: "Residential Land for Sale in OMR , Kelambakkam",
       price: "3,500",
       postedBy: "Owner",
       postedDate: "jul 17, 2024",
@@ -2884,7 +2884,7 @@ export const projectData = [
     },
     squareFeet: "1500 sq",
     propertyDetails: {
-      title: "Beach front plot for sale in ECR , Mamallapuram",
+      title: "EMI Plot for sale in Kodaikanal , Pannaikadu",
       price: "36,00,000",
       postedBy: "Owner",
       postedDate: "jul 18, 2024",
@@ -2920,7 +2920,7 @@ export const projectData = [
     },
     squareFeet: "9600 sq",
     propertyDetails: {
-      title: "Beach front plot for sale in ECR , Mamallapuram",
+      title: "Farmland Sale",
       price: "26,40,000",
       postedBy: "Owner",
       postedDate: "Apr 12, 2024",
