@@ -7,11 +7,11 @@ export const menuItems = [
 
   {
     title: "Individual",
-    link:'/properties',
+    link:'/properties/individuals',
   },
   {
     title: "Projects",
-    link:'/properties',
+    link:'/properties/projects',
   },
   {
     title: "Added Value Services",
