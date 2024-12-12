@@ -5,6 +5,7 @@ export default function DropdownSelect({
   options = optionsDefault,
   defaultOption,
   addtionalParentClass = "",
+  style 
 }) {
   const selectRef = useRef();
   const [selected, setSelected] = useState("");
@@ -31,7 +32,7 @@ export default function DropdownSelect({
 
   return (
     <>
-      <div className={`nice-select ${addtionalParentClass}`} ref={selectRef}>
+      <div className={`nice-select ${addtionalParentClass}`} ref={selectRef} style={style}>
         <span onClick={() => toggleDropdown()} className="current">
           {selected || defaultOption || options[0]}
         </span>

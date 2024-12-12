@@ -103,20 +103,20 @@ export default function Properties4() {
     setFeatures,
   };
   return (
-    <section className="flat-section flat-recommended flat-sidebar">
+    <section className="flat-section flat-recommended flat-sidebar" style={{position: 'relative', bottom: '10vh'}}>
       <div className="container">
         <div className="box-title-listing">
-          <div className="box-left">
+          {/* <div className="box-left">
             <h3 className="fw-8">Properties</h3>
-            {/* <p className="text">
+            <p className="text">
               There are currently {sorted.length} properties.
-            </p> */}
+            </p>
             <p className="text">
               {sorted.length}
             </p>
-          </div>
-          <div className="box-filter-tab">
-            <ul className="nav-tab-filter" role="tablist">
+          </div> */}
+          <div className="box-filter-tab" >
+            <ul className="nav-tab-filter" role="tablist" >
               <li className="nav-tab-item" role="presentation">
                 <a
                   href="#gridLayout"
@@ -238,8 +238,8 @@ export default function Properties4() {
           </div>
         </div>
         <div className="row">
-          <div className="col-xl-4 col-lg-5">
-            <div className="widget-sidebar fixed-sidebar">
+          <div className="col-xl-4 col-lg-5" style={{width: '25%'}}>
+            <div className="widget-sidebar fixed-sidebar" >
               <div className="flat-tab flat-tab-form widget-filter-search widget-box">
                 {/* <ul className="nav-tab-form" role="tablist">
                   <li className="nav-tab-item" role="presentation">
@@ -261,14 +261,15 @@ export default function Properties4() {
                     </a>
                   </li>
                 </ul> */}
-                <div className="tab-content">
+                <div className="tab-content" >
                   <div className="tab-pane fade active show" role="tabpanel">
                     <div className="form-sl">
                       <form onSubmit={(e) => e.preventDefault()}>
                         <div className="wd-filter-select">
                           <div className="inner-group">
                             <div className="box">
-                              <div className="form-style">
+                              <div className="form-style"
+                                  style={{borderBottom: '1px solid #e4e4e4'}}>
                                 <input
                                   type="text"
                                   className="form-control"
@@ -276,11 +277,12 @@ export default function Properties4() {
                                   defaultValue=""
                                   name="s"
                                   title="Search for"
+                                  style={{border: 'none'}}
                                   required
                                 />
                               </div>
                               <div className="form-style">
-                                <div className="group-ip ip-icon">
+                                <div className="group-ip ip-icon" style={{borderBottom: '1px solid #e4e4e4'}}>
                                   <input
                                     type="text"
                                     className="form-control"
@@ -289,6 +291,7 @@ export default function Properties4() {
                                     name="s"
                                     title="Search for"
                                     required
+                                    style={{border: 'none'}}
                                   />
                                   <a
                                     href="#"
@@ -297,7 +300,7 @@ export default function Properties4() {
                                 </div>
                               </div>
                               <div className="form-style">
-                                <div className="group-select">
+                                <div className="group-select" style={{borderBottom: '1px solid #e4e4e4'}}>
                                   <DropdownSelect
                                     defaultOption="Property type"
                                     onChange={setType}
@@ -308,28 +311,33 @@ export default function Properties4() {
                                       "Office",
                                       "House",
                                     ]}
+                                    
+                                  style={{border: 'none'}}
                                   />
                                 </div>
                               </div>
-                              <div className="form-style box-select">
+                              <div className="form-style box-select" style={{borderBottom: '1px solid #e4e4e4'}}>
                                 <DropdownSelect
                                   defaultOption="Room"
                                   onChange={setRooms}
                                   options={["All", 1, 2, 3, 4, 5]}
+                                  style={{border: 'none'}}
                                 />
                               </div>
-                              <div className="form-style box-select">
+                              <div className="form-style box-select" style={{borderBottom: '1px solid #e4e4e4'}}>
                                 <DropdownSelect
                                   defaultOption="Bathrooms"
                                   onChange={setBathrooms}
                                   options={["All", 1, 2, 3, 4, 5]}
+                                  style={{border: 'none'}}
                                 />
                               </div>
-                              <div className="form-style box-select">
+                              <div className="form-style box-select" style={{borderBottom: '1px solid #e4e4e4'}}>
                                 <DropdownSelect
                                   defaultOption="Bedrooms"
                                   onChange={setBedrooms}
                                   options={["All", 1, 2, 3, 4, 5]}
+                                  style={{border: 'none'}}
                                 />
                               </div>
                             </div>
@@ -368,7 +376,7 @@ export default function Properties4() {
                               <div className="form-style widget-price wd-price-2">
                                 <div className="box-title-price">
                                   <span className="title-price fw-6">
-                                    Size:
+                                    Sq Feet:
                                   </span>
                                   <div className="caption-price">
                                     <span
@@ -376,14 +384,14 @@ export default function Properties4() {
                                       className="fw-6"
                                     >
                                       {" "}
-                                      ₹{size[0]}{" "}
+                                      {size[0]}{" "}
                                     </span>
                                     <span>-</span>
                                     <span
                                       id="slider-range-value2"
                                       className="fw-6"
                                     >
-                                      ₹{size[1]}
+                                      {size[1]}
                                     </span>
                                   </div>
                                 </div>
@@ -435,12 +443,12 @@ export default function Properties4() {
                                 </div>
                               </div>
                             </div>
-                            <a
+                            {/* <a
                               className="tf-btn btn-linemt-5 clear-filter"
                               onClick={clearFilter}
                             >
                               Clear Filter
-                            </a>
+                            </a> */}
                             <div className="form-style">
                               <button
                                 type="submit"
@@ -509,8 +517,8 @@ export default function Properties4() {
               </div> */}
             </div>
           </div>
-          <div className="col-xl-8 col-lg-7 flat-animate-tab">
-            <div className="tab-content">
+          <div className="col-xl-8 col-lg-7 flat-animate-tab" style={{width: '75%'}} >
+            <div className="tab-content" style={{width: '100%'}}  >
               <div
                 className="tab-pane active show"
                 id="gridLayout"
@@ -523,7 +531,7 @@ export default function Properties4() {
                       currentPage * itemPerPage
                     )
                     .map((elm, i) => (
-                      <div key={i} className="col-md-6">
+                      <div key={i} className="col-md-6" style={{width: '33%'}}>
                         <div className="homelengo-box">
                           <div className="archive-top">
                             <Link

@@ -199,7 +199,7 @@ export default function Footer1() {
                   <li className="mt-12 d-flex align-items-center gap-8">
                     <i className="icon icon-mapPinLine fs-20 text-variant-2" />
                     <p className="text-white">
-                      Address lines 1, chennai, tamil nadu
+                    LIP Prpoerties pvt Ltd
                     </p>
                   </li>
                   <li className="mt-12 d-flex align-items-center gap-8">
@@ -208,12 +208,12 @@ export default function Footer1() {
                       href="tel:1-333-345-6868"
                       className="text-white caption-1"
                     >
-                      9900997788
+                      +91 9994547709
                     </a>
                   </li>
                   <li className="mt-12 d-flex align-items-center gap-8">
                     <i className="icon icon-mail fs-20 text-variant-2" />
-                    <p className="text-white">landsindia@gmail.com</p>
+                    <p className="text-white">admin@propertystores.com</p>
                   </li>
                 </ul>
               </div>
