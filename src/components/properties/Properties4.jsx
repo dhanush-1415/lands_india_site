@@ -103,7 +103,7 @@ export default function Properties4() {
     setFeatures,
   };
   return (
-    <section className="flat-section flat-recommended flat-sidebar" style={{position: 'relative', bottom: '10vh'}}>
+    <section className="flat-section flat-recommended flat-sidebar" style={{position: 'relative'}}>
       <div className="container">
         <div className="box-title-listing">
           {/* <div className="box-left">
