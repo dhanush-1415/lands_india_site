@@ -359,26 +359,25 @@ export default function Header1({
   
   const items = [
     {
-      title: 'Individual Property',
+      img:'https://static.vecteezy.com/system/resources/previews/028/900/473/non_2x/agent-icon-design-free-png.png',
+      title: 'Individual',
       description:
-        'Experience the epitome of modern living with our luxury apartments, meticulously designed for comfort and security. These homes feature 24/7 surveillance, eco-friendly systems such as solar energy solutions, and an array of exclusive amenities including pools, gyms, and recreational spaces. Strategically located near business hubs and major transport links, our spacious apartments—starting at 1,500 sq. ft.—offer customizable interiors to match your personal style, making them the perfect blend of elegance and functionality.',
+        'Discover personalized living spaces crafted to reflect your unique style, preferences, and lifestyle. Our individual property options include state-of-the-art apartments and luxurious villas, offering a range of modern amenities such as 24/7 security, cutting-edge smart home systems, and eco-friendly green energy solutions. Designed for ultimate comfort and convenience, these properties are perfect for families, professionals, and individuals who seek a harmonious blend of luxury, privacy, and practicality. Whether you’re looking for a cozy apartment or an expansive villa, we have the ideal space for you.',
     },
     {
-      title: 'Rent/Lease',
+      img:'https://static.vecteezy.com/system/resources/previews/028/900/473/non_2x/agent-icon-design-free-png.png',
+      title: 'Project',
       description:
-        'Explore our extensive range of commercial spaces located in prime city areas, ideal for businesses of all sizes. With flexible lease terms starting from just 1 year, we offer fully furnished offices that are ready for immediate occupancy. Each rental includes dedicated parking, utility services, and round-the-clock property management support to ensure a hassle-free experience. Perfect for growing enterprises, these properties are designed to enhance productivity and provide a professional environment.',
+        'Explore our diverse range of real estate projects, thoughtfully designed to meet the dynamic needs of businesses, communities, and future generations. From sleek commercial complexes to large-scale mixed-use developments, our projects emphasize innovation, sustainability, and prime locations. Each property is designed to offer flexible, customizable spaces that cater to the evolving demands of modern enterprises. With long-term value in mind, we provide end-to-end solutions that cater to investors, developers, and end-users alike. Our projects are meticulously planned to create vibrant, sustainable communities that foster growth, connection, and prosperity.',
     },
     {
-      title: 'Sell Property',
+      img:'https://static.vecteezy.com/system/resources/previews/028/900/473/non_2x/agent-icon-design-free-png.png',
+      title: 'Value-Added Services',
       description:
-        'Take advantage of our expertise in selling premium properties, from modern villas with private pools and lush gardens to high-demand homes in rapidly developing neighborhoods. Our professional real estate agents handle every aspect of the sale, offering competitive market pricing, free valuations, and personalized marketing strategies. We ensure a fast and seamless sales process with minimal paperwork, making it easy for you to connect with serious buyers and achieve the best value for your property.',
-    },
-    {
-      title: 'Added Value Services',
-      description:
-        'Enhance your real estate experience with our exclusive added-value services tailored to meet your needs. From professional staging and high-quality photography to highlight your property’s best features, to comprehensive legal and financial advisory support, we provide everything you need for a stress-free transaction. Our experts also offer relocation assistance, property maintenance, and customized solutions to ensure your real estate journey is seamless, efficient, and rewarding.',
+        'Maximize the potential of your real estate investments with our premium suite of value-added services, designed to elevate your experience every step of the way. Whether you require expert property staging to showcase your property’s full potential, high-resolution photography to capture stunning visuals, or in-depth legal and financial guidance to navigate complex transactions, we have you covered. Our comprehensive services also include relocation support, tailored maintenance plans, and personalized strategies designed to ensure a smooth, efficient, and rewarding property experience. We take pride in offering bespoke solutions that align with your unique needs, helping you achieve success in every aspect of your real estate journey.',
     },
   ];
+  
   
   
 
@@ -408,7 +407,7 @@ export default function Header1({
             }}
           >
             <Grid container justifyContent='space-between' alignItems='center' sx={{width:'90%',margin:'0px auto'}}>
-              <Grid item md={5.9}>
+              <Grid item xs={12} md={5.9} sx={{display:{xs:'none',sm:'none',md:'block'}}}>
                 <Carousel
                   responsive={responsive}
                   autoPlay
@@ -442,9 +441,13 @@ export default function Header1({
                   ))} */}
                   {items.map((item, index) => (
                     <div key={index} style={{ marginBottom: '2rem' }}>
-                      <Typography variant="h4" fontWeight="bold">
-                        {item.title}
-                      </Typography>
+                      <div className="d-flex align-items-center">
+                        <img src={item.img} width={100} alt="icon" />
+                        <Typography variant="h4" fontWeight="bold" px={3}>
+                          {item.title}
+                        </Typography>
+                      </div>
+                    
                       <Typography variant="body1" color="#000000" sx={{ marginTop: '1rem' }}>
                         {item.description}
                       </Typography>
@@ -452,7 +455,7 @@ export default function Header1({
                   ))}
                 </Carousel>
               </Grid>
-              <Grid item md={5.9}>
+              <Grid item xs={12} md={5.9}>
                 <Card sx={{borderRadius:'20px',width:{xs:'100%',sm:'100%',md:'85%',margin:'0px auto'},boxShadow:' rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px'}} >
                   <CardContent>
                     <Grid>
@@ -830,12 +833,22 @@ export default function Header1({
                   >
                     <ul className="navigation clearfix">
                       <Nav />
-                      <li>
                       <a
-                          
                         onClick={handleDialogOpen}
+                        style={{
+                          textAlign: 'center',
+                          fontWeight: 600,
+                          padding: '27px 0px',
+                          letterSpacing: '0px',
+                          color: '#000000',
+                          fontSize: '16px',
+                          lineHeight: '21.86px',
+                          textTransform: 'capitalize',
+                        }}
+                      
                         >
                           <svg
+                            style={{marginBottom:'3px'}}
                             width={20}
                             height={20}
                             viewBox="0 0 20 20"
@@ -850,9 +863,8 @@ export default function Header1({
                               strokeLinejoin="round"
                             />
                           </svg>
-                          Login/Register
+                          Login
                         </a>
-                      </li>
                     </ul>
                   </div>
                 </nav>

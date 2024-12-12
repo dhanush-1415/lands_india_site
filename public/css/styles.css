@@ -1168,7 +1168,7 @@ label {
   -webkit-transition: all 500ms ease;
   -ms-transition: all 500ms ease;
   -o-transition: all 500ms ease;
-  padding-right: 65px;
+  padding-right: 45px;
 }
 
 .main-header .sticky-header .nav-outer .options-box {
@@ -4710,8 +4710,8 @@ label {
 /*-------------- section ----------------- */
 /*------------ section ---------------- */
 .flat-section {
-  padding-top: 100px;
-  padding-bottom: 100px;
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 .flat-section-v2 {
