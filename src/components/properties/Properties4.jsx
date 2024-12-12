@@ -15,7 +15,7 @@ export default function Properties4() {
 
   let params = useParams();
 
-
+  
   const [sorted, setSorted] = useState();
   const [filtered, setFiltered] = useState([]);
 
@@ -24,6 +24,7 @@ export default function Properties4() {
     console.log('fff', sorted);
   },[sorted])
   useEffect(()=>{
+    !params.name ? window.location.href = '/properties/all': '' 
     if(params.name === "projects"){
       setSorted(projectData)
       
@@ -31,6 +32,9 @@ export default function Properties4() {
     }
     if(params.name === "individuals"){
       setSorted(indvidualData)
+    }
+    if(params.name === "all"){
+      setSorted(props)
     }
   },[])
 

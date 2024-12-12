@@ -386,19 +386,20 @@ export default function Header1({
     {
       img: individual,
       title: 'Individual',
-      description: 'Discover a variety of personalized living spaces, from luxurious apartments to spacious villas, all equipped with modern amenities like 24/7 security, smart home technology, and eco-friendly solutions for a comfortable, convenient lifestyle.',
+      description: 'Find tailored living spaces, from cozy apartments to elegant villas, featuring modern conveniences such as smart technology, green solutions, and round-the-clock security for a fulfilling lifestyle.',
     },
     {
       img: projects,
       title: 'Project',
-      description: 'Explore our diverse range of real estate projects, including sleek commercial complexes and large-scale mixed-use developments, all designed with a focus on sustainability, flexibility, and prime locations to meet the needs of businesses and investors.',
+      description: 'Discover an array of projects, from dynamic commercial hubs to versatile mixed-use spaces, designed to cater to the demands of businesses, entrepreneurs, and investors alike.',
     },
     {
       img: addedValue,
       title: 'Value-Added Services',
-      description: 'Enhance your real estate experience with a comprehensive suite of value-added services, including expert property staging, high-resolution photography, legal and financial advice, as well as personalized strategies to ensure a smooth and rewarding journey.',
+      description: 'Experience seamless real estate journeys with specialized services, including legal, financial, and customized guidance to simplify processes and maximize your outcomes.',
     },
-  ];
+];
+
 
   
 
@@ -463,7 +464,11 @@ export default function Header1({
                   {items.map((item, index) => (
                     <div key={index} style={{ marginBottom: '2rem' }}>
                       <div className="d-flex flex-column justify-content-center align-items-center">
-                        <img src={item.img} width={200} alt="icon" />
+                        <img src={item.img} alt="icon" style={{
+                                                    width: "200px",
+                                                    height: "200px",
+                                                    objectFit: "cover"
+                                                  }}/>
                         <Typography variant="h4" fontWeight="bold" px={3}>
                           {item.title}
                         </Typography>
