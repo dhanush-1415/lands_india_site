@@ -1,15 +1,37 @@
 import { allProperties } from "@/data/properties";
 import React from "react";
 
-export default function DetailsTitle1({ propertyItem = allProperties[0] }) {
+export default function DetailsTitle1({ propertyItem}) {
   return (
     <div className="flat-section-v4">
       <div className="container">
+      {/* {
+        title: "#On-road New House sale in Udumalpet"
+      price: " 97,00,000",
+        postedBy: "Owner",
+        postedDate: "Sep 25, 2024",
+        description: "On-road New Residential House for Sale in Udumalpet",
+        amenities: [
+          "North Facing",
+          "Semi - Furnished House",
+          "EB connection available",
+          "Water supply available",
+          "DTCP Approved Property"
+        ],
+        locationDetails: [
+          "This On-road property located 60 meters from the main road",
+          "100 meter from Dharapuram main road",
+          "Located in Gated community"
+        ],
+        nearbyAreas: [
+          "Newly by-pass road work going on from 600m from the property which is visible from our property"
+        ]
+      }, */}
         <div className="header-property-detail">
           <div className="content-top d-flex justify-content-between align-items-center">
             <h3 className="title link fw-8">{propertyItem.title}</h3>
             <div className="box-price d-flex align-items-end">
-              <h3 className="fw-8">₹25,000,00</h3>
+              <h3 className="fw-8">₹{propertyItem.price}</h3>
               {/* <span className="body-1 text-variant-1">/month</span> */}
             </div>
           </div>
@@ -21,17 +43,17 @@ export default function DetailsTitle1({ propertyItem = allProperties[0] }) {
                   <li className="meta-item">
                     <i className="icon icon-bed" />
                     <span className="text-variant-1">Beds:</span>
-                    <span className="fw-6">3</span>
+                    <span className="fw-6">{propertyItem.features.beds}</span>
                   </li>
                   <li className="meta-item">
                     <i className="icon icon-bath" />
                     <span className="text-variant-1">Baths:</span>
-                    <span className="fw-6">2</span>
+                    <span className="fw-6">{propertyItem.features.baths}</span>
                   </li>
                   <li className="meta-item">
                     <i className="icon icon-sqft" />
                     <span className="text-variant-1">Sqft:</span>
-                    <span className="fw-6">1150</span>
+                    <span className="fw-6">{propertyItem.features.sqfeet}</span>
                   </li>
                 </ul>
               </div>
@@ -40,7 +62,7 @@ export default function DetailsTitle1({ propertyItem = allProperties[0] }) {
                 <p className="meta-item">
                   <span className="icon icon-mapPin" />
                   <span className="text-variant-1">
-                    145 New Ave, Anna Nagar, Chennai
+                    {propertyItem.location.village}, {propertyItem.location.district}, {propertyItem.location.state}, {propertyItem.location.country}
                   </span>
                 </p>
               </div>

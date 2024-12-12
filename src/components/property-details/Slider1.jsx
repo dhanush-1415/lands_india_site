@@ -29,7 +29,7 @@ const propertyImages = [
   },
 ];
 
-export default function Slider1() {
+export default function Slider1({ imageItem }) {
   return (
     <Gallery>
       <section className="flat-slider-detail-v1 px-10">
@@ -54,11 +54,11 @@ export default function Slider1() {
           modules={[Pagination]}
           pagination={{ clickable: true, el: ".spb18" }}
         >
-          {propertyImages.map((image, index) => (
+          {imageItem.map((image, index) => (
             <SwiperSlide key={index}>
               <Item
-                original={image.src}
-                thumbnail={image.src}
+                original={image}
+                thumbnail={image}
                 width={image.width}
                 height={image.height}
               >
@@ -71,7 +71,7 @@ export default function Slider1() {
                     <img
                       ref={ref}
                       alt={image.alt}
-                      src={image.src}
+                      src={image}
                       width={image.width}
                       height={image.height}
                     />
