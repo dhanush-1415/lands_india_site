@@ -1,5 +1,6 @@
 import "../public/scss/styles.scss";
 import "photoswipe/dist/photoswipe.css";
+import 'boxicons/css/boxicons.min.css';
 import "react-modal-video/scss/modal-video.scss";
 import "rc-slider/assets/index.css";
 import WOW from "./utlis/wow";
@@ -98,7 +99,7 @@ function App() {
 
 
 
-              <Route
+              {/* <Route
                 path="property-halfmap-grid"
                 element={<PropertyHalfmapGridPage />}
               />
@@ -145,7 +146,7 @@ function App() {
               <Route path="my-favorites" element={<MyFavoritePage />} />
               <Route path="reviews" element={<ReviewPage />} />
               <Route path="my-profile" element={<MyProfilePage />} />
-              <Route path="add-property" element={<AddPropertyPage />} />
+              <Route path="add-property" element={<AddPropertyPage />} /> */}
             </Route>
           </Routes>
         </div>

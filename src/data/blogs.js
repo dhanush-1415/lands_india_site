@@ -1,7 +1,7 @@
 export const blogPosts = [
   {
     id: 1,
-    imgSrc: "/images/blog/blog-10.jpg",
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMwlDkFzqaVanOqZ0ZLRXtdfiipnZc2SY4Hw&s",
     alt: "img-blog",
     date: "January 28, 2024",
     author: "Sundar Rajan",
@@ -12,7 +12,7 @@ export const blogPosts = [
   },
   {
     id: 2,
-    imgSrc: "/images/blog/blog-11.jpg",
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMwlDkFzqaVanOqZ0ZLRXtdfiipnZc2SY4Hw&s",
     alt: "img-blog",
     date: "January 28, 2024",
     author: "Anjali Nair",
@@ -23,7 +23,7 @@ export const blogPosts = [
   },
   {
     id: 3,
-    imgSrc: "/images/blog/blog-12.jpg",
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMwlDkFzqaVanOqZ0ZLRXtdfiipnZc2SY4Hw&s",
     alt: "img-blog",
     date: "January 28, 2024",
     author: "Ravi Shankar",

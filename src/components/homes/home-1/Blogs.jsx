@@ -40,7 +40,7 @@ export default function Blogs() {
           {blogPosts.map((post, index) => (
             <SwiperSlide className="swiper-slide" key={index}>
               <Link
-                to={`/blog-detail/${post.id}`}
+                // to={`/blog-detail/${post.id}`}
                 className="flat-blog-item hover-img"
               >
                 <div className="img-style">
