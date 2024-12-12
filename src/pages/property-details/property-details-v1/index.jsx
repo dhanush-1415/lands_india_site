@@ -374,6 +374,195 @@ export default function PropertyDetailsPageV1() {
       ]
     }
   ]
+  const projects = [
+    
+    {
+      id: 1,
+      postedBy: {
+        name: "Di**a",
+        email: "di***********r@gmail.com"
+      },
+      squareFeet: "4800 sq",
+      propertyDetails: {
+        title: "Beach front plot for sale in ECR , Mamallapuram",
+        price: "55,00,000",
+        postedBy: "Owner",
+        postedDate: "jul 17, 2024",
+        descriptions: [
+          "Title : Beach front plot for sale in ECR Maamallapuram", "sqft : 2 Grounds, 4800 - sqft", "Price : 55laks / per Ground", "Gated community with Watchman !!", "150meter from Beach !!","1.5km from Maamallapuram bus stand Eb facility"
+        ],
+        
+        location: {
+          country: "India",
+          state: "Tamil Nadu",
+          district: "Kancheepuram",
+          taluk: "Tirukalikundram",
+          village: "Mamallapuram"
+        },
+      },
+      img: [
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721216563555SS259424391.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721216566804SS521158392.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721216570936SS541271682.jpg",
+      ]
+    },
+    {
+      id: 2,
+      postedBy: {
+        name: "Di**a",
+        email: "di***********r@gmail.com"
+      },
+      squareFeet: "1200 sq",
+      propertyDetails: {
+        title: "Beach front plot for sale in ECR , Mamallapuram",
+        price: "22,00,000",
+        postedBy: "Owner",
+        postedDate: "jul 18, 2024",
+        descriptions: [
+          "Title : Income cottage sale", "Offers: 12% Returns Yearly", "Location : ECR , Chennai", "Price : 22 lakhs", "SQFT : Plots Scale: 1200 Sqft Land , 400 Sqft Buildup Area","24/7 Service ,Swimming Pool , Fitness Center ,Restaurant ,Conference Hall ,Kidsplay Park ,Spa & Wellness"
+        ],
+        
+        location: {
+          country: "India",
+          state: "Tamil Nadu",
+          district: "Chengalpattu",
+          taluk: "Thirukazhikundram",
+          village: "Pudupattinam"
+        },
+      },
+      img: [
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1726818481275SS782793669.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721281161254SS931112073.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1726818481330SS201904029.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721720629542SS825523086.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721281154717SS637165200.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721281149266SS12290080.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1726818481062SS30764972.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721281169588SS132337919.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1726818481222SS55328135.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1726818481277SS655268977.jpg"
+      ]
+    },
+    {
+      id: 3,
+      postedBy: {
+        name: "Di**a",
+        email: "di***********r@gmail.com"
+      },
+      squareFeet: "3500 sq",
+      propertyDetails: {
+        title: "Beach front plot for sale in ECR , Mamallapuram",
+        price: "3,500",
+        postedBy: "Owner",
+        postedDate: "jul 17, 2024",
+        descriptions: [
+          "Title : Residential Land for Sale", "Location : Kelambakkam, OMR (Behind Alliance Humming Garden)", "Offer Price : ₹ 3500 per sqft"
+        ],
+        
+        location: {
+          country: "India",
+          state: "Tamil Nadu",
+          district: "Chengalpattu",
+          taluk: "Tiruporur",
+          village: "Kelambakkam"
+        },
+      },
+      img: [
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721219201318SS403685325.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721219206090SS878496586.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721219209203SS466906581.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721219212077SS221768027.jpg",
+      ]
+    },
+    {
+      id: 4,
+      postedBy: {
+        name: "Di**a",
+        email: "di***********r@gmail.com"
+      },
+      squareFeet: "1500 sq",
+      propertyDetails: {
+        title: "Beach front plot for sale in ECR , Mamallapuram",
+        price: "36,00,000",
+        postedBy: "Owner",
+        postedDate: "jul 18, 2024",
+        descriptions: [
+          "Title : Kodaikanal to Pannaikadu DTCP EMI Plots for sale", "On Road Site", "PAY 50% First & Register", "PAY 50% Balance With Interest FREE EMI", "Investment one time & Get monthly returns 10 yrs","Monthly rental return 1%", "Maintenance 100% free", "Monthly 4 days free stay reserved for owner", "Vathalagundu to Kodaikanal on road sight", "Gated community with security", "Kids play area & Park available", "DTCP Approved", "Easy access to Moolaiyar River", "Easy access Kodaikanal, Palani and vathalagundu", "100% safe and secured property", "Plot size starts from 1500sqft", "Concrete Road and EB available"
+        ],
+        
+        location: {
+          country: "India",
+          state: "Tamil Nadu",
+          district: "Dindigul",
+          taluk: "Kodaikanal",
+          village: "Pannaikadu"
+        },
+      },
+      img: [
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721285409450SS970750546.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721285417005SS171686186.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721285421584SS279047873.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721285426471SS945095527.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721285436121SS268707929.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721285443528SS18985419.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721285446772SS432706533.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1721285455411SS994089969.jpg"
+      ]
+    },
+    {
+      id: 4,
+      postedBy: {
+        name: "Di**a",
+        email: "di***********r@gmail.com"
+      },
+      squareFeet: "9600 sq",
+      propertyDetails: {
+        title: "Beach front plot for sale in ECR , Mamallapuram",
+        price: "26,40,000",
+        postedBy: "Owner",
+        postedDate: "Apr 12, 2024",
+        descriptions: [
+          "Gated Community", "Swimming Pool", "Water Falls", "Party Hall", "Restaurant","Kids Play Area", "Garden", "Indoor Games", "Outdoor Games & Etc...",
+        ],
+        additionalInformation: {
+            "Dtcp": "Yes",
+            "RERAApproved": "Yes",
+          "NearByAmenities": [
+            "Coutralam Falls",
+            "Thirumalai Kovil"
+          ],
+          "RoadSize": "23 Feet",
+          "CCTV": "Yes",
+          "Security": "Yes",
+          "KidsPlayPark": "Yes",
+          "Garden": "Yes",
+          "StreetLight": "Yes",
+          "RoadType": "Concrete Road",
+          "EbFacility": "Yes",
+          "Water": "Ground Water",
+          "CommunityType": "Gated Community",
+          "Trees": "Yes"
+        },        
+        location: {
+          country: "India",
+          state: "Tamil Nadu",
+          district: "Tenkasi",
+          taluk: "Shenkottai",
+          village: "Tenpottai"
+        },
+      },
+      img: [
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1712920885828SS641824268.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1712920885861SS807020942.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1712920888303SS113070131.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1712920900689SS77397891.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1712920900724SS722469815.jpg",
+        "https://file-manager.propertystores.in/file-manager/get/properties_store/properties/1712920900893SS520820400.jpg"
+      ]
+    }
+  ]
+
+   
   const propertyItem =
     data.filter((elm) => elm.id == params.id)[0] || data[0];
   return (
