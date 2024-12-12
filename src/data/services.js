@@ -22,19 +22,19 @@
 export const services = [
   {
     imageSrc: "/images/service/home-1.png",
-    title: "Buy A House",
+    title: "individual ",
     description:
       "Discover your dream home effortlessly. Explore diverse house listings with expert guidance for a seamless buying experience.",
   },
   {
     imageSrc: "/images/service/home-2.png",
-    title: "Buy A Plot",
+    title: "projects",
     description:
       "Invest in a plot of land and build your future. Explore available plots for sale with professional advice and opportunities.",
   },
   {
     imageSrc: "/images/service/home-3.png",
-    title: "Buy Commercial Property",
+    title: "added value service",
     description:
       "Find the ideal commercial property for your business needs. Explore various options for office spaces, shops, and more.",
   },

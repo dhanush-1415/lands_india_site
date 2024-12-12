@@ -3,7 +3,7 @@ import WordEffect1 from "@/components/common/WordEffect1";
 
 export default function Hero() {
   return (
-    <section className="flat-slider home-1">
+    <section className="flat-slider home-1 " style={{height : '70vh'}}>
       <div className="container relative">
         <div className="row">
           <div className="col-lg-12">
@@ -21,7 +21,7 @@ export default function Hero() {
                   residence you dream of, let’s discuss for your dream house?
                 </p>
               </div>
-              <FilterTab />
+              {/* <FilterTab /> */}
             </div>
           </div>
         </div>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { services } from "@/data/services";
 export default function Services() {
   return (
-    <section className="flat-section">
+    <section className="flat-section" style={{padding: '0 auto 40px auto'}}>
       <div className="container">
         <div className="box-title text-center wow fadeInUp">
           <div className="text-subtitle text-primary">Our Services</div>

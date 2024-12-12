@@ -1,20 +1,22 @@
 export const footerSections = [
   {
-    heading: "Categories",
+    heading: "Usefull info",
     links: [
-      { href: "/", label: "Pricing Plans" },
-      { href: "/", label: "Our Services" },
-      { href: "/about-us", label: "About Us" },
-      { href: "/contact", label: "Contact Us" },
+      { href: "/", label: "Buy Property" },
+      { href: "/", label: "Sell Property" },
+      { href: "/about-us", label: "Agent" },
+      { href: "/contact", label: "My Account" },
+      { href: "/contact", label: "Contact us" },
     ],
   },
   {
     heading: "Our Company",
     links: [
-      { href: "/", label: "Property For Sale" },
-      { href: "/", label: "Property For Rent" },
-      { href: "/", label: "Property For Buy" },
-      { href: "/", label: "Our Agents" },
+      { href: "/", label: "Home" },
+      { href: "/", label: "Individual" },
+      { href: "/about-us", label: "Projects" },
+      { href: "/contact", label: "Added Value Service" },
+      { href: "/contact", label: "Rent/Lease" },
     ],
   },
   {
@@ -22,7 +24,6 @@ export const footerSections = [
     links: [
       { href: "/", label: "Terms Of Service" },
       { href: "/", label: "Privacy Policy" },
-      { href: "/", label: "Cookie Policy" },
     ],
   },
 ];

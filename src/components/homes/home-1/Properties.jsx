@@ -16,7 +16,7 @@ export default function Properties() {
   }, [selectedOption]);
 
   return (
-    <section className="flat-section flat-recommended">
+    <section className="flat-section flat-recommended" style={{position: 'relative' ,bottom: "8vh"}}>
       <div className="container">
         <div className="box-title text-center wow fadeInUp">
           <div className="text-subtitle text-primary">Featured Properties</div>

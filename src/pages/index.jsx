@@ -26,10 +26,10 @@ export default function Home() {
       <Properties />
       {/* <Locations /> */}
       <Services />
-      <Benefit />
-      <Properties2 />
+      {/* <Benefit /> */}
+      {/* <Properties2 /> */}
       <Testimonials />
-      <Agents />
+      {/* <Agents /> */}
       {/* <Brands /> */}
       <Blogs />
       <Footer1 />

@@ -11,7 +11,7 @@ const metadata = {
 export default function SidebarGridPage() {
   return (
     <>
-      <MetaComponent  />
+      {/* <MetaComponent  /> */}
       {/* <Header1 /> */}
       <Properties4 />
       <Footer1 />
