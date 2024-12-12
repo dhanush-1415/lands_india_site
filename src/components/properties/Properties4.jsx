@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import Pagination from "../common/Pagination";
 import Slider from "rc-slider";
-import { allProperties, featureOptions, properties2 } from "@/data/properties";
+import { allProperties, featureOptions,projectData, indvidualData, props } from "@/data/properties";
 
 import { useParams } from "react-router-dom";
 
@@ -16,12 +16,21 @@ export default function Properties4() {
   let params = useParams();
 
 
+  const [sorted, setSorted] = useState();
+  const [filtered, setFiltered] = useState([]);
+
+  useEffect(() => {
+    
+    console.log('fff', sorted);
+  },[sorted])
   useEffect(()=>{
     if(params.name === "projects"){
-
+      setSorted(projectData)
+      
+      
     }
     if(params.name === "individuals"){
-
+      setSorted(indvidualData)
     }
   },[])
 
@@ -32,9 +41,7 @@ export default function Properties4() {
   const [bathrooms, setBathrooms] = useState("All");
   const [type, setType] = useState("All");
   const [features, setFeatures] = useState([]);
-  const [filtered, setFiltered] = useState(allProperties);
   const [sortingOption, setSortingOption] = useState("Sort by (Default)");
-  const [sorted, setSorted] = useState(allProperties);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemPerPage, setitemPerPage] = useState(8);
 
@@ -48,65 +55,65 @@ export default function Properties4() {
     setFeatures([]);
   };
 
-  useEffect(() => {
-    let filteredArrays = [];
+  // useEffect(() => {
+  //   let filteredArrays = [];
 
-    if (features.length) {
-      const filteredByfeatures = [...allProperties].filter((elm) =>
-        features.every((el) => elm.features.includes(el))
-      );
-      filteredArrays = [...filteredArrays, filteredByfeatures];
-    }
-    if (rooms != "All") {
-      const filteredByRooms = [...allProperties].filter(
-        (elm) => rooms == elm.rooms
-      );
-      filteredArrays = [...filteredArrays, filteredByRooms];
-    }
-    if (bedrooms != "All") {
-      const filteredBybedrooms = [...allProperties].filter(
-        (elm) => bedrooms == elm.beds
-      );
-      filteredArrays = [...filteredArrays, filteredBybedrooms];
-    }
-    if (bathrooms != "All") {
-      const filteredBybathrooms = [...allProperties].filter(
-        (elm) => bathrooms == elm.baths
-      );
-      filteredArrays = [...filteredArrays, filteredBybathrooms];
-    }
-    if (type != "All") {
-      const filteredBytype = [...allProperties].filter((elm) =>
-        elm.type.includes(type)
-      );
-      filteredArrays = [...filteredArrays, filteredBytype];
-    }
-    const filteredByprice = [...allProperties].filter(
-      (elm) => elm.price >= price[0] && elm.price <= price[1]
-    );
-    filteredArrays = [...filteredArrays, filteredByprice];
-    const filteredBysize = [...allProperties].filter(
-      (elm) => elm.sqft >= size[0] && elm.sqft <= size[1]
-    );
-    filteredArrays = [...filteredArrays, filteredBysize];
+  //   if (features.length) {
+  //     const filteredByfeatures = [...props].filter((elm) =>
+  //       features.every((el) => elm.features.includes(el))
+  //     );
+  //     filteredArrays = [...filteredArrays, filteredByfeatures];
+  //   }
+  //   if (rooms != "All") {
+  //     const filteredByRooms = [...props].filter(
+  //       (elm) => rooms == elm.rooms
+  //     );
+  //     filteredArrays = [...filteredArrays, filteredByRooms];
+  //   }
+  //   if (bedrooms != "All") {
+  //     const filteredBybedrooms = [...props].filter(
+  //       (elm) => bedrooms == elm.beds
+  //     );
+  //     filteredArrays = [...filteredArrays, filteredBybedrooms];
+  //   }
+  //   if (bathrooms != "All") {
+  //     const filteredBybathrooms = [...props].filter(
+  //       (elm) => bathrooms == elm.baths
+  //     );
+  //     filteredArrays = [...filteredArrays, filteredBybathrooms];
+  //   }
+  //   if (type != "All") {
+  //     const filteredBytype = [...props].filter((elm) =>
+  //       elm.type.includes(type)
+  //     );
+  //     filteredArrays = [...filteredArrays, filteredBytype];
+  //   }
+  //   const filteredByprice = [...props].filter(
+  //     (elm) => elm.price >= price[0] && elm.price <= price[1]
+  //   );
+  //   filteredArrays = [...filteredArrays, filteredByprice];
+  //   const filteredBysize = [...props].filter(
+  //     (elm) => elm.sqft >= size[0] && elm.sqft <= size[1]
+  //   );
+  //   filteredArrays = [...filteredArrays, filteredBysize];
 
-    const commonItems = [...allProperties].filter((item) =>
-      filteredArrays.every((array) => array.includes(item))
-    );
-    setFiltered(commonItems);
-  }, [price, size, rooms, bedrooms, bathrooms, type, features]);
+  //   const commonItems = [...props].filter((item) =>
+  //     filteredArrays.every((array) => array.includes(item))
+  //   );
+  //   setFiltered(commonItems);
+  // }, [price, size, rooms, bedrooms, bathrooms, type, features]);
 
-  useEffect(() => {
-    if (sortingOption === "Price Ascending") {
-      setSorted([...filtered].sort((a, b) => a.price - b.price));
-    } else if (sortingOption === "Price Descending") {
-      setSorted([...filtered].sort((a, b) => b.price - a.price));
-    } else {
-      setSorted(filtered); // Return items in their original order
-    }
+  // useEffect(() => {
+  //   if (sortingOption === "Price Ascending") {
+  //     setSorted([...filtered].sort((a, b) => a.price - b.price));
+  //   } else if (sortingOption === "Price Descending") {
+  //     setSorted([...filtered].sort((a, b) => b.price - a.price));
+  //   } else {
+  //     setSorted(filtered); 
+  //   }
 
-    setCurrentPage(1);
-  }, [filtered, sortingOption]);
+  //   setCurrentPage(1);
+  // }, [filtered, sortingOption]);
 
   const allProps = {
     price,
@@ -544,230 +551,240 @@ export default function Properties4() {
                 role="tabpanel"
               >
                 <div className="row">
-                  {sorted
+                  {sorted && sorted
                     .slice(
                       (currentPage - 1) * itemPerPage,
                       currentPage * itemPerPage
                     )
-                    .map((elm, i) => (
-                      <div key={i} className="col-md-6" style={{width: '33%'}}>
-                        <div className="homelengo-box">
-                          <div className="archive-top">
-                            <Link
-                              to={`/property-details/${elm.id}`}
-                              className="images-group"
-                            >
-                              <div className="images-style">
-                                <img
-                                  className="lazyload"
-                                  alt="img"
-                                  src={elm.imgSrc}
-                                  width={615}
-                                  height={405}
-                                />
-                              </div>
-                              <div className="top">
-                                <ul className="d-flex gap-6">
-                                  <li className="flag-tag primary">Featured</li>
-                                  <li className="flag-tag style-1">For Sale</li>
-                                </ul>
-                              </div>
-                              <div className="bottom">
-                                <svg
-                                  width={16}
-                                  height={16}
-                                  viewBox="0 0 16 16"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path
-                                    d="M10 7C10 7.53043 9.78929 8.03914 9.41421 8.41421C9.03914 8.78929 8.53043 9 8 9C7.46957 9 6.96086 8.78929 6.58579 8.41421C6.21071 8.03914 6 7.53043 6 7C6 6.46957 6.21071 5.96086 6.58579 5.58579C6.96086 5.21071 7.46957 5 8 5C8.53043 5 9.03914 5.21071 9.41421 5.58579C9.78929 5.96086 10 6.46957 10 7Z"
-                                    stroke="white"
-                                    strokeWidth="1.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  />
-                                  <path
-                                    d="M13 7C13 11.7613 8 14.5 8 14.5C8 14.5 3 11.7613 3 7C3 5.67392 3.52678 4.40215 4.46447 3.46447C5.40215 2.52678 6.67392 2 8 2C9.32608 2 10.5979 2.52678 11.5355 3.46447C12.4732 4.40215 13 5.67392 13 7Z"
-                                    stroke="white"
-                                    strokeWidth="1.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  />
-                                </svg>
-                                {elm.address}
-                              </div>
-                            </Link>
-                          </div>
-                          <div className="archive-bottom">
-                            <div className="content-top">
-                              <h6 className="text-capitalize">
-                                <Link
-                                  to={`/property-details/${elm.id}`}
-                                  className="link"
-                                >
-                                  {elm.title}
-                                </Link>
-                              </h6>
-                              <ul className="meta-list">
-                                <li className="item">
-                                  <i className="icon icon-bed" />
-                                  <span className="text-variant-1">Beds:</span>
-                                  <span className="fw-6">{elm.beds}</span>
-                                </li>
-                                <li className="item">
-                                  <i className="icon icon-bath" />
-                                  <span className="text-variant-1">Baths:</span>
-                                  <span className="fw-6">{elm.baths}</span>
-                                </li>
-                                <li className="item">
-                                  <i className="icon icon-sqft" />
-                                  <span className="text-variant-1">Sqft:</span>
-                                  <span className="fw-6">{elm.sqft}</span>
-                                </li>
-                              </ul>
-                            </div>
-                            <div className="content-bottom">
-                              <div className="d-flex gap-8 align-items-center">
-                                <div className="avatar avt-40 round">
-                                  <img
-                                    alt="avt"
-                                    src={elm.avatar}
-                                    width={34}
-                                    height={34}
-                                  />
-                                </div>
-                                <span>{elm.agent}</span>
-                              </div>
-                              <h6 className="price">
-                                ₹{elm.price.toLocaleString()}
-                              </h6>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                    .map((property, index) => (
+                      
+                                        <div key={index} className="col-xl-4 col-lg-6 col-md-6">
+                                          <div className="homelengo-box">
+                                            <div className="archive-top">
+                                              <Link
+                                                to={`/property-details/${property.id}`}
+                                                className="images-group"
+                                                
+                                              >
+                                               <div className="images-style">
+                                                  <img
+                                                    className="lazyload"
+                                                    data-src={property.img[0]}
+                                                    alt=""
+                                                    src={property.img[0]}
+                                                    style={{
+                                                      width: "615px",
+                                                      height: "250px",
+                                                      objectFit: "cover"
+                                                    }}
+                                                  />
+                                                </div>
+                      
+                                                <div className="top">
+                                                  <ul className="d-flex gap-6">
+                                                    <li className="flag-tag primary">Featured</li>
+                                                    <li className="flag-tag style-1">For Sale</li>
+                                                  </ul>
+                                                </div>
+                                                <div className="bottom">
+                                                  <svg
+                                                    width={16}
+                                                    height={16}
+                                                    viewBox="0 0 16 16"
+                                                    fill="none"
+                                                  >
+                                                    <path
+                                                      d="M10 7C10 7.53043 9.78929 8.03914 9.41421 8.41421C9.03914 8.78929 8.53043 9 8 9C7.46957 9 6.96086 8.78929 6.58579 8.41421C6.21071 8.03914 6 7.53043 6 7C6 6.46957 6.21071 5.96086 6.58579 5.58579C6.96086 5.21071 7.46957 5 8 5C8.53043 5 9.03914 5.21071 9.41421 5.58579C9.78929 5.96086 10 6.46957 10 7Z"
+                                                      stroke="white"
+                                                      strokeWidth="1.5"
+                                                      strokeLinecap="round"
+                                                      strokeLinejoin="round"
+                                                    />
+                                                    <path
+                                                      d="M13 7C13 11.7613 8 14.5 8 14.5C8 14.5 3 11.7613 3 7C3 5.67392 3.52678 4.40215 4.46447 3.46447C5.40215 2.52678 6.67392 2 8 2C9.32608 2 10.5979 2.52678 11.5355 3.46447C12.4732 4.40215 13 5.67392 13 7Z"
+                                                      stroke="white"
+                                                      strokeWidth="1.5"
+                                                      strokeLinecap="round"
+                                                      strokeLinejoin="round"
+                                                    />
+                                                  </svg>
+                                                  {property.propertyDetails.location.village}, {property.propertyDetails.location.district}, {property.propertyDetails.location.state}, {property.propertyDetails.location.country}
+                                                </div>
+                                              </Link>
+                                            </div>
+                                            <div className="archive-bottom">
+                                              <div className="content-top">
+                                                <h6 className="text-capitalize">
+                                                  <Link
+                                                    to={`/property-details/${property.id}`}
+                                                    className="link"
+                                                  >
+                                                    {property.propertyDetails.title}
+                                                  </Link>
+                                                </h6>
+                                                <ul className="meta-list">
+                                                  <li className="item">
+                                                    <i className="icon icon-bed" />
+                                                    <span className="text-variant-1">Beds:</span>
+                                                    <span className="fw-6">{8}</span>
+                                                  </li>
+                                                  <li className="item">
+                                                    <i className="icon icon-bath" />
+                                                    <span className="text-variant-1">Baths:</span>
+                                                    <span className="fw-6">{property.baths}</span>
+                                                  </li>
+                                                  <li className="item">
+                                                    <i className="icon icon-sqft" />
+                                                    <span className="text-variant-1">Sqft:</span>
+                                                    <span className="fw-6">{property.sqft}</span>
+                                                  </li>
+                                                </ul>
+                                              </div>
+                                              <div className="content-bottom">
+                                                {/* <div className="d-flex gap-8 align-items-center">
+                                                  <div className="avatar avt-40 round">
+                                                    <img
+                                                      alt="avt"
+                                                      src={property.avatar}
+                                                      width={34}
+                                                      height={34}
+                                                    />
+                                                  </div>
+                                                  <span>{property.agent}</span>
+                                                </div> */}
+                                                <h6 className="price">
+                                                  ₹{property.propertyDetails.price}
+                                                </h6>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
                     ))}
                 </div>
                 <ul className="wd-navigation mt-20">
                   <Pagination
                     currentPage={currentPage}
                     setPage={setCurrentPage}
-                    itemLength={sorted.length}
+                    itemLength={sorted?.length}
                     itemPerPage={itemPerPage}
                   />
                 </ul>
               </div>
               <div className="tab-pane" id="listLayout" role="tabpanel">
-                {sorted
+                {sorted && sorted
                   .slice(
                     (currentPage - 1) * itemPerPage,
                     currentPage * itemPerPage
                   )
-                  .map((elm, i) => (
-                    <div key={i} className="col-md-12">
-                      <div className="homelengo-box list-style-1 list-style-2 line">
-                        <div className="archive-top">
-                          <Link
-                            to={`/property-details/${elm.id}`}
-                            className="images-group"
-                          >
-                            <div className="images-style">
-                              <img
-                                className="lazyload"
-                                alt="img-property"
-                                src={elm.imgSrc}
-                                width={344}
-                                height={315}
-                              />
-                            </div>
-                            <div className="top">
-                              <ul className="d-flex gap-6 flex-wrap">
-                                <li className="flag-tag primary">Featured</li>
-                                <li className="flag-tag style-1">For Sale</li>
-                              </ul>
-                            </div>
-                          </Link>
-                        </div>
-                        <div className="archive-bottom">
-                          <div className="content-top">
-                            <h6 className="text-capitalize">
-                              <Link
-                                to={`/property-details/${elm.id}`}
-                                className="link text-line-clamp-1"
-                              >
-                                {elm.title}
-                              </Link>
-                            </h6>
-                            <ul className="meta-list">
-                              <li className="item">
-                                <i className="icon icon-bed" />
-                                <span className="text-variant-1">Beds:</span>
-                                <span className="fw-6">{elm.beds}</span>
-                              </li>
-                              <li className="item">
-                                <i className="icon icon-bath" />
-                                <span className="text-variant-1">Baths:</span>
-                                <span className="fw-6">{elm.baths}</span>
-                              </li>
-                              <li className="item">
-                                <i className="icon icon-sqft" />
-                                <span className="text-variant-1">Sqft:</span>
-                                <span className="fw-6">{elm.sqft}</span>
-                              </li>
-                            </ul>
-                            <div className="location">
-                              <svg
-                                width={16}
-                                height={16}
-                                viewBox="0 0 16 16"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M10 7C10 7.53043 9.78929 8.03914 9.41421 8.41421C9.03914 8.78929 8.53043 9 8 9C7.46957 9 6.96086 8.78929 6.58579 8.41421C6.21071 8.03914 6 7.53043 6 7C6 6.46957 6.21071 5.96086 6.58579 5.58579C6.96086 5.21071 7.46957 5 8 5C8.53043 5 9.03914 5.21071 9.41421 5.58579C9.78929 5.96086 10 6.46957 10 7Z"
-                                  stroke="#A3ABB0"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                />
-                                <path
-                                  d="M13 7C13 11.7613 8 14.5 8 14.5C8 14.5 3 11.7613 3 7C3 5.67392 3.52678 4.40215 4.46447 3.46447C5.40215 2.52678 6.67392 2 8 2C9.32608 2 10.5979 2.52678 11.5355 3.46447C12.4732 4.40215 13 5.67392 13 7Z"
-                                  stroke="#A3ABB0"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-                              <span className="text-line-clamp-1">
-                                {elm.address}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="content-bottom">
-                            <div className="d-flex gap-8 align-items-center">
-                              <div className="avatar avt-40 round">
-                                <img
-                                  alt="avt"
-                                  src={elm.avatar}
-                                  width={34}
-                                  height={34}
-                                />
-                              </div>
-                              <span>{elm.agent}</span>
-                            </div>
-                            <h6 className="price">
-                              ₹{elm.price.toLocaleString()}
-                            </h6>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  .map((property, index) => (
+                    
+                                      <div key={index} className="col-xl-4 col-lg-6 col-md-6">
+                                        <div className="homelengo-box">
+                                          <div className="archive-top">
+                                            <Link
+                                              to={`/property-details/${property.id}`}
+                                              className="images-group"
+                                              
+                                            >
+                                             <div className="images-style">
+                                                <img
+                                                  className="lazyload"
+                                                  data-src={property.img[0]}
+                                                  alt=""
+                                                  src={property.img[0]}
+                                                  style={{
+                                                    width: "615px",
+                                                    height: "250px",
+                                                    objectFit: "cover"
+                                                  }}
+                                                />
+                                              </div>
+                    
+                                              <div className="top">
+                                                <ul className="d-flex gap-6">
+                                                  <li className="flag-tag primary">Featured</li>
+                                                  <li className="flag-tag style-1">For Sale</li>
+                                                </ul>
+                                              </div>
+                                              <div className="bottom">
+                                                <svg
+                                                  width={16}
+                                                  height={16}
+                                                  viewBox="0 0 16 16"
+                                                  fill="none"
+                                                >
+                                                  <path
+                                                    d="M10 7C10 7.53043 9.78929 8.03914 9.41421 8.41421C9.03914 8.78929 8.53043 9 8 9C7.46957 9 6.96086 8.78929 6.58579 8.41421C6.21071 8.03914 6 7.53043 6 7C6 6.46957 6.21071 5.96086 6.58579 5.58579C6.96086 5.21071 7.46957 5 8 5C8.53043 5 9.03914 5.21071 9.41421 5.58579C9.78929 5.96086 10 6.46957 10 7Z"
+                                                    stroke="white"
+                                                    strokeWidth="1.5"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                  />
+                                                  <path
+                                                    d="M13 7C13 11.7613 8 14.5 8 14.5C8 14.5 3 11.7613 3 7C3 5.67392 3.52678 4.40215 4.46447 3.46447C5.40215 2.52678 6.67392 2 8 2C9.32608 2 10.5979 2.52678 11.5355 3.46447C12.4732 4.40215 13 5.67392 13 7Z"
+                                                    stroke="white"
+                                                    strokeWidth="1.5"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                  />
+                                                </svg>
+                                                {property.propertyDetails.location.village}, {property.propertyDetails.location.district}, {property.propertyDetails.location.state}, {property.propertyDetails.location.country}
+                                              </div>
+                                            </Link>
+                                          </div>
+                                          <div className="archive-bottom">
+                                            <div className="content-top">
+                                              <h6 className="text-capitalize">
+                                                <Link
+                                                  to={`/property-details/${property.id}`}
+                                                  className="link"
+                                                >
+                                                  {property.propertyDetails.title}
+                                                </Link>
+                                              </h6>
+                                              <ul className="meta-list">
+                                                <li className="item">
+                                                  <i className="icon icon-bed" />
+                                                  <span className="text-variant-1">Beds:</span>
+                                                  <span className="fw-6">{8}</span>
+                                                </li>
+                                                <li className="item">
+                                                  <i className="icon icon-bath" />
+                                                  <span className="text-variant-1">Baths:</span>
+                                                  <span className="fw-6">{property.baths}</span>
+                                                </li>
+                                                <li className="item">
+                                                  <i className="icon icon-sqft" />
+                                                  <span className="text-variant-1">Sqft:</span>
+                                                  <span className="fw-6">{property.sqft}</span>
+                                                </li>
+                                              </ul>
+                                            </div>
+                                            <div className="content-bottom">
+                                              {/* <div className="d-flex gap-8 align-items-center">
+                                                <div className="avatar avt-40 round">
+                                                  <img
+                                                    alt="avt"
+                                                    src={property.avatar}
+                                                    width={34}
+                                                    height={34}
+                                                  />
+                                                </div>
+                                                <span>{property.agent}</span>
+                                              </div> */}
+                                              <h6 className="price">
+                                                ₹{property.propertyDetails.price}
+                                              </h6>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
                   ))}
                 <ul className="wd-navigation mt-20">
                   <Pagination
                     currentPage={currentPage}
                     setPage={setCurrentPage}
-                    itemLength={sorted.length}
+                    itemLength={sorted?.length}
                     itemPerPage={itemPerPage}
                   />
                 </ul>

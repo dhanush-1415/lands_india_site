@@ -1,22 +1,24 @@
-import { filterOptions, properties } from "@/data/properties";
+import { filterOptions, properties, props } from "@/data/properties";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Properties() {
   const [selectedOption, setSelectedOption] = useState(filterOptions[0]);
-  const [filtered, setFiltered] = useState(properties);
+  const [filtered, setFiltered] = useState(props);
   useEffect(() => {
     if (selectedOption == "View All") {
-      setFiltered(properties);
+      setFiltered(props);
     } else {
       setFiltered(
-        properties.filter((el) => el.filterOptions.includes(selectedOption))
+        props.filter((el) => el.filterOptions.includes(selectedOption))
       );
     }
-  }, [selectedOption]);
+    console.log('fffff', filtered);
+    
+  }, [selectedOption, props]);
 
   return (
-    <section className="flat-section flat-recommended" style={{position: 'relative'}}>
+    <section className="flat-section flat-recommended" style={{position: 'relative', zIndex: '500'}}>
       <div className="container">
         <div className="box-title text-center wow fadeInUp">
           <div className="text-subtitle text-primary">Featured Properties</div>
@@ -53,17 +55,22 @@ export default function Properties() {
                         <Link
                           to={`/property-details/${property.id}`}
                           className="images-group"
+                          
                         >
-                          <div className="images-style">
+                         <div className="images-style">
                             <img
                               className="lazyload"
-                              data-src={property.imgSrc}
-                              alt={""}
-                              src={property.imgSrc}
-                              width={615}
-                              height={405}
+                              data-src={property.img[0]}
+                              alt=""
+                              src={property.img[0]}
+                              style={{
+                                width: "615px",
+                                height: "250px",
+                                objectFit: "cover"
+                              }}
                             />
                           </div>
+
                           <div className="top">
                             <ul className="d-flex gap-6">
                               <li className="flag-tag primary">Featured</li>
@@ -92,7 +99,7 @@ export default function Properties() {
                                 strokeLinejoin="round"
                               />
                             </svg>
-                            {property.address}
+                            {property.propertyDetails.location.village}, {property.propertyDetails.location.district}, {property.propertyDetails.location.state}, {property.propertyDetails.location.country}
                           </div>
                         </Link>
                       </div>
@@ -103,14 +110,14 @@ export default function Properties() {
                               to={`/property-details/${property.id}`}
                               className="link"
                             >
-                              {property.title}
+                              {property.propertyDetails.title}
                             </Link>
                           </h6>
                           <ul className="meta-list">
                             <li className="item">
                               <i className="icon icon-bed" />
                               <span className="text-variant-1">Beds:</span>
-                              <span className="fw-6">{property.beds}</span>
+                              <span className="fw-6">{8}</span>
                             </li>
                             <li className="item">
                               <i className="icon icon-bath" />
@@ -125,7 +132,7 @@ export default function Properties() {
                           </ul>
                         </div>
                         <div className="content-bottom">
-                          <div className="d-flex gap-8 align-items-center">
+                          {/* <div className="d-flex gap-8 align-items-center">
                             <div className="avatar avt-40 round">
                               <img
                                 alt="avt"
@@ -135,9 +142,9 @@ export default function Properties() {
                               />
                             </div>
                             <span>{property.agent}</span>
-                          </div>
+                          </div> */}
                           <h6 className="price">
-                            ₹{property.price.toFixed(2)}
+                            ₹{property.propertyDetails.price}
                           </h6>
                         </div>
                       </div>

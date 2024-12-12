@@ -6,13 +6,13 @@ export default function Description({propertyDetails}) {
     <>
       {" "}
       <h5 className="fw-6 title">Description</h5>
-      <p className="text-variant-1">
+      <p className="text-variant-1 mb-8 ">
        {propertyDetails.description}
       </p>
       <ul>
-        {propertyDetails.locationDetails.map((item, index) => (
+        {propertyDetails.locationDetails?.map((item, index) => (
           <li key={index}>
-            <p className="text-variant-1">{item},</p>
+          <p className="text-variant-1">•{item},</p>
           </li>
         ))}
       </ul>
