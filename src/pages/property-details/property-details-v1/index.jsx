@@ -14,11 +14,16 @@ const metadata = {
 };
 export default function PropertyDetailsPageV1() {
   let params = useParams();
+  const data = [
+    {
+      
+    }
+  ]
   const propertyItem =
     allProperties.filter((elm) => elm.id == params.id)[0] || allProperties[0];
   return (
     <>
-      <MetaComponent meta={metadata} />
+      <MetaComponent  />
       {/* <Header1 /> */}
       <DetailsTitle1 propertyItem={propertyItem} />
       <Slider1 />

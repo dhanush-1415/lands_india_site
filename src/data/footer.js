@@ -4,9 +4,9 @@ export const footerSections = [
     links: [
       { href: "/", label: "Buy Property" },
       { href: "/", label: "Sell Property" },
-      { href: "/about-us", label: "Agent" },
-      { href: "/contact", label: "My Account" },
-      { href: "/contact", label: "Contact us" },
+      { href: "/", label: "Agent" },
+      { href: "/", label: "My Account" },
+      { href: "/", label: "Contact us" },
     ],
   },
   {
@@ -14,9 +14,9 @@ export const footerSections = [
     links: [
       { href: "/", label: "Home" },
       { href: "/", label: "Individual" },
-      { href: "/about-us", label: "Projects" },
-      { href: "/contact", label: "Added Value Service" },
-      { href: "/contact", label: "Rent/Lease" },
+      { href: "/", label: "Projects" },
+      { href: "/", label: "Added Value Service" },
+      { href: "/", label: "Rent/Lease" },
     ],
   },
   {
