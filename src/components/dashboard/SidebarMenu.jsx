@@ -1,7 +1,15 @@
 import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function SidebarMenu() {
+
+  const handleLogout = () => {
+    localStorage.removeItem("LandsUser");
+    toast.success("Logout Successful");
+    window.location.href = "/"
+  }
+
   useEffect(() => {
     // Function to toggle the "full-width" class
     const toggleFullWidth = () => {
@@ -362,7 +370,7 @@ export default function SidebarMenu() {
             </Link>
           </li>
           <li className={`nav-menu-item ${pathname == "/" ? "active" : ""}`}>
-            <Link className="nav-menu-link" to={`/`}>
+            <Link className="nav-menu-link" onClick={handleLogout}>
               <svg
                 width={22}
                 height={22}
