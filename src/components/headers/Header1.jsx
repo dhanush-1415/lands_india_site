@@ -19,7 +19,8 @@ import PasswordIcon from '@mui/icons-material/Password';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-
+import { UserLogin, RegisterUser, verifyMobileOtp } from "@/apiCalls";
+import { toast } from "react-toastify";
 
 
 const buttonStyle = {
@@ -57,6 +58,16 @@ export default function Header1({
   }, []);
 
 
+  const [isLogin , setIsLogin] = useState(false);
+
+  useEffect(() => {
+    const user = localStorage.getItem("LandsUser");
+    if (user) {
+      setIsLogin(true);
+    }
+  }, [isLogin]);
+
+
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const theme = useTheme();
@@ -68,19 +79,17 @@ export default function Header1({
 
   const [resOtp , setResOtp] = useState("");
 
-  const [is_login , setIsLogin] = useState(false);
 
+  // useEffect(()=>{
+  //   const phone = localStorage.getItem("phone");
+  //   const type = localStorage.getItem("type");
+  //   const isLogin = localStorage.getItem("is_login");
 
-  useEffect(()=>{
-    const phone = localStorage.getItem("phone");
-    const type = localStorage.getItem("type");
-    const isLogin = localStorage.getItem("is_login");
+  //   if(isLogin){
+  //     setIsLogin(isLogin)
+  //   }
 
-    if(isLogin){
-      setIsLogin(isLogin)
-    }
-
-  },[])
+  // },[])
 
 
 
@@ -154,21 +163,25 @@ export default function Header1({
 
   const [inputDisable , setInputDisable] = useState(false);
 
-  const handlePhoneChange =async (phoneValue) => {
+  const handlePhoneChange = async (phoneValue) => {
 
-    setInputDisable(true)
+    // setInputDisable(true)
 
-    const data = {
-      phone:phoneValue
-    }
+    if(phoneValue.length === 10){
+    
+      const data = {
+        phone:phoneValue
+      }
 
-    const response = await verifyMobileOtp(data);  
-    if (response.success === true) {
-      setVerifyBar(true);
-      setResOtp(response.otp)
-      toast.success('OTP sent successfully');
-    } else {
-      toast.error('Failed to Verify OTP');
+      const response = await verifyMobileOtp(data);  
+      if (response.success === true) {
+        setVerifyBar(true);
+        setResOtp(response.otp);
+        setInputDisable(true);
+        toast.success('OTP sent successfully');
+      } else {
+        toast.error('Failed to Verify OTP');
+      }
     }
   };
 
@@ -181,9 +194,9 @@ export default function Header1({
         [id]: value
       };
   
-      if (id === 'phone' && value.length === 10) {
-        handlePhoneChange(value);
-      }
+      // if (id === 'phone' && value.length === 10) {
+      //   handlePhoneChange(value);
+      // }
   
       return updatedData;
     });
@@ -206,10 +219,13 @@ export default function Header1({
   };
 
 
+  const [isVerified , setIsVerified] = useState(false);
+
   const verifyOtp = () =>{
       if(otp === resOtp){
         toast.success("OTP Verified Successfully");
         setVerifyBar(false);
+        setIsVerified(true);
       }else{
         toast.error("Incorrect OTP");
       }
@@ -251,9 +267,8 @@ export default function Header1({
     console.log(data);
   }
   
-
-  const handleLogin = async() => {
-    const {phone, password } = loginData;
+  const handleLogin = async () => {
+    const { phone, password } = loginData;
   
     if (!phone || !password) {
       toast.error('All fields are required.');
@@ -263,24 +278,35 @@ export default function Header1({
     const data = {
       phone: phone,
       password: password,
+    };
+  
+    try {
+      const response = await UserLogin(data);
+  
+      if (response.success) {
+        setLoginData({
+          phone: '',
+          password: '',
+        });
+        setDialogOpen(false);
+        if(response.user){
+          localStorage.setItem("LandsUser", JSON.stringify(response.user));
+        }
+        setIsLogin(true)
+        // Uncomment and use these if required for your application
+        // localStorage.setItem("phone", response.phone);
+        // localStorage.setItem("type", response.type);
+        // localStorage.setItem("is_login", true);
+        setLoginActive(true);
+        toast.success('Login Successful');
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      toast.error('An error occurred during login. Please try again.');
+      console.error('Login error:', error); // Optional: Log the error for debugging
     }
-
-    const response = await UserLogin(data);  
-    if (response.success === true) {
-      setLoginData({
-        phone: '',
-        password: '',
-      });
-      setDialogOpen(false); 
-      localStorage.setItem("phone" , response.phone);
-      localStorage.setItem("type" , response.type);
-      localStorage.setItem("is_login" , true);
-      setLoginActive(true);
-      toast.success('Login Successful');
-    } else {
-      toast.error('Failed to Login');
-    }
-    }
+  };
   
 
   const handleDrawerOpen = () => {
@@ -316,16 +342,6 @@ export default function Header1({
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
-
-  const menuItems = [
-    { text: 'Home', path: '/' },
-    { text: 'Individual', path: '/about' },
-    { text: 'Projects', path: '/about' },
-    { text: 'Added Value Service', path: '/about' },
-    { text: 'Rent/Lease', path: '/about' },
-    { text: 'Sell Property', path: '/about' },
-    { text: 'Login/Register', path: '/login-register' },
-  ];
 
 
   const [profileOpen , setProfileOpen] = useState(false);
@@ -555,7 +571,7 @@ export default function Header1({
                                 />    
                               </Grid>
                               <Grid item xs={12} sm={12} md={12} sx={{display:'flex',justifyContent:'flex-end'}}>
-                                <Button sx={buttonStyle} variant='contained' size="large" fullWidth >Login</Button>
+                                <Button sx={buttonStyle} variant='contained' size="large" fullWidth onClick={handleLogin} >Login</Button>
                               </Grid>
                               <Grid item md={12} sx={{display:'flex',justifyContent:'center'}}>
                                 <Typography variant='subtitle1'>Create new account? <span onClick={() => {setLoginActive(false)}} style={{cursor:'pointer',color:'#0d7ae3'}} >Create</span></Typography>
@@ -565,7 +581,7 @@ export default function Header1({
                         </>
                       ):(
                     <>
-                      <Grid item md={12} sx={{margin:'20px 0'}}>
+                      <Grid item md={12} sx={{margin:'20px 0',overflow:'auto'}}>
                         <Grid container justifyContent='space-between' direction='column' gap={1.7} sx={{padding:{xs:'none',sm:'none',md:' 0px 20px'}}} >
                           <Grid item md={12}>
                             <Typography variant='h5' sx={{fontWeight:'bold'}}>Register to Continue</Typography>
@@ -597,62 +613,67 @@ export default function Header1({
                             />
                           </Grid>
                           <Grid item xs={12} sm={12} md={12}>
-                            {/* <TextField
-                              id="phone"
-                              label="Phone"
-                              variant="outlined"
-                              fullWidth
-                              disabled={inputDisable}
-                              value={registerData.phone}
-                              onChange={handleRegisterChange}
-                              error={!!errors.phone}
-                              helperText={errors.phone}
-                              InputProps={{
-                                endAdornment: (
-                                  <InputAdornment position="end">
-                                    <IconButton>
-                                      <LocalPhoneIcon />
-                                    </IconButton>
-                                  </InputAdornment>
-                                ),
-                              }}
-                            /> */}
-                            <TextField
-                              id="phone"
-                              label="Phone"
-                              variant="outlined"
-                              fullWidth
-                              disabled={inputDisable}
-                              value={registerData.phone}
-                              onChange={handleRegisterChange}
-                              error={!!errors.phone}
-                              helperText={errors.phone}
-                              InputProps={{
-                                endAdornment: (
-                                  <InputAdornment position="end">
-                                    <IconButton>
-                                      <LocalPhoneIcon />
-                                    </IconButton>
-                                  </InputAdornment>
-                                ),
-                              }}
-                              sx={{
-                                "& .MuiOutlinedInput-root": {
-                                  "& input": {
-                                    border: "none", // Removes the border
-                                  },
-                                },
-                              }}
-                            />
+                            <Grid container justifyContent='space-between'>
+                              <Grid item xs={8} sm={9} md={9}>
+                                <TextField
+                                  id="phone"
+                                  label="Phone"
+                                  variant="outlined"
+                                  fullWidth
+                                  disabled={isVerified}
+                                  value={registerData.phone}
+                                  onChange={handleRegisterChange}
+                                  error={!!errors.phone}
+                                  helperText={errors.phone}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton>
+                                          <LocalPhoneIcon />
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                      "& input": {
+                                        border: "none", // Removes the border
+                                      },
+                                    },
+                                  }}
+                                />
+                              </Grid>
+                              <Grid item xs={4} sm={2.9} md={2.5} sx={{display:'flex',alignItems:'center',justifyContent:'flex-end'}}>
+                                  <Button variant='contained' size="large" disabled={registerData.phone.length !== 10 || isVerified} onClick={() => {handlePhoneChange(registerData.phone)}}>
+                                    {inputDisable ? isVerified ? "Verified" : "Resend" : "Verify"}
+                                  </Button>
+                              </Grid>
+                            </Grid>
+          
                           </Grid>
                           {verifyBar && (
                             <Grid item xs={12} sm={12} md={12}>
-                              <Grid container direction="row">
-                                <Grid item xs={6} sm={6} md={6}>
-                                  <TextField id="outlined-basic" label="OTP" variant="outlined" fullWidth size='small' value={otp} onChange={(e)=>{setOtp(e.target.value)}} />
+                              <Grid container direction="row" justifyContent='space-between'>
+                                <Grid item xs={8} sm={9} md={9}>
+                                  <TextField
+                                    label="OTP"
+                                    id="outlined-size-small"
+                                    fullWidth
+                                    defaultValue="Small"
+                                    size="small"
+                                    value={otp} onChange={(e)=>{setOtp(e.target.value)}} 
+                                    sx={{
+                                      "& .MuiOutlinedInput-root": {
+                                        "& input": {
+                                          border: "none", 
+                                          padding: '8.5px 14px'
+                                        },
+                                      },
+                                    }}
+                                  />
                                 </Grid>
-                                <Grid item xs={6} sm={6} md={6}>
-                                  <Button sx={{marginLeft:'20px'}} variant='contained' disabled={!otp.length} onClick={verifyOtp}>Verify</Button>
+                                <Grid item xs={4} sm={2.9} md={2.5} sx={{display:'flex',alignItems:'center',justifyContent:'flex-end'}}>
+                                  <Button sx={{marginLeft:'20px'}} variant='contained' disabled={!otp.length} onClick={verifyOtp}>Submit</Button>
                                 </Grid>
                               </Grid>
                             </Grid>
@@ -800,7 +821,7 @@ export default function Header1({
                               variant="contained"
                               size="large"
                               fullWidth
-                              // onClick={handleSignup}
+                              onClick={handleSignup}
                               sx={buttonStyle}
                             >
                               Submit
@@ -864,6 +885,25 @@ export default function Header1({
                   >
                     <ul className="navigation clearfix">
                       <Nav />
+                      {isLogin ? (
+                
+                        <a
+                        href="/dashboard"
+                        style={{
+                          textAlign: 'center',
+                          fontWeight: 600,
+                          padding: '27px 20px 27px 0px',
+                          letterSpacing: '0px',
+                          color: '#000000',
+                          fontSize: '16px',
+                          lineHeight: '21.86px',
+                          textTransform: 'capitalize',
+                        }}
+                      
+                        >
+                          Dashboard
+                        </a>
+                      ):(
                       <a
                         onClick={handleDialogOpen}
                         style={{
@@ -896,6 +936,7 @@ export default function Header1({
                           </svg>
                           Login/Register
                         </a>
+                      )}
                     </ul>
                   </div>
                 </nav>
