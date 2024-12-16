@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DropdownSelect from "../common/DropdownSelect";
+import { getCategories, getInputs } from "@/apiCalls";
 
 export default function AddProperty() {
   const [isDragging, setIsDragging] = useState(false); // Track drag state
@@ -51,8 +52,108 @@ export default function AddProperty() {
   };
 
   const handleDragLeave = () => {
-    setIsDragging(false); // Remove border when dragging ends
+    setIsDragging(false); 
   };
+
+
+
+  const [categories , setCategories] = useState();
+  const [subCategories, setSubCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(""); 
+  const [selectedSubCategoryId, setSelectedSubCategoryId] = useState(null);
+  const [menuInputs , setMenuInputs ] = useState();
+  const [formData, setFormData] = useState({});
+
+  const fetchCategories = async () => {
+    try {
+      const data = await getCategories();
+      if(data.success){
+        setCategories(data.data)
+      }else{
+        toast.error(data.message)
+      }
+    } catch (err) {
+      console.error('Error fetching categories:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+
+  const fetchInputs = async () => {
+    try {
+      const data = await getInputs(selectedSubCategoryId);
+      if(data.success){
+        setMenuInputs(data.inputs)
+      }else{
+        toast.error(data.message)
+      }
+    } catch (err) {
+      console.error('Error fetching categories:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchInputs();
+  }, [selectedSubCategoryId]);
+  
+  
+  const handleCategoryChange = (category) => {
+    setFormData({})
+    setSelectedCategory(category);
+    const selectedSubCategories = category.subMenus || [];
+    setSubCategories(selectedSubCategories); 
+    setSelectedSubCategoryId(null);
+  };
+
+  const handleSubCategoryChange = (subCategory) => {
+    setFormData({})
+    setSelectedSubCategoryId(subCategory.id); 
+  };
+
+  const handleChange = (id, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
+  const handleSubmit = async () => {
+    const PropertiesInput = Object.entries(formData).map(([inputId, value]) => ({
+      inputId: Number(inputId),
+      value,
+    }));
+
+    const payload = {
+      propertiesPost: {
+        sellerId: 1, // Replace with dynamic sellerId if needed
+        subMenuId: selectedSubCategoryId,
+        status: "active",
+      },
+      PropertiesInput,
+    };
+
+    console.log(payload , "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
+    // try {
+    //   const response = await axios.post("http://localhost:4400/property/add-property", payload, {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
+
+    //   if (response.data.success) {
+    //     toast.success("Property added successfully!");
+    //   } else {
+    //     toast.error(response.data.message);
+    //   }
+    // } catch (error) {
+    //   console.error("Error submitting property:", error);
+    //   toast.error("Failed to add property");
+    // }
+  };
+
   return (
     <div className="main-content">
       <div className="main-content-inner">
@@ -123,22 +224,259 @@ export default function AddProperty() {
                 <label htmlFor="neighborhood">
                   Category
                 </label>
-
-                <DropdownSelect options={["House", "Land", "Villa"]} />
+                <DropdownSelect 
+                  options={categories?.map((category) => category.name)} // Assuming categories have a 'name' field
+                  onChange={(selectedCategory) => {
+                    const category = categories.find((cat) => cat.name === selectedCategory);
+                    handleCategoryChange(category);
+                  }}
+                />
               </fieldset>
             <fieldset className="box-fieldset">
                 <label htmlFor="neighborhood">
                   Sub Category
                 </label>
 
-                <DropdownSelect options={["None"]} />
+                <DropdownSelect   
+                  options={subCategories.length > 0 ? subCategories.map(subCat => subCat.name) : ["None"]}
+                  onChange={(selectedSubCategory) => {
+                    const subCategory = subCategories.find((sub) => sub.name === selectedSubCategory);
+                    handleSubCategoryChange(subCategory);
+                  }} 
+                />
               </fieldset>
             </div>
             
           </div>
         </div>
         <div className="widget-box-2 mb-20">
-          {/* <h5 className="title">Information</h5> */}
+          <div className="box-info-property">
+            {menuInputs?.length ? (
+              <div className="box grid-2 gap-30">
+                {menuInputs?.length && menuInputs.map((input, index) => {
+                  const { id, input_name, input_type, options, required } = input;
+                  
+                  let inputField = null;
+                  switch (input_type) {
+                    case "text":
+                      inputField = (
+                        <fieldset key={id} className="box box-fieldset">
+                          <label htmlFor={input_name}>
+                            {input_name} <span>{required ? "*" : ""}</span>
+                          </label>
+                          <input
+                            type="text"
+                            id={input_name}
+                            name={input_name}
+                            className="form-control"
+                            placeholder={`Enter ${input_name}`}
+                            onChange={(e) => handleChange(input.id, e.target.value)}
+                          />
+                        </fieldset>
+                      );
+                      break;
+
+                    case "textarea":
+                      inputField = (
+                        <fieldset key={id} className="box box-fieldset">
+                          <label htmlFor={input_name}>
+                            {input_name} <span>{required ? "*" : ""}</span>
+                          </label>
+                          <textarea
+                            id={input_name}
+                            name={input_name}
+                            className="textarea"
+                            placeholder={`Enter ${input_name}`}
+                            onChange={(e) => handleChange(input.id, e.target.value)}
+                          />
+                        </fieldset>
+                      );
+                      break;
+
+                    case "number":
+                      inputField = (
+                        <fieldset key={id} className="box box-fieldset">
+                          <label htmlFor={input_name}>
+                            {input_name} <span>{required ? "*" : ""}</span>
+                          </label>
+                          <input
+                            type="number"
+                            id={input_name}
+                            name={input_name}
+                            className="form-control"
+                            placeholder={`Enter ${input_name}`}
+                            onChange={(e) => handleChange(input.id, e.target.value)}
+                          />
+                        </fieldset>
+                      );
+                      break;
+
+                    case "dropdown":
+                      inputField = (
+                        <fieldset key={id} className="box box-fieldset">
+                          <label htmlFor={input_name}>
+                            {input_name} <span>{required ? "*" : ""}</span>
+                          </label>
+                          <select
+                            id={input_name}
+                            name={input_name}
+                            className="form-control"
+                            onChange={(e) => handleChange(input.id, e.target.value)}
+                          >
+                            <option>
+                              Select
+                            </option>
+                            {options?.map((option, idx) => (
+                              <option key={idx} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                          </select>
+                        </fieldset>
+                      );
+                      break;
+
+                    case "checkbox":
+                      inputField = (
+                        <fieldset key={id} className="box box-fieldset">
+                          <label htmlFor={input_name}>
+                            {input_name} <span>{required ? "*" : ""}</span>
+                          </label>
+                          <div class="d-flex flex-row">
+                            {options?.map((option, idx) => (
+                              <div key={idx} className="pe-4">
+                                <input
+                                  type="checkbox"
+                                  id={`${input_name}-${option}`}
+                                  name={input_name}
+                                  value={option}
+                                  onChange={(e) => {
+                                    const newValue = formData[input.id] || [];
+                                    const updatedValue = e.target.checked
+                                      ? [...newValue, option]
+                                      : newValue.filter((val) => val !== option);
+                                    handleChange(input.id, updatedValue);
+                                  }}
+                                />
+                                <label htmlFor={`${input_name}-${option}`}>{option}</label>
+                              </div>
+                            ))}
+                          </div>
+                        </fieldset>
+                      );
+                      break;
+
+                    case "radio":
+                      inputField = (
+                        <fieldset key={id} className="box box-fieldset">
+                          <label htmlFor={input_name}>
+                            {input_name} <span>{required ? "*" : ""}</span>
+                          </label>
+                          <div class="d-flex flex-row">
+                            {options?.map((option, idx) => (
+                              <div key={idx} className="pe-4">
+                                <input
+                                  type="radio"
+                                  id={`${input_name}-${option}`}
+                                  name={input_name}
+                                  value={option}
+                                  onChange={(e) => handleChange(input.id, e.target.value)}
+                                />
+                                <label htmlFor={`${input_name}-${option}`}>{option}</label>
+                              </div>
+                            ))}
+                          </div>
+                        </fieldset>
+                      );
+                      break;
+
+                    case "date":
+                      inputField = (
+                        <fieldset key={id} className="box box-fieldset">
+                          <label htmlFor={input_name}>
+                            {input_name} <span>{required ? "*" : ""}</span>
+                          </label>
+                          <input
+                            type="date"
+                            id={input_name}
+                            name={input_name}
+                            className="form-control"
+                            onChange={(e) => handleChange(input.id, e.target.value)}
+                          />
+                        </fieldset>
+                      );
+                      break;
+
+                    case "email":
+                      inputField = (
+                        <fieldset key={id} className="box box-fieldset">
+                          <label htmlFor={input_name}>
+                            {input_name} <span>{required ? "*" : ""}</span>
+                          </label>
+                          <input
+                            type="email"
+                            id={input_name}
+                            name={input_name}
+                            className="form-control"
+                            placeholder={`Enter ${input_name}`}
+                            onChange={(e) => handleChange(input.id, e.target.value)}
+                          />
+                        </fieldset>
+                      );
+                      break;
+
+                    case "password":
+                      inputField = (
+                        <fieldset key={id} className="box box-fieldset">
+                          <label htmlFor={input_name}>
+                            {input_name} <span>{required ? "*" : ""}</span>
+                          </label>
+                          <input
+                            type="password"
+                            id={input_name}
+                            name={input_name}
+                            className="form-control"
+                            placeholder={`Enter ${input_name}`}
+                            onChange={(e) => handleChange(input.id, e.target.value)}
+                          />
+                        </fieldset>
+                      );
+                      break;
+
+                    case "file":
+                      inputField = (
+                        <fieldset key={id} className="box box-fieldset">
+                          <label htmlFor={input_name}>
+                            {input_name} <span>{required ? "*" : ""}</span>
+                          </label>
+                          <input
+                            type="file"
+                            id={input_name}
+                            name={input_name}
+                            className="form-control"
+                            onChange={(e) => handleChange(input.id, e.target.files[0])}
+                          />
+                        </fieldset>
+                      );
+                      break;
+
+                    default:
+                      break;
+                  }
+
+                  return inputField;
+                })}
+              </div>
+            ):(
+              <div className="box grid-2 gap-30">
+                {/* <h3>No Inputs</h3> */}
+              </div>
+            )}
+         
+          </div>
+        </div>
+
+        {/* <div className="widget-box-2 mb-20">
           <div className="box-info-property">
             <fieldset className="box box-fieldset">
               <label htmlFor="title">
@@ -202,7 +540,7 @@ export default function AddProperty() {
 
                 <DropdownSelect options={["Tamil Nadu", "Kerala", "Andhra"]} />
               </fieldset>
-              {/* <fieldset className="box-fieldset">
+              <fieldset className="box-fieldset">
                 <label htmlFor="neighborhood">
                   Neighborhood:<span>*</span>
                 </label>
@@ -210,9 +548,9 @@ export default function AddProperty() {
                 <DropdownSelect
                   options={["None", "Little Italy", "Bedford Park"]}
                 />
-              </fieldset> */}
+              </fieldset>
             </div>
-            {/* <div className="box box-fieldset">
+            <div className="box box-fieldset">
               <label htmlFor="location">
                 Location:<span>*</span>
               </label>
@@ -236,10 +574,10 @@ export default function AddProperty() {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
-            </div> */}
+            </div>
           </div>
         </div>
-        {/* <div className="widget-box-2 mb-20">
+        <div className="widget-box-2 mb-20">
           <h5 className="title">Price</h5>
           <div className="box-price-property">
             <div className="box grid-2 gap-30">
@@ -276,8 +614,8 @@ export default function AddProperty() {
               </fieldset>
             </div>
           </div>
-        </div> */}
-        {/* <div className="widget-box-2 mb-20">
+        </div>
+        <div className="widget-box-2 mb-20">
           <h5 className="title">Addtional Infomation</h5>
           <div className="box grid-3 gap-30">
             <fieldset className="box-fieldset">
@@ -381,8 +719,8 @@ export default function AddProperty() {
               <input type="text" className="form-control" />
             </fieldset>
           </div>
-        </div> */}
-        {/* <div className="widget-box-2 mb-20">
+        </div>
+        <div className="widget-box-2 mb-20">
           <h5 className="title">
             Amenities<span>*</span>
           </h5>
@@ -525,8 +863,8 @@ export default function AddProperty() {
               </div>
             </div>
           </div>
-        </div> */}
-        {/* <div className="widget-box-2 mb-20">
+        </div>
+        <div className="widget-box-2 mb-20">
           <h5 className="title">Virtual Tour 360</h5>
           <div className="box-radio-check">
             <div className="text-btn mb-16">Virtual Tour Type:</div>
@@ -558,8 +896,8 @@ export default function AddProperty() {
             <label htmlFor="embedded">Embedded Code Virtual 360</label>
             <textarea className="textarea" defaultValue={""} />
           </fieldset>
-        </div> */}
-        {/* <div className="widget-box-2 mb-20">
+        </div>
+        <div className="widget-box-2 mb-20">
           <h5 className="title">Videos</h5>
           <fieldset className="box-fieldset">
             <label htmlFor="video" className="text-btn">
@@ -571,8 +909,8 @@ export default function AddProperty() {
               placeholder="Youtube, vimeo url"
             />
           </fieldset>
-        </div> */}
-        {/* <div className="widget-box-2 mb-20">
+        </div>
+        <div className="widget-box-2 mb-20">
           <h5 className="title">Floors</h5>
           <div className="box-radio-check">
             <div className="text-btn mb-16">Enable Floor Plan:</div>
@@ -678,8 +1016,8 @@ export default function AddProperty() {
               <span className="icon icon-plus" />
             </a>
           </div>
-        </div> */}
-        {/* <div className="widget-box-2 mb-20">
+        </div>
+        <div className="widget-box-2 mb-20">
           <h5 className="title">Agent Infomation</h5>
           <div className="box-radio-check">
             <div className="text-btn mb-16">Choose type agent information?</div>
@@ -708,8 +1046,8 @@ export default function AddProperty() {
             </fieldset>
           </div>
         </div> */}
-        <div className="box-btn">
-          <a href="#" className="tf-btn primary">
+        <div className="box-btn" onClick={handleSubmit}>
+          <a className="tf-btn primary">
             Add Property
           </a>
           {/* <a href="#" className="tf-btn btn-line">

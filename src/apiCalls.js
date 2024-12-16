@@ -66,3 +66,50 @@ const baseUrl = "http://luxcycs.com:4400"
       throw error;
     }
   };
+
+  export const getCategories = async () => {
+
+    const url = `${baseUrl}/dashboard/menus`;
+  
+    const options = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+  
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      return response.json();
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  };
+  
+
+  export const getInputs = async (id) => {
+
+    const url = `${baseUrl}/inputs/get-inputs/${id}`;
+  
+    const options = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+  
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      return response.json();
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  };

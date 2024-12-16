@@ -1,0 +1,161 @@
+GET http://luxcycs.com:4400/
+
+###
+POST http://luxcycs.com:4400/registration
+Content-Type: application/json
+
+{
+    "phone": "0989786748"
+}
+
+###
+post http://luxcycs.com:4400/registration/new-user
+Content-Type: application/json
+
+{
+    "fullName": "test2",
+    "phone": "9707654321",
+    "password": "123456",
+    "email": "test2@gmail.com",
+    "type": "B2c"
+}
+
+###
+
+post http://luxcycs.com:4400/login
+Content-Type: application/json
+
+{
+    "phone": "9707654321",
+    "password": "123456"
+}
+
+###
+post http://luxcycs.com:4400/reset-password
+Content-Type: application/json
+
+{
+    "phone": "9707654323"
+}
+
+###
+get http://luxcycs.com:4400/reset-password
+
+
+###
+put http://luxcycs.com:4400/reset-password
+Content-Type: application/json
+
+{
+  "phone": "9707654123",
+  "otp": "202772"
+}
+
+###
+GET http://luxcycs.com:4400/dashboard/main/7
+
+### 
+POST http://localhost:4400/dashboard/add-menu
+Content-Type: application/json
+
+{
+    "menu": "mainnnn",
+    "subMenu": "submenu-13333"
+}
+
+### 
+GET http://luxcycs.com:4400/dashboard/menus
+
+
+### 
+POST http://luxcycs.com:4400/inputs/add-input/1
+Content-Type: application/json
+
+{
+    "inputName": "test", 
+    "inputType": "text", 
+    "required": true, 
+    "options": ["b","c"]
+}
+
+### 
+GET http://luxcycs.com:4400/inputs/get-inputs/1
+
+
+### 
+PUT http://luxcycs.com:4400/inputs/update-input/1
+Content-Type: application/json
+
+{
+    "id": 6,
+    "inputName": "test", 
+    "inputType": "number", 
+    "required": true, 
+    "options": ["a"]
+}
+
+### 
+DELETE http://luxcycs.com:4400/inputs/delete-input/2
+
+### 
+PUT http://luxcycs.com:4400/dashboard/update-menu
+Content-Type: application/json
+
+{
+    "menu": "updated-main",
+    "id": 13
+}
+
+### 
+DELETE http://luxcycs.com:4400/dashboard/delete-menu
+Content-Type: application/json
+
+{
+    "menu": "Hostel",
+    "id": 1
+}
+
+### 
+POST http://localhost:4400/property/add-property
+Content-Type: application/json
+
+
+{
+  "propertiesPost": {
+    "sellerId": 1,
+    "subMenuId": 19,
+    "status": "active"
+  },
+  "PropertiesInput": [
+    {
+      "inputId": 64,
+      "value": "bbb"
+    },
+    {
+      "inputId": 65,
+      "value": "fff"
+    }
+  ]
+}
+
+### 
+PUT http://localhost:4400/property/update-property
+Content-Type: application/json
+
+
+{
+    "propertiesPost": {
+        "id": 1
+    },
+  "PropertiesInput": [
+    {
+        "id": 1,
+        "properties_postId": 1,
+        "input_id": 68,
+        "input_value": "ccc"
+      }
+  ]
+}
+
+### 
+GET http://luxcycs.com:4400/property/1
