@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Nav from "./Nav";
+import NavTwo from './Nav2';
 import { AppBar, Toolbar, Typography, Box, Grid, TextField,Card,CardContent, Menu, MenuItem,Switch, IconButton, Drawer, List, ListItem, ListItemText, Button, useMediaQuery, useTheme, Dialog, DialogTitle, DialogContent, DialogActions, FormHelperText, Divider  } from '@mui/material';
 import { Link } from "react-router-dom";
 import Slide from '@mui/material/Slide';
@@ -14,6 +15,7 @@ import projects from './projects.png';
 import CloseIcon from '@mui/icons-material/Close';
 import InputAdornment from '@mui/material/InputAdornment';
 import PersonIcon from '@mui/icons-material/Person';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import EmailIcon from '@mui/icons-material/Email';
 import PasswordIcon from '@mui/icons-material/Password';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
@@ -873,6 +875,23 @@ export default function Header1({
                     {/* <h6 className="fw-bold">Lands India</h6> */}
                   </div>
                 </div>
+                <div className="inner-header-right header-account">
+              <div className="nav-outer flex align-center">
+                {/* Main Menu */}
+                <nav className="main-menu show navbar-expand-md">
+                  <div
+                    className="navbar-collapse collapse clearfix"
+                    id="navbarSupportedContent"
+                  >
+                    <ul className="navigation clearfix">
+                      <Nav />
+                    </ul>
+                  </div>
+                </nav>
+                {/* Main Menu End*/}
+              </div>
+               
+              </div>
               </div>
        
               <div className="inner-header-right header-account">
@@ -884,7 +903,7 @@ export default function Header1({
                     id="navbarSupportedContent"
                   >
                     <ul className="navigation clearfix">
-                      <Nav />
+                      <NavTwo />
                       {isLogin ? (
                 
                         <a
@@ -918,7 +937,7 @@ export default function Header1({
                         }}
                       
                         >
-                          <svg
+                          {/* <svg
                             style={{marginBottom:'3px', marginRight:'4px'}}
                             width={20}
                             height={20}
@@ -933,7 +952,8 @@ export default function Header1({
                               strokeLinecap="round"
                               strokeLinejoin="round"
                             />
-                          </svg>
+                          </svg> */}
+                          <AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom:0.45 }} />
                           Login/Register
                         </a>
                       )}
