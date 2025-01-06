@@ -5,12 +5,12 @@ export default function Description({propertyDetails}) {
   return (
     <>
       {" "}
-      <p className="mb-10 text-variant-1">
+      {/* <p className="mb-10 text-variant-1">
         <strong style={{fontWeight:'bold'}}>Posted By: </strong>{propertyDetails?.postedBy}
       </p>
       <p className="mb-10 text-variant-1">
         <strong style={{fontWeight:'bold'}}>Posted On: </strong>{propertyDetails?.postedDate}
-      </p>
+      </p> */}
     
       <h5 className="mt-8 fw-6 title">Description</h5>
       <p className="text-variant-1 mb-8 ">

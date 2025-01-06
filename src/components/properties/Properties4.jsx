@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import DropdownSelect from "../common/DropdownSelect";
 import { Link } from "react-router-dom";
+import AttachEmailSharpIcon from '@mui/icons-material/AttachEmailSharp';
+import CallIcon from '@mui/icons-material/Call';
+import PermPhoneMsgIcon from '@mui/icons-material/PermPhoneMsg';
 
 import Pagination from "../common/Pagination";
 import Slider from "rc-slider";
@@ -136,16 +139,27 @@ export default function Properties4() {
     <section className="flat-section flat-recommended flat-sidebar" style={{position: 'relative'}}>
       <div className="container">
         <div className="box-title-listing">
-          {/* <div className="box-left">
+          <div className="box-left">
             <h3 className="fw-8">Properties</h3>
-            <p className="text">
+            {/* <p className="text">
               There are currently {sorted.length} properties.
             </p>
             <p className="text">
               {sorted.length}
-            </p>
-          </div> */}
+            </p> */}
+          </div>
           <div className="box-filter-tab" >
+          
+          <DropdownSelect
+              onChange={setSortingOption}
+              addtionalParentClass="list-sort"
+              options={[
+                "Sort by price",
+
+                "Price Ascending",
+                "Price Descending",
+              ]}
+            />
             <ul className="nav-tab-filter" role="tablist" >
               <li className="nav-tab-item" role="presentation">
                 <a
@@ -243,7 +257,7 @@ export default function Properties4() {
               </li>
             </ul>
 
-            <DropdownSelect
+            {/* <DropdownSelect
               onChange={(value) => {
                 const match = value.match(/\d+/); // Match the digits in the value
                 if (match) {
@@ -253,24 +267,14 @@ export default function Properties4() {
               }}
               addtionalParentClass="list-page"
               options={["Show: 8", "Show: 10", "Show: 12"]}
-            />
+            /> */}
 
-            <DropdownSelect
-              onChange={setSortingOption}
-              addtionalParentClass="list-sort"
-              options={[
-                "Sort by price",
-
-                "Price Ascending",
-                "Price Descending",
-              ]}
-            />
           </div>
         </div>
         <div className="row">
           <div className="col-xl-4 col-lg-5" style={{width: '25%'}}>
             <div className="widget-sidebar fixed-sidebar" >
-              <div className="flat-tab flat-tab-form widget-filter-search widget-box">
+              <div className="flat-tab flat-tab-form widget-filter-search widget-box" style={{margin: 0, padding: '0 20px' }}>
                 {/* <ul className="nav-tab-form" role="tablist">
                   <li className="nav-tab-item" role="presentation">
                     <a
@@ -295,7 +299,7 @@ export default function Properties4() {
                   <div className="tab-pane fade active show" role="tabpanel">
                     <div className="form-sl">
                       <form onSubmit={(e) => e.preventDefault()}>
-                        <div className="wd-filter-select">
+                        <div className="wd-filter-select" style={{boxShadow: 'none'}}>
                           <div className="inner-group">
                             <div className="box">
                               <div className="form-style"
@@ -354,22 +358,6 @@ export default function Properties4() {
                                   style={{border: 'none'}}
                                 />
                               </div>
-                              <div className="form-style box-select" style={{borderBottom: '1px solid #e4e4e4'}}>
-                                <DropdownSelect
-                                  defaultOption="Bathrooms"
-                                  onChange={setBathrooms}
-                                  options={["All", 1, 2, 3, 4, 5]}
-                                  style={{border: 'none'}}
-                                />
-                              </div>
-                              <div className="form-style box-select" style={{borderBottom: '1px solid #e4e4e4'}}>
-                                <DropdownSelect
-                                  defaultOption="Bedrooms"
-                                  onChange={setBedrooms}
-                                  options={["All", 1, 2, 3, 4, 5]}
-                                  style={{border: 'none'}}
-                                />
-                              </div>
                             </div>
                             <div className="box">
                               <div className="form-style widget-price">
@@ -403,40 +391,9 @@ export default function Properties4() {
                                   onChange={setPrice}
                                 />
                               </div>
-                              <div className="form-style widget-price wd-price-2">
-                                <div className="box-title-price">
-                                  <span className="title-price fw-6">
-                                    Sq Feet:
-                                  </span>
-                                  <div className="caption-price">
-                                    <span
-                                      id="slider-range-value1"
-                                      className="fw-6"
-                                    >
-                                      {" "}
-                                      {size[0]}{" "}
-                                    </span>
-                                    <span>-</span>
-                                    <span
-                                      id="slider-range-value2"
-                                      className="fw-6"
-                                    >
-                                      {size[1]}
-                                    </span>
-                                  </div>
-                                </div>
-                                <Slider
-                                  range
-                                  // formatLabel={() => ``}
-                                  max={2500}
-                                  min={500}
-                                  value={size}
-                                  onChange={setSize}
-                                />
-                              </div>
                             </div>
                             <div className="box">
-                              <div className="form-style wd-amenities">
+                              {/* <div className="form-style wd-amenities">
                                 <div className="group-checkbox">
                                   <h6 className="title text-black-2">
                                     Amenities:
@@ -471,7 +428,7 @@ export default function Properties4() {
                                     ))}
                                   </div>
                                 </div>
-                              </div>
+                              </div> */}
                             </div>
                             {/* <a
                               className="tf-btn btn-linemt-5 clear-filter"
@@ -495,56 +452,7 @@ export default function Properties4() {
                   </div>
                 </div>
               </div>
-              {/* <div className="widget-box box-latest-property">
-                <h5 className="fw-6 title">Latest Propeties</h5>
-                <ul>
-                  {properties2.slice(0, 5).map((elm, i) => (
-                    <li key={i} className="latest-property-item">
-                      <Link
-                        to={`/property-details/${elm.id}`}
-                        className="images-style"
-                      >
-                        <img
-                          alt="img"
-                          src={elm.imgSrc}
-                          width={615}
-                          height={405}
-                        />
-                      </Link>
-                      <div className="content">
-                        <div className="text-capitalize text-btn">
-                          <Link
-                            to={`/property-details/${elm.id}`}
-                            className="link"
-                          >
-                            {elm.title}
-                          </Link>
-                        </div>
-                        <ul className="meta-list mt-6">
-                          <li className="item">
-                            <i className="icon icon-bed" />
-                            <span className="text-variant-1">Beds:</span>
-                            <span className="fw-6">{elm.beds}</span>
-                          </li>
-                          <li className="item">
-                            <i className="icon icon-bath" />
-                            <span className="text-variant-1">Baths:</span>
-                            <span className="fw-6">{elm.baths}</span>
-                          </li>
-                          <li className="item">
-                            <i className="icon icon-sqft" />
-                            <span className="text-variant-1">Sqft:</span>
-                            <span className="fw-6">{elm.sqft}</span>
-                          </li>
-                        </ul>
-                        <div className="mt-10 text-btn">
-                          ₹{elm.price.toLocaleString()}
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div> */}
+             
             </div>
           </div>
           <div className="col-xl-8 col-lg-7 flat-animate-tab" style={{width: '75%'}} >
@@ -584,12 +492,12 @@ export default function Properties4() {
                                                   />
                                                 </div>
                       
-                                                <div className="top">
+                                                {/* <div className="top">
                                                   <ul className="d-flex gap-6">
                                                     <li className="flag-tag primary">Featured</li>
                                                     <li className="flag-tag style-1">For Sale</li>
                                                   </ul>
-                                                </div>
+                                                </div> */}
                                                 <div className="bottom">
                                                   <svg
                                                     width={16}
@@ -644,28 +552,43 @@ export default function Properties4() {
                                                   </li>
                                                 </ul>
                                               </div>
-                                              <div className="content-bottom">
-                                                {/* <div className="d-flex gap-8 align-items-center">
-                                                  <div className="avatar avt-40 round">
-                                                    <img
-                                                      alt="avt"
-                                                      src={property.avatar}
-                                                      width={34}
-                                                      height={34}
-                                                    />
+                                              <div className="content-bottom" style={{flexDirection: 'column'}}>
+                                                <div className="d-flex gap-8 align-items-center " style={{justifyContent: 'space-between', width: '100%'}}>
+                                                  <div className="">
+                                                    <h6 className="price">
+                                                      ₹{property.propertyDetails.price}
+                                                    </h6>
                                                   </div>
-                                                  <span>{property.agent}</span>
-                                                </div> */}
-                                                <h6 className="price">
-                                                  ₹{property.propertyDetails.price}
-                                                </h6>
+                                                  <div className="" style={{display: 'flex'}}>
+                                                    <div className="" style={{ padding: '3px', border: '1px solid black', borderRadius: '50%', marginRight: '10px' }}>
+                                                      <CallIcon />
+                                                    </div>
+                                                    <div className="" style={{ padding: '3px', border: '1px solid black', borderRadius: '50%' }}>
+                                                      <PermPhoneMsgIcon />
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div className="d-flex gap-8 align-items-center " style={{justifyContent: 'space-between', width: '100%', marginTop: '12px'}}>
+                                                  <div className="">
+                                                    <div className="d-flex gap-8 align-items-center" style={{ fontWeight: 'bold', background: '#018df7', color: '#ffffff', padding: '4px 10px' }}>
+                                                      <AttachEmailSharpIcon sx={{ padding: '0px 2px' }} /><span > Enquiry Now </span>
+                                                    </div>
+                                    
+                                                  </div>
+                                                  <div className="">
+                                                                    
+                          <div className="d-flex gap-8 align-items-center">
+                            <span style={{ fontWeight: 'bold', border: '1.5px dotted black', padding: '4px 10px' }} >View Details</span>
+                          </div>
+                                                  </div>
+                                                </div>
                                               </div>
                                             </div>
                                           </div>
                                         </div>
                     ))}
                 </div>
-                <ul className="wd-navigation mt-20">
+                <ul className="wd-navigation mt-20" style={{justifyContent: 'center'}} >
                   <Pagination
                     currentPage={currentPage}
                     setPage={setCurrentPage}
@@ -776,15 +699,12 @@ export default function Properties4() {
                                                 </div>
                                                 <span>{property.agent}</span>
                                               </div> */}
-                                              <h6 className="price">
-                                                ₹{property.propertyDetails.price}
-                                              </h6>
                                             </div>
                                           </div>
                                         </div>
                                       </div>
                   ))}
-                <ul className="wd-navigation mt-20">
+                <ul className="wd-navigation mt-20" style={{justifyContent: 'center'}} >
                   <Pagination
                     currentPage={currentPage}
                     setPage={setCurrentPage}
