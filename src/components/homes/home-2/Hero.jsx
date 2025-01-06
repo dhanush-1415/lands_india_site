@@ -13,42 +13,47 @@ export default function Hero() {
         <div className="row">
           <div className="col-xl-10">
             <div className="slider-content">
+              <div className="wrap-search-link">
+                {/* <p className="body-2">What are you looking for:</p> */}
+                <div className="categories-list">
+                  <a href="#">
+                    {/* <i className="icon icon-house-fill" />  */}
+                    100%
+                  </a>
+                  <a href="#">
+                    {/* <i className="icon icon-villa-fill" />  */}
+                    Verified Properties
+                  </a>
+                  <a href="#">
+                    {/* <i className="icon icon-office-fill" /> */}
+                     Verified Buyers
+                  </a>
+                  <a href="#">
+                    {/* <i className="icon icon-apartment" />  */}
+                    100YRS Legal Properties
+                  </a>
+                </div>
+              </div>
               <div className="heading">
-                <h1 className="fw-8 title animationtext clip">
-                  Find A Home That
-                  <br />
-                  <TyperComponent
+                <h3 className="fw-8 title animationtext clip head-header">
+                  Find Real Properties at the <br /> Best Prices on PropertyStore
+
+                  {/* <TyperComponent
                     strings={["Fits Perfectly", "Fits Dream Home"]}
-                  />
-                </h1>
-                <p
+                  /> */}
+                </h3>
+                {/* <p
                   className="subtitle body-2 wow fadeInUp"
                   data-wow-delay=".2s"
                 >
                   We are a real estate agency that will help you find the best{" "}
                   <br />
                   residence you dream of.
-                </p>
+                </p> */}
               </div>
 
               <FilterTab tabClass="nav-tab-form style-2" styleClass="style-2" />
-              <div className="wrap-search-link">
-                <p className="body-2">What are you looking for:</p>
-                <div className="categories-list">
-                  <a href="#">
-                    <i className="icon icon-house-fill" /> Houses
-                  </a>
-                  <a href="#">
-                    <i className="icon icon-villa-fill" /> Villa
-                  </a>
-                  <a href="#">
-                    <i className="icon icon-office-fill" /> Office
-                  </a>
-                  <a href="#">
-                    <i className="icon icon-apartment" /> Apartments
-                  </a>
-                </div>
-              </div>
+
             </div>
           </div>
         </div>

@@ -1,24 +1,51 @@
 export const menuItems = [
   {
-    title: "Home",
+    title: "Help/Support",
     link:'/',
-    isCurrent: true,
+    // isCurrent: true,
   },
 
   {
-    title: "Individual",
+    title: "Find Agents",
     link:'/properties/individuals',
   },
+  // {
+  //   title: "Value Added Services",
+  //   link:'/properties/projects',
+  // },
   {
-    title: "Projects",
-    link:'/properties/projects',
-  },
-  {
-    title: "Added Value Services",
+    title: "Events",
     link:'/',
   },
   {
-    title: "Rent/Lease",
+    title: "Franchises",
+    link:'/properties',
+  },
+  // {
+  //   title: "Sell Property",
+  //   link:'/',
+  // },
+  // {
+  //   title: "Login/Register",
+  //   link:'#modalLogin',
+  // },
+  // {
+  //   title: "Contact Us",
+  //   link:'/contact',
+
+  // },
+  // {
+  //   title: "Dashboard",
+  //   link:'/dashboard',
+
+  // },
+];
+
+
+
+export const rightMenuItems = [
+  {
+    title: "Value Added Services",
     link:'/properties',
   },
   {
@@ -40,7 +67,6 @@ export const menuItems = [
 
   // },
 ];
-
 
 
 // export const menuItems = [

@@ -34,7 +34,7 @@ export default function DropdownSelect({
     <>
       <div className={`nice-select ${addtionalParentClass}`} ref={selectRef} style={style}>
         <span onClick={() => toggleDropdown()} className="current">
-          {selected || "Select" || options[0]}
+          {selected || options[0]}
         </span>
         <ul className="list">
           {options?.length && options.map((elm, i) => (
