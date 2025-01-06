@@ -68,7 +68,7 @@ GET http://luxcycs.com:4400/dashboard/menus
 
 
 ### 
-POST http://luxcycs.com:4400/inputs/add-input/1
+POST http://luxcycs.com:4400/inputs/add-input/
 Content-Type: application/json
 
 {
@@ -79,7 +79,7 @@ Content-Type: application/json
 }
 
 ### 
-GET http://luxcycs.com:4400/inputs/get-inputs/1
+GET http://luxcycs.com:4400/inputs/get-inputs/40
 
 
 ### 

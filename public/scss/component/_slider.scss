@@ -1,11 +1,41 @@
-.flat-slider {
+.home-splitter{
+  display: flex;
+  flex-direction: row,
+}
+.home-sp-one{
+ width:60vw;
+//  background-image: url(https://t4.ftcdn.net/jpg/02/61/99/99/360_F_261999985_waD5uRLvIzezu0OQLWKOBGvWyShliFaU.jpg);
+background-color: #ebf3fb;
+}
+.home-sp-two{
+   width: 40vw;
+   overflow: hidden;
+   background-image: url(https://media.gettyimages.com/id/128502214/photo/classic-turn-of-the-century-american-house.jpg?s=612x612&w=gi&k=20&c=i4olPZuStzxhaUt8Py7FzUSRaub86j2UdvezcLPtThI=);
+}
+.custom-slider-cont{
+  width: 85%;
+  margin: 0 auto;
+}
+.custom-home-header{
+  padding: 0px 0px 30px 0;
+  .custom-span-header{
+    color: #000000;
+    line-height: 55px;
+    font-size: 2.8rem;
+    font-weight: bold;
+  }
+}
+.filter-search-bar{
+  width: 75.45%;
+}
+.flat-slider  {
   position: relative;
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
   z-index: 123;
   &.home-1 {
-    background-image: url(/images/slider/slider-1.jpg);
+    // background-image: url(/images/slider/slider-6.jpg);
 
     .overlay {
       background: $on-surface;
@@ -14,7 +44,7 @@
     .slider-content {
       position: relative;
       z-index: 1;
-      padding: 155px 0px 146px;
+      padding: 100px 0px;
       .heading {
         margin-bottom: 40px;
       }
@@ -52,7 +82,7 @@
       // background-image: url(/images/slider/slider-2.jpg);
     }
     .slider-content {
-      padding: 150px 0px;
+      padding: 65px 0px;
       position: relative;
       z-index: 10;
       .heading {
@@ -63,7 +93,7 @@
       }
     }
     .wrap-search-link {
-      margin-top: 24px;
+      margin: 24px 0px 40px;
       display: flex;
       align-items: center;
       gap: 20px;
@@ -188,7 +218,7 @@
   flex-wrap: wrap;
   .categories-list {
     display: flex;
-    gap: 16px;
+    gap: 10px;
     overflow: auto;
     .icon {
       font-size: 14px;
@@ -219,13 +249,18 @@
     font-weight: 600;
     display: flex;
     align-items: center;
+    min-width: fit-content;
     gap: 6px;
-    color: $white;
+    background: $white;
+    padding: 5px 12px;
+    margin-bottom: 5px;
   }
 }
 
 .flat-tab-form {
+  margin-top: 40px;
   position: relative;
+  text-align: center;
 }
 
 @keyframes waviy {

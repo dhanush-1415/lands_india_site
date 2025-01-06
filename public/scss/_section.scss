@@ -4,6 +4,9 @@
   padding-top: 50px;
   padding-bottom: 50px;
 }
+.flat-standby {
+  padding-top: 300px;
+}
 .flat-section-v2 {
   padding-top: 150px;
   padding-bottom: 100px;
@@ -683,7 +686,7 @@
 // widget home box
 .homelengo-box {
   display: block;
-  border-radius: 16px;
+  // border-radius: 16px;
   overflow: hidden;
   border: 1px solid $outline;
   .images-group {
@@ -732,8 +735,8 @@
     }
   }
   .content-top {
-    padding-bottom: 24px;
-    margin-bottom: 24px;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
     border-bottom: 1px solid $outline;
 
     .meta-list {
@@ -1912,6 +1915,37 @@
   }
 }
 
+.custom-home-icon{
+  width: 125px;
+  height: 116px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  // border: 1px solid $outline;
+  @include transition5;
+  position: relative;
+  border-radius: 16px;
+  .icon-box {
+    path {
+      @include transition3;
+    }
+  }
+  .content {
+    @include transition5;
+    color: #000000;
+  }
+
+    .icon-box {
+      svg path {
+        fill: #000000;
+      }
+    }
+    .content {
+      color: #000000;
+    }
+}
 .wrap-categories-v3 {
   .navigation {
     position: absolute;

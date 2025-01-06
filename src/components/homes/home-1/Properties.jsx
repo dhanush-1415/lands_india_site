@@ -1,6 +1,9 @@
 import { filterOptions, properties, props } from "@/data/properties";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import CallIcon from '@mui/icons-material/Call';
+import AttachEmailSharpIcon from '@mui/icons-material/AttachEmailSharp';
+import PermPhoneMsgIcon from '@mui/icons-material/PermPhoneMsg';
 
 export default function Properties() {
   const [selectedOption, setSelectedOption] = useState(filterOptions[0]);
@@ -14,11 +17,61 @@ export default function Properties() {
       );
     }
     console.log('fffff', filtered);
-    
+
   }, [selectedOption, props]);
 
+
+  const services = [
+    {
+      icon: "bi bi-house",
+      title: "Properties",
+      description: "We help you find a new home by offering a smart real estate experience",
+    },
+    {
+      icon: "bi bi-buildings",
+      title: "Projects",
+      description: "Find an experienced agent who knows your market best",
+    },
+    {
+      icon: "bi bi-handshake",
+      title: "Value Added Service",
+      description: "Millions of houses and apartments in your favourite cities",
+    },
+    {
+      icon: "bi bi-person-circle",
+      title: "Agent",
+      description: "Sign up now and sell or rent your own properties",
+    },
+    {
+      icon: "bi bi-gear",
+      title: "Property Management",
+      description: "We help you find a new home by offering a smart real estate experience",
+    },
+    {
+      icon: "bi bi-cash-stack",
+      title: "Financial Services",
+      description: "Find an experienced agent who knows your market best",
+    },
+    {
+      icon: "bi bi-wallet2",
+      title: "Wealth Advice",
+      description: "Millions of houses and apartments in your favourite cities",
+    },
+    {
+      icon: "bi bi-newspaper",
+      title: "News and Articles",
+      description: "Sign up now and sell or rent your own properties",
+    },
+    {
+      icon: "bi bi-newspaper",
+      title: "News and Articles",
+      description: "Sign up now and sell or rent your own properties",
+    },
+  ];
+
+
   return (
-    <section className="flat-section flat-recommended" style={{position: 'relative', zIndex: '500'}}>
+    <section className="flat-section flat-recommended flat-standby" style={{ position: 'relative' }}>
       <div className="container">
         <div className="box-title text-center wow fadeInUp">
           <div className="text-subtitle text-primary">Featured Properties</div>
@@ -36,9 +89,8 @@ export default function Properties() {
                 className="nav-tab-item"
               >
                 <a
-                  className={`nav-link-item ${
-                    option === selectedOption ? "active" : ""
-                  }`}
+                  className={`nav-link-item ${option === selectedOption ? "active" : ""
+                    }`}
                 >
                   {option}
                 </a>
@@ -49,15 +101,15 @@ export default function Properties() {
             <div className="tab-pane active show">
               <div className="row">
                 {filtered.map((property, index) => (
-                  <div key={index} className="col-xl-4 col-lg-6 col-md-6">
+                  <div key={index} className="col-xl-3 col-lg-3 col-md-6 col-sm-12">
                     <div className="homelengo-box">
                       <div className="archive-top">
                         <Link
                           to={`/property-details/${property.id}`}
                           className="images-group"
-                          
+
                         >
-                         <div className="images-style">
+                          <div className="images-style">
                             <img
                               className="lazyload"
                               data-src={property.img[0]}
@@ -71,12 +123,12 @@ export default function Properties() {
                             />
                           </div>
 
-                          <div className="top">
+                          {/* <div className="top">
                             <ul className="d-flex gap-6">
                               <li className="flag-tag primary">Featured</li>
                               <li className="flag-tag style-1">For Sale</li>
                             </ul>
-                          </div>
+                          </div> */}
                           <div className="bottom">
                             <svg
                               width={16}
@@ -132,20 +184,23 @@ export default function Properties() {
                           </ul>
                         </div>
                         <div className="content-bottom">
-                          {/* <div className="d-flex gap-8 align-items-center">
-                            <div className="avatar avt-40 round">
-                              <img
-                                alt="avt"
-                                src={property.avatar}
-                                width={34}
-                                height={34}
-                              />
-                            </div>
-                            <span>{property.agent}</span>
-                          </div> */}
                           <h6 className="price">
                             ₹{property.propertyDetails.price}
                           </h6>
+                          <div className="d-flex gap-8 align-items-center">
+                            <span style={{ fontWeight: 'bold', border: '1.5px dotted black', padding: '3px 10px' }} >View Details</span>
+                          </div>
+                        </div>
+                        <div className="content-bottom mt-3">
+                          <div className="d-flex gap-8 align-items-center" style={{ fontWeight: 'bold', background: '#018df7', color: '#ffffff', padding: '4px 10px' }}>
+                            <AttachEmailSharpIcon sx={{ padding: '0px 2px' }} /><span > Enquiry Now </span>
+                          </div>
+                          <div className="" style={{ padding: '3px', border: '1px solid black', borderRadius: '50%' }}>
+                            <CallIcon />
+                          </div>
+                          <div className="" style={{ padding: '3px', border: '1px solid black', borderRadius: '50%' }}>
+                            <PermPhoneMsgIcon />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -165,6 +220,33 @@ export default function Properties() {
           </div>
         </div>
       </div>
+      <div className="container py-5">
+      <div className="row">
+        {services.map((service, index) => (
+          <div
+            key={index}
+            className={`col-md-4 text-center p-4 ${index % 3} ${
+              index % 3 === 0 ? "border-top-0 border-start-0" : "" // First in the row
+            } ${
+              index % 3 === 2 ? "border-end-0 border-top-0" : "" // Last in the row
+            } ${
+              index % 3 === 1 ? "border-top-0" : "" // Last in the row
+            } ${
+              index >= services.length - (services.length % 3 || 3) // Last row
+                ? "border-bottom-0 border-top-0"
+                : ""
+            }`}
+            style={{
+              border: "2px solid #ddd",
+            }}
+          >
+            <i className={`${service.icon} fs-1 mb-3`}></i>
+            <h5 className="fw-bold">{service.title}</h5>
+            <p className="text-muted">{service.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
     </section>
   );
 }
