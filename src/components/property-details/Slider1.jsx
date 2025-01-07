@@ -32,8 +32,8 @@ const propertyImages = [
 export default function Slider1({ imageItem }) {
   return (
     <Gallery>
-      <section className="flat-slider-detail-v1 px-10">
-        <Swiper
+      <section className="flat-slider-detail-v1 px-10" style={{height: '70vh',display: 'flex', justifyContent: 'center'}}>
+        {/* <Swiper
           className="swiper tf-sw-location"
           slidesPerView={3}
           spaceBetween={10}
@@ -81,7 +81,114 @@ export default function Slider1({ imageItem }) {
             </SwiperSlide>
           ))}
           <div className="sw-pagination spb18 sw-pagination-location text-center" />
-        </Swiper>
+        </Swiper> */}
+        <div style={{ display: 'flex', width: '98%', height: '100%' }}>
+  <div style={{ width: '50%', height: '100%' }}>
+    <Item original={imageItem[0]} thumbnail={imageItem[0]} width={500} height={500}>
+      {({ ref, open }) => (
+        <img
+          ref={ref}
+          onClick={open}
+          src={imageItem[0]}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', cursor: 'pointer' }}
+          alt=""
+        />
+      )}
+    </Item>
+  </div>
+  <div style={{ width: '50%', height: '100%' }}>
+    <div
+      style={{
+        width: '99%',
+        height: '49%',
+        marginLeft: '1%',
+        marginBottom: '1%',
+        display: 'flex',
+      }}
+    >
+      <Item original={imageItem[1]} thumbnail={imageItem[1]} width={500} height={500}>
+        {({ ref, open }) => (
+          <div style={{ width: '50%', height: '100%', backgroundColor: 'black', cursor: 'pointer' }}>
+            <img
+              ref={ref}
+              onClick={open}
+              src={imageItem[1]}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              alt=""
+            />
+          </div>
+        )}
+      </Item>
+      <Item original={imageItem[2]} thumbnail={imageItem[2]} width={500} height={500}>
+        {({ ref, open }) => (
+          <div
+            style={{
+              width: '50%',
+              height: '100%',
+              backgroundColor: 'black',
+              marginLeft: '1%',
+              cursor: 'pointer',
+            }}
+          >
+            <img
+              ref={ref}
+              onClick={open}
+              src={imageItem[2]}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              alt=""
+            />
+          </div>
+        )}
+      </Item>
+    </div>
+    <div
+      style={{
+        width: '99%',
+        height: '50%',
+        marginLeft: '1%',
+        marginBottom: '1%',
+        display: 'flex',
+      }}
+    >
+      <Item original={imageItem[3]} thumbnail={imageItem[3]} width={500} height={500}>
+        {({ ref, open }) => (
+          <div style={{ width: '50%', height: '100%', backgroundColor: 'black', cursor: 'pointer' }}>
+            <img
+              ref={ref}
+              onClick={open}
+              src={imageItem[3]}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              alt=""
+            />
+          </div>
+        )}
+      </Item>
+      <Item original={imageItem[4]} thumbnail={imageItem[4]} width={500} height={500}>
+        {({ ref, open }) => (
+          <div
+            style={{
+              width: '50%',
+              height: '100%',
+              backgroundColor: 'black',
+              marginLeft: '1%',
+              cursor: 'pointer',
+            }}
+          >
+            <img
+              ref={ref}
+              onClick={open}
+              src={imageItem[4]}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              alt=""
+            />
+          </div>
+        )}
+      </Item>
+    </div>
+  </div>
+</div>
+
+
       </section>
     </Gallery>
   );

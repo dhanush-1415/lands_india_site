@@ -37,7 +37,25 @@ export default function DetailsTitle1({ propertyItem}) {
           </div>
           <div className="content-bottom">
             <div className="box-left">
-              {propertyItem?.features &&
+              <div className="info-box">
+                <div className="label">Location</div>
+                <p className="meta-item">
+                  <span className="icon icon-mapPin" />
+                  <span className="text-variant-1">
+                    {propertyItem.location.village}, {propertyItem.location.district}, {propertyItem.location.state}, {propertyItem.location.country}
+                  </span>
+                </p>
+              </div>
+              <div className="info-box">
+                <div className="label">Posted On</div>
+                <p className="meta-item">
+                  <span className="icon icon-calendar" />
+                  <span className="text-variant-1">
+                    2-01-2025
+                  </span>
+                </p>
+              </div>
+              {/* {propertyItem?.features &&
               <div className="info-box">
                 <div className="label">Features</div>
                 <ul className="meta">
@@ -58,16 +76,7 @@ export default function DetailsTitle1({ propertyItem}) {
                   </li>
                 </ul>
               </div>
-              }
-              <div className="info-box">
-                <div className="label">Location</div>
-                <p className="meta-item">
-                  <span className="icon icon-mapPin" />
-                  <span className="text-variant-1">
-                    {propertyItem.location.village}, {propertyItem.location.district}, {propertyItem.location.state}, {propertyItem.location.country}
-                  </span>
-                </p>
-              </div>
+              } */}
             </div>
             {/* <ul className="icon-box">
               <li>
