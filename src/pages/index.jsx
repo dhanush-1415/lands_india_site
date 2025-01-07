@@ -10,6 +10,8 @@ import Properties from "@/components/homes/home-1/Properties";
 import Properties2 from "@/components/homes/home-1/Properties2";
 import Services from "@/components/homes/home-1/Services";
 import Testimonials from "@/components/common/Testimonials";
+import Carousel from "@/components/homes/home-2/Carousel";
+import BottomCarousel from "@/components/homes/home-2/BannerCarousel";
 
 import MetaComponent from "@/components/common/MetaComponent";
 // const metadata = {
@@ -23,6 +25,7 @@ export default function Home() {
       <MetaComponent  />
       {/* <Header1 /> */}
       <Hero />
+      <Carousel />
       <Properties />
       {/* <Locations /> */}
       {/* <Services /> */}
@@ -32,6 +35,7 @@ export default function Home() {
       {/* <Agents /> */}
       {/* <Brands /> */}
       <Blogs />
+      <BottomCarousel />
       <Footer1 />
     </>
   );
