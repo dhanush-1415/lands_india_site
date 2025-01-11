@@ -7,7 +7,7 @@ import NorthEastIcon from '@mui/icons-material/NorthEast';
 
 export default function Blogs() {
   return (
-    <section className="flat-section bg-primary-new">
+    <section className="flat-section bg-primary-new" style={{background:'#f0f3f4'}}>
       <style>
         {`
           .blog-cont-custom {
