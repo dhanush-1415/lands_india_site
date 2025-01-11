@@ -1,12 +1,12 @@
 import React from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { Divider } from '@mui/material';
-import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter } from "react-icons/fa";
 
 
 const HelpForm = () => {
     return (
-        <section className="flat-section" style={{ background: '#f8f9fa' }}>
+        <section className="flat-section" style={{ background: '#f0f3f4' }}>
             <style>
                 {`
                     .custom-row {
@@ -21,8 +21,8 @@ const HelpForm = () => {
                     `
                 }
             </style>
-            <div className="container">
-                <div style={{ padding: '30px 0' }}>
+            <div className="container" style={{backgroundColor: '#f0f3f4'}}>
+                <div style={{ padding: '0px 0 30px' }}>
                     <h3>Help/Support</h3>
                 </div>
                 <div className="custom-row">
@@ -74,15 +74,15 @@ const HelpForm = () => {
                         <p style={{ marginBottom: '0.5rem' }}>Call us</p>
                         <p style={{ fontWeight: 'bold', marginBottom: '0.2rem' }}>+91 93638 28393</p>
                         <p style={{ fontWeight: 'bold', marginBottom: '2px' }}>+91 93638 28393</p>
-                        < Divider />
+                        < Divider style={{backgroundColor: 'black', marginTop: '1rem'}} />
                         <p style={{ marginBottom: '0.5rem', marginTop: '1rem' }}>Whatsapp</p>
                         <p style={{ fontWeight: 'bold', marginBottom: '2px' }}>+91 93638 28393</p>
-                        < Divider />
+                        < Divider style={{backgroundColor: 'black', marginTop: '1rem'}} />
                         <p style={{ marginBottom: '0.5rem', marginTop: '1rem' }}>Email:</p>
                         <p style={{ fontWeight: 'bold', marginBottom: '2px' }}>
                             admin@propertystores.in <br /> info@propertystores.in
                         </p>
-                        < Divider />
+                        < Divider style={{backgroundColor: 'black', marginTop: '1rem'}} />
                         <h5 style={{ fontWeight: 'bold', marginTop: '1rem',marginBottom:'10px' }}>Follow Us:</h5>
                         <Row>
                             <Col xs="auto">
@@ -128,6 +128,21 @@ const HelpForm = () => {
                                     }}
                                 >
                                     <FaLinkedinIn />
+                                </Button>
+                            </Col>
+                            <Col xs="auto">
+                                <Button
+                                    variant="light"
+                                    className="rounded-circle shadow-sm"
+                                    style={{
+                                        width: "50px",
+                                        height: "50px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                    }}
+                                >
+                                    <FaTwitter />  {/* Replaced FaInstagram with FaTwitter */}
                                 </Button>
                             </Col>
                         </Row>

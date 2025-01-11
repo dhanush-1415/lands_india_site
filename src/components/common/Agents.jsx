@@ -5,11 +5,16 @@ import { Divider } from "@mui/material";
 import { Button } from "react-bootstrap";
 import { getAgents } from "@/apiCalls";
 
-import { Pagination } from "swiper/modules";
+import Pagination from "./Pagination";
+import DropdownSelect from "./DropdownSelect";
+import Footer2 from "../footer/Footer2";
 export default function Agents() {
 
 
   const [data , setData ] = useState();
+    const [currentPage, setCurrentPage] = useState(1);
+      const [sorted, setSorted] = useState();
+        const [itemPerPage, setItemPerPage] = useState(9);
 
     console.log(data , "ppppppppppppppppppp")
   
@@ -31,6 +36,7 @@ export default function Agents() {
     }, []);
 
   return (
+    <>
     <section className="flat-section flat-agents" style={{ paddingTop: '0px' }}>
       <style>{`
       .custom-aligner{
@@ -46,7 +52,7 @@ export default function Agents() {
         }
         `}
       </style>
-      <div style={{ background: '#f8f9fa', padding: '20px 0' }}>
+      <div style={{ background: '#f0f3f4', padding: '20px 0' }}>
         <div style={{ width: '80%', margin: '50px auto' }}>
           <h4>Our Agents</h4>
         </div>
@@ -57,11 +63,42 @@ export default function Agents() {
             <h5>Sign Up to Start Your Journey as a Top-Tire Agent</h5>
           </div>
           <div>
-            <button style={{ backgroundColor: "#0095ff", border: 'none', padding: '15px', color: '#ffffff', fontWeight: 'bold' }} >Register As Agent</button>
+            <button style={{ backgroundColor: "rgb(0, 143, 247)", border: 'none', padding: '15px', color: '#ffffff', fontWeight: 'bold' }} >Register As Agent</button>
           </div>
         </div>
       </div>
-      <div className="container" style={{ padding: '70px 0' }}>
+      
+      
+                      
+                      <div className="d-flex align-items-center justify-content-end container custom-container-header">
+                          <div style={{ width: '17%',marginTop:'2rem', marginRight: '2rem' }}>
+                              <DropdownSelect
+                                  style={{ borderRadius: '0', fontWeight:'700',border: 'none', borderBottom: '1px solid #e4e4e4' }}
+                                  // onChange={setSortingOption}
+                                  addtionalParentClass="list-sort"
+                                  options={[
+                                      "Location",
+                                      "Chennai",
+                                      "Trichy",
+                                  ]}
+                              />
+      
+                          </div>
+                          <div style={{ width: '17%',marginTop:'2rem', marginRight: '6px' }}>
+                              <DropdownSelect
+                                  style={{ borderRadius: '0', fontWeight:'700',border: 'none', borderBottom: '1px solid #e4e4e4' }}
+                                  // onChange={setSortingOption}
+                                  addtionalParentClass="list-sort"
+                                  options={[
+                                      "Professional",
+                                      "Realestate broker"
+                                  ]}
+                              />
+      
+                          </div>
+      
+                      </div>
+      <div className="container custom-container-header" style={{ padding: '30px 0 40px' }}>
         {/* 
         <div className="box-title text-center wow fadeInUp">
           <div className="text-subtitle text-primary">Our Teams</div>
@@ -73,32 +110,18 @@ export default function Agents() {
               <SwiperSlide key={agent.id} className="swiper-slide">
                 <div
                   className="box-agent hover-img wow fadeInUp"
-                  style={{ animationDelay: agent.wowDelay, padding: '20px', boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", }} // WOW.js animation delay
+                  style={{ animationDelay: agent.wowDelay, padding: '20px', boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", gap: '10px', borderRadius: '3px'}} // WOW.js animation delay
                 >
                   <a href="#" className="box-img img-style" style={{ borderRadius: '0px' }}>
                     <img
                       className="lazyload mh-100"
                       data-src={agent.imgSrc}
                       alt={`image-agent-${agent.name}`}
-                      src={agent.imgSrc}
+                      src={agent.imageURL}
                       // width={450}
-                      style={{ maxHeight: '40px !importent' }}
+                      style={{ maxHeight: '50px !importent', borderRadius: '3px' }}
                       height={450}
                     />
-                    <ul className="agent-social">
-                      <li>
-                        <span className="icon icon-facebook" />
-                      </li>
-                      <li>
-                        <span className="icon icon-x" />
-                      </li>
-                      <li>
-                        <span className="icon icon-linkedin" />
-                      </li>
-                      <li>
-                        <span className="icon icon-instargram" />
-                      </li>
-                    </ul>
                   </a>
                   <div className="content justify-content-center">
                     <div className="info" style={{ textAlign: 'center' }}>
@@ -107,19 +130,19 @@ export default function Agents() {
                           {agent.name}
                         </a>
                       </h5>
-                      <p className="text-variant-1">Male, 35</p>
+                      <p className="text-variant-1" style={{marginBottom: 0 }}>{agent.gender}, {agent.age} </p>
                     </div>
                     {/* <div className="box-icon">
                       <span className="icon icon-phone" />
                       <span className="icon icon-mail" />
                     </div> */}
                   </div>
-                  <Divider sx={{ border: '1px solid black' }} />
+                  < Divider style={{backgroundColor: 'black', marginBottom: '10px'}} />
                   <div className="content justify-content-center">
                     <div className="info" style={{ textAlign: 'center' }}>
-                      <p className="text-variant-1" style={{ fontWeight: 'bold' }}>Real Estate Broker</p>
+                      <p className="text-variant-1" style={{ fontWeight: 'bold', marginBottom: 0 }}>{agent.service}</p>
 
-                      <p className="text-variant-1">Chennai, TamilNadu</p>
+                      <p className="text-variant-1">{agent.location}</p>
                     </div>
 
                   </div>
@@ -129,6 +152,7 @@ export default function Agents() {
           </div>
           <div className="sw-pagination spb3 sw-pagination-mb-1 text-center d-sm-none d-block" />
         </div>
+        
         {/* <Swiper
           spaceBetween={30}
           slidesPerView={1}
@@ -195,6 +219,17 @@ export default function Agents() {
           <div className="sw-pagination spb3 sw-pagination-mb-1 text-center d-sm-none d-block" />
         </Swiper> */}
       </div>
+      
+      <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
+                          <Pagination
+                            currentPage={currentPage}
+                            setPage={setCurrentPage}
+                            itemLength={sorted?.length}
+                            itemPerPage={itemPerPage}
+                          />
+                        </ul>
     </section>
+    <Footer2 />
+    </>
   );
 }

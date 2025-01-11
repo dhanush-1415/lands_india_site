@@ -1,17 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { Divider } from '@mui/material';
 import { agents } from '@/data/agents';
 import WifiCalling3Icon from '@mui/icons-material/WifiCalling3';
 import PinDropIcon from '@mui/icons-material/PinDrop';
+import Footer2 from '../footer/Footer2';
+import Pagination from './Pagination';
 
 const Franchise = () => {
+    const [currentPage, setCurrentPage] = useState(1);
+      const [sorted, setSorted] = useState();
+        const [itemPerPage, setItemPerPage] = useState(9);
   return (
+  <>
     <section className="flat-section" style={{paddingTop:'0px'}}>
-         <div style={{background:'#f8f9fa',padding:'40px 0'}}>
+         <div style={{background:'#f0f3f4',padding:'40px 0'}}>
           <h3 style={{width:'80%',margin:'0px auto'}} className="mb-4">Franchise</h3>
         </div>
-      <div className="container py-5" style={{ background: '#ffffff' }}>
+      <div className="container custom-container-header py-5" style={{ background: '#ffffff' }}>
      
         <Row>
           {/* Agents Section */}
@@ -33,7 +39,7 @@ const Franchise = () => {
                         style={{ maxHeight: '40px !importent' }}
                         height={450}
                       />
-                      <ul className="agent-social">
+                      {/* <ul className="agent-social">
                         <li>
                           <span className="icon icon-facebook" />
                         </li>
@@ -46,7 +52,7 @@ const Franchise = () => {
                         <li>
                           <span className="icon icon-instargram" />
                         </li>
-                      </ul>
+                      </ul> */}
                     </a>
                     <div className="content justify-content-start">
                       <div className="info" style={{ textAlign: 'left' }}>
@@ -71,11 +77,21 @@ const Franchise = () => {
                 </Col>
               ))}
             </Row>
+            
+                  
+                  <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
+                                      <Pagination
+                                        currentPage={currentPage}
+                                        setPage={setCurrentPage}
+                                        itemLength={sorted?.length}
+                                        itemPerPage={itemPerPage}
+                                      />
+                                    </ul>
           </Col>
 
           {/* Form Section */}
           <Col lg={4} >
-            <div style={{ background: '#f8f9fa' }} className="p-4 bg-#f8f9fa shadow-sm rounded">
+            <div style={{ background: '#ffffff',boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px !important", }} className="p-4 bg-#ffffff shadow-sm rounded widget-sidebar fixed-sidebar">
               <h5>Franchise with Us!</h5>
               <p>
                 Register now to start your journey toward successful franchise
@@ -111,6 +127,8 @@ const Franchise = () => {
         </Row>
       </div>
     </section>
+    <Footer2 />
+    </>
   );
 };
 
