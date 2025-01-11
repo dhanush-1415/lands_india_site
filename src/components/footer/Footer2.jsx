@@ -102,7 +102,7 @@ const Footer2 = () => {
           </Grid>
 
           {/* Bottom Section */}
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={4}>
             <Typography variant="h6" gutterBottom color='#ffffff' fontWeight='bold'>
               Office Address
             </Typography>
@@ -147,7 +147,7 @@ const Footer2 = () => {
             </Typography>
           </Grid>
 
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={2.5}>
             <Typography variant="h6" gutterBottom color='#ffffff' fontWeight='bold'>
               Our Company
             </Typography>
@@ -168,7 +168,7 @@ const Footer2 = () => {
             </Link>
           </Grid>
 
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={2.5}>
             <Typography variant="h6" gutterBottom color='#ffffff' fontWeight='bold'>
               Group Of Companies
             </Typography>
