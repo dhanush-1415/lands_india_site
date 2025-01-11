@@ -1,13 +1,13 @@
 export const menuItems = [
   {
     title: "Help/Support",
-    link:'/',
+    link:'/support',
     // isCurrent: true,
   },
 
   {
     title: "Find Agents",
-    link:'/properties/individuals',
+    link:'/agents',
   },
   // {
   //   title: "Value Added Services",
@@ -19,7 +19,7 @@ export const menuItems = [
   },
   {
     title: "Franchises",
-    link:'/properties',
+    link:'/franchise',
   },
   // {
   //   title: "Sell Property",
@@ -46,7 +46,7 @@ export const menuItems = [
 export const rightMenuItems = [
   {
     title: "Value Added Services",
-    link:'/properties',
+    link:'/value-added-services',
   },
   {
     title: "Sell Property",

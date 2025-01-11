@@ -16,6 +16,14 @@ background-color: #ebf3fb;
   width: 85%;
   margin: 0 auto;
 }
+.custom-link{
+  color:black;
+  text-decoration:none;
+}
+.custom-link:hover{
+  color:black;
+  text-decoration:none;
+}
 .custom-home-header{
   padding: 0px 0px 30px 0;
   .custom-span-header{
@@ -27,9 +35,11 @@ background-color: #ebf3fb;
 }
 .filter-search-bar{
   width: 75.45%;
+  box-shadow: 0 4px 18px #00000014;
 }
 .flat-slider  {
   position: relative;
+  background-color: #f0f3f4;
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -82,7 +92,7 @@ background-color: #ebf3fb;
       // background-image: url(/images/slider/slider-2.jpg);
     }
     .slider-content {
-      padding: 65px 0px;
+      padding: 100px 0px;
       position: relative;
       z-index: 10;
       .heading {
@@ -93,7 +103,7 @@ background-color: #ebf3fb;
       }
     }
     .wrap-search-link {
-      margin: 24px 0px 40px;
+      margin: 0px 0px 20px;
       display: flex;
       align-items: center;
       gap: 20px;

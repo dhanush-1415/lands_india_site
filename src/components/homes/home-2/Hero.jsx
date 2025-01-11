@@ -18,7 +18,7 @@ export default function Hero() {
                 <div className="wrap-search-link">
                   {/* <p className="body-2">What are you looking for:</p> */}
                   <div className="categories-list">
-                    <a href="#">
+                    <a href="#" style={{background:'#008ff7',fontSize:'20px',lineHeight:'30px',boxShadow:'0px 1px 5px #00000054',color:'#ffffff !important'}}>
                       {/* <i className="icon icon-house-fill" />  */}
                       100%
                     </a>

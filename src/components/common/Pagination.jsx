@@ -22,7 +22,7 @@ export default function Pagination({
           {" "}
           <li onClick={() => handlePageClick(currentPage - 1)}>
             <a className={`nav-item`}>
-              <i className="icon icon-arr-l" />
+              <i className="icon icon-arr-l nav-item" />
             </a>
           </li>
           {[...Array(totalPages)].slice(0, 4).map((_, index) => {
@@ -31,6 +31,7 @@ export default function Pagination({
               <li key={page}>
                 <a
                   className={`nav-item ${currentPage === page ? "active" : ""}`}
+                  style={{color: `${ currentPage === page ? '' : '#008ff7 ' }`}}
                   onClick={() => handlePageClick(page)}
                 >
                   {page}
@@ -40,17 +41,17 @@ export default function Pagination({
           })}
           {currentPage >= 5 && (
             <li>
-              <a className={`nav-item active`}>{currentPage}</a>
+              <a className={`nav-item active`} style={{color: `${ currentPage === page ? '#008ff7' : '' }`}}>{currentPage}</a>
             </li>
           )}
           {totalPages >= 5 && currentPage != totalPages && (
             <li className={`nav-item`}>
-              <a className="">...</a>
+              <a className="nav-item">...</a>
             </li>
           )}
           <li onClick={() => handlePageClick(currentPage + 1)}>
             <a className={`nav-item`}>
-              <i className="icon icon-arr-r" />
+              <i className="icon icon-arr-r nav-item" />
             </a>
           </li>{" "}
         </React.Fragment>

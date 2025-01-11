@@ -1,4 +1,4 @@
-GET http://luxcycs.com:4400/
+GET http://luxcycs.com:4400/property/get-properties
 
 ###
 POST http://luxcycs.com:4400/registration

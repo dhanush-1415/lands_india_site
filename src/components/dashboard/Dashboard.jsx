@@ -7,6 +7,13 @@ import Pagination from "../common/Pagination";
 import { properties2, properties4 } from "@/data/properties";
 import Pagination2 from "../common/Pagination2";
 export default function Dashboard() {
+
+    const handleLogout = () => {
+      localStorage.removeItem("LandsUser");
+      // toast.success("Logout Successful");
+      window.location.href = "/"
+    }
+  
   return (
     <div className="main-content">
       <div className="main-content-inner">
@@ -14,12 +21,12 @@ export default function Dashboard() {
           <span className="body-1">Show Dashboard</span>
         </div>
         <div className="flat-counter-v2 tf-counter">
-          <div className="counter-box">
+          <div className="counter-box" onClick={handleLogout}>
             <div className="box-icon">
               <span className="icon icon-listing" />
             </div>
             <div className="content-box">
-              <div className="title-count text-variant-1">Your listing</div>
+              <div className="title-count text-variant-1" >Your listing</div>
               <div className="box-count d-flex align-items-end">
                 {/* <h3 className="number fw-8" data-speed="2000" data-to="17" data-inviewport="yes">32</h3>       */}
                 <h3 className="fw-8">32</h3>

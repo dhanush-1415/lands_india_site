@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Nav from "./Nav";
 import NavTwo from './Nav2';
-import { AppBar, Toolbar, Typography, Box, Grid, TextField,Card,CardContent, Menu, MenuItem,Switch, IconButton, Drawer, List, ListItem, ListItemText, Button, useMediaQuery, useTheme, Dialog, DialogTitle, DialogContent, DialogActions, FormHelperText, Divider  } from '@mui/material';
+import { AppBar, Toolbar, Typography, Box, Grid, TextField, Card, CardContent, Menu, MenuItem, Switch, IconButton, Drawer, List, ListItem, ListItemText, Button, useMediaQuery, useTheme, Dialog, DialogTitle, DialogContent, DialogActions, FormHelperText, Divider } from '@mui/material';
 import { Link } from "react-router-dom";
 import Slide from '@mui/material/Slide';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl'
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import logo from './logo.jpeg';
+// import logo from './logo-light.png';
+import logo from './logo-new.png';
 import addedValue from './added-value.png';
 import individual from './individual.png';
 import projects from './projects.png';
@@ -60,7 +61,7 @@ export default function Header1({
   }, []);
 
 
-  const [isLogin , setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
     const user = localStorage.getItem("LandsUser");
@@ -74,12 +75,12 @@ export default function Header1({
   const [dialogOpen, setDialogOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [loginActive , setLoginActive] = useState(true);
-  const [verifyBar , setVerifyBar] = useState(false);
+  const [loginActive, setLoginActive] = useState(true);
+  const [verifyBar, setVerifyBar] = useState(false);
 
-  const [otp , setOtp] = useState("");
+  const [otp, setOtp] = useState("");
 
-  const [resOtp , setResOtp] = useState("");
+  const [resOtp, setResOtp] = useState("");
 
 
   // useEffect(()=>{
@@ -102,7 +103,7 @@ export default function Header1({
     email: '',
     password: '',
     confirmPassword: '',
-    role:''
+    role: ''
   });
 
   const [loginData, setLoginData] = useState({
@@ -163,19 +164,19 @@ export default function Header1({
     }
   }, [registerData.confirmPassword, registerData.password, loginActive]);
 
-  const [inputDisable , setInputDisable] = useState(false);
+  const [inputDisable, setInputDisable] = useState(false);
 
   const handlePhoneChange = async (phoneValue) => {
 
     // setInputDisable(true)
 
-    if(phoneValue.length === 10){
-    
+    if (phoneValue.length === 10) {
+
       const data = {
-        phone:phoneValue
+        phone: phoneValue
       }
 
-      const response = await verifyMobileOtp(data);  
+      const response = await verifyMobileOtp(data);
       if (response.success === true) {
         setVerifyBar(true);
         setResOtp(response.otp);
@@ -189,17 +190,17 @@ export default function Header1({
 
   const handleRegisterChange = (event) => {
     const { id, value } = event.target;
-  
+
     setRegisterData(prevData => {
       const updatedData = {
         ...prevData,
         [id]: value
       };
-  
+
       // if (id === 'phone' && value.length === 10) {
       //   handlePhoneChange(value);
       // }
-  
+
       return updatedData;
     });
   };
@@ -210,7 +211,7 @@ export default function Header1({
       role
     }));
   };
-  
+
 
   const handleLoginChange = (event) => {
     const { id, value } = event.target;
@@ -221,27 +222,27 @@ export default function Header1({
   };
 
 
-  const [isVerified , setIsVerified] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
 
-  const verifyOtp = () =>{
-      if(otp === resOtp){
-        toast.success("OTP Verified Successfully");
-        setVerifyBar(false);
-        setIsVerified(true);
-      }else{
-        toast.error("Incorrect OTP");
-      }
+  const verifyOtp = () => {
+    if (otp === resOtp) {
+      toast.success("OTP Verified Successfully");
+      setVerifyBar(false);
+      setIsVerified(true);
+    } else {
+      toast.error("Incorrect OTP");
+    }
   }
 
 
-  const handleSignup = async() => {
+  const handleSignup = async () => {
     const { name, phone, password, email, role } = registerData;
-  
+
     if (!name || !phone || !password || !email || !role) {
       toast.error('All fields are required.');
       return;
     }
-  
+
     const data = {
       fullName: name,
       phone: phone,
@@ -250,7 +251,7 @@ export default function Header1({
       type: role
     }
 
-    const response = await RegisterUser(data);  
+    const response = await RegisterUser(data);
     if (response.success === true) {
       setLoginActive(true);
       setRegisterData({
@@ -265,33 +266,33 @@ export default function Header1({
     } else {
       toast.error('Failed to Register');
     }
-  
+
     console.log(data);
   }
-  
+
   const handleLogin = async () => {
     const { phone, password } = loginData;
-  
+
     if (!phone || !password) {
       toast.error('All fields are required.');
       return;
     }
-  
+
     const data = {
       phone: phone,
       password: password,
     };
-  
+
     try {
       const response = await UserLogin(data);
-  
+
       if (response.success) {
         setLoginData({
           phone: '',
           password: '',
         });
         setDialogOpen(false);
-        if(response.user){
+        if (response.user) {
           localStorage.setItem("LandsUser", JSON.stringify(response.user));
         }
         setIsLogin(true)
@@ -309,7 +310,7 @@ export default function Header1({
       console.error('Login error:', error); // Optional: Log the error for debugging
     }
   };
-  
+
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
@@ -322,7 +323,7 @@ export default function Header1({
 
   const [openMenu, setOpenMenu] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  
+
 
   const handleDialogOpen = () => {
     // const is_login = localStorage.getItem("is_login") === 'true';
@@ -346,7 +347,7 @@ export default function Header1({
   };
 
 
-  const [profileOpen , setProfileOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const handleProfileOpen = () => {
     setProfileOpen(true);
@@ -377,7 +378,7 @@ export default function Header1({
       items: 1,
     },
   };
-  
+
   // const items = [
   //   {
   //     img:'https://static.vecteezy.com/system/resources/previews/028/900/473/non_2x/agent-icon-design-free-png.png',
@@ -398,8 +399,8 @@ export default function Header1({
   //       'Maximize the potential of your real estate investments with our premium suite of value-added services, designed to elevate your experience every step of the way. Whether you require expert property staging to showcase your property’s full potential, high-resolution photography to capture stunning visuals, or in-depth legal and financial guidance to navigate complex transactions, we have you covered. Our comprehensive services also include relocation support, tailored maintenance plans, and personalized strategies designed to ensure a smooth, efficient, and rewarding property experience. We take pride in offering bespoke solutions that align with your unique needs, helping you achieve success in every aspect of your real estate journey.',
   //   },
   // ];
-  
-  
+
+
   const items = [
     {
       img: individual,
@@ -416,43 +417,43 @@ export default function Header1({
       title: 'Added Value Services',
       description: 'Experience seamless real estate journeys with specialized services, including legal, financial, and customized guidance to simplify processes and maximize your outcomes.',
     },
-];
+  ];
 
 
-  
+
 
   return (
     <>
-    <Dialog fullScreen open={dialogOpen} TransitionComponent={Transition} onClose={handleDialogClose}>
-     <DialogContent sx={{padding:'0px'}}>
-        <IconButton
-          onClick={handleDialogClose}
-          sx={{
-            position: 'absolute',
-            top: 16,
-            right: 16,
-            color: '#000000',
-          }}
-        >
-        <CloseIcon />
-        <Typography sx={{marginLeft:'5px'}}>
-          Close
-        </Typography>
-          
-        </IconButton>
-          <Grid height='100vh' 
+      <Dialog fullScreen open={dialogOpen} TransitionComponent={Transition} onClose={handleDialogClose}>
+        <DialogContent sx={{ padding: '0px' }}>
+          <IconButton
+            onClick={handleDialogClose}
+            sx={{
+              position: 'absolute',
+              top: 16,
+              right: 16,
+              color: '#000000',
+            }}
+          >
+            <CloseIcon />
+            <Typography sx={{ marginLeft: '5px' }}>
+              Close
+            </Typography>
+
+          </IconButton>
+          <Grid height='100vh'
             sx={{
               display: 'flex',
               alignItems: 'center',
               // backgroundImage: 'url()',
-              backgroundColor:'#F3F6FB',
+              backgroundColor: '#F3F6FB',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               color: '#fff',
             }}
           >
-            <Grid container justifyContent='space-between' alignItems='center' sx={{width:'90%',margin:'0px auto'}}>
-              <Grid item xs={12} md={5} sx={{display:{xs:'none',sm:'none',md:'block'}}}>
+            <Grid container justifyContent='space-between' alignItems='center' sx={{ width: '90%', margin: '0px auto' }}>
+              <Grid item xs={12} md={5} sx={{ display: { xs: 'none', sm: 'none', md: 'block' } }}>
                 <Carousel
                   responsive={responsive}
                   autoPlay
@@ -488,16 +489,16 @@ export default function Header1({
                     <div key={index} style={{ marginBottom: '2rem' }}>
                       <div className="d-flex flex-column justify-content-center align-items-center">
                         <img src={item.img} alt="icon" style={{
-                                                    width: "200px",
-                                                    height: "200px",
-                                                    objectFit: "cover"
-                                                  }}/>
+                          width: "200px",
+                          height: "200px",
+                          objectFit: "cover"
+                        }} />
                         <Typography variant="h4" fontWeight="bold" px={3}>
                           {item.title}
                         </Typography>
                       </div>
-                    
-                      <Typography variant="body1" color="#000000"  sx={{ marginTop: '1rem', textAlign:'center' }}>
+
+                      <Typography variant="body1" color="#000000" sx={{ marginTop: '1rem', textAlign: 'center' }}>
                         {item.description}
                       </Typography>
                     </div>
@@ -505,15 +506,15 @@ export default function Header1({
                 </Carousel>
               </Grid>
               <Grid item xs={12} md={5.9}>
-                <Card sx={{borderRadius:'20px',width:{xs:'100%',sm:'100%',md:'85%',margin:'0px auto'},boxShadow:' rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px'}} >
+                <Card sx={{ borderRadius: '20px', width: { xs: '100%', sm: '100%', md: '85%', margin: '0px auto' }, boxShadow: ' rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px' }} >
                   <CardContent>
                     <Grid>
                       {loginActive ? (
                         <>
                           <Grid item md={12}>
-                            <Grid container justifyContent='space-between' direction='column' spacing={1.7} sx={{padding:{xs:'none',sm:'none',md:'35px'}}} >
+                            <Grid container justifyContent='space-between' direction='column' spacing={1.7} sx={{ padding: { xs: 'none', sm: 'none', md: '35px' } }} >
                               <Grid item xs={12} sm={12} md={12}>
-                                <Typography variant='h5' sx={{fontWeight:'bold'}}>Login to Continue</Typography>
+                                <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Login to Continue</Typography>
                               </Grid>
                               <Grid item xs={12} sm={12} md={12}>
                                 <TextField
@@ -541,7 +542,7 @@ export default function Header1({
                                       },
                                     },
                                   }}
-                                />                          
+                                />
                               </Grid>
                               <Grid item xs={12} sm={12} md={12}>
                                 <TextField
@@ -570,68 +571,37 @@ export default function Header1({
                                       },
                                     },
                                   }}
-                                />    
+                                />
                               </Grid>
-                              <Grid item xs={12} sm={12} md={12} sx={{display:'flex',justifyContent:'flex-end'}}>
+                              <Grid item xs={12} sm={12} md={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                                 <Button sx={buttonStyle} variant='contained' size="large" fullWidth onClick={handleLogin} >Login</Button>
                               </Grid>
-                              <Grid item md={12} sx={{display:'flex',justifyContent:'center'}}>
-                                <Typography variant='subtitle1'>Create new account? <span onClick={() => {setLoginActive(false)}} style={{cursor:'pointer',color:'#0d7ae3'}} >Create</span></Typography>
+                              <Grid item md={12} sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <Typography variant='subtitle1'>Create new account? <span onClick={() => { setLoginActive(false) }} style={{ cursor: 'pointer', color: '#0d7ae3' }} >Create</span></Typography>
                               </Grid>
                             </Grid>
                           </Grid>
                         </>
-                      ):(
-                    <>
-                      <Grid item md={12} sx={{margin:'20px 0',overflow:'auto'}}>
-                        <Grid container justifyContent='space-between' direction='column' gap={1.7} sx={{padding:{xs:'none',sm:'none',md:' 0px 20px'}}} >
-                          <Grid item md={12}>
-                            <Typography variant='h5' sx={{fontWeight:'bold'}}>Register to Continue</Typography>
-                          </Grid>
-                          <Grid item xs={12} sm={12} md={12}>
-                            <TextField
-                              id="name"
-                              label="Name"
-                              variant="outlined"
-                              fullWidth
-                              value={registerData.name}
-                              onChange={handleRegisterChange}
-                              InputProps={{
-                                endAdornment: (
-                                  <InputAdornment position="end">
-                                    <IconButton>
-                                      <PersonIcon />
-                                    </IconButton>
-                                  </InputAdornment>
-                                ),
-                              }}
-                              sx={{
-                                "& .MuiOutlinedInput-root": {
-                                  "& input": {
-                                    border: "none", // Removes the border
-                                  },
-                                },
-                              }}
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={12} md={12}>
-                            <Grid container justifyContent='space-between'>
-                              <Grid item xs={8} sm={9} md={9}>
+                      ) : (
+                        <>
+                          <Grid item md={12} sx={{ margin: '20px 0', overflow: 'auto' }}>
+                            <Grid container justifyContent='space-between' direction='column' gap={1.7} sx={{ padding: { xs: 'none', sm: 'none', md: ' 0px 20px' } }} >
+                              <Grid item md={12}>
+                                <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Register to Continue</Typography>
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={12}>
                                 <TextField
-                                  id="phone"
-                                  label="Phone"
+                                  id="name"
+                                  label="Name"
                                   variant="outlined"
                                   fullWidth
-                                  disabled={isVerified}
-                                  value={registerData.phone}
+                                  value={registerData.name}
                                   onChange={handleRegisterChange}
-                                  error={!!errors.phone}
-                                  helperText={errors.phone}
                                   InputProps={{
                                     endAdornment: (
                                       <InputAdornment position="end">
                                         <IconButton>
-                                          <LocalPhoneIcon />
+                                          <PersonIcon />
                                         </IconButton>
                                       </InputAdornment>
                                     ),
@@ -645,197 +615,228 @@ export default function Header1({
                                   }}
                                 />
                               </Grid>
-                              <Grid item xs={4} sm={2.9} md={2.5} sx={{display:'flex',alignItems:'center',justifyContent:'flex-end'}}>
-                                  <Button variant='contained' size="large" disabled={registerData.phone.length !== 10 || isVerified} onClick={() => {handlePhoneChange(registerData.phone)}}>
-                                    {inputDisable ? isVerified ? "Verified" : "Resend" : "Verify"}
-                                  </Button>
-                              </Grid>
-                            </Grid>
-          
-                          </Grid>
-                          {verifyBar && (
-                            <Grid item xs={12} sm={12} md={12}>
-                              <Grid container direction="row" justifyContent='space-between'>
-                                <Grid item xs={8} sm={9} md={9}>
-                                  <TextField
-                                    label="OTP"
-                                    id="outlined-size-small"
-                                    fullWidth
-                                    defaultValue="Small"
-                                    size="small"
-                                    value={otp} onChange={(e)=>{setOtp(e.target.value)}} 
-                                    sx={{
-                                      "& .MuiOutlinedInput-root": {
-                                        "& input": {
-                                          border: "none", 
-                                          padding: '8.5px 14px'
+                              <Grid item xs={12} sm={12} md={12}>
+                                <Grid container justifyContent='space-between'>
+                                  <Grid item xs={8} sm={9} md={9}>
+                                    <TextField
+                                      id="phone"
+                                      label="Phone"
+                                      variant="outlined"
+                                      fullWidth
+                                      disabled={isVerified}
+                                      value={registerData.phone}
+                                      onChange={handleRegisterChange}
+                                      error={!!errors.phone}
+                                      helperText={errors.phone}
+                                      InputProps={{
+                                        endAdornment: (
+                                          <InputAdornment position="end">
+                                            <IconButton>
+                                              <LocalPhoneIcon />
+                                            </IconButton>
+                                          </InputAdornment>
+                                        ),
+                                      }}
+                                      sx={{
+                                        "& .MuiOutlinedInput-root": {
+                                          "& input": {
+                                            border: "none", // Removes the border
+                                          },
                                         },
+                                      }}
+                                    />
+                                  </Grid>
+                                  <Grid item xs={4} sm={2.9} md={2.5} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                                    <Button variant='contained' size="large" disabled={registerData.phone.length !== 10 || isVerified} onClick={() => { handlePhoneChange(registerData.phone) }}>
+                                      {inputDisable ? isVerified ? "Verified" : "Resend" : "Verify"}
+                                    </Button>
+                                  </Grid>
+                                </Grid>
+
+                              </Grid>
+                              {verifyBar && (
+                                <Grid item xs={12} sm={12} md={12}>
+                                  <Grid container direction="row" justifyContent='space-between'>
+                                    <Grid item xs={8} sm={9} md={9}>
+                                      <TextField
+                                        label="OTP"
+                                        id="outlined-size-small"
+                                        fullWidth
+                                        defaultValue="Small"
+                                        size="small"
+                                        value={otp} onChange={(e) => { setOtp(e.target.value) }}
+                                        sx={{
+                                          "& .MuiOutlinedInput-root": {
+                                            "& input": {
+                                              border: "none",
+                                              padding: '8.5px 14px'
+                                            },
+                                          },
+                                        }}
+                                      />
+                                    </Grid>
+                                    <Grid item xs={4} sm={2.9} md={2.5} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                                      <Button sx={{ marginLeft: '20px' }} variant='contained' disabled={!otp.length} onClick={verifyOtp}>Submit</Button>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+                              )}
+                              <Grid item xs={12} sm={12} md={12}>
+                                <TextField
+                                  id="email"
+                                  label="Email"
+                                  variant="outlined"
+                                  fullWidth
+                                  value={registerData.email}
+                                  onChange={handleRegisterChange}
+                                  error={!!errors.email}
+                                  helperText={errors.email}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton>
+                                          <EmailIcon />
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                      "& input": {
+                                        border: "none", // Removes the border
                                       },
-                                    }}
-                                  />
-                                </Grid>
-                                <Grid item xs={4} sm={2.9} md={2.5} sx={{display:'flex',alignItems:'center',justifyContent:'flex-end'}}>
-                                  <Button sx={{marginLeft:'20px'}} variant='contained' disabled={!otp.length} onClick={verifyOtp}>Submit</Button>
-                                </Grid>
+                                    },
+                                  }}
+                                />
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={12}>
+                                <TextField
+                                  id="password"
+                                  label="Password"
+                                  variant="outlined"
+                                  fullWidth
+                                  type="password"
+                                  value={registerData.password}
+                                  onChange={handleRegisterChange}
+                                  error={!!errors.password}
+                                  helperText={errors.password}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton>
+                                          <PasswordIcon />
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                      "& input": {
+                                        border: "none", // Removes the border
+                                      },
+                                    },
+                                  }}
+                                />
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={12}>
+                                <TextField
+                                  id="confirmPassword"
+                                  label="Confirm Password"
+                                  variant="outlined"
+                                  fullWidth
+                                  type="password"
+                                  value={registerData.confirmPassword}
+                                  onChange={handleRegisterChange}
+                                  error={!!errors.confirmPassword}
+                                  helperText={errors.confirmPassword}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton>
+                                          <PasswordIcon />
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                      "& input": {
+                                        border: "none", // Removes the border
+                                      },
+                                    },
+                                  }}
+                                />
+                              </Grid>
+                              <Grid item xs={12} sm={12} ms={12}>
+                                <FormControl component="fieldset" error={!!errors.role}>
+                                  {/* <FormLabel component="legend">Role</FormLabel> */}
+                                  <Grid container spacing={2}>
+                                    <Grid item>
+                                      <FormControlLabel
+                                        control={
+                                          <Switch
+                                            checked={registerData.role === 'Buyer'}
+                                            onChange={() => handleRoleChange('Buyer')}
+                                          />
+                                        }
+                                        label="Buyer"
+                                      />
+                                    </Grid>
+                                    <Grid item>
+                                      <FormControlLabel
+                                        control={
+                                          <Switch
+                                            checked={registerData.role === 'Seller'}
+                                            onChange={() => handleRoleChange('Seller')}
+                                          />
+                                        }
+                                        label="Seller"
+                                      />
+                                    </Grid>
+                                    <Grid item>
+                                      <FormControlLabel
+                                        control={
+                                          <Switch
+                                            checked={registerData.role === 'Agent'}
+                                            onChange={() => handleRoleChange('Agent')}
+                                          />
+                                        }
+                                        label="Agent"
+                                      />
+                                    </Grid>
+                                    <Grid item>
+                                      <FormControlLabel
+                                        control={
+                                          <Switch
+                                            checked={registerData.role === 'B2B'}
+                                            onChange={() => handleRoleChange('B2B')}
+                                          />
+                                        }
+                                        label="B2B"
+                                      />
+                                    </Grid>
+                                  </Grid>
+                                  {errors.role && <FormHelperText>{errors.role}</FormHelperText>}
+                                </FormControl>
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                <Button
+                                  variant="contained"
+                                  size="large"
+                                  fullWidth
+                                  onClick={handleSignup}
+                                  sx={buttonStyle}
+                                >
+                                  Submit
+                                </Button>
+                              </Grid>
+                              <Grid item md={12} sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <Typography variant='subtitle1'>Already have an account? <span onClick={() => { setLoginActive(true) }} style={{ cursor: 'pointer', color: '#0d7ae3' }} >Login</span></Typography>
                               </Grid>
                             </Grid>
-                          )}
-                          <Grid item xs={12} sm={12} md={12}>
-                            <TextField
-                              id="email"
-                              label="Email"
-                              variant="outlined"
-                              fullWidth
-                              value={registerData.email}
-                              onChange={handleRegisterChange}
-                              error={!!errors.email}
-                              helperText={errors.email}
-                              InputProps={{
-                                endAdornment: (
-                                  <InputAdornment position="end">
-                                    <IconButton>
-                                      <EmailIcon />
-                                    </IconButton>
-                                  </InputAdornment>
-                                ),
-                              }}
-                              sx={{
-                                "& .MuiOutlinedInput-root": {
-                                  "& input": {
-                                    border: "none", // Removes the border
-                                  },
-                                },
-                              }}
-                            />
                           </Grid>
-                          <Grid item xs={12} sm={12} md={12}>
-                            <TextField
-                              id="password"
-                              label="Password"
-                              variant="outlined"
-                              fullWidth
-                              type="password"
-                              value={registerData.password}
-                              onChange={handleRegisterChange}
-                              error={!!errors.password}
-                              helperText={errors.password}
-                              InputProps={{
-                                endAdornment: (
-                                  <InputAdornment position="end">
-                                    <IconButton>
-                                      <PasswordIcon />
-                                    </IconButton>
-                                  </InputAdornment>
-                                ),
-                              }}
-                              sx={{
-                                "& .MuiOutlinedInput-root": {
-                                  "& input": {
-                                    border: "none", // Removes the border
-                                  },
-                                },
-                              }}
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={12} md={12}>
-                            <TextField
-                              id="confirmPassword"
-                              label="Confirm Password"
-                              variant="outlined"
-                              fullWidth
-                              type="password"
-                              value={registerData.confirmPassword}
-                              onChange={handleRegisterChange}
-                              error={!!errors.confirmPassword}
-                              helperText={errors.confirmPassword}
-                              InputProps={{
-                                endAdornment: (
-                                  <InputAdornment position="end">
-                                    <IconButton>
-                                      <PasswordIcon />
-                                    </IconButton>
-                                  </InputAdornment>
-                                ),
-                              }}
-                              sx={{
-                                "& .MuiOutlinedInput-root": {
-                                  "& input": {
-                                    border: "none", // Removes the border
-                                  },
-                                },
-                              }}
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={12} ms={12}>
-                             <FormControl component="fieldset" error={!!errors.role}>
-                              {/* <FormLabel component="legend">Role</FormLabel> */}
-                              <Grid container spacing={2}>
-                                <Grid item>
-                                  <FormControlLabel
-                                    control={
-                                      <Switch
-                                        checked={registerData.role === 'Buyer'}
-                                        onChange={() => handleRoleChange('Buyer')}
-                                      />
-                                    }
-                                    label="Buyer"
-                                  />
-                                </Grid>
-                                <Grid item>
-                                  <FormControlLabel
-                                    control={
-                                      <Switch
-                                        checked={registerData.role === 'Seller'}
-                                        onChange={() => handleRoleChange('Seller')}
-                                      />
-                                    }
-                                    label="Seller"
-                                  />
-                                </Grid>
-                                <Grid item>
-                                  <FormControlLabel
-                                    control={
-                                      <Switch
-                                        checked={registerData.role === 'Agent'}
-                                        onChange={() => handleRoleChange('Agent')}
-                                      />
-                                    }
-                                    label="Agent"
-                                  />
-                                </Grid>
-                                <Grid item>
-                                  <FormControlLabel
-                                    control={
-                                      <Switch
-                                        checked={registerData.role === 'B2B'}
-                                        onChange={() => handleRoleChange('B2B')}
-                                      />
-                                    }
-                                    label="B2B"
-                                  />
-                                </Grid>
-                              </Grid>
-                              {errors.role && <FormHelperText>{errors.role}</FormHelperText>}
-                            </FormControl>
-                          </Grid>
-                          <Grid item xs={12} sm={12} md={12} sx={{display:'flex',justifyContent:'flex-end'}}>
-                            <Button
-                              variant="contained"
-                              size="large"
-                              fullWidth
-                              onClick={handleSignup}
-                              sx={buttonStyle}
-                            >
-                              Submit
-                            </Button>
-                          </Grid>
-                          <Grid item md={12} sx={{display:'flex',justifyContent:'center'}}>
-                            <Typography variant='subtitle1'>Already have an account? <span onClick={() => {setLoginActive(true)}} style={{cursor:'pointer',color:'#0d7ae3'}} >Login</span></Typography>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </>
-                  )}
+                        </>
+                      )}
                     </Grid>
                   </CardContent>
                 </Card>
@@ -844,100 +845,100 @@ export default function Header1({
           </Grid>
         </DialogContent>
       </Dialog>
-    <header
-      id="header"
-      className={`${parentClass} ${isFixed ? "is-fixed" : ""}`}
-    >
-      {/* Header Lower */}
-      <div className="header-lower">
-        <div className="row">
-          <div className="col-lg-12">
-            <div className="inner-header">
-              <div className="inner-header-left">
-                <div className="logo-box flex">
-                  <div className="logo">
-                    <Link to={`/`}>
-                      <img
-                        alt="logo"
-                        width={isMobile ? 60 : 75}
-                        className="logo-1"
-                        // height={48}
-                        src={logo}
-                      />
-                      <img
-                        alt="logo"
-                        width={70}
-                        className="logo-2"
-                        // height={48}
-                        src={logo}
-                      />
-                    </Link>
-                    {/* <h6 className="fw-bold">Lands India</h6> */}
+      <header
+        id="header"
+        className={`${parentClass} ${isFixed ? "is-fixed" : ""}`}
+      >
+        {/* Header Lower */}
+        <div className="header-lower">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="inner-header">
+                <div className="inner-header-left">
+                  <div className="logo-box flex">
+                    <div className="logo">
+                      <Link to={`/`}>
+                        <img
+                          alt="logo"
+                          style={{width:'65px'}}
+                          className="logo-1"
+                          // height={48}
+                          src={logo}
+                        />
+                        <img
+                          alt="logo"
+                          width={70}
+                          className="logo-2"
+                          // height={48}
+                          src={logo}
+                        />
+                      </Link>
+                      {/* <h6 className="fw-bold">Lands India</h6> */}
+                    </div>
+                  </div>
+                  <div className="inner-header-right header-account">
+                    <div className="nav-outer flex align-center">
+                      {/* Main Menu */}
+                      <nav className="main-menu show navbar-expand-md">
+                        <div
+                          className="navbar-collapse collapse clearfix"
+                          id="navbarSupportedContent"
+                        >
+                          <ul className="navigation clearfix">
+                            <Nav />
+                          </ul>
+                        </div>
+                      </nav>
+                      {/* Main Menu End*/}
+                    </div>
+
                   </div>
                 </div>
+
                 <div className="inner-header-right header-account">
-              <div className="nav-outer flex align-center">
-                {/* Main Menu */}
-                <nav className="main-menu show navbar-expand-md">
-                  <div
-                    className="navbar-collapse collapse clearfix"
-                    id="navbarSupportedContent"
-                  >
-                    <ul className="navigation clearfix">
-                      <Nav />
-                    </ul>
-                  </div>
-                </nav>
-                {/* Main Menu End*/}
-              </div>
-               
-              </div>
-              </div>
-       
-              <div className="inner-header-right header-account">
-              <div className="nav-outer flex align-center">
-                {/* Main Menu */}
-                <nav className="main-menu show navbar-expand-md">
-                  <div
-                    className="navbar-collapse collapse clearfix"
-                    id="navbarSupportedContent"
-                  >
-                    <ul className="navigation clearfix">
-                      <NavTwo />
-                      {isLogin ? (
-                
-                        <a
-                        href="/dashboard"
-                        style={{
-                          textAlign: 'center',
-                          fontWeight: 600,
-                          padding: '27px 20px 27px 0px',
-                          letterSpacing: '0px',
-                          color: '#000000',
-                          fontSize: '16px',
-                          lineHeight: '21.86px',
-                          textTransform: 'capitalize',
-                        }}
-                      
-                        >
-                          Dashboard
-                        </a>
-                      ):(
-                      <a
-                        onClick={handleDialogOpen}
-                        style={{
-                          textAlign: 'center',
-                          fontWeight: 600,
-                          padding: '27px 20px 27px 0px',
-                          letterSpacing: '0px',
-                          color: '#000000',
-                          fontSize: '16px',
-                          lineHeight: '21.86px',
-                          textTransform: 'capitalize',
-                        }}
-                      
-                        >
-                          {/* <svg
+                  <div className="nav-outer flex align-center">
+                    {/* Main Menu */}
+                    <nav className="main-menu show navbar-expand-md">
+                      <div
+                        className="navbar-collapse collapse clearfix"
+                        id="navbarSupportedContent"
+                      >
+                        <ul className="navigation clearfix">
+                          <NavTwo />
+                          {isLogin ? (
+
+                            <a
+                              href="/dashboard"
+                              style={{
+                                textAlign: 'center',
+                                fontWeight: 600,
+                                padding: '27px 20px 27px 0px',
+                                letterSpacing: '0px',
+                                color: '#161e2d',
+                                fontSize: '15px',
+                                lineHeight: '21.86px',
+                                textTransform: 'capitalize',
+                              }}
+
+                            >
+                              Dashboard
+                            </a>
+                          ) : (
+                            <a
+                              onClick={handleDialogOpen}
+                              style={{
+                                textAlign: 'center',
+                                fontWeight: 600,
+                                padding: '27px 20px 27px 0px',
+                                letterSpacing: '0px',
+                                color: '#161e2d',
+                                fontSize: '15px',
+                                lineHeight: '21.86px',
+                                textTransform: 'capitalize',
+                              }}
+
+                            >
+                              {/* <svg
                             style={{marginBottom:'3px', marginRight:'4px'}}
                             width={20}
                             height={20}
@@ -953,85 +954,85 @@ export default function Header1({
                               strokeLinejoin="round"
                             />
                           </svg> */}
-                          <AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom:0.45 }} />
-                          Login/Register
-                        </a>
-                      )}
-                    </ul>
+                              <AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color:'#161e2d' , marginRight:'5px' }} />
+                              Login/Register
+                            </a>
+                          )}
+                        </ul>
+                      </div>
+                    </nav>
+                    {/* Main Menu End*/}
                   </div>
-                </nav>
-                {/* Main Menu End*/}
-              </div>
-               
-              </div>
-              <div
-                className="mobile-nav-toggler mobile-button"
-                onClick={() => {
-                  document.body.classList.add("mobile-menu-visible");
-                }}
-              >
-                <span />
+
+                </div>
+                <div
+                  className="mobile-nav-toggler mobile-button"
+                  onClick={() => {
+                    document.body.classList.add("mobile-menu-visible");
+                  }}
+                >
+                  <span />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      {/* End Header Lower */}
-      {/* Mobile Menu  */}
-      <div
-        className="close-btn"
-        onClick={() => {
-          document.body.classList.remove("mobile-menu-visible");
-        }}
-      >
-        <span className="icon flaticon-cancel-1" />
-      </div>
-      <div className="mobile-menu">
-        <div className="menu-backdrop" />
-        <nav className="menu-box">
-          <div className="nav-logo">
-            <Link to={`/`}>
-              <img
-                alt="nav-logo"
-                width={70}
-                src={logo}
-              />
-            </Link>
-            {/* <h4>Lands India</h4> */}
-          </div>
-          <div className="bottom-canvas">
-            <div className="login-box flex align-center">
-              <a onClick={handleDialogOpen}>
-                Login
-              </a>
-              <span>/</span>
-              <a onClick={handleDialogOpen}>
-                Register
-              </a>
+        {/* End Header Lower */}
+        {/* Mobile Menu  */}
+        <div
+          className="close-btn"
+          onClick={() => {
+            document.body.classList.remove("mobile-menu-visible");
+          }}
+        >
+          <span className="icon flaticon-cancel-1" />
+        </div>
+        <div className="mobile-menu">
+          <div className="menu-backdrop" />
+          <nav className="menu-box">
+            <div className="nav-logo">
+              <Link to={`/`}>
+                <img
+                  alt="nav-logo"
+                  width={70}
+                  src={logo}
+                />
+              </Link>
+              {/* <h4>Lands India</h4> */}
             </div>
-            <div className="menu-outer">
-              <MobileNav />
-            </div>
-            {/* <div className="button-mobi-sell">
+            <div className="bottom-canvas">
+              <div className="login-box flex align-center">
+                <a onClick={handleDialogOpen}>
+                  Login
+                </a>
+                <span>/</span>
+                <a onClick={handleDialogOpen}>
+                  Register
+                </a>
+              </div>
+              <div className="menu-outer">
+                <MobileNav />
+              </div>
+              {/* <div className="button-mobi-sell">
               <Link className="tf-btn primary" to={`/add-property`}>
                 Submit Property
               </Link>
             </div> */}
-            <div className="mobi-icon-box">
-              <div className="box d-flex align-items-center">
-                <span className="icon icon-phone2" />
-                <div>1-333-345-6868</div>
-              </div>
-              <div className="box d-flex align-items-center">
-                <span className="icon icon-mail" />
-                <div>landsindia@gmail.com</div>
+              <div className="mobi-icon-box">
+                <div className="box d-flex align-items-center">
+                  <span className="icon icon-phone2" />
+                  <div>1-333-345-6868</div>
+                </div>
+                <div className="box d-flex align-items-center">
+                  <span className="icon icon-mail" />
+                  <div>landsindia@gmail.com</div>
+                </div>
               </div>
             </div>
-          </div>
-        </nav>
-      </div>
-      {/* End Mobile Menu */}
-    </header>
+          </nav>
+        </div>
+        {/* End Mobile Menu */}
+      </header>
     </>
   );
 }

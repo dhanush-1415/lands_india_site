@@ -47,3 +47,12 @@
 
 /*-------------- Responsive ----------------- */
 @import "./responsive";
+
+*,body{
+    font-family: "Poppins", serif !important;
+    font-optical-sizing: auto;
+    font-style: normal; /* Default style */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}

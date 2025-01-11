@@ -2459,9 +2459,13 @@
     line-height: 21.86px;
     border-radius: 10px;
     border: 1px solid $outline;
-    &:hover,
+    color: #008ff7;
+    &:hover {
+      color: $white !important;
+      background-color: #008ff7;
+    }
     &.active {
-      background-color: $primary;
+      background-color: #008ff7;
       color: $white;
     }
   }
