@@ -170,6 +170,13 @@ li {
 .custom-container-header{
     background: #ffffff !important;
 }
+
+@media (min-width: 1200px) {
+    .containe,.container-lg, .container-md, .container-sm, .container-xlr{
+      max-width: 1250px !important;
+    }
+  }
+  
 .container3,
 .container2,
 .container {

@@ -10,6 +10,9 @@ import Slider from "rc-slider";
 import { allProperties, featureOptions, projectData, indvidualData, props } from "@/data/properties";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { getCategories, getProperties } from "@/apiCalls";
+import NorthEastIcon from '@mui/icons-material/NorthEast';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import DraftsTwoToneIcon from '@mui/icons-material/DraftsTwoTone';
 
 
 import { useParams } from "react-router-dom";
@@ -45,7 +48,7 @@ export default function Properties4() {
   const [inputDetails, setInputDetails] = useState([]); // inputDetails data
   const [propertyInputs, setPropertyInputs] = useState([]); // propertyInputs data
 
-  console.log(properties , "mmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
+  console.log(properties, "mmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
 
   // useEffect(() => {
   //   // Ensure all required data is available
@@ -97,25 +100,25 @@ export default function Properties4() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const params = new URLSearchParams();
-  
+
     if (keyword) params.append("keyword", keyword);
     if (location) params.append("location", location);
-  
+
     if (selectedCategory && selectedCategory !== "category") {
       params.append("category", selectedCategory);
     }
-  
+
     if (selectedSubCategory && selectedSubCategory !== "Sub Category") {
       params.append("subcategory", selectedSubCategory);
     }
-  
+
     params.append("minPrice", price[0].toString());
     params.append("maxPrice", price[1].toString());
-  
+
     navigate(`/properties/all?${params.toString()}`);
   };
 
-  
+
   // const handleSubmit = (e) => {
   //   e.preventDefault();
   //   const params = new URLSearchParams();
@@ -230,7 +233,7 @@ export default function Properties4() {
   };
   return (
     <section className="flat-section flat-recommended flat-sidebar" style={{ position: 'relative' }}>
-      <div className="container">
+      <div className="container custom-container-header">
         <div className="box-title-listing">
           <div className="box-left">
             <h3 className="fw-8">Properties</h3>
@@ -559,12 +562,8 @@ export default function Properties4() {
                       <div key={index} className="col-xl-4 col-lg-6 col-md-6">
                         <div className="homelengo-box">
                           <div className="archive-top">
-                            <Link
-                              to={`/property-details/${property.id}`}
-                              className="images-group"
-
-                            >
-                              <div className="images-style">
+                            <Link to={`/property-details/${property.id}`} className="images-group">
+                              <div className="images-style" style={{ position: "relative" }}>
                                 <img
                                   className="lazyload"
                                   data-src={property.img[0]}
@@ -573,18 +572,22 @@ export default function Properties4() {
                                   style={{
                                     width: "615px",
                                     height: "250px",
-                                    objectFit: "cover"
+                                    objectFit: "cover",
+                                  }}
+                                />
+                                {/* Gradient Overlay */}
+                                <div
+                                  style={{
+                                    position: "absolute",
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    height: "50%",
+                                    background: "linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0))",
                                   }}
                                 />
                               </div>
-
-                              {/* <div className="top">
-                                                  <ul className="d-flex gap-6">
-                                                    <li className="flag-tag primary">Featured</li>
-                                                    <li className="flag-tag style-1">For Sale</li>
-                                                  </ul>
-                                                </div> */}
-                              <div className="bottom">
+                              <div className="bottom" style={{ fontSize: "14px", position: "absolute", bottom: "10px", left: "10px", color: "white" }}>
                                 <svg
                                   width={16}
                                   height={16}
@@ -606,11 +609,12 @@ export default function Properties4() {
                                     strokeLinejoin="round"
                                   />
                                 </svg>
-                                {property.propertyDetails.location.village}, {property.propertyDetails.location.district}, {property.propertyDetails.location.state}, {property.propertyDetails.location.country}
+                                {property.propertyDetails.location.district}, {property.propertyDetails.location.state}
                               </div>
                             </Link>
                           </div>
-                          <div className="archive-bottom">
+
+                          <div className="archive-bottom" style={{ backgroundColor: '#ffffff' }}>
                             <div className="content-top">
                               <h6 className="text-capitalize">
                                 <Link
@@ -620,55 +624,78 @@ export default function Properties4() {
                                   {property.propertyDetails.title}
                                 </Link>
                               </h6>
-                              <ul className="meta-list">
+                              <ul className="meta-list" style={{ paddingLeft: '0px' }}>
                                 <li className="item">
-                                  <i className="icon icon-bed" />
+                                  <i className="icon icon-bed" style={{ fontSize: '25px' }} />
                                   <span className="text-variant-1">Beds:</span>
                                   <span className="fw-6">{8}</span>
                                 </li>
                                 <li className="item">
-                                  <i className="icon icon-bath" />
+                                  <i className="icon icon-bath" style={{ fontSize: '25px' }} />
                                   <span className="text-variant-1">Baths:</span>
                                   <span className="fw-6">{property.baths}</span>
                                 </li>
                                 <li className="item">
-                                  <i className="icon icon-sqft" />
+                                  <i className="icon icon-sqft" style={{ fontSize: '25px' }} />
                                   <span className="text-variant-1">Sqft:</span>
                                   <span className="fw-6">{property.sqft}</span>
                                 </li>
                               </ul>
                             </div>
-                            <div className="content-bottom" style={{ flexDirection: 'column' }}>
-                              <div className="d-flex gap-8 align-items-center " style={{ justifyContent: 'space-between', width: '100%' }}>
-                                <div className="">
-                                  <h6 className="price">
-                                    ₹{property.propertyDetails.price}
-                                  </h6>
-                                </div>
-                                <div className="" style={{ display: 'flex' }}>
-                                  <div className="" style={{ padding: '3px', border: '1px solid black', borderRadius: '50%', marginRight: '10px' }}>
-                                    <CallIcon />
-                                  </div>
-                                  <div className="" style={{ padding: '3px', border: '1px solid black', borderRadius: '50%' }}>
-                                    <PermPhoneMsgIcon />
-                                  </div>
-                                </div>
+                            <div className="content-bottom">
+                              <h6 className="price">
+                                ₹{property.propertyDetails.price}
+                              </h6>
+                              <div className="d-flex gap-8 align-items-center">
+                                <span style={{ cursor: 'pointer', fontWeight: 'bold', border: '1.5px dotted black', padding: '5px 10px' }} >View Details</span>
                               </div>
-                              <div className="d-flex gap-8 align-items-center " style={{ justifyContent: 'space-between', width: '100%', marginTop: '12px' }}>
-                                <div className="">
-                                  <div className="d-flex gap-8 align-items-center" style={{ fontWeight: 'bold', background: '#018df7', color: '#ffffff', padding: '4px 10px' }}>
-                                    <AttachEmailSharpIcon sx={{ padding: '0px 2px' }} /><span > Enquiry Now </span>
-                                  </div>
 
+                            </div>
+                            <div className="content-bottom mt-3">
+                              <div
+                                className="d-flex justify-content-center align-items-center shadow-sm mt-3"
+                                style={{
+                                  cursor: 'pointer',
+                                  fontWeight: 'bold',
+                                  background: '#018df7',
+                                  color: '#ffffff',
+                                  padding: '10px 5px',
+                                  borderRadius: '0px',
+                                  textAlign: 'center',
+                                }}
+                              >
+                                <DraftsTwoToneIcon sx={{ marginRight: '5px' }} />
+                                <span>Enquiry Now</span>
+                              </div>
+                              <div
+                                className="d-flex justify-content-around mt-3"
+                                style={{ gap: '15px' }}
+                              >
+                                <div
+                                  className="d-flex justify-content-center align-items-center rounded-circle border shadow-sm"
+                                  style={{
+                                    width: '50px',
+                                    height: '50px',
+                                    cursor: 'pointer',
+                                    background: '#ffffff',
+                                  }}
+                                >
+                                  <CallIcon sx={{ color: '#018df7' }} />
                                 </div>
-                                <div className="">
-
-                                  <div className="d-flex gap-8 align-items-center">
-                                    <span style={{ fontWeight: 'bold', border: '1.5px dotted black', padding: '4px 10px' }} >View Details</span>
-                                  </div>
+                                <div
+                                  className="d-flex justify-content-center align-items-center rounded-circle border shadow-sm"
+                                  style={{
+                                    width: '50px',
+                                    height: '50px',
+                                    cursor: 'pointer',
+                                    background: '#ffffff',
+                                  }}
+                                >
+                                  <WhatsAppIcon sx={{ color: '#25D366' }} />
                                 </div>
                               </div>
                             </div>
+
                           </div>
                         </div>
                       </div>
