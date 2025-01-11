@@ -15,9 +15,11 @@ import LocalParkingIcon from '@mui/icons-material/LocalParking';
 import HomeIcon from "@mui/icons-material/Home";
 import CallIcon from '@mui/icons-material/Call';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-
+import DraftsTwoToneIcon from '@mui/icons-material/DraftsTwoTone';
+import DraftsIcon from '@mui/icons-material/Drafts';
 import EastIcon from '@mui/icons-material/East';
 import WestIcon from '@mui/icons-material/West';
+import { Grid } from "@mui/material";
 
 export default function Carousel() {
 
@@ -31,12 +33,12 @@ export default function Carousel() {
             price: "₹97,00,000",
             badges: ["Residential Property", "Posted On: Sep 25"],
             details: [
-                { label: "Beds", value: "2", icon: <BedIcon /> },
-                { label: "Baths", value: "4", icon: <BathtubIcon /> },
-                { label: "Sqft", value: "1744", icon: <SquareFootIcon /> },
-                { label: "Furnished", value: "Semi", icon: <HomeIcon /> },
-                { label: "Floors", value: "Ground + 1", icon: <StairsIcon /> },
-                { label: "Parking", value: "Open", icon: <LocalParkingIcon /> },
+                { label: "Beds", value: "2", icon: <i style={{ fontSize: '30px' }} className="icon icon-bed" /> },
+                { label: "Baths", value: "4", icon: <i style={{ fontSize: '30px' }} className="icon icon-bath" /> },
+                { label: "Sqft", value: "1744", icon: <i style={{ fontSize: '30px' }} className="icon icon-sqft" /> },
+                { label: "Furnished", value: "Semi", icon: <i style={{ fontSize: '30px' }} className="icon icon-house-fill" /> },
+                { label: "Floors",value: "Ground + 1", icon: <StairsIcon style={{ fontSize: '35px' }} /> },
+                { label: "Parking",value: "Open", icon: <LocalParkingIcon style={{ fontSize: '35px' }} /> },
             ],
         },
         {
@@ -47,12 +49,12 @@ export default function Carousel() {
             price: "₹85,00,000",
             badges: ["Apartment", "Posted On: Sep 22"],
             details: [
-                { label: "Beds", value: "3", icon: <BedIcon /> },
-                { label: "Baths", value: "3", icon: <BathtubIcon /> },
-                { label: "Sqft", value: "1200", icon: <SquareFootIcon /> },
-                { label: "Furnished", value: "Fully", icon: <HomeIcon /> },
-                { label: "Floors", value: "5th Floor", icon: <StairsIcon /> },
-                { label: "Parking", value: "Covered", icon: <LocalParkingIcon /> },
+                { label: "Beds", value: "3", icon: <i className="icon icon-bed" /> },
+                { label: "Baths", value: "3", icon: <i className="icon icon-bath" /> },
+                { label: "Sqft", value: "1200", icon: <i className="icon icon-sqft" /> },
+                { label: "Furnished", value: "Fully", icon: <HomeIcon style={{ fontSize: '40px' }} /> },
+                { label: "Floors",value: "5th Floor", icon: <StairsIcon style={{ fontSize: '40px' }} /> },
+                { label: "Parking",value: "Covered", icon: <LocalParkingIcon style={{ fontSize: '40px' }} /> },
             ],
         },
         {
@@ -63,12 +65,12 @@ export default function Carousel() {
             price: "₹1,50,00,000",
             badges: ["Villa", "Posted On: Sep 20"],
             details: [
-                { label: "Beds", value: "5", icon: <BedIcon /> },
-                { label: "Baths", value: "6", icon: <BathtubIcon /> },
-                { label: "Sqft", value: "3000", icon: <SquareFootIcon /> },
-                { label: "Furnished", value: "Fully", icon: <HomeIcon /> },
-                { label: "Floors", value: "2", icon: <StairsIcon /> },
-                { label: "Parking", value: "Private Garage", icon: <LocalParkingIcon /> },
+                { label: "Beds", value: "5", icon: <i className="icon icon-bed" /> },
+                { label: "Baths", value: "6", icon: <i className="icon icon-bath" /> },
+                { label: "Sqft", value: "3000", icon: <i className="icon icon-sqft" /> },
+                { label: "Furnished", value: "Fully", icon: <HomeIcon style={{ fontSize: '40px' }} /> },
+                { label: "Floors",value: "2", icon: <StairsIcon style={{ fontSize: '40px' }} /> },
+                { label: "Parking",value: "Private Garage", icon: <LocalParkingIcon style={{ fontSize: '40px' }} /> },
             ],
         },
     ];
@@ -86,8 +88,8 @@ export default function Carousel() {
     //             { label: "Baths", value: "4" },
     //             { label: "Sqft", value: "1744" },
     //             { label: "Furnished", value: "Semi" },
-    //             { label: "Floors", value: "Ground + 1" },
-    //             { label: "Parking", value: "Open" },
+    //             {  value: "Ground + 1" },
+    //             {  value: "Open" },
     //         ],
     //     },
     //     {
@@ -102,8 +104,8 @@ export default function Carousel() {
     //             { label: "Baths", value: "3" },
     //             { label: "Sqft", value: "1200" },
     //             { label: "Furnished", value: "Fully" },
-    //             { label: "Floors", value: "5th Floor" },
-    //             { label: "Parking", value: "Covered" },
+    //             {  value: "5th Floor" },
+    //             {  value: "Covered" },
     //         ],
     //     },
     //     {
@@ -118,8 +120,8 @@ export default function Carousel() {
     //             { label: "Baths", value: "6" },
     //             { label: "Sqft", value: "3000" },
     //             { label: "Furnished", value: "Fully" },
-    //             { label: "Floors", value: "2" },
-    //             { label: "Parking", value: "Private Garage" },
+    //             {  value: "2" },
+    //             {  value: "Private Garage" },
     //         ],
     //     },
     // ];
@@ -165,18 +167,18 @@ export default function Carousel() {
 
     const settings = {
         speed: 500,
-        dots: true,
+        dots: false,
         infinite: true,
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
-        autoplaySpeed: 4000,
+        autoplaySpeed: 4000000,
         nextArrow: <CustomNextArrow />,
         prevArrow: <CustomPrevArrow />,
     };
 
     return (
-        <section className="property-carousel">
+        <section className="property-carousel" style={{ background: '#ffffff' }} >
             <style>
                 {`
                 
@@ -184,11 +186,14 @@ export default function Carousel() {
                         padding: 60px 0;
                         background-color: #f9f9f9;
                     }
+                    .slick-active{
+                        color:#1563DF;
+                    }
                     .custom-cont{
                         display: flex;
                         flex-direction: row;
-                        min-height: 395px;
-                        max-height: 400px;
+                        min-height: 450px;
+                        max-height: 450px;
                     }
                     .carousel-title {
                         text-align: left;
@@ -199,6 +204,11 @@ export default function Carousel() {
                     @media (max-width: 768px) {
                         .carousel-title {
                             font-size: 1.5rem; /* Smaller font size on tablets and below */
+                        }
+                        .custom-cont{
+                            flex-direction: column;
+                            min-height: 100%;
+                            max-height: 100%;
                         }
 
                     }
@@ -212,9 +222,6 @@ export default function Carousel() {
                     .carousel-title .MuiSvgIcon-root {
                         margin-left: 10px;
                     }
-                    .property-slide {
-                        padding: 20px;
-                    }
                     .image-column {
                         position: relative;
                         padding:0;
@@ -227,8 +234,9 @@ export default function Carousel() {
                         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                     }
                     .details-column {
+
                         padding: 20px;
-                        background: white;
+                        background: #008ff7;
                         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                     }
                     .property-title {
@@ -315,15 +323,15 @@ export default function Carousel() {
 
                 `}
             </style>
-            <Container>
+            <div className="container custom-container-header" style={{ background: '#ffffff !important', backgroundColor: '#ffffff !important' }}>
                 <h3 className="carousel-title">
-                    Exclusive Premium Properties
+                    Exclusive <br /> Premium Properties
                 </h3>
                 <Slider {...settings}>
                     {properties.map((property, index) => (
                         <div key={index} className="property-slide">
                             <div className="custom-cont">
-                                <Col lg={6} md={12} className="image-column">
+                                <Col lg={7} md={12} className="image-column" style={{ background: '#f8f9fa', display: 'flex', justifyContent: 'center', aligntems: 'center' }}>
                                     <img
                                         src={property.image}
                                         alt={property.title}
@@ -331,53 +339,87 @@ export default function Carousel() {
                                     />
                                 </Col>
                                 <Col
-                                    lg={6}
+                                    lg={5}
                                     md={12}
+                                    style={{ background: '#008ff7' }}
                                     className="details-column d-flex flex-column justify-content-center"
                                 >
-                                    <h4 className="property-title">{property.title}</h4>
-                                    <p className="property-location">{property.location}</p>
-                                    <div className="badges-container">
-                                        {property.badges.map((badge, i) => (
-                                            <Badge
-                                                key={i}
-                                                bg="secondary"
-                                                className="property-badge"
-                                            >
-                                                {badge}
-                                            </Badge>
-                                        ))}
+                                    <h4 className="property-title text-white">{property.title}</h4>
+                                    <p className="property-location text-white"><span className="icon icon-mapPin" style={{ marginRight: '10px' }} />{property.location}</p>
+                                    <div className="badges-container" style={{ display: 'flex' }}>
+                                        <p
+                                            style={{ color: '#161e2d', fontSize: '1rem', borderRadius: '0px', padding: '7px 10px', background: '#ffffff', fontWeight: 'bold' }}
+                                            className="property-badge"
+                                        >
+                                            {property.badges[0]}
+                                        </p>
+                                        <p
+                                            style={{
+                                                backgroundColor: '#008ff7 !important',
+                                                background: '#008ff7',
+                                                color: '#ffffff',
+                                                padding: '7px 10px',
+                                                borderRadius: '0',
+                                                fontSize: '1rem',
+                                                fontWeight: 'bold',
+
+                                                border: '2px dotted #ffffff'
+                                            }}
+                                            className="property-badge"
+                                        >
+                                            {property.badges[1]}
+                                        </p>
+                                        {/* 
+                                        <Badge
+                                            bg="light"
+                                            style={{ color: '#161e2d', borderRadius: '0px', padding: '10px' }}
+                                            className="property-badge"
+                                        >
+                                            {property.badges[1]}
+                                        </Badge> */}
                                     </div>
                                     <Row className="property-details">
                                         {property.details.map((detail, i) => (
                                             <Col xs={6} sm={4} key={i}>
-                                                <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                                                    <span className="detail-icon" style={{ color: "#1976d2" }}>
+                                                <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                    <span className="detail-icon" style={{ color: "#ffffff" }}>
                                                         {detail.icon}
                                                     </span>
-                                                    <span className="detail-label" style={{ fontWeight: "bold" }}>
-                                                        {detail.label}:
-                                                    </span>
-                                                    <span className="detail-value">{detail.value}</span>
+                                                    <div style={{display:'flex',flexDirection:'column'}}>
+                                                        <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                            {detail.label || ""}:
+                                                        </span>
+                                                        <span className="detail-value text-white" style={{ marginBottom: '3px' }}>{detail.value}</span>
+                                                    </div>
                                                 </p>
                                             </Col>
                                         ))}
                                     </Row>
 
-                                    <h5 className="property-price">{property.price}</h5>
+                                    <h5 className="property-price text-white">{property.price}</h5>
                                     <div className="button-group">
-                                        <Button variant="primary" className="me-3" style={{ fontSize: '1rem' }}>
+                                        <Button variant="primary" className="me-2" style={{ borderRadius: '0px', fontWeight: 'bold', fontSize: '1rem', background: '#ffffff', color: '#161e2d' }}>
+                                            <DraftsIcon sx={{ marginRight: '2px' }} />
                                             Enquiry now
                                         </Button>
-                                        <Button variant="outline-secondary" className="me-2 call-btn">
-                                            <CallIcon />
-                                            Call us
+                                        <Button variant="outline-secondary" className="me-2 call-btn" style={{ background: 'white', color: '#161e2d', borderRadius: '0px' }}>
+                                            <Grid container direction="row" alignItems='center' justifyContent='center' spacing={1}>
+                                                <Grid item md={3}>
+                                                    <CallIcon sx={{ marginRight: '2px' }} />
+                                                </Grid>
+                                                <Grid item md={9}>
+                                                    <Grid>
+                                                        <Grid container direction='column' alignItems='flex-start'>
+                                                            <Grid item sx={{ lineHeight: '15px', textAlign: 'left' }}>
+                                                                <p style={{ fontSize: 'smaller', width: 'max-content', marginBottom: '0px' }}><strong>  Call Us</strong> <br />  <strong>+91 936 382 8393</strong></p>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
                                         </Button>
-                                        <Button variant="outline-success" className="whatsapp-btn">
-                                            <WhatsAppIcon />
-                                            <a href="https://wa.me/phoneNumber" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
-                                                WhatsApp
-                                            </a>
+                                        <Button variant="outline-success" className="whatsapp-btn" style={{ background: 'white', color: '#161e2d', fontWeight: 'bold', borderRadius: '0px' }}>
+                                            <WhatsAppIcon sx={{ fontSize: '25px' }} />
                                         </Button>
                                     </div>
 
@@ -386,7 +428,7 @@ export default function Carousel() {
                         </div>
                     ))}
                 </Slider>
-            </Container>
+            </div>
         </section>
     );
 }

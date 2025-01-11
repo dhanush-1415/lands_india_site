@@ -40,6 +40,10 @@ import MyPropertyPage from "./pages/dashboard/my-property";
 import MessagePage from "./pages/dashboard/message";
 import MyFavoritePage from "./pages/dashboard/my-favorites";
 import ReviewPage from "./pages/dashboard/reviews";
+import HelpAndSupport from "./pages/Help&Support/HelpAndSupport";
+import Agents from "./components/common/Agents";
+import ValueAddedServices from "./components/common/ValueAddedServices";
+import Franchise from "./components/common/Franchise";
 import MyProfilePage from "./pages/dashboard/my-profile";
 import AddPropertyPage from "./pages/dashboard/add-property";
 import Header1 from "./components/headers/Header1";
@@ -85,6 +89,10 @@ function App() {
 
 
               <Route path="properties" element={<SidebarGridPage />} />
+              <Route path="support" element={<HelpAndSupport />} />
+              <Route path="agents" element={<Agents />} />
+              <Route path="franchise" element={<Franchise />} />
+              <Route path="value-added-services" element={<ValueAddedServices />} />
               <Route path="properties/:name" element={<SidebarGridPage />} />
               <Route
                 path="property-details"

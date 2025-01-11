@@ -125,6 +125,34 @@ export const agents = [
     imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXFuhf12Xp6JMd3CAA89wJn3xIk1zcGE3GUG2aA2YLQCqEdgsrT6YtNkOI2LccLqaC_TM&usqp=CAU",
     wowDelay: ".5s",
   },
+    {
+    id: 1,
+    name: "Ravi Kumar",
+    position: "Administrative Staff",
+    imgSrc: "https://i.pinimg.com/236x/4b/cc/54/4bcc54ebe6d0e6700e3df3047c1129c8.jpg",
+    wowDelay: ".2s",
+  },
+  {
+    id: 2,
+    name: "Anjali Reddy",
+    position: "Administrative Staff",
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWN_ct9Sp4bf-SPyts4b6LRWzfyIMgiHUD8Q&s",
+    wowDelay: ".3s",
+  },
+  {
+    id: 3,
+    name: "Suresh Nair",
+    position: "Administrative Staff",
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTCH4jtCCxVpcXetPNnJHT03V4fTV_YWnBhWqleLDxKqB5CH45xW6Ho-tID7baJdFB1tw&usqp=CAU",
+    wowDelay: ".4s",
+  },
+  {
+    id: 4,
+    name: "Vishal Menon",
+    position: "Administrative Staff",
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXFuhf12Xp6JMd3CAA89wJn3xIk1zcGE3GUG2aA2YLQCqEdgsrT6YtNkOI2LccLqaC_TM&usqp=CAU",
+    wowDelay: ".5s",
+  },
 ];
 
 export const agents2 = [

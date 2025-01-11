@@ -4,43 +4,25 @@ import { Link } from "react-router-dom";
 import AttachEmailSharpIcon from '@mui/icons-material/AttachEmailSharp';
 import CallIcon from '@mui/icons-material/Call';
 import PermPhoneMsgIcon from '@mui/icons-material/PermPhoneMsg';
-
+import { toast } from "react-toastify";
 import Pagination from "../common/Pagination";
 import Slider from "rc-slider";
-import { allProperties, featureOptions,projectData, indvidualData, props } from "@/data/properties";
+import { allProperties, featureOptions, projectData, indvidualData, props } from "@/data/properties";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { getCategories, getProperties } from "@/apiCalls";
+
 
 import { useParams } from "react-router-dom";
 
 
 
 export default function Properties4() {
+  const params = useParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-
-  let params = useParams();
-
-  
   const [sorted, setSorted] = useState();
   const [filtered, setFiltered] = useState([]);
-
-  useEffect(() => {
-    
-    console.log('fff', sorted);
-  },[sorted])
-  useEffect(()=>{
-    !params.name ? window.location.href = '/properties/all': '' 
-    if(params.name === "projects"){
-      setSorted(projectData)
-      
-      
-    }
-    if(params.name === "individuals"){
-      setSorted(indvidualData)
-    }
-    if(params.name === "all"){
-      setSorted(props)
-    }
-  },[])
-
   const [price, setPrice] = useState([1800, 5500]);
   const [size, setSize] = useState([800, 2200]);
   const [rooms, setRooms] = useState("All");
@@ -50,8 +32,58 @@ export default function Properties4() {
   const [features, setFeatures] = useState([]);
   const [sortingOption, setSortingOption] = useState("Sort by (Default)");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemPerPage, setitemPerPage] = useState(8);
+  const [itemPerPage, setItemPerPage] = useState(9);
 
+  const [properties, setProperties] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
+  const [keyword, setKeyword] = useState("");
+  const [location, setLocation] = useState("");
+  const [combinedData, setCombinedData] = useState([]); // Final combined data
+  const [inputDetails, setInputDetails] = useState([]); // inputDetails data
+  const [propertyInputs, setPropertyInputs] = useState([]); // propertyInputs data
+
+  console.log(properties , "mmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
+
+  // useEffect(() => {
+  //   // Ensure all required data is available
+  //   if (properties.length && propertyInputs.length && inputDetails.length) {
+  //     // Combine data
+  //     const result = properties.map((property) => {
+  //       // Filter inputs related to the current property
+  //       const relatedInputs = propertyInputs.filter(
+  //         (input) => input.properties_postId === property.id
+  //       );
+
+  //       // Map inputs to include inputDetails
+  //       const inputsWithDetails = relatedInputs.map((input) => {
+  //         const inputDetail = inputDetails.find(
+  //           (detail) => detail.id === input.input_id
+  //         );
+  //         return {
+  //           ...input,
+  //           inputDetail, // Add input detail if available
+  //         };
+  //       });
+
+  //       // Combine property with its inputs
+  //       return {
+  //         ...property,
+  //         inputs: inputsWithDetails, // Attach processed inputs
+  //       };
+  //     });
+
+  //     // Store the result in state
+  //     setCombinedData(result);
+  //   }
+  // }, [properties, propertyInputs, inputDetails]);
+
+  // console.log(combinedData,  "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
+
+
+  // Clear filters function
   const clearFilter = () => {
     setPrice([1800, 5500]);
     setSize([800, 2200]);
@@ -62,65 +94,126 @@ export default function Properties4() {
     setFeatures([]);
   };
 
-  // useEffect(() => {
-  //   let filteredArrays = [];
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+  
+    if (keyword) params.append("keyword", keyword);
+    if (location) params.append("location", location);
+  
+    if (selectedCategory && selectedCategory !== "category") {
+      params.append("category", selectedCategory);
+    }
+  
+    if (selectedSubCategory && selectedSubCategory !== "Sub Category") {
+      params.append("subcategory", selectedSubCategory);
+    }
+  
+    params.append("minPrice", price[0].toString());
+    params.append("maxPrice", price[1].toString());
+  
+    navigate(`/properties/all?${params.toString()}`);
+  };
 
-  //   if (features.length) {
-  //     const filteredByfeatures = [...props].filter((elm) =>
-  //       features.every((el) => elm.features.includes(el))
-  //     );
-  //     filteredArrays = [...filteredArrays, filteredByfeatures];
-  //   }
-  //   if (rooms != "All") {
-  //     const filteredByRooms = [...props].filter(
-  //       (elm) => rooms == elm.rooms
-  //     );
-  //     filteredArrays = [...filteredArrays, filteredByRooms];
-  //   }
-  //   if (bedrooms != "All") {
-  //     const filteredBybedrooms = [...props].filter(
-  //       (elm) => bedrooms == elm.beds
-  //     );
-  //     filteredArrays = [...filteredArrays, filteredBybedrooms];
-  //   }
-  //   if (bathrooms != "All") {
-  //     const filteredBybathrooms = [...props].filter(
-  //       (elm) => bathrooms == elm.baths
-  //     );
-  //     filteredArrays = [...filteredArrays, filteredBybathrooms];
-  //   }
-  //   if (type != "All") {
-  //     const filteredBytype = [...props].filter((elm) =>
-  //       elm.type.includes(type)
-  //     );
-  //     filteredArrays = [...filteredArrays, filteredBytype];
-  //   }
-  //   const filteredByprice = [...props].filter(
-  //     (elm) => elm.price >= price[0] && elm.price <= price[1]
-  //   );
-  //   filteredArrays = [...filteredArrays, filteredByprice];
-  //   const filteredBysize = [...props].filter(
-  //     (elm) => elm.sqft >= size[0] && elm.sqft <= size[1]
-  //   );
-  //   filteredArrays = [...filteredArrays, filteredBysize];
+  
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const params = new URLSearchParams();
+  //   if (keyword) params.append("keyword", keyword);
+  //   if (location) params.append("location", location);
+  //   if (selectedCategory !== "category" || selectedCategory != null || selectedCategory != '' ) { params.append("category", selectedCategory)};
+  //   if (selectedSubCategory !== "Sub Category" || selectedSubCategory != null || selectedSubCategory != ''  )  {params.append("subcategory", selectedSubCategory)};
+  //   params.append("minPrice", price[0].toString());
+  //   params.append("maxPrice", price[1].toString());
+  //   navigate(`/properties/all?${params.toString()}`);
+  // };
 
-  //   const commonItems = [...props].filter((item) =>
-  //     filteredArrays.every((array) => array.includes(item))
-  //   );
-  //   setFiltered(commonItems);
-  // }, [price, size, rooms, bedrooms, bathrooms, type, features]);
+  useEffect(() => {
+    const fetchCategoriesData = async () => {
+      try {
+        const data = await getCategories();
+        if (data.success) {
+          setCategories(data.data);
+        } else {
+          toast.error(data.message);
+        }
+      } catch (err) {
+        console.error('Error fetching categories:', err);
+      }
+    };
+    fetchCategoriesData();
+  }, []);
 
-  // useEffect(() => {
-  //   if (sortingOption === "Price Ascending") {
-  //     setSorted([...filtered].sort((a, b) => a.price - b.price));
-  //   } else if (sortingOption === "Price Descending") {
-  //     setSorted([...filtered].sort((a, b) => b.price - a.price));
-  //   } else {
-  //     setSorted(filtered); 
-  //   }
+  // Handle category selection
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category.name);
+    const selectedSubCategories = category.subMenus || [];
+    setSubCategories(selectedSubCategories);
+    setSelectedSubCategory(null);
+  };
 
-  //   setCurrentPage(1);
-  // }, [filtered, sortingOption]);
+  // Handle subcategory selection
+  const handleSubCategoryChange = (subCategory) => {
+    setSelectedSubCategory(subCategory.name);
+  };
+
+  // Handle location change
+  const handleLocationChange = (data) => {
+    setLocation(data.name);
+  };
+
+  // Fetch properties based on search parameters
+  useEffect(() => {
+    const fetchProperties = async () => {
+      const location = searchParams.get("location");
+      const minPrice = searchParams.get("minPrice");
+      const maxPrice = searchParams.get("maxPrice");
+      const keyword = searchParams.get("keyword");
+      const category = searchParams.get("category");
+      const subCategory = searchParams.get("subcategory");
+
+      const filter = {
+        location: location || "",
+        minPrice: minPrice ? parseInt(minPrice) : 0,
+        maxPrice: maxPrice ? parseInt(maxPrice) : 0,
+        keyword: keyword || "",
+        category: category || "",
+        subCategory: subCategory || "",
+      };
+
+      try {
+        const data = await getProperties(filter);
+        setProperties(data.data);
+        if (data.success) {
+          setProperties(data.data);
+          // setInputDetails(data.inputDetails);
+          // setPropertyInputs(data.propertyInputs);
+        } else {
+          toast.error(data.message);
+        }
+      } catch (err) {
+        console.error('Error fetching properties:', err);
+      }
+    };
+
+    fetchProperties();
+  }, [searchParams]);
+
+  // Set sorted data based on URL params
+  useEffect(() => {
+    if (!params.name) {
+      window.location.href = '/properties/all';
+      return;
+    }
+
+    if (params.name === "projects") {
+      setSorted(projectData); // Replace with actual data
+    } else if (params.name === "individuals") {
+      setSorted(indvidualData); // Replace with actual data
+    } else if (params.name === "all") {
+      setSorted(props); // Replace with actual data
+    }
+  }, [params.name]);
 
   const allProps = {
     price,
@@ -136,7 +229,7 @@ export default function Properties4() {
     setFeatures,
   };
   return (
-    <section className="flat-section flat-recommended flat-sidebar" style={{position: 'relative'}}>
+    <section className="flat-section flat-recommended flat-sidebar" style={{ position: 'relative' }}>
       <div className="container">
         <div className="box-title-listing">
           <div className="box-left">
@@ -149,8 +242,8 @@ export default function Properties4() {
             </p> */}
           </div>
           <div className="box-filter-tab" >
-          
-          <DropdownSelect
+
+            <DropdownSelect
               onChange={setSortingOption}
               addtionalParentClass="list-sort"
               options={[
@@ -272,9 +365,9 @@ export default function Properties4() {
           </div>
         </div>
         <div className="row">
-          <div className="col-xl-4 col-lg-5" style={{width: '25%'}}>
+          <div className="col-xl-4 col-lg-5" style={{ width: '25%' }}>
             <div className="widget-sidebar fixed-sidebar" >
-              <div className="flat-tab flat-tab-form widget-filter-search widget-box" style={{margin: 0, padding: '0 20px' }}>
+              <div className="flat-tab flat-tab-form widget-filter-search widget-box" style={{ margin: 0, padding: '0 20px' }}>
                 {/* <ul className="nav-tab-form" role="tablist">
                   <li className="nav-tab-item" role="presentation">
                     <a
@@ -298,64 +391,57 @@ export default function Properties4() {
                 <div className="tab-content" >
                   <div className="tab-pane fade active show" role="tabpanel">
                     <div className="form-sl">
-                      <form onSubmit={(e) => e.preventDefault()}>
-                        <div className="wd-filter-select" style={{boxShadow: 'none'}}>
+                      <form onSubmit={handleSubmit}>
+                        <div className="wd-filter-select" style={{ boxShadow: 'none' }}>
                           <div className="inner-group">
                             <div className="box">
                               <div className="form-style"
-                                  style={{borderBottom: '1px solid #e4e4e4'}}>
+                                style={{ borderBottom: '1px solid #e4e4e4' }}>
                                 <input
                                   type="text"
                                   className="form-control"
                                   placeholder="Type keyword...."
                                   defaultValue=""
                                   name="s"
+                                  value={keyword}
+                                  onChange={(e) => setKeyword(e.target.value)}
                                   title="Search for"
-                                  style={{border: 'none'}}
+                                  style={{ border: 'none' }}
                                   required
                                 />
                               </div>
                               <div className="form-style">
-                                <div className="group-ip ip-icon" style={{borderBottom: '1px solid #e4e4e4'}}>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Location"
-                                    defaultValue=""
-                                    name="s"
-                                    title="Search for"
-                                    required
-                                    style={{border: 'none'}}
-                                  />
-                                  <a
-                                    href="#"
-                                    className="icon-right icon-location"
+                                <div className="group-select" style={{ borderBottom: '1px solid #e4e4e4' }}>
+                                  <DropdownSelect
+                                    options={["Location", ...(categories?.map((category) => category.name) || [])]} // Prepend "All" to the options
+                                    onChange={(selectedCategory) => {
+                                      const category = categories.find((cat) => cat.name === selectedCategory);
+                                      handleLocationChange(category);
+                                    }}
+                                    style={{ border: 'none' }}
                                   />
                                 </div>
                               </div>
                               <div className="form-style">
-                                <div className="group-select" style={{borderBottom: '1px solid #e4e4e4'}}>
+                                <div className="group-select" style={{ borderBottom: '1px solid #e4e4e4' }}>
                                   <DropdownSelect
-                                    defaultOption="Property type"
-                                    onChange={setType}
-                                    options={[
-                                      "All",
-                                      "Villa",
-                                      "Studio",
-                                      "Office",
-                                      "House",
-                                    ]}
-                                    
-                                  style={{border: 'none'}}
+                                    options={["Category", ...(categories?.map((category) => category.name) || [])]} // Prepend "All" to the options
+                                    onChange={(selectedCategory) => {
+                                      const category = categories.find((cat) => cat.name === selectedCategory);
+                                      handleCategoryChange(category);
+                                    }}
+                                    style={{ border: 'none' }}
                                   />
                                 </div>
                               </div>
-                              <div className="form-style box-select" style={{borderBottom: '1px solid #e4e4e4'}}>
+                              <div className="form-style box-select" style={{ borderBottom: '1px solid #e4e4e4' }}>
                                 <DropdownSelect
-                                  defaultOption="Room"
-                                  onChange={setRooms}
-                                  options={["All", 1, 2, 3, 4, 5]}
-                                  style={{border: 'none'}}
+                                  options={["Sub Category", ...(subCategories?.map((subCat) => subCat.name) || [])]} // Prepend "All" to the options
+                                  onChange={(selectedSubCategory) => {
+                                    const subCategory = subCategories.find((sub) => sub.name === selectedSubCategory);
+                                    handleSubCategoryChange(subCategory);
+                                  }}
+                                  style={{ border: 'none' }}
                                 />
                               </div>
                             </div>
@@ -452,11 +538,11 @@ export default function Properties4() {
                   </div>
                 </div>
               </div>
-             
+
             </div>
           </div>
-          <div className="col-xl-8 col-lg-7 flat-animate-tab" style={{width: '75%'}} >
-            <div className="tab-content" style={{width: '100%'}}  >
+          <div className="col-xl-8 col-lg-7 flat-animate-tab" style={{ width: '75%' }} >
+            <div className="tab-content" style={{ width: '100%' }}  >
               <div
                 className="tab-pane active show"
                 id="gridLayout"
@@ -469,126 +555,126 @@ export default function Properties4() {
                       currentPage * itemPerPage
                     )
                     .map((property, index) => (
-                      
-                                        <div key={index} className="col-xl-4 col-lg-6 col-md-6">
-                                          <div className="homelengo-box">
-                                            <div className="archive-top">
-                                              <Link
-                                                to={`/property-details/${property.id}`}
-                                                className="images-group"
-                                                
-                                              >
-                                               <div className="images-style">
-                                                  <img
-                                                    className="lazyload"
-                                                    data-src={property.img[0]}
-                                                    alt=""
-                                                    src={property.img[0]}
-                                                    style={{
-                                                      width: "615px",
-                                                      height: "250px",
-                                                      objectFit: "cover"
-                                                    }}
-                                                  />
-                                                </div>
-                      
-                                                {/* <div className="top">
+
+                      <div key={index} className="col-xl-4 col-lg-6 col-md-6">
+                        <div className="homelengo-box">
+                          <div className="archive-top">
+                            <Link
+                              to={`/property-details/${property.id}`}
+                              className="images-group"
+
+                            >
+                              <div className="images-style">
+                                <img
+                                  className="lazyload"
+                                  data-src={property.img[0]}
+                                  alt=""
+                                  src={property.img[0]}
+                                  style={{
+                                    width: "615px",
+                                    height: "250px",
+                                    objectFit: "cover"
+                                  }}
+                                />
+                              </div>
+
+                              {/* <div className="top">
                                                   <ul className="d-flex gap-6">
                                                     <li className="flag-tag primary">Featured</li>
                                                     <li className="flag-tag style-1">For Sale</li>
                                                   </ul>
                                                 </div> */}
-                                                <div className="bottom">
-                                                  <svg
-                                                    width={16}
-                                                    height={16}
-                                                    viewBox="0 0 16 16"
-                                                    fill="none"
-                                                  >
-                                                    <path
-                                                      d="M10 7C10 7.53043 9.78929 8.03914 9.41421 8.41421C9.03914 8.78929 8.53043 9 8 9C7.46957 9 6.96086 8.78929 6.58579 8.41421C6.21071 8.03914 6 7.53043 6 7C6 6.46957 6.21071 5.96086 6.58579 5.58579C6.96086 5.21071 7.46957 5 8 5C8.53043 5 9.03914 5.21071 9.41421 5.58579C9.78929 5.96086 10 6.46957 10 7Z"
-                                                      stroke="white"
-                                                      strokeWidth="1.5"
-                                                      strokeLinecap="round"
-                                                      strokeLinejoin="round"
-                                                    />
-                                                    <path
-                                                      d="M13 7C13 11.7613 8 14.5 8 14.5C8 14.5 3 11.7613 3 7C3 5.67392 3.52678 4.40215 4.46447 3.46447C5.40215 2.52678 6.67392 2 8 2C9.32608 2 10.5979 2.52678 11.5355 3.46447C12.4732 4.40215 13 5.67392 13 7Z"
-                                                      stroke="white"
-                                                      strokeWidth="1.5"
-                                                      strokeLinecap="round"
-                                                      strokeLinejoin="round"
-                                                    />
-                                                  </svg>
-                                                  {property.propertyDetails.location.village}, {property.propertyDetails.location.district}, {property.propertyDetails.location.state}, {property.propertyDetails.location.country}
-                                                </div>
-                                              </Link>
-                                            </div>
-                                            <div className="archive-bottom">
-                                              <div className="content-top">
-                                                <h6 className="text-capitalize">
-                                                  <Link
-                                                    to={`/property-details/${property.id}`}
-                                                    className="link"
-                                                  >
-                                                    {property.propertyDetails.title}
-                                                  </Link>
-                                                </h6>
-                                                <ul className="meta-list">
-                                                  <li className="item">
-                                                    <i className="icon icon-bed" />
-                                                    <span className="text-variant-1">Beds:</span>
-                                                    <span className="fw-6">{8}</span>
-                                                  </li>
-                                                  <li className="item">
-                                                    <i className="icon icon-bath" />
-                                                    <span className="text-variant-1">Baths:</span>
-                                                    <span className="fw-6">{property.baths}</span>
-                                                  </li>
-                                                  <li className="item">
-                                                    <i className="icon icon-sqft" />
-                                                    <span className="text-variant-1">Sqft:</span>
-                                                    <span className="fw-6">{property.sqft}</span>
-                                                  </li>
-                                                </ul>
-                                              </div>
-                                              <div className="content-bottom" style={{flexDirection: 'column'}}>
-                                                <div className="d-flex gap-8 align-items-center " style={{justifyContent: 'space-between', width: '100%'}}>
-                                                  <div className="">
-                                                    <h6 className="price">
-                                                      ₹{property.propertyDetails.price}
-                                                    </h6>
-                                                  </div>
-                                                  <div className="" style={{display: 'flex'}}>
-                                                    <div className="" style={{ padding: '3px', border: '1px solid black', borderRadius: '50%', marginRight: '10px' }}>
-                                                      <CallIcon />
-                                                    </div>
-                                                    <div className="" style={{ padding: '3px', border: '1px solid black', borderRadius: '50%' }}>
-                                                      <PermPhoneMsgIcon />
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <div className="d-flex gap-8 align-items-center " style={{justifyContent: 'space-between', width: '100%', marginTop: '12px'}}>
-                                                  <div className="">
-                                                    <div className="d-flex gap-8 align-items-center" style={{ fontWeight: 'bold', background: '#018df7', color: '#ffffff', padding: '4px 10px' }}>
-                                                      <AttachEmailSharpIcon sx={{ padding: '0px 2px' }} /><span > Enquiry Now </span>
-                                                    </div>
-                                    
-                                                  </div>
-                                                  <div className="">
-                                                                    
-                          <div className="d-flex gap-8 align-items-center">
-                            <span style={{ fontWeight: 'bold', border: '1.5px dotted black', padding: '4px 10px' }} >View Details</span>
+                              <div className="bottom">
+                                <svg
+                                  width={16}
+                                  height={16}
+                                  viewBox="0 0 16 16"
+                                  fill="none"
+                                >
+                                  <path
+                                    d="M10 7C10 7.53043 9.78929 8.03914 9.41421 8.41421C9.03914 8.78929 8.53043 9 8 9C7.46957 9 6.96086 8.78929 6.58579 8.41421C6.21071 8.03914 6 7.53043 6 7C6 6.46957 6.21071 5.96086 6.58579 5.58579C6.96086 5.21071 7.46957 5 8 5C8.53043 5 9.03914 5.21071 9.41421 5.58579C9.78929 5.96086 10 6.46957 10 7Z"
+                                    stroke="white"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                  <path
+                                    d="M13 7C13 11.7613 8 14.5 8 14.5C8 14.5 3 11.7613 3 7C3 5.67392 3.52678 4.40215 4.46447 3.46447C5.40215 2.52678 6.67392 2 8 2C9.32608 2 10.5979 2.52678 11.5355 3.46447C12.4732 4.40215 13 5.67392 13 7Z"
+                                    stroke="white"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
+                                {property.propertyDetails.location.village}, {property.propertyDetails.location.district}, {property.propertyDetails.location.state}, {property.propertyDetails.location.country}
+                              </div>
+                            </Link>
                           </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
+                          <div className="archive-bottom">
+                            <div className="content-top">
+                              <h6 className="text-capitalize">
+                                <Link
+                                  to={`/property-details/${property.id}`}
+                                  className="link"
+                                >
+                                  {property.propertyDetails.title}
+                                </Link>
+                              </h6>
+                              <ul className="meta-list">
+                                <li className="item">
+                                  <i className="icon icon-bed" />
+                                  <span className="text-variant-1">Beds:</span>
+                                  <span className="fw-6">{8}</span>
+                                </li>
+                                <li className="item">
+                                  <i className="icon icon-bath" />
+                                  <span className="text-variant-1">Baths:</span>
+                                  <span className="fw-6">{property.baths}</span>
+                                </li>
+                                <li className="item">
+                                  <i className="icon icon-sqft" />
+                                  <span className="text-variant-1">Sqft:</span>
+                                  <span className="fw-6">{property.sqft}</span>
+                                </li>
+                              </ul>
+                            </div>
+                            <div className="content-bottom" style={{ flexDirection: 'column' }}>
+                              <div className="d-flex gap-8 align-items-center " style={{ justifyContent: 'space-between', width: '100%' }}>
+                                <div className="">
+                                  <h6 className="price">
+                                    ₹{property.propertyDetails.price}
+                                  </h6>
+                                </div>
+                                <div className="" style={{ display: 'flex' }}>
+                                  <div className="" style={{ padding: '3px', border: '1px solid black', borderRadius: '50%', marginRight: '10px' }}>
+                                    <CallIcon />
+                                  </div>
+                                  <div className="" style={{ padding: '3px', border: '1px solid black', borderRadius: '50%' }}>
+                                    <PermPhoneMsgIcon />
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="d-flex gap-8 align-items-center " style={{ justifyContent: 'space-between', width: '100%', marginTop: '12px' }}>
+                                <div className="">
+                                  <div className="d-flex gap-8 align-items-center" style={{ fontWeight: 'bold', background: '#018df7', color: '#ffffff', padding: '4px 10px' }}>
+                                    <AttachEmailSharpIcon sx={{ padding: '0px 2px' }} /><span > Enquiry Now </span>
+                                  </div>
+
+                                </div>
+                                <div className="">
+
+                                  <div className="d-flex gap-8 align-items-center">
+                                    <span style={{ fontWeight: 'bold', border: '1.5px dotted black', padding: '4px 10px' }} >View Details</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     ))}
                 </div>
-                <ul className="wd-navigation mt-20" style={{justifyContent: 'center'}} >
+                <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
                   <Pagination
                     currentPage={currentPage}
                     setPage={setCurrentPage}
@@ -604,91 +690,91 @@ export default function Properties4() {
                     currentPage * itemPerPage
                   )
                   .map((property, index) => (
-                    
-                                      <div key={index} className="col-xl-4 col-lg-6 col-md-6">
-                                        <div className="homelengo-box">
-                                          <div className="archive-top">
-                                            <Link
-                                              to={`/property-details/${property.id}`}
-                                              className="images-group"
-                                              
-                                            >
-                                             <div className="images-style">
-                                                <img
-                                                  className="lazyload"
-                                                  data-src={property.img[0]}
-                                                  alt=""
-                                                  src={property.img[0]}
-                                                  style={{
-                                                    width: "615px",
-                                                    height: "250px",
-                                                    objectFit: "cover"
-                                                  }}
-                                                />
-                                              </div>
-                    
-                                              <div className="top">
-                                                <ul className="d-flex gap-6">
-                                                  <li className="flag-tag primary">Featured</li>
-                                                  <li className="flag-tag style-1">For Sale</li>
-                                                </ul>
-                                              </div>
-                                              <div className="bottom">
-                                                <svg
-                                                  width={16}
-                                                  height={16}
-                                                  viewBox="0 0 16 16"
-                                                  fill="none"
-                                                >
-                                                  <path
-                                                    d="M10 7C10 7.53043 9.78929 8.03914 9.41421 8.41421C9.03914 8.78929 8.53043 9 8 9C7.46957 9 6.96086 8.78929 6.58579 8.41421C6.21071 8.03914 6 7.53043 6 7C6 6.46957 6.21071 5.96086 6.58579 5.58579C6.96086 5.21071 7.46957 5 8 5C8.53043 5 9.03914 5.21071 9.41421 5.58579C9.78929 5.96086 10 6.46957 10 7Z"
-                                                    stroke="white"
-                                                    strokeWidth="1.5"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                  />
-                                                  <path
-                                                    d="M13 7C13 11.7613 8 14.5 8 14.5C8 14.5 3 11.7613 3 7C3 5.67392 3.52678 4.40215 4.46447 3.46447C5.40215 2.52678 6.67392 2 8 2C9.32608 2 10.5979 2.52678 11.5355 3.46447C12.4732 4.40215 13 5.67392 13 7Z"
-                                                    stroke="white"
-                                                    strokeWidth="1.5"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                  />
-                                                </svg>
-                                                {property.propertyDetails.location.village}, {property.propertyDetails.location.district}, {property.propertyDetails.location.state}, {property.propertyDetails.location.country}
-                                              </div>
-                                            </Link>
-                                          </div>
-                                          <div className="archive-bottom">
-                                            <div className="content-top">
-                                              <h6 className="text-capitalize">
-                                                <Link
-                                                  to={`/property-details/${property.id}`}
-                                                  className="link"
-                                                >
-                                                  {property.propertyDetails.title}
-                                                </Link>
-                                              </h6>
-                                              <ul className="meta-list">
-                                                <li className="item">
-                                                  <i className="icon icon-bed" />
-                                                  <span className="text-variant-1">Beds:</span>
-                                                  <span className="fw-6">{8}</span>
-                                                </li>
-                                                <li className="item">
-                                                  <i className="icon icon-bath" />
-                                                  <span className="text-variant-1">Baths:</span>
-                                                  <span className="fw-6">{property.baths}</span>
-                                                </li>
-                                                <li className="item">
-                                                  <i className="icon icon-sqft" />
-                                                  <span className="text-variant-1">Sqft:</span>
-                                                  <span className="fw-6">{property.sqft}</span>
-                                                </li>
-                                              </ul>
-                                            </div>
-                                            <div className="content-bottom">
-                                              {/* <div className="d-flex gap-8 align-items-center">
+
+                    <div key={index} className="col-xl-4 col-lg-6 col-md-6">
+                      <div className="homelengo-box">
+                        <div className="archive-top">
+                          <Link
+                            to={`/property-details/${property.id}`}
+                            className="images-group"
+
+                          >
+                            <div className="images-style">
+                              <img
+                                className="lazyload"
+                                data-src={property.img[0]}
+                                alt=""
+                                src={property.img[0]}
+                                style={{
+                                  width: "615px",
+                                  height: "250px",
+                                  objectFit: "cover"
+                                }}
+                              />
+                            </div>
+
+                            <div className="top">
+                              <ul className="d-flex gap-6">
+                                <li className="flag-tag primary">Featured</li>
+                                <li className="flag-tag style-1">For Sale</li>
+                              </ul>
+                            </div>
+                            <div className="bottom">
+                              <svg
+                                width={16}
+                                height={16}
+                                viewBox="0 0 16 16"
+                                fill="none"
+                              >
+                                <path
+                                  d="M10 7C10 7.53043 9.78929 8.03914 9.41421 8.41421C9.03914 8.78929 8.53043 9 8 9C7.46957 9 6.96086 8.78929 6.58579 8.41421C6.21071 8.03914 6 7.53043 6 7C6 6.46957 6.21071 5.96086 6.58579 5.58579C6.96086 5.21071 7.46957 5 8 5C8.53043 5 9.03914 5.21071 9.41421 5.58579C9.78929 5.96086 10 6.46957 10 7Z"
+                                  stroke="white"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                                <path
+                                  d="M13 7C13 11.7613 8 14.5 8 14.5C8 14.5 3 11.7613 3 7C3 5.67392 3.52678 4.40215 4.46447 3.46447C5.40215 2.52678 6.67392 2 8 2C9.32608 2 10.5979 2.52678 11.5355 3.46447C12.4732 4.40215 13 5.67392 13 7Z"
+                                  stroke="white"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                              {property.propertyDetails.location.village}, {property.propertyDetails.location.district}, {property.propertyDetails.location.state}, {property.propertyDetails.location.country}
+                            </div>
+                          </Link>
+                        </div>
+                        <div className="archive-bottom">
+                          <div className="content-top">
+                            <h6 className="text-capitalize">
+                              <Link
+                                to={`/property-details/${property.id}`}
+                                className="link"
+                              >
+                                {property.propertyDetails.title}
+                              </Link>
+                            </h6>
+                            <ul className="meta-list">
+                              <li className="item">
+                                <i className="icon icon-bed" />
+                                <span className="text-variant-1">Beds:</span>
+                                <span className="fw-6">{8}</span>
+                              </li>
+                              <li className="item">
+                                <i className="icon icon-bath" />
+                                <span className="text-variant-1">Baths:</span>
+                                <span className="fw-6">{property.baths}</span>
+                              </li>
+                              <li className="item">
+                                <i className="icon icon-sqft" />
+                                <span className="text-variant-1">Sqft:</span>
+                                <span className="fw-6">{property.sqft}</span>
+                              </li>
+                            </ul>
+                          </div>
+                          <div className="content-bottom">
+                            {/* <div className="d-flex gap-8 align-items-center">
                                                 <div className="avatar avt-40 round">
                                                   <img
                                                     alt="avt"
@@ -699,12 +785,12 @@ export default function Properties4() {
                                                 </div>
                                                 <span>{property.agent}</span>
                                               </div> */}
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   ))}
-                <ul className="wd-navigation mt-20" style={{justifyContent: 'center'}} >
+                <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
                   <Pagination
                     currentPage={currentPage}
                     setPage={setCurrentPage}

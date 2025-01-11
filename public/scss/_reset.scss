@@ -164,9 +164,12 @@ li {
 }
 
 .container {
-    max-width: 1320px;
+    max-width: 1250px;
 }
 
+.custom-container-header{
+    background: #ffffff !important;
+}
 .container3,
 .container2,
 .container {
@@ -178,7 +181,9 @@ li {
 .container {
     padding-left: 15px;
     padding-right: 15px;
+    background: #f0f3f4 ;
 }
+
 .container-full {
     width: 100%;
     max-width: 100%;

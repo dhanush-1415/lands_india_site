@@ -1,13 +1,13 @@
 export const sliderImages = [
   {
-    src: "/images/slider/slider-2.jpg",
+    src: "/images/slider/slider-2-3.jpg",
     alt: "images",
     width: 960,
     height: 730,
     className: "img-animation wow",
   },
   {
-    src: "/images/slider/slider-2-1.jpg",
+    src: "/images/slider/slider-2-3.jpg",
     alt: "images",
     width: 960,
     height: 730,

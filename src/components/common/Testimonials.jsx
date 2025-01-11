@@ -12,8 +12,8 @@ export default function Testimonials() {
           data-wow-delay=".2s"
           data-wow-duration="2000ms"
         >
-          <div className="text-subtitle text-primary">Our Testimonials</div>
-          <h3 className="title mt-4">What’s people say’s</h3>
+          <div className="text-subtitle ">What’s people say’s</div>
+          <h3 className="title mt-4">Trusted By 10K+ Buyers</h3>
           <p className="desc text-variant-1">
             Our seasoned team excels in real estate with years of successful
             market navigation, offering informed decisions and optimal results.

@@ -12,6 +12,9 @@ import Services from "@/components/homes/home-1/Services";
 import Testimonials from "@/components/common/Testimonials";
 import Carousel from "@/components/homes/home-2/Carousel";
 import BottomCarousel from "@/components/homes/home-2/BannerCarousel";
+import BoxCategory from "@/components/homes/home-2/BoxCategory";
+import BottomBanner from "@/components/homes/home-2/BottomBanner";
+import Footer2 from "@/components/footer/Footer2";
 
 import MetaComponent from "@/components/common/MetaComponent";
 // const metadata = {
@@ -27,16 +30,18 @@ export default function Home() {
       <Hero />
       <Carousel />
       <Properties />
+      <BoxCategory />
       {/* <Locations /> */}
       {/* <Services /> */}
       {/* <Benefit /> */}
       {/* <Properties2 /> */}
       <Testimonials />
+      <BottomBanner />
       {/* <Agents /> */}
       {/* <Brands /> */}
       <Blogs />
       <BottomCarousel />
-      <Footer1 />
+      <Footer2 />
     </>
   );
 }
