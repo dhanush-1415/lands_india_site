@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 export default function Testimonials() {
   return (
-    <section className="flat-section bg-primary-new flat-testimonial">
+    <section className="flat-section bg-primary-new flat-testimonial" style={{background:'#f0f3f4'}}>
       <div className="box-title px-15 wow fadeInUp">
         <div
           className="text-center wow fadeInUpSmall"

@@ -43,8 +43,8 @@ export default function BottomCarousel() {
                 onClick={onClick}
                 style={{
                     position: "absolute",
-                    bottom: "-12%",
-                    right: "3%",
+                    bottom: "-25%",
+                    left: "53%",
                     transform: "translateY(-50%)",
                     zIndex: 10,
                     color: "#000",
@@ -63,8 +63,8 @@ export default function BottomCarousel() {
                 className="icon-btn-right"
                 style={{
                     position: "absolute",
-                    bottom: "-12%",
-                    right: "7%",
+                    bottom: "-25%",
+                    right: "52%",
                     transform: "translateY(-50%)",
                     zIndex: 10,
                     color: "#000",
@@ -76,7 +76,7 @@ export default function BottomCarousel() {
     };
 
     const settings = {
-        dots: true,
+        dots: false,
         infinite: true,
         slidesToShow: 3,
         slidesToScroll: 1,
@@ -107,7 +107,7 @@ export default function BottomCarousel() {
     };
 
     return (
-        <section className="property-carousel">
+        <section className="property-carousel" style={{background:'#ffffff'}}>
             <style>
                 {`
                 .list-header-custom {
@@ -145,7 +145,7 @@ export default function BottomCarousel() {
                 }
                 `}
             </style>
-            <Container>
+            <div className="container custom-container-header mx-3">
                 <div className="list-header-custom">
                     <div>
                         <h3 className="carousel-title">
@@ -163,14 +163,16 @@ export default function BottomCarousel() {
                         </div>
                     </div>
                 </div>
-                <Slider {...settings}>
-                    {properties.map((property, index) => (
-                        <div style={{ margin: '0 10px' }} key={property.id}>
-                            <img style={{ width: '90%', borderRadius: '8px', margin: '0px auto' }} src={property.img || ""} alt="banner" />
-                        </div>
-                    ))}
-                </Slider>
-            </Container>
+                <div className="custom-multi-banner">
+                    <Slider {...settings}>
+                        {properties.map((property, index) => (
+                            <div style={{ margin: '0 10px' }} key={property.id}>
+                                <img style={{ width: '90%', borderRadius: '8px', margin: '0px auto' }} src={property.img || ""} alt="banner" />
+                            </div>
+                        ))}
+                    </Slider>
+                </div>
+            </div>
         </section>
     );
 }

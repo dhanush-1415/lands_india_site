@@ -7,16 +7,18 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+
 
 const Footer2 = () => {
   return (
-    <Grid sx={{backgroundColor: '#121212', color: '#fff'}}>
-      <Box sx={{py: 5, width: { xs: '98%', sm: '98%', md: '90%' }, margin: '0px auto' }}>
+    <Grid sx={{ backgroundColor: '#1c1c1e', color: '#fff' }}>
+      <Box sx={{ py: 5, width: { xs: '98%', sm: '98%', md: '90%' }, margin: '0px auto' }}>
         <Grid container sx={{ justifyContent: { xs: 'space-between' } }}>
           <Grid container sx={{ justifyContent: { xs: 'space-between' }, margin: '50px 0' }}>
 
             <Grid item xs={12} md={5.8} sx={{ margin: '20px 0' }}>
-              <Grid container justifyContent='space-between' sx={{ backgroundColor: '#1E1E1E', borderRadius: '5px', padding: { xs: '20px', sm: '20px', md: '0px' } }}>
+              <Grid container justifyContent='space-between' sx={{ backgroundColor: '#2e2e2e', borderRadius: '5px', padding: { xs: '20px', sm: '20px', md: '0px' } }}>
                 <Grid item xs={12} md={3} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <img src="https://themesflat.co/html/dreamhomehtml/assets/images/icon/footer-icon-1.png" alt='logo' />
                 </Grid>
@@ -40,7 +42,7 @@ const Footer2 = () => {
                 </Grid>
                 <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                   <Grid>
-                    <Grid container justifyContent='space-between' flexDirection="row" sx={{ backgroundColor: '#1E1E1E', borderRadius: '5px', boxShadow: " rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", marginBottom: '-20px', padding: '10px 20px' }} >
+                    <Grid container justifyContent='space-between' flexDirection="row" sx={{ backgroundColor: '#343434', borderRadius: '5px', boxShadow: " rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", marginBottom: '-20px', padding: '10px 20px' }} >
                       <Grid>
                         <PhoneIcon />
                       </Grid>
@@ -58,7 +60,7 @@ const Footer2 = () => {
 
             </Grid>
             <Grid item xs={12} md={5.8} sx={{ margin: '20px 0' }}>
-              <Grid container justifyContent='space-between' sx={{ backgroundColor: '#1E1E1E', borderRadius: '5px', padding: { xs: '20px', sm: '20px', md: '0px' } }}>
+              <Grid container justifyContent='space-between' sx={{ backgroundColor: '#2e2e2e', borderRadius: '5px', padding: { xs: '20px', sm: '20px', md: '0px' } }}>
                 <Grid item xs={12} md={3} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <img src="https://themesflat.co/html/dreamhomehtml/assets/images/icon/footer-icon-2.png" alt='logo' />
                 </Grid>
@@ -81,7 +83,7 @@ const Footer2 = () => {
                 </Grid>
                 <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                   <Grid>
-                    <Grid container justifyContent='space-between' flexDirection="row" sx={{ backgroundColor: '#1E1E1E', borderRadius: '5px', boxShadow: " rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", marginBottom: '-20px', padding: '10px 20px' }} >
+                    <Grid container justifyContent='space-between' flexDirection="row" sx={{ backgroundColor: '#343434', borderRadius: '5px', boxShadow: " rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", marginBottom: '-20px', padding: '10px 20px' }} >
                       <Grid>
                         <HomeWorkIcon />
                       </Grid>
@@ -106,7 +108,7 @@ const Footer2 = () => {
             <Typography variant="h6" gutterBottom color='#ffffff' fontWeight='bold'>
               Office Address
             </Typography>
-            <Typography variant="body2" fontWeight='bold' color='gray' sx={{mt:3}}>
+            <Typography variant="body2" fontWeight='bold' color='gray' sx={{ mt: 3 }}>
               Head office:
             </Typography>
             <Typography variant="body2" fontWeight='bold'>
@@ -127,7 +129,7 @@ const Footer2 = () => {
             <Typography variant="h6" gutterBottom color='#ffffff' fontWeight='bold'>
               Contact Our Team
             </Typography>
-            <Typography variant="body2" fontWeight='bold' color='gray'  sx={{mt:3}}>
+            <Typography variant="body2" fontWeight='bold' color='gray' sx={{ mt: 3 }}>
               Support Team:
             </Typography>
             <Typography variant="body2">
@@ -151,7 +153,7 @@ const Footer2 = () => {
             <Typography variant="h6" gutterBottom color='#ffffff' fontWeight='bold'>
               Our Company
             </Typography>
-            <Link href="#" color="inherit" underline="hover" variant="body2" display="block"  sx={{mt:3}}>
+            <Link href="#" color="inherit" underline="hover" variant="body2" display="block" sx={{ mt: 3 }}>
               <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />About Us
             </Link>
             <Link href="#" color="inherit" underline="hover" variant="body2" display="block">
@@ -172,7 +174,7 @@ const Footer2 = () => {
             <Typography variant="h6" gutterBottom color='#ffffff' fontWeight='bold'>
               Group Of Companies
             </Typography>
-            <Link href="#" color="inherit" underline="hover" variant="body2" display="block"  sx={{mt:3}}>
+            <Link href="#" color="inherit" underline="hover" variant="body2" display="block" sx={{ mt: 3 }}>
               <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />About Us
             </Link>
             <Link href="#" color="inherit" underline="hover" variant="body2" display="block">
@@ -190,15 +192,17 @@ const Footer2 = () => {
           </Grid>
         </Grid>
 
-        {/* Footer2 Bottom */}
         <Box
           sx={{
             borderTop: '1px solid #333',
             mt: 4,
+            mb: 4,
             pt: 2,
+            pb: 2,
             display: 'flex',
             justifyContent: 'space-between',
             flexWrap: 'wrap',
+            borderBottom: '1px solid #333'
           }}
         >
           <Box>
@@ -209,17 +213,59 @@ const Footer2 = () => {
               Privacy Policy
             </Link>
           </Box>
-          <Box>
-            <IconButton color="inherit">
-              <FacebookIcon />
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <IconButton
+              color="inherit"
+              sx={{
+                border: '1px solid gray',
+                borderRadius: '50%',
+                padding: 1,
+                '&:hover': {
+                  backgroundColor: '#3b5998',
+                  '& svg': {
+                    color: 'white',
+                  },
+                },
+              }}
+            >
+              <FaFacebookF sx={{ fontSize: '20px', color: '#3b5998' }} />
             </IconButton>
-            <IconButton color="inherit">
-              <LinkedInIcon />
+
+            <IconButton
+              color="inherit"
+              sx={{
+                border: '1px solid gray',
+                borderRadius: '50%',
+                padding: 1,
+                '&:hover': {
+                  backgroundColor: '#0077b5',
+                  '& svg': {
+                    color: 'white',
+                  },
+                },
+              }}
+            >
+              <FaLinkedinIn sx={{ fontSize: '20px', color: '#0077b5' }} />
             </IconButton>
-            <IconButton color="inherit">
-              <InstagramIcon />
+
+            <IconButton
+              color="inherit"
+              sx={{
+                border: '1px solid gray',
+                borderRadius: '50%',
+                padding: 1,
+                '&:hover': {
+                  backgroundColor: '#e4405f',
+                  '& svg': {
+                    color: 'white',
+                  },
+                },
+              }}
+            >
+              <FaInstagram sx={{ fontSize: '20px', color: '#e4405f' }} />
             </IconButton>
           </Box>
+
         </Box>
 
         <Typography variant="body2" sx={{ textAlign: 'center', mt: 2 }}>
