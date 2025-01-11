@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import DropdownSelect from "../common/DropdownSelect";
-import { getCategories, getInputs } from "@/apiCalls";
+import { getCategories, getInputs, createNewProperty } from "@/apiCalls";
+import { toast } from "react-toastify";
 
 export default function AddProperty() {
   const [isDragging, setIsDragging] = useState(false); // Track drag state
   const [images, setImages] = useState([]);
+
   // [
   //   "/images/home/house-18.jpg",
   //   "/images/home/house-23.jpg",
@@ -13,18 +15,50 @@ export default function AddProperty() {
   //   "/images/home/house-33.jpg",
   // ]
 
-  const handleImageChange = (e, index) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const newImages = [...images];
-        newImages[index] = reader.result;
-        setImages(newImages);
-      };
-      reader.readAsDataURL(file);
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files); // Convert FileList to Array
+    const maxFiles = 10 - images.length; // Calculate remaining slots
+
+    if (files.length > maxFiles) {
+      alert(`You can only add ${maxFiles} more images.`);
+      return;
     }
+
+    const newFiles = files.slice(0, maxFiles).map((file, index) => ({
+      id: `${Date.now()}-${index}`, // Generate a unique ID for each file
+      file,
+      preview: URL.createObjectURL(file),
+    }));
+
+    setImages((prev) => [...prev, ...newFiles]); // Append new files to existing state
   };
+
+  // const handleImageChange = (e) => {
+  //   const files = Array.from(e.target.files); 
+  //   if (files.length > 0) {
+  //     const newFiles = files.map((file, index) => ({
+  //       id: `${Date.now()}-${index}`,
+  //       file,
+  //     }));
+  //     setImages((prev) => [...prev, ...newFiles]);
+  //   }
+  // };
+
+  // const handleImageChange = (e, index) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       const newImages = [...images];
+  //       newImages[index] = reader.result;
+  //       setImages(newImages);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
+
+
   const handleDelete = (index) => {
     const newImages = images.filter((_, imgIndex) => imgIndex !== index);
     setImages(newImages);
@@ -52,24 +86,24 @@ export default function AddProperty() {
   };
 
   const handleDragLeave = () => {
-    setIsDragging(false); 
+    setIsDragging(false);
   };
 
 
 
-  const [categories , setCategories] = useState();
+  const [categories, setCategories] = useState();
   const [subCategories, setSubCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(""); 
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategoryId, setSelectedSubCategoryId] = useState(null);
-  const [menuInputs , setMenuInputs ] = useState();
+  const [menuInputs, setMenuInputs] = useState();
   const [formData, setFormData] = useState({});
 
   const fetchCategories = async () => {
     try {
       const data = await getCategories();
-      if(data.success){
+      if (data.success) {
         setCategories(data.data)
-      }else{
+      } else {
         toast.error(data.message)
       }
     } catch (err) {
@@ -85,9 +119,9 @@ export default function AddProperty() {
   const fetchInputs = async () => {
     try {
       const data = await getInputs(selectedSubCategoryId);
-      if(data.success){
+      if (data.success) {
         setMenuInputs(data.inputs)
-      }else{
+      } else {
         toast.error(data.message)
       }
     } catch (err) {
@@ -98,19 +132,19 @@ export default function AddProperty() {
   useEffect(() => {
     fetchInputs();
   }, [selectedSubCategoryId]);
-  
-  
+
+
   const handleCategoryChange = (category) => {
     setFormData({})
     setSelectedCategory(category);
     const selectedSubCategories = category.subMenus || [];
-    setSubCategories(selectedSubCategories); 
+    setSubCategories(selectedSubCategories);
     setSelectedSubCategoryId(null);
   };
 
   const handleSubCategoryChange = (subCategory) => {
     setFormData({})
-    setSelectedSubCategoryId(subCategory.id); 
+    setSelectedSubCategoryId(subCategory.id);
   };
 
   const handleChange = (id, value) => {
@@ -120,38 +154,53 @@ export default function AddProperty() {
     }));
   };
 
+
+  useEffect(() => {
+    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+    console.log(landsUser, ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,")
+  }, [])
+
   const handleSubmit = async () => {
+
+    // const landsUser = JSON.parse(localStorage.getItem('landsUser'));
+
+    // if (landsUser?.type === 'Seller') {
+
     const PropertiesInput = Object.entries(formData).map(([inputId, value]) => ({
-      inputId: Number(inputId),
-      value,
+      input_id: Number(inputId),
+      input_value: value,
     }));
 
     const payload = {
       propertiesPost: {
-        sellerId: 1, // Replace with dynamic sellerId if needed
         subMenuId: selectedSubCategoryId,
-        status: "active",
+        sellerId: 4,
+        images
       },
       PropertiesInput,
     };
 
-    console.log(payload , "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
-    // try {
-    //   const response = await axios.post("http://localhost:4400/property/add-property", payload, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
+    try {
+      const data = await createNewProperty(payload);
+      if (data.success) {
+        setMenuInputs(data.inputs)
+      } else {
+        toast.error(data.message)
+      }
+    } catch (err) {
+      console.error('Error fetching categories:', err);
+    }
 
-    //   if (response.data.success) {
-    //     toast.success("Property added successfully!");
-    //   } else {
-    //     toast.error(response.data.message);
-    //   }
-    // } catch (error) {
-    //   console.error("Error submitting property:", error);
-    //   toast.error("Failed to add property");
+    // }else{
+
+    //   console.log(landsUser , landsUser?.id , landsUser?.type , "ppppppppppppppppppppppp")
+    //   // toast.error("Seller Not Found")
+    //   // setTimeout(() => {
+    //   //   window.location.href="/"
+    //   // }, 3000);
     // }
+
   };
 
   return (
@@ -191,23 +240,33 @@ export default function AddProperty() {
                   />
                 </svg>
                 Select photos
+                {/* <input
+                  type="file"
+                  className="ip-file"
+                  accept="image/*"
+                  multiple
+                  onChange={(e) => handleImageChange(e, images.length)}
+                /> */}
                 <input
                   type="file"
                   className="ip-file"
                   accept="image/*"
-                  onChange={(e) => handleImageChange(e, images.length)}
+                  multiple
+                  max={10 - images.length}
+                  disabled={images.length >= 10}
+                  onChange={(e) => handleImageChange(e)}
                 />
               </a>
               <p className="file-name fw-5">
                 or drag photos here <br />
-                <span>(Up to 10 photos)</span>
+                <span>(Up to {10 - images.length} photos)</span>
               </p>
             </div>
           </div>
           <div className="box-img-upload">
-            {images.map((imgSrc, index) => (
+            {images.map((img, index) => (
               <div key={index} className="item-upload file-delete">
-                <img alt="img" src={imgSrc} width={615} height={405} />
+                <img alt={`Uploaded preview ${index + 1}`} src={img.preview} width={615} height={405} />
                 <span
                   className="icon icon-trash remove-file"
                   onClick={() => handleDelete(index)}
@@ -224,7 +283,7 @@ export default function AddProperty() {
                 <label htmlFor="neighborhood">
                   Category
                 </label>
-                <DropdownSelect 
+                <DropdownSelect
                   options={categories?.map((category) => category.name)} // Assuming categories have a 'name' field
                   onChange={(selectedCategory) => {
                     const category = categories.find((cat) => cat.name === selectedCategory);
@@ -232,21 +291,21 @@ export default function AddProperty() {
                   }}
                 />
               </fieldset>
-            <fieldset className="box-fieldset">
+              <fieldset className="box-fieldset">
                 <label htmlFor="neighborhood">
                   Sub Category
                 </label>
 
-                <DropdownSelect   
+                <DropdownSelect
                   options={subCategories.length > 0 ? subCategories.map(subCat => subCat.name) : ["None"]}
                   onChange={(selectedSubCategory) => {
                     const subCategory = subCategories.find((sub) => sub.name === selectedSubCategory);
                     handleSubCategoryChange(subCategory);
-                  }} 
+                  }}
                 />
               </fieldset>
             </div>
-            
+
           </div>
         </div>
         <div className="widget-box-2 mb-20">
@@ -255,7 +314,7 @@ export default function AddProperty() {
               <div className="box grid-2 gap-30">
                 {menuInputs?.length && menuInputs.map((input, index) => {
                   const { id, input_name, input_type, options, required } = input;
-                  
+
                   let inputField = null;
                   switch (input_type) {
                     case "text":
@@ -467,12 +526,12 @@ export default function AddProperty() {
                   return inputField;
                 })}
               </div>
-            ):(
+            ) : (
               <div className="box grid-2 gap-30">
                 {/* <h3>No Inputs</h3> */}
               </div>
             )}
-         
+
           </div>
         </div>
 

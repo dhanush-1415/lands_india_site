@@ -80,10 +80,17 @@
 }
 @media (max-width: 575px) {
   .non-swiper-on-575 {
-    display: none;
+    display: flex;
+  }
+  .tf-layout-mobile-sm{
+    display: flex;
+    flex-direction: column;
+  }
+  .swiper-slide{
+    margin-top: 40px;
   }
   .swiper-on-575 {
-    display: block;
+    display: flex;
   }
 }
 .swiper-on-767 {

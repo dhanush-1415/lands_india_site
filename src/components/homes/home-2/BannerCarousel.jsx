@@ -117,7 +117,9 @@ export default function BottomCarousel() {
                     align-items:center;
                 }
                 .custom-last-two{
-                    display;flex;
+                        width:100%;
+                    display:flex;
+                    flex-direction:row;
                 }
                 @media (max-width: 768px) {
                     .list-header-custom {

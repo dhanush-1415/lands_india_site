@@ -1,18 +1,18 @@
 export const blogPosts = [
   {
     id: 1,
-    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMwlDkFzqaVanOqZ0ZLRXtdfiipnZc2SY4Hw&s",
+    imgSrc: "https://c8.alamy.com/comp/ERMBBJ/blogging-website-and-internet-concept-banner-with-blog-word-sign-on-ERMBBJ.jpg",
     alt: "img-blog",
     date: "January 28, 2024",
-    author: "Sundar Rajan",
+    author: "ARCHITECTURE",
     category: "Real Estate",
-    title: "Building gains into housing stocks and how to trade the sector",
+    title: "Private Contemporary Home Balancing Openness",
     description:
       "The average contract interest rate for 30-year fixed-rate mortgages with conforming loan balances...",
   },
   {
     id: 2,
-    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMwlDkFzqaVanOqZ0ZLRXtdfiipnZc2SY4Hw&s",
+    imgSrc: "https://c8.alamy.com/comp/ERMBBJ/blogging-website-and-internet-concept-banner-with-blog-word-sign-on-ERMBBJ.jpg",
     alt: "img-blog",
     date: "January 28, 2024",
     author: "Anjali Nair",
@@ -23,7 +23,7 @@ export const blogPosts = [
   },
   {
     id: 3,
-    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMwlDkFzqaVanOqZ0ZLRXtdfiipnZc2SY4Hw&s",
+    imgSrc: "https://c8.alamy.com/comp/ERMBBJ/blogging-website-and-internet-concept-banner-with-blog-word-sign-on-ERMBBJ.jpg",
     alt: "img-blog",
     date: "January 28, 2024",
     author: "Ravi Shankar",
