@@ -655,29 +655,29 @@ export default function Properties4() {
                             </div>
                             <div className="content-bottom mt-3">
                               <div
-                                className="d-flex justify-content-center align-items-center shadow-sm mt-3"
+                                className="d-flex justify-content-center align-items-center shadow-sm mt-1"
                                 style={{
                                   cursor: 'pointer',
                                   fontWeight: 'bold',
                                   background: '#018df7',
                                   color: '#ffffff',
-                                  padding: '10px 5px',
+                                  padding: '10px 10px',
                                   borderRadius: '0px',
                                   textAlign: 'center',
                                 }}
                               >
                                 <DraftsTwoToneIcon sx={{ marginRight: '5px' }} />
-                                <span>Enquiry Now</span>
+                                <span style={{fontSize: '14px'}}>Enquiry Now</span>
                               </div>
                               <div
-                                className="d-flex justify-content-around mt-3"
+                                className="d-flex justify-content-around mt-1"
                                 style={{ gap: '15px' }}
                               >
                                 <div
                                   className="d-flex justify-content-center align-items-center rounded-circle border shadow-sm"
                                   style={{
-                                    width: '50px',
-                                    height: '50px',
+                                    width: '44px',
+                                    height: '44px',
                                     cursor: 'pointer',
                                     background: '#ffffff',
                                   }}
@@ -687,8 +687,8 @@ export default function Properties4() {
                                 <div
                                   className="d-flex justify-content-center align-items-center rounded-circle border shadow-sm"
                                   style={{
-                                    width: '50px',
-                                    height: '50px',
+                                    width: '44px',
+                                    height: '44px',
                                     cursor: 'pointer',
                                     background: '#ffffff',
                                   }}
