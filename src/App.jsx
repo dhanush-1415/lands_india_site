@@ -43,6 +43,7 @@ import ReviewPage from "./pages/dashboard/reviews";
 import HelpAndSupport from "./pages/Help&Support/HelpAndSupport";
 import Agents from "./components/common/Agents";
 import ValueAddedServices from "./components/common/ValueAddedServices";
+import Events from "./components/common/Events";
 import Franchise from "./components/common/Franchise";
 import MyProfilePage from "./pages/dashboard/my-profile";
 import AddPropertyPage from "./pages/dashboard/add-property";
@@ -90,6 +91,7 @@ function App() {
 
               <Route path="properties" element={<SidebarGridPage />} />
               <Route path="support" element={<HelpAndSupport />} />
+              <Route path="events" element={<Events />} />
               <Route path="agents" element={<Agents />} />
               <Route path="franchise" element={<Franchise />} />
               <Route path="value-added-services" element={<ValueAddedServices />} />

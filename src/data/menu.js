@@ -15,7 +15,7 @@ export const menuItems = [
   // },
   {
     title: "Events",
-    link:'/',
+    link:'/events',
   },
   {
     title: "Franchises",

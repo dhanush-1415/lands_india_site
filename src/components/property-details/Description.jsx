@@ -16,7 +16,7 @@ export default function Description({propertyDetails}) {
       <p className="text-variant-1 mb-8 ">
        {propertyDetails.description}
       </p>
-      {propertyDetails?.descriptions?.length &&
+      {/* {propertyDetails?.descriptions?.length &&
         <ul>
           {propertyDetails.descriptions?.map((item, index) => (
             <li key={index}>
@@ -37,7 +37,7 @@ export default function Description({propertyDetails}) {
       <p className="mt-8 text-variant-1">
         <strong style={{fontWeight:'bold'}}>NearBy: </strong>{propertyDetails.nearbyAreas}
       </p>
-      }
+      } */}
       
       {/* <a href="#" className="btn-view">
         <span className="text">View More</span>

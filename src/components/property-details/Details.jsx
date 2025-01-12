@@ -15,7 +15,7 @@ export default function Details() {
   return (
     <>
       {" "}
-      <h5 className="title fw-6">Property Details</h5>
+      <h5 className="title fw-6">Additional Details</h5>
       <div className="row">
         {items.map((item, index) => (
           <div className="col-md-6" key={index}>
