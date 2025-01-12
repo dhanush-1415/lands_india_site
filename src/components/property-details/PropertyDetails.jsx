@@ -19,10 +19,18 @@ export default function PropertyDetails({propertyDetails , additionalInformation
   console.log(propertyDetails , additionalInformation , "pppppppppppppppppppppppppppppppppppppp")
   return (
     <>
-      <section className="flat-section-v3 flat-property-detail">
-        <div className="container">
+      <section className="flat-section-v3 flat-property-detail" style={{background:'#f0f3f4'}}>
+        <style>
+          {`
+            .custom-cont-full{
+              width:89%;
+              margin:0px auto;
+            }
+          `}
+        </style>
+        <div  className="custom-cont-full" style={{ width:'89% !important', margin:'0px auto'}} >
           <div className="row">
-            <div className="col-xl-8 col-lg-7">
+            <div className="col-xl-8 col-lg-6" style={{background:'#ffffff',padding:'30px'}}>
               <div className="single-property-element single-property-desc">
                 <Description propertyDetails={propertyDetails} />
               </div>
@@ -32,28 +40,28 @@ export default function PropertyDetails({propertyDetails , additionalInformation
               {/* <div className="single-property-element single-property-video">
                 <Video />
               </div> */}
-              {/* <div className="single-property-element single-property-info">
+              <div className="single-property-element single-property-info">
                 <Details />
-              </div> */}
+              </div>
               {/* <div className="single-property-element single-property-feature">
                 <Features />
-              </div> */}
-              {/* <div className="single-property-element single-property-map">
+              </div>
+              <div className="single-property-element single-property-map">
                 <MapLocation />
-              </div> */}
-              {/* <div className="single-property-element single-property-floor">
+              </div>
+              <div className="single-property-element single-property-floor">
                 <FloorPlan />
               </div>
               <div className="single-property-element single-property-attachments">
                 <AttachMents />
-              </div> */}
-              {/* <div className="single-property-element single-property-explore">
+              </div>
+              <div className="single-property-element single-property-explore">
                 <Explore />
-              </div> */}
-              {/* <div className="single-property-element single-property-loan">
+              </div>
+              <div className="single-property-element single-property-loan">
                 <LoanCalculator />
-              </div> */}
-              {/* <div className="single-property-element single-property-nearby">
+              </div>
+              <div className="single-property-element single-property-nearby">
                 <Nearby />
               </div>
               <div className="single-property-element single-wrapper-review">
@@ -61,8 +69,8 @@ export default function PropertyDetails({propertyDetails , additionalInformation
               </div> */}
             </div>
             <div className="col-xl-4 col-lg-5">
-              <div className="single-sidebar fixed-sidebar">
-                <div className="widget-box single-property-contact">
+              <div className="single-sidebar fixed-sidebar" style={{background:'#ffffff'}} >
+                <div className="widget-box single-property-contact" style={{borderRadius:'0px'}}>
                   <ContactSeller />
                 </div>
                 {/* <div className="flat-tab flat-tab-form widget-filter-search widget-box">

@@ -4,12 +4,12 @@ import { Grid } from "@mui/material";
 export default function Overview({ additionalInformation }) {
   return (
     <>
-      <h6 className="title fw-6">Overview</h6>
+      <h5 className="mt-8 fw-6 title">Overview</h5>
       <ul className="info-box">
         <Grid container spacing={2}>
           {/* <Grid item xs={12} sm={6} md={4}>
             <li className="item">
-              <a href="#" className="box-icon w-52">
+              <a className="box-icon w-52">
                 <i className="icon icon-sliders-horizontal" />
               </a>
               <div className="content">
@@ -21,7 +21,7 @@ export default function Overview({ additionalInformation }) {
 
           <Grid item xs={12} sm={6} md={4}>
             <li className="item">
-              <a href="#" className="box-icon w-52">
+              <a className="box-icon w-52">
                 <i className="icon icon-garage" />
               </a>
               <div className="content">
@@ -33,7 +33,7 @@ export default function Overview({ additionalInformation }) {
 
           <Grid item xs={12} sm={6} md={4}>
             <li className="item">
-              <a href="#" className="box-icon w-52">
+              <a className="box-icon w-52">
                 <i className="icon icon-bed1" />
               </a>
               <div className="content">
@@ -45,7 +45,7 @@ export default function Overview({ additionalInformation }) {
 
           <Grid item xs={12} sm={6} md={4}>
             <li className="item">
-              <a href="#" className="box-icon w-52">
+              <a className="box-icon w-52">
                 <i className="icon icon-bathtub" />
               </a>
               <div className="content">
@@ -57,7 +57,7 @@ export default function Overview({ additionalInformation }) {
 
           <Grid item xs={12} sm={6} md={4}>
             <li className="item">
-              <a href="#" className="box-icon w-52">
+              <a className="box-icon w-52">
                 <i className="icon icon-crop" />
               </a>
               <div className="content">
@@ -69,7 +69,7 @@ export default function Overview({ additionalInformation }) {
 
           <Grid item xs={12} sm={6} md={4}>
             <li className="item">
-              <a href="#" className="box-icon w-52">
+              <a className="box-icon w-52">
                 <i className="icon icon-hammer" />
               </a>
               <div className="content">
@@ -81,7 +81,7 @@ export default function Overview({ additionalInformation }) {
 
           <Grid item xs={12} sm={6} md={4}>
             <li className="item">
-              <a href="#" className="box-icon w-52">
+              <a className="box-icon w-52">
                 <i className="icon icon-ruler" />
               </a>
               <div className="content">
@@ -93,7 +93,7 @@ export default function Overview({ additionalInformation }) {
 
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
-                <a href="#" className="box-icon w-52">
+                <a className="box-icon w-52">
                   <i className="bx bx-home"></i>
                 </a>
                 <div className="content">
@@ -106,7 +106,7 @@ export default function Overview({ additionalInformation }) {
             {/* Bathrooms */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
-                <a href="#" className="box-icon w-52">
+                <a className="box-icon w-52">
                   <i className="bx bx-bath"></i>
                 </a>
                 <div className="content">
@@ -119,7 +119,7 @@ export default function Overview({ additionalInformation }) {
             {/* Furnished */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
-                <a href="#" className="box-icon w-52">
+                <a className="box-icon w-52">
                 <i class='bx bx-chair' ></i>
                 </a>
                 <div className="content">
@@ -132,7 +132,7 @@ export default function Overview({ additionalInformation }) {
             {/* Floor Type */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
-                <a href="#" className="box-icon w-52">
+                <a className="box-icon w-52">
                   <i className="bx bx-grid"></i>
                 </a>
                 <div className="content">
@@ -145,7 +145,7 @@ export default function Overview({ additionalInformation }) {
             {/* Property Age */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
-                <a href="#" className="box-icon w-52">
+                <a className="box-icon w-52">
                   <i className="bx bx-time"></i>
                 </a>
                 <div className="content">
@@ -158,7 +158,7 @@ export default function Overview({ additionalInformation }) {
             {/* Car Parking */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
-                <a href="#" className="box-icon w-52">
+                <a className="box-icon w-52">
                   <i className="bx bx-car"></i>
                 </a>
                 <div className="content">
@@ -171,7 +171,7 @@ export default function Overview({ additionalInformation }) {
             {/* Frontage */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
-                <a href="#" className="box-icon w-52">
+                <a className="box-icon w-52">
                   <i className="bx bx-ruler"></i>
                 </a>
                 <div className="content">
@@ -184,7 +184,7 @@ export default function Overview({ additionalInformation }) {
             {/* Facing */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
-                <a href="#" className="box-icon w-52">
+                <a className="box-icon w-52">
                   <i className="bx bx-compass"></i>
                 </a>
                 <div className="content">
@@ -197,7 +197,7 @@ export default function Overview({ additionalInformation }) {
             {/* EB Connection */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
-                <a href="#" className="box-icon w-52">
+                <a className="box-icon w-52">
                   <i class='bx bxs-plug' ></i>
                 </a>
                 <div className="content">
@@ -210,7 +210,7 @@ export default function Overview({ additionalInformation }) {
             {/* Has Solar */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
-                <a href="#" className="box-icon w-52">
+                <a className="box-icon w-52">
                   <i className="bx bx-sun"></i>
                 </a>
                 <div className="content">
@@ -223,7 +223,7 @@ export default function Overview({ additionalInformation }) {
             {/* Water */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
-                <a href="#" className="box-icon w-52">
+                <a className="box-icon w-52">
                   <i className="bx bx-water"></i>
                 </a>
                 <div className="content">
@@ -236,7 +236,7 @@ export default function Overview({ additionalInformation }) {
             {/* Compound */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
-                <a href="#" className="box-icon w-52">
+                <a className="box-icon w-52">
                   <i class='bx bx-border-outer'></i>
                 </a>
                 <div className="content">
@@ -249,7 +249,7 @@ export default function Overview({ additionalInformation }) {
             {/* Ceiling */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
-                <a href="#" className="box-icon w-52">
+                <a className="box-icon w-52">
                 <i class='bx bx-vertical-top'></i>
                 </a>
                 <div className="content">
@@ -262,7 +262,7 @@ export default function Overview({ additionalInformation }) {
             {/* Rental Income */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
-                <a href="#" className="box-icon w-52">
+                <a className="box-icon w-52">
                   <i className="bx bx-rupee"></i>
                 </a>
                 <div className="content">
@@ -275,7 +275,7 @@ export default function Overview({ additionalInformation }) {
             {/* Road Width */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
-                <a href="#" className="box-icon w-52">
+                <a className="box-icon w-52">
                 <i class='bx bx-reflect-vertical'></i>
                 </a>
                 <div className="content">
@@ -288,7 +288,7 @@ export default function Overview({ additionalInformation }) {
             {/* Garden */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
-                <a href="#" className="box-icon w-52">
+                <a className="box-icon w-52">
                 <i class='bx bxs-tree'></i>
                 </a>
                 <div className="content">

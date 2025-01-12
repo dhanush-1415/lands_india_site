@@ -1,32 +1,18 @@
 import { allProperties } from "@/data/properties";
 import React from "react";
 
-export default function DetailsTitle1({ propertyItem}) {
+export default function DetailsTitle1({ propertyItem }) {
   return (
-    <div className="flat-section-v4">
-      <div className="container">
-      {/* {
-        title: "#On-road New House sale in Udumalpet"
-      price: " 97,00,000",
-        postedBy: "Owner",
-        postedDate: "Sep 25, 2024",
-        description: "On-road New Residential House for Sale in Udumalpet",
-        amenities: [
-          "North Facing",
-          "Semi - Furnished House",
-          "EB connection available",
-          "Water supply available",
-          "DTCP Approved Property"
-        ],
-        locationDetails: [
-          "This On-road property located 60 meters from the main road",
-          "100 meter from Dharapuram main road",
-          "Located in Gated community"
-        ],
-        nearbyAreas: [
-          "Newly by-pass road work going on from 600m from the property which is visible from our property"
-        ]
-      }, */}
+    <div className="flat-section-v43" style={{ padding: '30px 0' }}>
+      <style>
+        {`
+            .custom-cont-full{
+              width:89%;
+              margin:0px auto;
+            }
+          `}
+      </style>
+      <div className="custom-cont-full">
         <div className="header-property-detail">
           <div className="content-top d-flex justify-content-between align-items-center">
             <h3 className="title link fw-8">{propertyItem.title}</h3>
@@ -77,6 +63,17 @@ export default function DetailsTitle1({ propertyItem}) {
                 </ul>
               </div>
               } */}
+            </div>
+            <div>
+              <div className="info-box">
+                <div className="label">Square feet</div>
+                <p className="meta-item">
+                  <span className="icon icon-sqft" />
+                  <span className="text-variant-1">
+                    2300Sqft
+                  </span>
+                </p>
+              </div>
             </div>
             {/* <ul className="icon-box">
               <li>
