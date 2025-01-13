@@ -155,17 +155,11 @@ export default function AddProperty() {
   };
 
 
-  useEffect(() => {
-    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
-
-    console.log(landsUser, ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,")
-  }, [])
-
   const handleSubmit = async () => {
 
-    // const landsUser = JSON.parse(localStorage.getItem('landsUser'));
+    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
-    // if (landsUser?.type === 'Seller') {
+    if (landsUser?.type === 'Seller' || landsUser?.type === 'Buyer') {
 
     const PropertiesInput = Object.entries(formData).map(([inputId, value]) => ({
       input_id: Number(inputId),
@@ -175,7 +169,7 @@ export default function AddProperty() {
     const payload = {
       propertiesPost: {
         subMenuId: selectedSubCategoryId,
-        sellerId: 4,
+        sellerId: 6,
         images
       },
       PropertiesInput,
@@ -184,22 +178,22 @@ export default function AddProperty() {
     try {
       const data = await createNewProperty(payload);
       if (data.success) {
-        setMenuInputs(data.inputs)
+        setMenuInputs(null)
+        toast.success("Property Created Successfully");
+        setImages([]);
       } else {
-        toast.error(data.message)
+        toast.error(data.message || data.error || "Something Went Wrong")
       }
     } catch (err) {
       console.error('Error fetching categories:', err);
     }
 
-    // }else{
-
-    //   console.log(landsUser , landsUser?.id , landsUser?.type , "ppppppppppppppppppppppp")
-    //   // toast.error("Seller Not Found")
-    //   // setTimeout(() => {
-    //   //   window.location.href="/"
-    //   // }, 3000);
-    // }
+    }else{
+      toast.error("Seller Not Found")
+      setTimeout(() => {
+        window.location.href="/"
+      }, 4000);
+    }
 
   };
 

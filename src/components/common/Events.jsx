@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Divider } from "@mui/material";
 import { Button } from "react-bootstrap";
-import { getAgents } from "@/apiCalls";
+import { getEventsList } from "@/apiCalls";
 import DropdownSelect from "./DropdownSelect";
 
 import Pagination from "./Pagination";
@@ -23,7 +23,7 @@ export default function Events() {
 
     const fetchAgents = async () => {
         try {
-            const data = await getAgents();
+            const data = await getEventsList();
             if (data.success) {
                 setData(data.data)
             } else {
