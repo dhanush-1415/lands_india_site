@@ -18,6 +18,35 @@ const DashboardPage = () => {
     { id: "add-property", icon: <FaEnvelope />, label: "Add Property" },
   ];
 
+
+  const handleLogout = () => {
+    // Clear user data and navigate to the login page
+    localStorage.removeItem("LandsUser");
+    toast.success("Logout Sucessful")
+    setTimeout(() => {
+      window.location.href = "/"
+    }, 4000);
+  }
+
+  const landsUser = JSON.parse(localStorage.getItem("LandsUser"));
+
+  // Filter menu items based on user type
+  const filteredMenuItems = menuItems.filter((item) => {
+    if (landsUser?.type === "Agent" || landsUser?.type === "B2B") {
+      return item.id !== "my-property" && item.id !== "add-property";
+    }
+    return true;
+  });
+
+  // Add the Logout menu item
+  const finalMenuItems = [
+    ...filteredMenuItems,
+    { id: "logout", icon: null, label: "Logout", action: handleLogout },
+  ];
+
+
+
+
   const handleCollapse = () => setIsCollapsed(!isCollapsed);
 
   return (
@@ -31,9 +60,48 @@ const DashboardPage = () => {
         }}
       >
         <div className="d-flex flex-column align-items-center py-3 h-100" >
-  
+
           <div className="flex-grow-1 w-100">
-            {menuItems.map((item) => (
+            {finalMenuItems.map((item) => (
+              <div className="widget-sidebar fixed-sidebar" key={item.id} style={{cursor:'pointer'}}>
+                <div
+                  className="flat-tab flat-tab-form widget-filter-search widget-box"
+                  style={{ margin: "0px 10px 15px", padding: "0" }}
+                >
+                  <div className="tab-content">
+                    <div className="tab-pane fade active show" role="tabpanel">
+                      <div className="form-sl">
+                        <div
+                          className="wd-filter-select"
+                          style={{ boxShadow: "none", marginTop: "0" }}
+                        >
+                          <div className="inner-group">
+                            <div className="box">
+                              <div
+                                className="form-style"
+                                onClick={() =>
+                                  item.id === "logout" ? item.action() : setActivePage(item.id)
+                                }
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  flexDirection: "row",
+                                  padding: "20px 10px",
+                                }}
+                              >
+                                <span>{item.label}</span>
+                                {item.id !== "logout" && <KeyboardArrowRightIcon />}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+            {/* {menuItems.map((item) => (
               <div className="widget-sidebar fixed-sidebar" key={item.id} >
                 <div className="flat-tab flat-tab-form widget-filter-search widget-box" style={{ margin: '0px 10px 15px', padding: '0' }}>
 
@@ -69,13 +137,26 @@ const DashboardPage = () => {
               //   <span className="me-3">{item.icon}</span>
               //   {!isCollapsed && <span>{item.label}</span>}
               // </div>
-            ))}
+            ))} */}
           </div>
         </div>
       </div>
+      <style>
+        {`
+          .custom-dashboard-header {
+            height: 800px; /* Corrected typo from "hight" to "height" */
+            overflow: auto;
+            scrollbar-width: none; /* Hides scrollbar in Firefox */
+          }
 
+          /* For WebKit-based browsers like Chrome, Edge, and Safari */
+          .custom-dashboard-header::-webkit-scrollbar {
+            display: none;
+          }
+        `}
+      </style>
       {/* Dynamic Content */}
-      <div className="flex-grow-1 bg-light p-4" style={{width:'75%'}}>
+      <div className="flex-grow-1 bg-light p-4 custom-dashboard-header" style={{ width: '75%' }}>
         <div className="layout-wrap">
           {activePage === 'Dashboard' ? (
             <Dashboard />
