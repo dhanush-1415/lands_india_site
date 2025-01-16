@@ -645,21 +645,21 @@ export default function Properties() {
                             </h6>
                             <ul className="meta-list" style={{ paddingLeft: '0px' }}>
                               <li className="item">
-                                <i className="icon icon-bed" style={{ fontSize: '25px' }} />
+                                <i className="icon icon-bed" style={{ fontSize: '20px' }} />
                                 <span className="text-variant-1">Beds:</span>
                                 <span className="fw-6">{
                                   elm.inputs.find(item => item.input_name === "beds")?.input_value || ""
                                 }</span>
                               </li>
                               <li className="item">
-                                <i className="icon icon-bath" style={{ fontSize: '25px' }} />
+                                <i className="icon icon-bath" style={{ fontSize: '20px' }} />
                                 <span className="text-variant-1">Baths:</span>
                                 <span className="fw-6">{
                                   elm.inputs.find(item => item.input_name === "baths")?.input_value || ""
                                 }</span>
                               </li>
                               <li className="item">
-                                <i className="icon icon-sqft" style={{ fontSize: '25px' }} />
+                                <i className="icon icon-sqft" style={{ fontSize: '20px' }} />
                                 <span className="text-variant-1">Sqft:</span>
                                 <span className="fw-6">{
                                   elm.inputs.find(item => item.input_name === "sqft")?.input_value || ""
@@ -697,7 +697,7 @@ export default function Properties() {
                                 textAlign: 'center',
                               }}
                             >
-                              <DraftsTwoToneIcon sx={{ marginRight: '5px' }} />
+                              <DraftsTwoToneIcon sx={{ marginRight: '5px', fontSize: '20px'  }} />
                               <span style={{ fontSize: '14px' }}>Enquiry Now</span>
                             </div>
                             <div

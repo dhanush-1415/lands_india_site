@@ -48,10 +48,6 @@ export const rightMenuItems = [
     title: "Value Added Services",
     link:'/value-added-services',
   },
-  {
-    title: "Sell Property",
-    link:'/',
-  },
   // {
   //   title: "Login/Register",
   //   link:'#modalLogin',

@@ -15,8 +15,12 @@ export default function AddProperty() {
 
   const [images, setImages] = useState([]);
 
+  const [location, setLocation] = useState('')
+  const [price, setPrice] = useState('')
 
-  const handlePrevChange = (inputId, value) => {
+  const handlePrevChange = (inputId, value, input_name) => {
+    console.log("ddddddddd", input_name);
+    
     setUpdatedData(prevState => {
       const updatedInputs = prevState[0]?.inputs?.map(input =>
         input.id === inputId ? { ...input, input_value: value } : input
@@ -35,32 +39,31 @@ export default function AddProperty() {
       location: item.location,
       price: item.price,
       status: item.status,
-      file_path: item.file_path,
+      updatedFiles: item.file_path,
       isPremium: item.isPremium,
       createdAt: item.createdAt,
     }));
 
     // Extract the inputs and create the "propertyInputs" array
     const propertyInputs = updatedData.flatMap(item => item.inputs.map(input => ({
-      id: input.id,
       properties_postId: input.properties_postId,
       input_id: input.input_id,
       input_value: input.input_value,
     })));
 
     // Extract the input names, types, and options to create the "inputs" array
-    const inputs = updatedData.flatMap(item => item.inputs.map(input => ({
-      id: input.input_id,
-      input_name: input.input_name,
-      input_type: input.input_type,
-      options: input.options,
-    })));
+    // const inputs = updatedData.flatMap(item => item.inputs.map(input => ({
+    //   id: input.input_id,
+    //   input_name: input.input_name,
+    //   input_type: input.input_type,
+    //   options: input.options,
+    // })));
 
     // Return the final structured data
     return {
       properties,
       propertyInputs,
-      inputs,
+      // inputs,
     };
   };
 
@@ -68,6 +71,8 @@ export default function AddProperty() {
     const structuredData = transformData(updatedData);
 
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+    console.log(structuredData, "ooooo");
+    
 
     const payLoad = {
       data : structuredData,
@@ -244,7 +249,10 @@ export default function AddProperty() {
     setSelectedSubCategoryId(subCategory.id);
   };
 
-  const handleChange = (id, value) => {
+  const handleChange = (id, value, name) => {
+    name == "location" && setLocation(value) 
+    name == "price" && setPrice(value) 
+    
     setFormData((prev) => ({
       ...prev,
       [id]: value,
@@ -267,6 +275,8 @@ export default function AddProperty() {
         propertiesPost: {
           subMenuId: selectedSubCategoryId,
           sellerId: landsUser.id,
+          location: location,
+          price: price,
           images
         },
         PropertiesInput,
@@ -423,7 +433,7 @@ export default function AddProperty() {
                               className="form-control"
                               placeholder={`Enter ${input_name}`}
                               value={input_value || ""}
-                              onChange={(e) => handlePrevChange(input.id, e.target.value)}
+                              onChange={(e) => handlePrevChange(input.id, e.target.value, input_name)}
                             />
                           </fieldset>
                         );
@@ -460,7 +470,7 @@ export default function AddProperty() {
                               className="form-control"
                               placeholder={`Enter ${input_name}`}
                               value={input_value || ""}
-                              onChange={(e) => handlePrevChange(input.id, e.target.value)}
+                              onChange={(e) => handlePrevChange(input.id, e.target.value, input_name)}
                             />
                           </fieldset>
                         );
@@ -636,7 +646,7 @@ export default function AddProperty() {
                               name={input_name}
                               className="form-control"
                               placeholder={`Enter ${input_name}`}
-                              onChange={(e) => handleChange(input.id, e.target.value)}
+                              onChange={(e) => handleChange(input.id, e.target.value, input_name)}
                             />
                           </fieldset>
                         );
@@ -653,7 +663,7 @@ export default function AddProperty() {
                               name={input_name}
                               className="textarea"
                               placeholder={`Enter ${input_name}`}
-                              onChange={(e) => handleChange(input.id, e.target.value)}
+                              onChange={(e) => handleChange(input.id, e.target.value, input_name)}
                             />
                           </fieldset>
                         );
@@ -671,7 +681,7 @@ export default function AddProperty() {
                               name={input_name}
                               className="form-control"
                               placeholder={`Enter ${input_name}`}
-                              onChange={(e) => handleChange(input.id, e.target.value)}
+                              onChange={(e) => handleChange(input.id, e.target.value, input_name)}
                             />
                           </fieldset>
                         );
@@ -687,7 +697,7 @@ export default function AddProperty() {
                               id={input_name}
                               name={input_name}
                               className="form-control"
-                              onChange={(e) => handleChange(input.id, e.target.value)}
+                              onChange={(e) => handleChange(input.id, e.target.value, input_name)}
                             >
                               <option>
                                 Select

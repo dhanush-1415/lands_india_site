@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DropdownSelect from "../common/DropdownSelect";
 import { Link } from "react-router-dom";
 import AttachEmailSharpIcon from '@mui/icons-material/AttachEmailSharp';
@@ -48,6 +48,8 @@ export default function Properties4() {
   const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState("");
+
+  const loaderRef = useRef(null);
 
   const clearFilter = () => {
     setPrice([1800, 5500]);
@@ -270,18 +272,44 @@ export default function Properties4() {
     setOpen(false);
   };
 
-
   const handleScroll = (event) => {
-    const bottom = event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight;
-    console.log(bottom, loading, "Scroll Position");
+    fetchProperties();
+    // const bottom = event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight;
+    // console.log(bottom, loading, "Scroll Position");
 
-    // Allow a small tolerance, e.g., 5px, to trigger loading when close to the bottom
-    if (bottom || event.target.scrollHeight - event.target.scrollTop <= event.target.clientHeight + 5) {
-      if (!loading) {
-        fetchProperties();
-      }
-    }
+    // // Allow a small tolerance, e.g., 5px, to trigger loading when close to the bottom
+    // if (bottom || event.target.scrollHeight - event.target.scrollTop <= event.target.clientHeight + 5) {
+    //   if (!loading) {
+    //     fetchProperties();
+    //   }
+    // }
   };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          handleScroll(); // Call the function when loader is visible
+        }
+      },
+      {
+        root: null, // Default is viewport
+        rootMargin: "0px", // Trigger as soon as it's in the viewport
+        threshold: 1.0, // Fully visible
+      }
+    );
+
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+
+    return () => {
+      if (loaderRef.current) {
+        observer.unobserve(loaderRef.current);
+      }
+    };
+  }, [handleScroll]);
+
 
 
   const AllLocation = [
@@ -374,7 +402,7 @@ export default function Properties4() {
 
         </div>
 
-        <div className="box-filter-tab" >
+        <div className="box-filter-tab" style={{minWidth: '15%'}} >
 
           <DropdownSelect
             onChange={(option) => {
@@ -686,7 +714,7 @@ export default function Properties4() {
               >
 
                 <div className="row"
-                  style={{ maxHeight: '1000px', overflowY: 'auto' }} // Set height and enable scrolling
+                  style={{  }} // Set height and enable scrolling - 
                   onScroll={handleScroll} // Listen for scroll events
                 >
                   {properties.length ? (
@@ -793,21 +821,21 @@ export default function Properties4() {
                               </h6>
                               <ul className="meta-list" style={{ paddingLeft: '0px' }}>
                                 <li className="item">
-                                  <i className="icon icon-bed" style={{ fontSize: '25px' }} />
+                                  <i className="icon icon-bed" style={{ fontSize: '20px' }} />
                                   <span className="text-variant-1">Beds:</span>
                                   <span className="fw-6">{
                                     elm.inputs.find(item => item.input_name === "beds")?.input_value || ""
                                   }</span>
                                 </li>
                                 <li className="item">
-                                  <i className="icon icon-bath" style={{ fontSize: '25px' }} />
+                                  <i className="icon icon-bath" style={{ fontSize: '20px' }} />
                                   <span className="text-variant-1">Baths:</span>
                                   <span className="fw-6">{
                                     elm.inputs.find(item => item.input_name === "baths")?.input_value || ""
                                   }</span>
                                 </li>
                                 <li className="item">
-                                  <i className="icon icon-sqft" style={{ fontSize: '25px' }} />
+                                  <i className="icon icon-sqft" style={{ fontSize: '20px' }} />
                                   <span className="text-variant-1">Sqft:</span>
                                   <span className="fw-6">{
                                     elm.inputs.find(item => item.input_name === "sqft")?.input_value || ""
@@ -879,6 +907,7 @@ export default function Properties4() {
 
                           </div>
                         </div>
+                        {loading && <div ref={loaderRef} className="loader"></div>}
                       </div>
                     ))
                   ) : (
