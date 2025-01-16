@@ -42,7 +42,13 @@ export default function BottomBanner() {
                         }
                     `}
                 </style>
-                <div className="custom-desktop-view" style={{ width: '80%', margin: '20px auto', position: 'relative' }}>
+                <img
+                            src="http://luxcycs.com:4400/uploads/banner.png"
+                            alt="Background"
+                            width="90%"
+                            style={{ display: 'block', margin: 'auto' }}
+                        />
+                {/* <div className="custom-desktop-view" style={{ width: '80%', margin: '20px auto', position: 'relative' }}>
                     <div className="custom-empty" style={{ position: 'relative', width: '100%' }}>
                         <img
                             src="https://protywpv1.live.vithemes.com/wp-content/uploads/2024/11/ds.webp"
@@ -98,7 +104,6 @@ export default function BottomBanner() {
                             Reach our support team
                         </button>
                     </div>
-                    {/* Second Image */}
                     <img
                         src="https://protywpv1.live.vithemes.com/wp-content/uploads/2024/11/agent.webp"
                         alt="Overlay"
@@ -111,8 +116,9 @@ export default function BottomBanner() {
                             zIndex: 2,
                         }}
                     />
-                </div>
-                <div className="custom-mobile-view" style={{ margin: '20px auto', position: 'relative' }}>
+                </div> */}
+
+                {/* <div className="custom-mobile-view" style={{ margin: '20px auto', position: 'relative' }}>
                     <div className="custom-mobile-viewer" style={{ position: 'relative', width: '100%' }}>
                         <img
                             src="https://protywpv1.live.vithemes.com/wp-content/uploads/2024/11/ds.webp"
@@ -168,7 +174,7 @@ export default function BottomBanner() {
                             Reach our support team
                         </button>
                     </div>
-                </div>
+                </div> */}
 
             </section>
         </>
