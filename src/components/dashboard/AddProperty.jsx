@@ -18,8 +18,9 @@ export default function AddProperty() {
   const [location, setLocation] = useState('')
   const [price, setPrice] = useState('')
 
-  const handlePrevChange = (inputId, value, input_name) => {
-    console.log("ddddddddd", input_name);
+  const handlePrevChange = (inputId, value, name) => {
+    name == "location" && setLocation(value) 
+    name == "price" && setPrice(value) 
     
     setUpdatedData(prevState => {
       const updatedInputs = prevState[0]?.inputs?.map(input =>
@@ -75,6 +76,8 @@ export default function AddProperty() {
     
 
     const payLoad = {
+      location: location,
+      price: price,
       data : structuredData,
       images,
     }
@@ -107,6 +110,10 @@ export default function AddProperty() {
               const combined = data.properties.map((property) => {
                 const propertyInputs = data.propertyInputs?.filter(input => input.properties_postId === property.id);
 
+                const images = data.properties[0].file_path?.split(",")
+                images && setImages(images)
+                console.log("images",images);
+                
                 const inputsWithNames = propertyInputs.map((input) => {
                   const inputData = data.inputs.find(i => i.id === input.input_id);
                   return {
@@ -367,7 +374,7 @@ export default function AddProperty() {
           <div className="box-img-upload">
             {images.map((img, index) => (
               <div key={index} className="item-upload file-delete">
-                <img alt={`Uploaded preview ${index + 1}`} src={img.preview} width={615} height={405} />
+                <img alt={`Uploaded preview ${index + 1}`} src={img.preview || img} width={615} height={405} />
                 <span
                   className="icon icon-trash remove-file"
                   onClick={() => handleDelete(index)}
@@ -451,7 +458,7 @@ export default function AddProperty() {
                               className="textarea"
                               placeholder={`Enter ${input_name}`}
                               value={input_value || ""}
-                              onChange={(e) => handlePrevChange(input.id, e.target.value)}
+                              onChange={(e) => handlePrevChange(input.id, e.target.value,input_name)}
                             />
                           </fieldset>
                         );
@@ -487,7 +494,7 @@ export default function AddProperty() {
                               name={input_name}
                               className="form-control"
                               value={input_value || ""}
-                              onChange={(e) => handlePrevChange(input.id, e.target.value)}
+                              onChange={(e) => handlePrevChange(input.id, e.target.value, input_name)}
                             >
                               <option value="">Select</option>
                               {options?.map((option, idx) => (

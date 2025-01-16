@@ -24,7 +24,7 @@ export default function Agents() {
 
   const fetchAgents = async () => {
     try {
-      const data = await getAgents({ location, });
+      const data = await getAgents( location, service);
       if (data.success) {
         setData(data.data)
       } else {
@@ -39,6 +39,11 @@ export default function Agents() {
     fetchAgents();
   }, []);
 
+  useEffect(() => {
+    fetchAgents();
+    console.log(location, service);
+    
+  }, [location, service]);
 
   const [open, setOpen] = useState(false);
 

@@ -380,9 +380,20 @@ export const createNewProperty = async (data) => {
 };
 
 
-export const getAgents = async () => {
+export const getAgents = async (location, service) => {
+  
+  const searchParArr = [];
 
-  const url = `${baseUrl}/agent`;
+  if (location) {
+    searchParArr.push(`loation=${location}`);
+  }
+  if (service) {
+    searchParArr.push(`service=${service}`);
+  }
+
+  const url = `${baseUrl}/agent?`;
+
+  url += searchParArr.join('&')
 
   const options = {
     method: 'GET',
@@ -852,6 +863,8 @@ export const updateProperty = async (data) => {
 
   console.log("ddddd", data);
   
+  formData.append('price', data.price);
+  formData.append('location', data.location);
   formData.append('properties', JSON.stringify(data.data.properties));
   formData.append('propertyInputs', JSON.stringify(data.data.propertyInputs));
 
