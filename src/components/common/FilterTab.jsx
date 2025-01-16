@@ -29,7 +29,6 @@ export default function FilterTab({
     };
   }, []);
 
-
   const AllLocation = [
     { "id": 1, "name": "Ariyalur" },
     { "id": 2, "name": "Chengalpattu" },

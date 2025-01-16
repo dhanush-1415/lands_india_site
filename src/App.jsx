@@ -110,6 +110,7 @@ function App() {
               <Route path="add-property" element={<AddPropertyPage />} />
               <Route path="add-property/:id" element={<AddPropertyPage />} />
               <Route path="my-favorites" element={<MyFavoritePage />} />
+              <Route path="blog-detail/:id" element={<BlogDetailsPage />} />
 
 
 
