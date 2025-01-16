@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { UpdateUser, getUserDetails, UpdateUserPassword, createAgent, getAgentDetails, updateAgent } from "@/apiCalls";
+import { UpdateUser, getUserDetails, UpdateUserPassword, createAgent, getAgentDetails, createB2B, updateAgent, getB2BDetails } from "@/apiCalls";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import DropdownSelect from "../common/DropdownSelect";
@@ -14,19 +14,31 @@ export default function MyProfile() {
 
   const [isAgent, setAgent] = useState(false);
 
+  const [isB2B, setIsB2B] = useState(false);
+
   const [isNew, setIsNew] = useState(false);
 
-  const [agentArray, setAgentArray] = useState();
+  const [isNewB2B, setIsNewB2B] = useState(false);
+
+
+  const [B2BData, setB2BData] = useState({
+    id: '',
+    B2BAge: "",
+    B2BGender: "",
+    B2BService: "",
+    location: "",
+  });
+
+  console.log(isAgent,B2BData ,  isNew, isB2B, isNewB2B, "ooooooooooooooooooooooooooooo")
 
   
   const [agentData, setAgentData] = useState({
-    id:'',
+    id: '',
     agentAge: "",
     agentGender: "",
     agentService: "",
   });
 
-  console.log(agentData , "bbbbbbbb")
 
   useEffect(() => {
     const fetchAgentDetails = async () => {
@@ -41,7 +53,6 @@ export default function MyProfile() {
             console.log(data.data);
             if (data.data) {
               setIsNew(false);
-              setAgentArray(data.data)
               setAgentData({
                 id: data.data[0].adviser_id,
                 agentAge: data.data[0].age,
@@ -58,6 +69,32 @@ export default function MyProfile() {
           toast.error("Error fetching agent details");
         }
       }
+
+      if (landsUser?.type === 'B2B') {
+        setIsB2B(true);
+
+        try {
+          const data = await getB2BDetails(landsUser.phoneNumber);
+          if (data.success) {
+            if (data.data.length) {
+              setIsNewB2B(false);
+              setB2BData({
+                id: data.data[0].adviser_id,
+                agentAge: data.data[0].age,
+                agentGender: data.data[0].gender,
+                agentService: data.data[0].service,
+              })
+            } else {
+              setIsNewB2B(true)
+            }
+          } else {
+            toast.error(data.message || data.error || "Something Went Wrong");
+          }
+        } catch (error) {
+          toast.error(error, "Error fetching B2B details");
+        }
+      }
+
     };
 
     fetchAgentDetails();
@@ -180,11 +217,22 @@ export default function MyProfile() {
     validateAgentField(name, value);
   };
 
+  const updateB2BField = (e) => {
+    const { name, value } = e.target;
+    setB2BData({ ...B2BData, [name]: value });
+    // validateAgentField(name, value);
+  };
+
   const updateDropdownValue = (field, value) => {
     setAgentData({ ...agentData, [field]: value });
     validateAgentField(field, value);
   };
 
+
+  const updateB2BDropdownValue = (field, value) => {
+    setB2BData({ ...B2BData, [field]: value });
+    // validateAgentField(field, value);
+  };
   const validateAgentField = (field, value) => {
     let error = "";
     if (!value || value === "Select") {
@@ -236,16 +284,25 @@ export default function MyProfile() {
 
           const payload2 = {
             ...(avatar?.file ? { image: avatar } : {}),
-            ...(!isNew ? {id: agentData.id} : {}),
+            ...(!isNew ? { id: agentData.id } : {}),
+            ...(!isNewB2B ? { id: B2BData.id } : {}),
             fullName: formData.name,
             email: formData.email,
             phone: formData.mobileNumber,
-            gender: agentData.agentGender,
-            age: agentData.agentAge,
-            service: agentData.agentService,
+            ...(isNew ? {
+              gender: agentData.agentGender,
+              age: agentData.agentAge,
+              service: agentData.agentService,
+            } : {}),
+            ...(isNewB2B ? {
+              gender: B2BData.B2BGender,
+              age: B2BData.B2BAge,
+              professional: B2BData.B2BService,
+            } : {}),
           };
 
-          if (isAgent) {
+
+          if (isAgent === true) {
 
             if (isNew) {
               const data = await createAgent(payload2);
@@ -266,13 +323,33 @@ export default function MyProfile() {
             }
           } else {
 
-            const data = await UpdateUser(payload);
-
-            if (data.success) {
-              console.log(data);
-              toast.success("User updated successfully");
+            if (isB2B) {
+              if (isNewB2B) {
+                const data = await createB2B(payload2);
+                if (data.success) {
+                  console.log(data);
+                  toast.success("User updated successfully");
+                } else {
+                  toast.error(data.message || data.error || "Something Went Wrong");
+                }
+              } else {
+                const data = await updateAgent(payload2);
+                if (data.success) {
+                  console.log(data);
+                  toast.success("User updated successfully");
+                } else {
+                  toast.error(data.message || data.error || "Something Went Wrong");
+                }
+              }
             } else {
-              toast.error(data.message || data.error || "Something Went Wrong");
+              const data = await UpdateUser(payload);
+
+              if (data.success) {
+                console.log(data);
+                toast.success("User updated successfully");
+              } else {
+                toast.error(data.message || data.error || "Something Went Wrong");
+              }
             }
           }
 
@@ -522,7 +599,58 @@ export default function MyProfile() {
                 )}
               </div>
             )}
+            {isNewB2B && (
+              <div className="box-fieldset">
+                <label htmlFor="agentAge">
+                  Age:
+                </label>
+                <input
+                  type="number"
+                  name="B2BAge"
+                  value={B2BData.B2BAge}
+                  onChange={updateB2BField}
+                  className="form-control style-1"
+                />
+                {validationErrors.B2BAge && (
+                  <span className="error-message">{validationErrors.B2BAge}</span>
+                )}
+              </div>
+            )}
           </div>
+          {isNewB2B && (
+            <div className="box grid-2 gap-30">
+              <div className="box-fieldset">
+                <label htmlFor="B2BGender">
+                  Gender:
+                </label>
+                <DropdownSelect
+                  options={["Select", "Male", "Female", "Other"]}
+                  onChange={(value) => updateB2BDropdownValue("B2BGender", value)}
+                />
+                {validationErrors.B2BGender && (
+                  <span className="error-message">{validationErrors.B2BGender}</span>
+                )}
+              </div>
+
+              <div className="box-fieldset">
+                <label htmlFor="B2BService">
+                  Service:
+                </label>
+                <DropdownSelect
+                  options={[
+                    "Select",
+                    "RealEstate Broker",
+                    "RealEstate Promoter",
+                    "RealEstate Marketer",
+                  ]}
+                  onChange={(value) => updateB2BDropdownValue("B2BService", value)}
+                />
+                {validationErrors.B2BService && (
+                  <span className="error-message">{validationErrors.B2BService}</span>
+                )}
+              </div>
+            </div>
+          )}
           {isAgent && (
             <div className="box grid-2 gap-30">
               <div className="box-fieldset">

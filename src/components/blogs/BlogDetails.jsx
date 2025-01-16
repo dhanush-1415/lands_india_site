@@ -8,7 +8,7 @@ export default function BlogDetails({ blogItem }) {
     <section className="flat-section">
       <div className="container">
         <div className="row">
-          <div className="col-lg-8">
+          <div className="col-lg-12">
             <div className="flat-blog-detail">
               <div className="mb-30 pb-30 line-b">
                 <h3 className="title fw-8">{blogItem.title}</h3>
@@ -231,9 +231,6 @@ export default function BlogDetails({ blogItem }) {
                 </div>
               </div>
             </div>
-          </div>
-          <div className="col-lg-4">
-            <Sidebar />
           </div>
         </div>
       </div>

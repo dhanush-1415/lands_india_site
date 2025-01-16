@@ -17,12 +17,14 @@ export default function Agents() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sorted, setSorted] = useState();
   const [itemPerPage, setItemPerPage] = useState(9);
+  const [location, setLocation] = useState("Location");
+  const [service , setService ] = useState("Service")
 
   console.log(data, "ppppppppppppppppppp")
 
   const fetchAgents = async () => {
     try {
-      const data = await getAgents();
+      const data = await getAgents({ location, });
       if (data.success) {
         setData(data.data)
       } else {
@@ -47,6 +49,69 @@ export default function Agents() {
   const handleClose = () => {
     setOpen(false);
   };
+
+
+  const AllLocation = [
+    { "id": 1, "name": "Ariyalur" },
+    { "id": 2, "name": "Chengalpattu" },
+    { "id": 3, "name": "Chennai" },
+    { "id": 4, "name": "Coimbatore" },
+    { "id": 5, "name": "Cuddalore" },
+    { "id": 6, "name": "Dharmapuri" },
+    { "id": 7, "name": "Dindigul" },
+    { "id": 8, "name": "Erode" },
+    { "id": 9, "name": "Kallakurichi" },
+    { "id": 10, "name": "Kancheepuram" },
+    { "id": 11, "name": "Karur" },
+    { "id": 12, "name": "Krishnagiri" },
+    { "id": 13, "name": "Madurai" },
+    { "id": 14, "name": "Mayiladuthurai" },
+    { "id": 15, "name": "Nagapattinam" },
+    { "id": 16, "name": "Kanyakumari" },
+    { "id": 17, "name": "Namakkal" },
+    { "id": 18, "name": "Perambalur" },
+    { "id": 19, "name": "Pudukkottai" },
+    { "id": 20, "name": "Ramanathapuram" },
+    { "id": 21, "name": "Ranipet" },
+    { "id": 22, "name": "Salem" },
+    { "id": 23, "name": "Sivaganga" },
+    { "id": 24, "name": "Tenkasi" },
+    { "id": 25, "name": "Thanjavur" },
+    { "id": 26, "name": "Theni" },
+    { "id": 27, "name": "Thiruvallur" },
+    { "id": 28, "name": "Thiruvarur" },
+    { "id": 29, "name": "Thoothukudi" },
+    { "id": 30, "name": "Tiruchirappalli" },
+    { "id": 31, "name": "Tirunelveli" },
+    { "id": 32, "name": "Tirupathur" },
+    { "id": 33, "name": "Tiruppur" },
+    { "id": 34, "name": "Tiruvannamalai" },
+    { "id": 35, "name": "The Nilgiris" },
+    { "id": 36, "name": "Vellore" },
+    { "id": 37, "name": "Viluppuram" },
+    { "id": 38, "name": "Virudhunagar" }
+  ]
+
+
+  const realEstateServices = [
+    { id: 1, name: "Property Listing" },
+    { id: 2, name: "Real Estate Brokerage" },
+    { id: 3, name: "Property Management" },
+    { id: 4, name: "Home Inspection" },
+    { id: 5, name: "Real Estate Appraisal" },
+    { id: 6, name: "Mortgage Services" },
+    { id: 7, name: "Legal Assistance" },
+    { id: 8, name: "Interior Design and Staging" },
+    { id: 9, name: "Architectural Services" },
+    { id: 10, name: "Construction and Renovation" },
+    { id: 11, name: "Real Estate Photography" },
+    { id: 12, name: "Virtual Tours and 3D Modeling" },
+    { id: 13, name: "Title and Escrow Services" },
+    { id: 14, name: "Property Marketing" },
+    { id: 15, name: "Relocation Services" },
+  ];
+
+
 
   return (
     <>
@@ -90,26 +155,21 @@ export default function Agents() {
         <div className="d-flex align-items-center justify-content-end container custom-container-header">
           <div style={{ width: '17%', marginTop: '2rem', marginRight: '2rem' }}>
             <DropdownSelect
-              style={{ borderRadius: '0', fontWeight: '700', border: 'none', borderBottom: '1px solid #e4e4e4' }}
-              // onChange={setSortingOption}
-              addtionalParentClass="list-sort"
-              options={[
-                "Location",
-                "Chennai",
-                "Trichy",
-              ]}
+              options={["Location", ...(AllLocation?.map((item) => item.name) || [])]} // Prepend "All" to the options
+              onChange={(location) => {
+                const item = AllLocation.find((cat) => cat.name === location);
+                setLocation(item);
+              }}
             />
 
           </div>
           <div style={{ width: '17%', marginTop: '2rem', marginRight: '6px' }}>
             <DropdownSelect
-              style={{ borderRadius: '0', fontWeight: '700', border: 'none', borderBottom: '1px solid #e4e4e4' }}
-              // onChange={setSortingOption}
-              addtionalParentClass="list-sort"
-              options={[
-                "Professional",
-                "Realestate broker"
-              ]}
+              options={["Service", ...(realEstateServices?.map((item) => item.name) || [])]} // Prepend "All" to the options
+              onChange={(service) => {
+                const item = realEstateServices.find((cat) => cat.name === service);
+                setService(item);
+              }}
             />
 
           </div>

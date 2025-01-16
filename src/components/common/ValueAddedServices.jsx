@@ -20,10 +20,8 @@ export default function ValueAddedServices() {
   const fetchServices = async () => {
     try {
       const data = await getValueAddedServiceList();
-      console.log(data , "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
-
       if (data.success) {
-        console.log(data , "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
+        setData(data.data)
       } else {
         toast.error(data.message)
       }
@@ -111,7 +109,7 @@ export default function ValueAddedServices() {
                 <SwiperSlide key={agent.id} className="swiper-slide">
                   <div
                     className="box-agent hover-img wow fadeInUp"
-                    style={{ animationDelay: agent.wowDelay, padding: '20px', boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", gap: '10px', borderRadius: '3px' }} // WOW.js animation delay
+                    style={{  padding: '20px', boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", gap: '10px', borderRadius: '3px' }} // WOW.js animation delay
                   >
                     <a href="#" className="box-img img-style" style={{ borderRadius: '0px' }}>
                       <img
@@ -120,8 +118,7 @@ export default function ValueAddedServices() {
                         alt={`image-agent-${agent.name}`}
                         src={agent.imageURL}
                         // width={450}
-                        style={{ maxHeight: '50px !importent', borderRadius: '3px' }}
-                        height={450}
+                        style={{ maxHeight: '350px !importent',minHeight:'350px !important', borderRadius: '3px' }}
                       />
                     </a>
                     <div className="content justify-content-center">
@@ -141,7 +138,7 @@ export default function ValueAddedServices() {
                     < Divider style={{ backgroundColor: 'black', marginBottom: '10px' }} />
                     <div className="content justify-content-center">
                       <div className="info" style={{ textAlign: 'center' }}>
-                        <p className="text-variant-1" style={{ fontWeight: 'bold', marginBottom: 0 }}>{agent.service}</p>
+                        <p className="text-variant-1" style={{ fontWeight: 'bold', marginBottom: 0 }}>{agent.professional}</p>
 
                         <p className="text-variant-1">{agent.location}</p>
                       </div>

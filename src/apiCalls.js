@@ -661,6 +661,39 @@ export const createAgent = async (data) => {
 };
 
 
+export const createB2B = async (data) => {
+  const url = `${baseUrl}/value-added-service/create-value-added-service`;
+
+  const formData = new FormData();
+
+  formData.append('name', data.fullName);
+  formData.append('gender', data.gender);
+  formData.append('email', data.email);
+  formData.append('phone_number', data.phone);
+  formData.append('age', data.age);
+  formData.append('service', data.service); // Changed from 'name' to 'service'
+
+  if (data.image && data.image.file) {
+    formData.append('image', data.image.file);
+  }
+
+  const options = {
+    method: 'POST',
+    body: formData, // Removed the Content-Type header
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error('Failed to Register');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Registration Failed:', error);
+    throw error;
+  }
+};
+
 
 export const getUserWishList = async (id) => {
 
@@ -850,6 +883,31 @@ export const updateProperty = async (data) => {
 export const getAgentDetails = async (phone) => {
 
   const url = `${baseUrl}/agent?phone=${phone}`;
+
+
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error('Failed to fetch data');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+};
+
+
+export const getB2BDetails = async (phone) => {
+
+  const url = `${baseUrl}/value-added-service?phone=${phone}`;
 
 
   const options = {

@@ -395,11 +395,11 @@ export default function Carousel() {
                                                 </span>
                                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                                                     <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
-                                                        Beds:
+                                                        BHK:
                                                     </span>
                                                     <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
                                                         {
-                                                            elm.inputs.find(item => item.input_name === "beds")?.input_value || ""
+                                                            elm.inputs.find(item => item.input_name === "BHK type")?.input_value || ""
                                                         }
                                                     </span>
                                                 </div>
@@ -416,7 +416,7 @@ export default function Carousel() {
                                                     </span>
                                                     <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
                                                         {
-                                                            elm.inputs.find(item => item.input_name === "baths")?.input_value || ""
+                                                            elm.inputs.find(item => item.input_name === "Bathroom(s)")?.input_value || ""
                                                         }
                                                     </span>
                                                 </div>
@@ -433,7 +433,7 @@ export default function Carousel() {
                                                     </span>
                                                     <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
                                                         {
-                                                            elm.inputs.find(item => item.input_name === "sqft")?.input_value || ""
+                                                            elm.inputs.find(item => item.input_name === "Buildup Area")?.input_value || ""
                                                         }
                                                     </span>
                                                 </div>
@@ -467,7 +467,7 @@ export default function Carousel() {
                                                     </span>
                                                     <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
                                                         {
-                                                            elm.inputs.find(item => item.input_name === "floors")?.input_value || ""
+                                                            elm.inputs.find(item => item.input_name === "Floor")?.input_value || ""
                                                         }
                                                     </span>
                                                 </div>

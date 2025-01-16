@@ -15,10 +15,13 @@ export default function BlogDetailsPage() {
   let params = useParams();
   const blogItem =
     allBlogs.filter((elm) => elm.id == params.id)[0] || allBlogs[0];
+
+  
+
+
   return (
     <>
       <MetaComponent meta={metadata} />
-      <Header1 />
       <PageTitle />
       <BlogDetails blogItem={blogItem} />
       <Footer1 />
