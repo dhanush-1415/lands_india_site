@@ -11,41 +11,49 @@ export default function BoxCategory() {
 
   const services = [
     {
+      url: '/properties/all',
       img: "https://pixelprime.co/themes/resideo-wp/demo-1/wp-content/uploads/2020/07/services-1-200x200.png",
       title: "Properties",
       description: "We help you find a new home by offering a smart real estate experience",
     },
     {
+      url: '/properties/all',
       img: "https://pixelprime.co/themes/resideo-wp/demo-1/wp-content/uploads/2020/07/plan-business-200x200.png",
       title: "Projects",
       description: "Find an experienced agent who knows your market best",
     },
     {
+      url: '/value-added-services',
       img: "https://pixelprime.co/themes/resideo-wp/demo-1/wp-content/uploads/2020/07/services-2-200x200.png",
       title: "Value Added Service",
       description: "Millions of houses and apartments in your favourite cities",
     },
     {
+      url: '/agents',
       img: "https://cdn-icons-png.flaticon.com/512/3693/3693231.png",
       title: "Agent",
       description: "Sign up now and sell or rent your own properties",
     },
     {
+      url: '/properties/all',
       img: "https://static.vecteezy.com/system/resources/thumbnails/035/642/059/small_2x/property-management-icon-line-illustration-vector.jpg",
       title: "Property Management",
       description: "We help you find a new home by offering a smart real estate experience",
     },
     {
-      img:"",
+      url: '/properties/all',
+      img: "https://img.freepik.com/premium-vector/female-finance-officer-icon-vector-image-can-be-used-trading_120816-51069.jpg",
       title: "Financial Services",
       description: "Find an experienced agent who knows your market best",
     },
     {
+      url: '/properties/all',
       img: "https://pixelprime.co/themes/resideo-wp/demo-1/wp-content/uploads/2020/07/services-3-200x200.png",
       title: "Wealth Advice",
       description: "Millions of houses and apartments in your favourite cities",
     },
     {
+      url: '/properties/all',
       img: "https://pixelprime.co/themes/resideo-wp/demo-1/wp-content/uploads/2020/07/services-4-200x200.png",
       title: "News and Articles",
       description: "Sign up now and sell or rent your own properties",
@@ -171,7 +179,7 @@ export default function BoxCategory() {
                   cursor: "pointer",
                   position: "relative",
                   overflow: "hidden",
-                  padding: "0px 3rem 3rem",
+                  padding: "1.5rem",
                 }}
               >
                 <div
@@ -188,7 +196,7 @@ export default function BoxCategory() {
                   </div>
                   <h5 className="fw-bold">{service.title}</h5>
                   <p className="text-muted" style={{ marginBottom: "0.5rem" }}>{service.description}</p>
-                  <h6 className="learn-more-button" style={{ marginTop: "0.5rem" }}>Learn More</h6>
+                  <h6 onClick={() => (window.location.href = service.url)} className="learn-more-button" style={{ marginTop: "0.5rem" }}>Learn More</h6>
                 </div>
               </div>
 

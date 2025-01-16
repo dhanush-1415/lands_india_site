@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Nav from "./Nav";
 import NavTwo from './Nav2';
-import { AppBar, Toolbar, Typography, Box, Grid, TextField, Card, CardContent, Menu, MenuItem, Switch, IconButton, Drawer, List, ListItem, ListItemText, Button, useMediaQuery, useTheme, Dialog, DialogTitle, DialogContent, DialogActions, FormHelperText, Divider } from '@mui/material';
+import { AppBar, Toolbar, Tooltip, Typography, Box, Grid, TextField, Card, CardContent, Menu, MenuItem, Switch, IconButton, Drawer, List, ListItem, ListItemText, Button, useMediaQuery, useTheme, Dialog, DialogTitle, DialogContent, DialogActions, FormHelperText, Divider } from '@mui/material';
 import { Link } from "react-router-dom";
 import Slide from '@mui/material/Slide';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -21,10 +21,11 @@ import EmailIcon from '@mui/icons-material/Email';
 import PasswordIcon from '@mui/icons-material/Password';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import Carousel from 'react-multi-carousel';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import 'react-multi-carousel/lib/styles.css';
 import { UserLogin, RegisterUser, verifyMobileOtp } from "@/apiCalls";
 import { toast } from "react-toastify";
-
+import InfoIcon from '@mui/icons-material/Info';
 
 const buttonStyle = {
   background: 'linear-gradient(to right, #0d7ae3 50%, white 50%)',
@@ -95,6 +96,20 @@ export default function Header1({
   // },[])
 
 
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+
+  const togglePasswordVisibility = (field) => {
+    if (field === 'oldPassword') {
+      setShowOldPassword(!showOldPassword);
+    } else if (field === 'newPassword') {
+      setShowNewPassword(!showNewPassword);
+    } else if (field === 'confirmPassword') {
+      setShowConfirmPassword(!showConfirmPassword);
+    }
+  };
 
 
   const [registerData, setRegisterData] = useState({
@@ -550,7 +565,7 @@ export default function Header1({
                                   label="Password"
                                   variant="outlined"
                                   fullWidth
-                                  type="password"
+                                  type={showOldPassword ? 'text' : 'password'}
                                   value={loginData.password}
                                   onChange={handleLoginChange}
                                   error={!!errors.password}
@@ -558,8 +573,8 @@ export default function Header1({
                                   InputProps={{
                                     endAdornment: (
                                       <InputAdornment position="end">
-                                        <IconButton>
-                                          <PasswordIcon />
+                                        <IconButton onClick={() => togglePasswordVisibility('oldPassword')}>
+                                          {showOldPassword ? <FaEyeSlash /> : <FaEye />}
                                         </IconButton>
                                       </InputAdornment>
                                     ),
@@ -595,6 +610,7 @@ export default function Header1({
                                   label="Name"
                                   variant="outlined"
                                   fullWidth
+                                  size="small"
                                   value={registerData.name}
                                   onChange={handleRegisterChange}
                                   InputProps={{
@@ -617,12 +633,13 @@ export default function Header1({
                               </Grid>
                               <Grid item xs={12} sm={12} md={12}>
                                 <Grid container justifyContent='space-between'>
-                                  <Grid item xs={8} sm={9} md={9}>
+                                  <Grid item xs={12} sm={12} md={12}>
                                     <TextField
                                       id="phone"
                                       label="Phone"
                                       variant="outlined"
                                       fullWidth
+                                      size="small"
                                       disabled={isVerified}
                                       value={registerData.phone}
                                       onChange={handleRegisterChange}
@@ -646,11 +663,11 @@ export default function Header1({
                                       }}
                                     />
                                   </Grid>
-                                  <Grid item xs={4} sm={2.9} md={2.5} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                                  {/* <Grid item xs={4} sm={2.9} md={2.5} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                                     <Button variant='contained' size="large" disabled={registerData.phone.length !== 10 || isVerified} onClick={() => { handlePhoneChange(registerData.phone) }}>
                                       {inputDisable ? isVerified ? "Verified" : "Resend" : "Verify"}
                                     </Button>
-                                  </Grid>
+                                  </Grid> */}
                                 </Grid>
 
                               </Grid>
@@ -687,6 +704,7 @@ export default function Header1({
                                   label="Email"
                                   variant="outlined"
                                   fullWidth
+                                  size="small"
                                   value={registerData.email}
                                   onChange={handleRegisterChange}
                                   error={!!errors.email}
@@ -715,16 +733,20 @@ export default function Header1({
                                   label="Password"
                                   variant="outlined"
                                   fullWidth
-                                  type="password"
+                                  size="small"
+                                  type={showNewPassword ? 'text' : 'password'}
                                   value={registerData.password}
                                   onChange={handleRegisterChange}
                                   error={!!errors.password}
-                                  helperText={errors.password}
+                                  // helperText={errors.password}
                                   InputProps={{
                                     endAdornment: (
                                       <InputAdornment position="end">
-                                        <IconButton>
-                                          <PasswordIcon />
+                                        <IconButton onClick={() => togglePasswordVisibility('newPassword')}>
+                                          {showNewPassword ? <FaEyeSlash sx={{marginRight:'3px'}}/> : <FaEye sx={{marginRight:'3px'}} />}
+                                          <Tooltip title={errors.password} placement="left-start">
+                                            <InfoIcon />
+                                          </Tooltip>
                                         </IconButton>
                                       </InputAdornment>
                                     ),
@@ -732,7 +754,7 @@ export default function Header1({
                                   sx={{
                                     "& .MuiOutlinedInput-root": {
                                       "& input": {
-                                        border: "none", // Removes the border
+                                        border: "none",
                                       },
                                     },
                                   }}
@@ -744,7 +766,8 @@ export default function Header1({
                                   label="Confirm Password"
                                   variant="outlined"
                                   fullWidth
-                                  type="password"
+                                  size="small"
+                                  type={showConfirmPassword ? 'text' : 'password'}
                                   value={registerData.confirmPassword}
                                   onChange={handleRegisterChange}
                                   error={!!errors.confirmPassword}
@@ -752,8 +775,8 @@ export default function Header1({
                                   InputProps={{
                                     endAdornment: (
                                       <InputAdornment position="end">
-                                        <IconButton>
-                                          <PasswordIcon />
+                                        <IconButton onClick={() => togglePasswordVisibility('confirmPassword')}>
+                                          {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                                         </IconButton>
                                       </InputAdornment>
                                     ),
@@ -770,7 +793,7 @@ export default function Header1({
                               <Grid item xs={12} sm={12} ms={12}>
                                 <FormControl component="fieldset" error={!!errors.role}>
                                   {/* <FormLabel component="legend">Role</FormLabel> */}
-                                  <Grid container spacing={2}>
+                                  <Grid container >
                                     <Grid item>
                                       <FormControlLabel
                                         control={
@@ -860,7 +883,7 @@ export default function Header1({
                       <Link to={`/`}>
                         <img
                           alt="logo"
-                          style={{width:'65px'}}
+                          style={{ width: '65px' }}
                           className="logo-1"
                           // height={48}
                           src={logo}
@@ -954,7 +977,7 @@ export default function Header1({
                               strokeLinejoin="round"
                             />
                           </svg> */}
-                              <AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color:'#161e2d' , marginRight:'5px' }} />
+                              <AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#161e2d', marginRight: '5px' }} />
                               Login/Register
                             </a>
                           )}
@@ -1001,7 +1024,7 @@ export default function Header1({
               {/* <h4>Lands India</h4> */}
             </div>
             <div className="bottom-canvas">
-              <div className="login-box flex align-center">
+              {/* <div className="login-box flex align-center">
                 <a onClick={handleDialogOpen}>
                   Login
                 </a>
@@ -1009,8 +1032,53 @@ export default function Header1({
                 <a onClick={handleDialogOpen}>
                   Register
                 </a>
-              </div>
+              </div> */}
               <div className="menu-outer">
+                <div
+                  className="navbar-collapse collapse clearfix"
+                  id="navbarSupportedContent"
+                >
+                  <ul className="navigation clearfix mobile-nav">
+                    {isLogin ? (
+
+                      <a
+                        href="/dashboard"
+                        style={{
+                          textAlign: 'center',
+                          fontWeight: 600,
+                          padding: '27px 20px 27px 0px',
+                          letterSpacing: '0px',
+                          color: '#161e2d',
+                          fontSize: '15px',
+                          lineHeight: '21.86px',
+                          textTransform: 'capitalize',
+                        }}
+
+                      >
+                        Dashboard
+                      </a>
+                    ) : (
+                      <a
+                        onClick={handleDialogOpen}
+                        style={{
+                          textAlign: 'center',
+                          fontWeight: 600,
+                          padding: '27px 20px 27px 0px',
+                          letterSpacing: '0px',
+                          color: '#161e2d',
+                          fontSize: '15px',
+                          lineHeight: '21.86px',
+                          textTransform: 'capitalize',
+                        }}
+
+                      >
+                        <AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#161e2d', marginRight: '5px' }} />
+                        Login/Register
+                      </a>
+                    )}
+                  </ul>
+                </div>
+                <Divider />
                 <MobileNav />
               </div>
               {/* <div className="button-mobi-sell">

@@ -1,20 +1,143 @@
 import React, { useState, useEffect } from "react";
 import DropdownSelect from "../common/DropdownSelect";
-import { getCategories, getInputs, createNewProperty } from "@/apiCalls";
+import { getCategories, getInputs, createNewProperty, getPropertyEdit, updateProperty } from "@/apiCalls";
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
+import { Grid } from "@mui/material";
 
 export default function AddProperty() {
-  const [isDragging, setIsDragging] = useState(false); // Track drag state
+
+  const params = useParams();
+
+  const [editData, setEditData] = useState();
+
+  const [updatedData, setUpdatedData] = useState();
+
   const [images, setImages] = useState([]);
 
-  // [
-  //   "/images/home/house-18.jpg",
-  //   "/images/home/house-23.jpg",
-  //   "/images/home/house-14.jpg",
-  //   "/images/home/house-32.jpg",
-  //   "/images/home/house-33.jpg",
-  // ]
 
+  const handlePrevChange = (inputId, value) => {
+    setUpdatedData(prevState => {
+      const updatedInputs = prevState[0]?.inputs?.map(input =>
+        input.id === inputId ? { ...input, input_value: value } : input
+      );
+      return [{ ...prevState[0], inputs: updatedInputs }];
+    });
+  };
+
+
+  const transformData = (updatedData) => {
+    // Extract the main properties and create the "properties" array
+    const properties = updatedData.map(item => ({
+      id: item.id,
+      sub_menuId: item.sub_menuId,
+      sellerId: item.sellerId,
+      location: item.location,
+      price: item.price,
+      status: item.status,
+      file_path: item.file_path,
+      isPremium: item.isPremium,
+      createdAt: item.createdAt,
+    }));
+
+    // Extract the inputs and create the "propertyInputs" array
+    const propertyInputs = updatedData.flatMap(item => item.inputs.map(input => ({
+      id: input.id,
+      properties_postId: input.properties_postId,
+      input_id: input.input_id,
+      input_value: input.input_value,
+    })));
+
+    // Extract the input names, types, and options to create the "inputs" array
+    const inputs = updatedData.flatMap(item => item.inputs.map(input => ({
+      id: input.input_id,
+      input_name: input.input_name,
+      input_type: input.input_type,
+      options: input.options,
+    })));
+
+    // Return the final structured data
+    return {
+      properties,
+      propertyInputs,
+      inputs,
+    };
+  };
+
+  const handlePrevSubmit = async () => {
+    const structuredData = transformData(updatedData);
+
+    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+    const payLoad = {
+      data : structuredData,
+      images,
+    }
+
+    if (landsUser) {
+      try {
+        const data = await updateProperty(payLoad);
+        if (data.success) {
+        } else {
+          toast.error(data.message)
+        }
+      } catch (err) {
+        console.error('Error fetching categories:', err);
+      }
+    } else {
+      toast.error('You must be logged in to access this page');
+    }
+  };
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (params.id) {
+        const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+        if (landsUser) {
+          try {
+            const data = await getPropertyEdit(params.id);
+            if (data.success) {
+              const combined = data.properties.map((property) => {
+                const propertyInputs = data.propertyInputs?.filter(input => input.properties_postId === property.id);
+
+                const inputsWithNames = propertyInputs.map((input) => {
+                  const inputData = data.inputs.find(i => i.id === input.input_id);
+                  return {
+                    ...input,
+                    input_name: inputData ? inputData.input_name : '',
+                    input_type: inputData ? inputData.input_type : '',
+                    options: inputData ? inputData.options : [],
+                  };
+                });
+
+                return {
+                  ...property,
+                  inputs: inputsWithNames,
+                };
+              });
+
+              setEditData(combined);
+              setUpdatedData(combined)
+
+            } else {
+              toast.error(data.message);
+            }
+          } catch (err) {
+            console.error('Error fetching categories:', err);
+          }
+        } else {
+          toast.error('You must be logged in to access this page');
+        }
+      }
+    };
+
+    fetchData();
+  }, [params]);
+
+
+  const [isDragging, setIsDragging] = useState(false); // Track drag state
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files); // Convert FileList to Array
@@ -33,31 +156,6 @@ export default function AddProperty() {
 
     setImages((prev) => [...prev, ...newFiles]); // Append new files to existing state
   };
-
-  // const handleImageChange = (e) => {
-  //   const files = Array.from(e.target.files); 
-  //   if (files.length > 0) {
-  //     const newFiles = files.map((file, index) => ({
-  //       id: `${Date.now()}-${index}`,
-  //       file,
-  //     }));
-  //     setImages((prev) => [...prev, ...newFiles]);
-  //   }
-  // };
-
-  // const handleImageChange = (e, index) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       const newImages = [...images];
-  //       newImages[index] = reader.result;
-  //       setImages(newImages);
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
-
 
   const handleDelete = (index) => {
     const newImages = images.filter((_, imgIndex) => imgIndex !== index);
@@ -82,14 +180,12 @@ export default function AddProperty() {
 
   const handleDragOver = (e) => {
     e.preventDefault();
-    setIsDragging(true); // Add border on drag
+    setIsDragging(true);
   };
 
   const handleDragLeave = () => {
     setIsDragging(false);
   };
-
-
 
   const [categories, setCategories] = useState();
   const [subCategories, setSubCategories] = useState([]);
@@ -97,6 +193,7 @@ export default function AddProperty() {
   const [selectedSubCategoryId, setSelectedSubCategoryId] = useState(null);
   const [menuInputs, setMenuInputs] = useState();
   const [formData, setFormData] = useState({});
+  
 
   const fetchCategories = async () => {
     try {
@@ -159,39 +256,39 @@ export default function AddProperty() {
 
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
-    if (landsUser?.type === 'Seller' || landsUser?.type === 'Buyer') {
+    if (landsUser) {
 
-    const PropertiesInput = Object.entries(formData).map(([inputId, value]) => ({
-      input_id: Number(inputId),
-      input_value: value,
-    }));
+      const PropertiesInput = Object.entries(formData).map(([inputId, value]) => ({
+        inputId: Number(inputId),
+        value: value,
+      }));
 
-    const payload = {
-      propertiesPost: {
-        subMenuId: selectedSubCategoryId,
-        sellerId: 6,
-        images
-      },
-      PropertiesInput,
-    };
+      const payload = {
+        propertiesPost: {
+          subMenuId: selectedSubCategoryId,
+          sellerId: landsUser.id,
+          images
+        },
+        PropertiesInput,
+      };
 
-    try {
-      const data = await createNewProperty(payload);
-      if (data.success) {
-        setMenuInputs(null)
-        toast.success("Property Created Successfully");
-        setImages([]);
-      } else {
-        toast.error(data.message || data.error || "Something Went Wrong")
+      try {
+        const data = await createNewProperty(payload);
+        if (data.success) {
+          setMenuInputs(null)
+          toast.success("Property Created Successfully");
+          setImages([]);
+        } else {
+          toast.error(data.message || data.error || "Something Went Wrong")
+        }
+      } catch (err) {
+        console.error('Error fetching categories:', err);
       }
-    } catch (err) {
-      console.error('Error fetching categories:', err);
-    }
 
-    }else{
+    } else {
       toast.error("Seller Not Found")
       setTimeout(() => {
-        window.location.href="/"
+        window.location.href = "/"
       }, 4000);
     }
 
@@ -201,7 +298,7 @@ export default function AddProperty() {
     <div className="main-content">
       <div className="main-content-inner">
         <div className="button-show-hide show-mb">
-          <span className="body-1">Show Dashboard</span>
+          <span className="body-1">Show Menu</span>
         </div>
         <div className="widget-box-2 mb-20">
           <h5 className="title">Upload Media</h5>
@@ -269,264 +366,483 @@ export default function AddProperty() {
             ))}
           </div>
         </div>
-        <div className="widget-box-2 mb-20">
-          {/* <h5 className="title">Price</h5> */}
-          <div className="box-price-property">
-            <div className="box grid-2 gap-30">
-              <fieldset className="box-fieldset">
-                <label htmlFor="neighborhood">
-                  Category
-                </label>
-                <DropdownSelect
-                  options={categories?.map((category) => category.name)} // Assuming categories have a 'name' field
-                  onChange={(selectedCategory) => {
-                    const category = categories.find((cat) => cat.name === selectedCategory);
-                    handleCategoryChange(category);
-                  }}
-                />
-              </fieldset>
-              <fieldset className="box-fieldset">
-                <label htmlFor="neighborhood">
-                  Sub Category
-                </label>
+        {!editData?.length > 0 && (
+          <div className="widget-box-2 mb-20">
+            <div className="box-price-property">
+              <div className="box grid-2 gap-30">
+                <fieldset className="box-fieldset">
+                  <label htmlFor="neighborhood">
+                    Category
+                  </label>
+                  <DropdownSelect
+                    options={["Select", ...(categories?.map((category) => category.name) || [])]} // Prepend "All" to the options
+                    onChange={(selectedCategory) => {
+                      const category = categories.find((cat) => cat.name === selectedCategory);
+                      handleCategoryChange(category);
+                    }}
+                  />
+                </fieldset>
+                <fieldset className="box-fieldset">
+                  <label htmlFor="neighborhood">
+                    Sub Category
+                  </label>
 
-                <DropdownSelect
-                  options={subCategories.length > 0 ? subCategories.map(subCat => subCat.name) : ["None"]}
-                  onChange={(selectedSubCategory) => {
-                    const subCategory = subCategories.find((sub) => sub.name === selectedSubCategory);
-                    handleSubCategoryChange(subCategory);
-                  }}
-                />
-              </fieldset>
+                  <DropdownSelect
+                    options={["Select", ...(subCategories?.map((subCat) => subCat.name) || [])]} // Prepend "All" to the options
+                    onChange={(selectedSubCategory) => {
+                      const subCategory = subCategories.find((sub) => sub.name === selectedSubCategory);
+                      handleSubCategoryChange(subCategory);
+                    }}
+                  />
+                </fieldset>
+              </div>
+
             </div>
-
           </div>
-        </div>
+        )}
         <div className="widget-box-2 mb-20">
-          <div className="box-info-property">
-            {menuInputs?.length ? (
-              <div className="box grid-2 gap-30">
-                {menuInputs?.length && menuInputs.map((input, index) => {
-                  const { id, input_name, input_type, options, required } = input;
+          {editData?.length > 0 ? (
+            <div className="box-info-property">
+              {updatedData[0]?.inputs?.length ? (
+                <div className="box grid-2 gap-30">
+                  {updatedData[0].inputs.map((input) => {
+                    const { id, input_name, input_type, options, input_value } = input;
 
-                  let inputField = null;
-                  switch (input_type) {
-                    case "text":
-                      inputField = (
-                        <fieldset key={id} className="box box-fieldset">
-                          <label htmlFor={input_name}>
-                            {input_name} <span>{required ? "*" : ""}</span>
-                          </label>
-                          <input
-                            type="text"
-                            id={input_name}
-                            name={input_name}
-                            className="form-control"
-                            placeholder={`Enter ${input_name}`}
-                            onChange={(e) => handleChange(input.id, e.target.value)}
-                          />
-                        </fieldset>
-                      );
-                      break;
+                    let inputField = null;
+                    switch (input_type) {
+                      case "text":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name}
+                            </label>
+                            <input
+                              type="text"
+                              id={input_name}
+                              name={input_name}
+                              className="form-control"
+                              placeholder={`Enter ${input_name}`}
+                              value={input_value || ""}
+                              onChange={(e) => handlePrevChange(input.id, e.target.value)}
+                            />
+                          </fieldset>
+                        );
+                        break;
 
-                    case "textarea":
-                      inputField = (
-                        <fieldset key={id} className="box box-fieldset">
-                          <label htmlFor={input_name}>
-                            {input_name} <span>{required ? "*" : ""}</span>
-                          </label>
-                          <textarea
-                            id={input_name}
-                            name={input_name}
-                            className="textarea"
-                            placeholder={`Enter ${input_name}`}
-                            onChange={(e) => handleChange(input.id, e.target.value)}
-                          />
-                        </fieldset>
-                      );
-                      break;
+                      case "textarea":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name}
+                            </label>
+                            <textarea
+                              id={input_name}
+                              name={input_name}
+                              className="textarea"
+                              placeholder={`Enter ${input_name}`}
+                              value={input_value || ""}
+                              onChange={(e) => handlePrevChange(input.id, e.target.value)}
+                            />
+                          </fieldset>
+                        );
+                        break;
 
-                    case "number":
-                      inputField = (
-                        <fieldset key={id} className="box box-fieldset">
-                          <label htmlFor={input_name}>
-                            {input_name} <span>{required ? "*" : ""}</span>
-                          </label>
-                          <input
-                            type="number"
-                            id={input_name}
-                            name={input_name}
-                            className="form-control"
-                            placeholder={`Enter ${input_name}`}
-                            onChange={(e) => handleChange(input.id, e.target.value)}
-                          />
-                        </fieldset>
-                      );
-                      break;
+                      case "number":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name}
+                            </label>
+                            <input
+                              type="number"
+                              id={input_name}
+                              name={input_name}
+                              className="form-control"
+                              placeholder={`Enter ${input_name}`}
+                              value={input_value || ""}
+                              onChange={(e) => handlePrevChange(input.id, e.target.value)}
+                            />
+                          </fieldset>
+                        );
+                        break;
 
-                    case "dropdown":
-                      inputField = (
-                        <fieldset key={id} className="box box-fieldset">
-                          <label htmlFor={input_name}>
-                            {input_name} <span>{required ? "*" : ""}</span>
-                          </label>
-                          <select
-                            id={input_name}
-                            name={input_name}
-                            className="form-control"
-                            onChange={(e) => handleChange(input.id, e.target.value)}
-                          >
-                            <option>
-                              Select
-                            </option>
-                            {options?.map((option, idx) => (
-                              <option key={idx} value={option}>
-                                {option}
+                      case "dropdown":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name}
+                            </label>
+                            <select
+                              id={input_name}
+                              name={input_name}
+                              className="form-control"
+                              value={input_value || ""}
+                              onChange={(e) => handlePrevChange(input.id, e.target.value)}
+                            >
+                              <option value="">Select</option>
+                              {options?.map((option, idx) => (
+                                <option key={idx} value={option}>
+                                  {option}
+                                </option>
+                              ))}
+                            </select>
+                          </fieldset>
+                        );
+                        break;
+
+                      case "checkbox":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name}
+                            </label>
+                            <div className="d-flex flex-row">
+                              {options?.map((option, idx) => (
+                                <div key={idx} className="pe-4">
+                                  <input
+                                    type="checkbox"
+                                    id={`${input_name}-${option}`}
+                                    name={input_name}
+                                    value={option}
+                                    checked={input_value?.split(",").includes(option)}
+                                    onChange={(e) => {
+                                      const newValue = input_value?.split(",") || [];
+                                      const updatedValue = e.target.checked
+                                        ? [...newValue, option]
+                                        : newValue.filter((val) => val !== option);
+                                      handlePrevChange(input.id, updatedValue.join(","));
+                                    }}
+                                  />
+                                  <label htmlFor={`${input_name}-${option}`}>{option}</label>
+                                </div>
+                              ))}
+                            </div>
+                          </fieldset>
+                        );
+                        break;
+
+                      case "radio":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name}
+                            </label>
+                            <div className="d-flex flex-row">
+                              {options?.map((option, idx) => (
+                                <div key={idx} className="pe-4">
+                                  <input
+                                    type="radio"
+                                    id={`${input_name}-${option}`}
+                                    name={input_name}
+                                    value={option}
+                                    checked={input_value === option}
+                                    onChange={(e) => handlePrevChange(input.id, e.target.value)}
+                                  />
+                                  <label htmlFor={`${input_name}-${option}`}>{option}</label>
+                                </div>
+                              ))}
+                            </div>
+                          </fieldset>
+                        );
+                        break;
+
+                      case "date":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name}
+                            </label>
+                            <input
+                              type="date"
+                              id={input_name}
+                              name={input_name}
+                              className="form-control"
+                              value={input_value || ""}
+                              onChange={(e) => handlePrevChange(input.id, e.target.value)}
+                            />
+                          </fieldset>
+                        );
+                        break;
+
+                      case "email":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name}
+                            </label>
+                            <input
+                              type="email"
+                              id={input_name}
+                              name={input_name}
+                              className="form-control"
+                              placeholder={`Enter ${input_name}`}
+                              value={input_value || ""}
+                              onChange={(e) => handlePrevChange(input.id, e.target.value)}
+                            />
+                          </fieldset>
+                        );
+                        break;
+
+                      case "password":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name}
+                            </label>
+                            <input
+                              type="password"
+                              id={input_name}
+                              name={input_name}
+                              className="form-control"
+                              placeholder={`Enter ${input_name}`}
+                              value={input_value || ""}
+                              onChange={(e) => handleChange(input.id, e.target.value)}
+                            />
+                          </fieldset>
+                        );
+                        break;
+
+                      default:
+                        break;
+                    }
+
+                    return inputField;
+                  })}
+                </div>
+              ) : (
+                <div className="box grid-2 gap-30">
+                  <h3>No Inputs</h3>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="box-info-property">
+              {menuInputs?.length ? (
+                <div className="box grid-2 gap-30">
+                  {menuInputs?.length && menuInputs.map((input, index) => {
+                    const { id, input_name, input_type, options, required } = input;
+
+                    let inputField = null;
+                    switch (input_type) {
+                      case "text":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name} <span>{required ? "*" : ""}</span>
+                            </label>
+                            <input
+                              type="text"
+                              id={input_name}
+                              name={input_name}
+                              className="form-control"
+                              placeholder={`Enter ${input_name}`}
+                              onChange={(e) => handleChange(input.id, e.target.value)}
+                            />
+                          </fieldset>
+                        );
+                        break;
+
+                      case "textarea":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name} <span>{required ? "*" : ""}</span>
+                            </label>
+                            <textarea
+                              id={input_name}
+                              name={input_name}
+                              className="textarea"
+                              placeholder={`Enter ${input_name}`}
+                              onChange={(e) => handleChange(input.id, e.target.value)}
+                            />
+                          </fieldset>
+                        );
+                        break;
+
+                      case "number":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name} <span>{required ? "*" : ""}</span>
+                            </label>
+                            <input
+                              type="number"
+                              id={input_name}
+                              name={input_name}
+                              className="form-control"
+                              placeholder={`Enter ${input_name}`}
+                              onChange={(e) => handleChange(input.id, e.target.value)}
+                            />
+                          </fieldset>
+                        );
+                        break;
+
+                      case "dropdown":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name} <span>{required ? "*" : ""}</span>
+                            </label>
+                            <select
+                              id={input_name}
+                              name={input_name}
+                              className="form-control"
+                              onChange={(e) => handleChange(input.id, e.target.value)}
+                            >
+                              <option>
+                                Select
                               </option>
-                            ))}
-                          </select>
-                        </fieldset>
-                      );
-                      break;
+                              {options?.map((option, idx) => (
+                                <option key={idx} value={option}>
+                                  {option}
+                                </option>
+                              ))}
+                            </select>
+                          </fieldset>
+                        );
+                        break;
 
-                    case "checkbox":
-                      inputField = (
-                        <fieldset key={id} className="box box-fieldset">
-                          <label htmlFor={input_name}>
-                            {input_name} <span>{required ? "*" : ""}</span>
-                          </label>
-                          <div class="d-flex flex-row">
-                            {options?.map((option, idx) => (
-                              <div key={idx} className="pe-4">
-                                <input
-                                  type="checkbox"
-                                  id={`${input_name}-${option}`}
-                                  name={input_name}
-                                  value={option}
-                                  onChange={(e) => {
-                                    const newValue = formData[input.id] || [];
-                                    const updatedValue = e.target.checked
-                                      ? [...newValue, option]
-                                      : newValue.filter((val) => val !== option);
-                                    handleChange(input.id, updatedValue);
-                                  }}
-                                />
-                                <label htmlFor={`${input_name}-${option}`}>{option}</label>
-                              </div>
-                            ))}
-                          </div>
-                        </fieldset>
-                      );
-                      break;
+                      case "checkbox":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name} <span>{required ? "*" : ""}</span>
+                            </label>
+                            <div className="d-flex flex-row">
+                              {options?.map((option, idx) => (
+                                <div key={idx} className="pe-4">
+                                  <input
+                                    type="checkbox"
+                                    id={`${input_name}-${option}`}
+                                    name={input_name}
+                                    value={option}
+                                    onChange={(e) => {
+                                      const newValue = formData[input.id]?.split(",") || []; // Split the existing value into an array
+                                      const updatedValue = e.target.checked
+                                        ? [...newValue, option] // Add the new option if checked
+                                        : newValue.filter((val) => val !== option); // Remove the option if unchecked
+                                      handleChange(input.id, updatedValue.join(",")); // Convert the array back to a comma-separated string
+                                    }}
+                                  />
+                                  <label htmlFor={`${input_name}-${option}`}>{option}</label>
+                                </div>
+                              ))}
+                            </div>
+                          </fieldset>
 
-                    case "radio":
-                      inputField = (
-                        <fieldset key={id} className="box box-fieldset">
-                          <label htmlFor={input_name}>
-                            {input_name} <span>{required ? "*" : ""}</span>
-                          </label>
-                          <div class="d-flex flex-row">
-                            {options?.map((option, idx) => (
-                              <div key={idx} className="pe-4">
-                                <input
-                                  type="radio"
-                                  id={`${input_name}-${option}`}
-                                  name={input_name}
-                                  value={option}
-                                  onChange={(e) => handleChange(input.id, e.target.value)}
-                                />
-                                <label htmlFor={`${input_name}-${option}`}>{option}</label>
-                              </div>
-                            ))}
-                          </div>
-                        </fieldset>
-                      );
-                      break;
+                        );
+                        break;
 
-                    case "date":
-                      inputField = (
-                        <fieldset key={id} className="box box-fieldset">
-                          <label htmlFor={input_name}>
-                            {input_name} <span>{required ? "*" : ""}</span>
-                          </label>
-                          <input
-                            type="date"
-                            id={input_name}
-                            name={input_name}
-                            className="form-control"
-                            onChange={(e) => handleChange(input.id, e.target.value)}
-                          />
-                        </fieldset>
-                      );
-                      break;
+                      case "radio":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name} <span>{required ? "*" : ""}</span>
+                            </label>
+                            <div class="d-flex flex-row">
+                              {options?.map((option, idx) => (
+                                <div key={idx} className="pe-4">
+                                  <input
+                                    type="radio"
+                                    id={`${input_name}-${option}`}
+                                    name={input_name}
+                                    value={option}
+                                    onChange={(e) => handleChange(input.id, e.target.value)}
+                                  />
+                                  <label htmlFor={`${input_name}-${option}`}>{option}</label>
+                                </div>
+                              ))}
+                            </div>
+                          </fieldset>
+                        );
+                        break;
 
-                    case "email":
-                      inputField = (
-                        <fieldset key={id} className="box box-fieldset">
-                          <label htmlFor={input_name}>
-                            {input_name} <span>{required ? "*" : ""}</span>
-                          </label>
-                          <input
-                            type="email"
-                            id={input_name}
-                            name={input_name}
-                            className="form-control"
-                            placeholder={`Enter ${input_name}`}
-                            onChange={(e) => handleChange(input.id, e.target.value)}
-                          />
-                        </fieldset>
-                      );
-                      break;
+                      case "date":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name} <span>{required ? "*" : ""}</span>
+                            </label>
+                            <input
+                              type="date"
+                              id={input_name}
+                              name={input_name}
+                              className="form-control"
+                              onChange={(e) => handleChange(input.id, e.target.value)}
+                            />
+                          </fieldset>
+                        );
+                        break;
 
-                    case "password":
-                      inputField = (
-                        <fieldset key={id} className="box box-fieldset">
-                          <label htmlFor={input_name}>
-                            {input_name} <span>{required ? "*" : ""}</span>
-                          </label>
-                          <input
-                            type="password"
-                            id={input_name}
-                            name={input_name}
-                            className="form-control"
-                            placeholder={`Enter ${input_name}`}
-                            onChange={(e) => handleChange(input.id, e.target.value)}
-                          />
-                        </fieldset>
-                      );
-                      break;
+                      case "email":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name} <span>{required ? "*" : ""}</span>
+                            </label>
+                            <input
+                              type="email"
+                              id={input_name}
+                              name={input_name}
+                              className="form-control"
+                              placeholder={`Enter ${input_name}`}
+                              onChange={(e) => handleChange(input.id, e.target.value)}
+                            />
+                          </fieldset>
+                        );
+                        break;
 
-                    case "file":
-                      inputField = (
-                        <fieldset key={id} className="box box-fieldset">
-                          <label htmlFor={input_name}>
-                            {input_name} <span>{required ? "*" : ""}</span>
-                          </label>
-                          <input
-                            type="file"
-                            id={input_name}
-                            name={input_name}
-                            className="form-control"
-                            onChange={(e) => handleChange(input.id, e.target.files[0])}
-                          />
-                        </fieldset>
-                      );
-                      break;
+                      case "password":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name} <span>{required ? "*" : ""}</span>
+                            </label>
+                            <input
+                              type="password"
+                              id={input_name}
+                              name={input_name}
+                              className="form-control"
+                              placeholder={`Enter ${input_name}`}
+                              onChange={(e) => handleChange(input.id, e.target.value)}
+                            />
+                          </fieldset>
+                        );
+                        break;
 
-                    default:
-                      break;
-                  }
+                      case "file":
+                        inputField = (
+                          <fieldset key={id} className="box box-fieldset">
+                            <label htmlFor={input_name}>
+                              {input_name} <span>{required ? "*" : ""}</span>
+                            </label>
+                            <input
+                              type="file"
+                              id={input_name}
+                              name={input_name}
+                              className="form-control"
+                              onChange={(e) => handleChange(input.id, e.target.files[0])}
+                            />
+                          </fieldset>
+                        );
+                        break;
 
-                  return inputField;
-                })}
-              </div>
-            ) : (
-              <div className="box grid-2 gap-30">
-                {/* <h3>No Inputs</h3> */}
-              </div>
-            )}
+                      default:
+                        break;
+                    }
 
-          </div>
+                    return inputField;
+                  })}
+                </div>
+              ) : (
+                <div className="box grid-2 gap-30">
+                  <h3>No Inputs</h3>
+                </div>
+              )}
+
+
+            </div>
+          )}
         </div>
 
         {/* <div className="widget-box-2 mb-20">
@@ -1099,14 +1415,26 @@ export default function AddProperty() {
             </fieldset>
           </div>
         </div> */}
-        <div className="box-btn" onClick={handleSubmit}>
-          <a className="tf-btn primary">
-            Add Property
-          </a>
-          {/* <a href="#" className="tf-btn btn-line">
+        {editData?.length ? (
+          <div className="box-btn" onClick={handlePrevSubmit}>
+            <a className="tf-btn primary">
+              Update Property
+            </a>
+            {/* <a href="#" className="tf-btn btn-line">
+          Save &amp; Preview
+        </a> */}
+          </div>
+        ) : (
+          <div className="box-btn" onClick={handleSubmit}>
+            <a className="tf-btn primary">
+              Add Property
+            </a>
+            {/* <a href="#" className="tf-btn btn-line">
             Save &amp; Preview
           </a> */}
-        </div>
+          </div>
+        )}
+
       </div>
       <div className="footer-dashboard">
         <p>Copyright © 2024 Lands India</p>

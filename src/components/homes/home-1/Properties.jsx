@@ -7,25 +7,460 @@ import PermPhoneMsgIcon from '@mui/icons-material/PermPhoneMsg';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import DraftsTwoToneIcon from '@mui/icons-material/DraftsTwoTone';
+import EnquiryForm from "@/components/common/Enquiry";
+import { getProperties, updateWishlist, getUserWishList } from "@/apiCalls";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import { toast } from "react-toastify";
 
 export default function Properties() {
-  const [selectedOption, setSelectedOption] = useState(filterOptions[2]);
-  const [filtered, setFiltered] = useState(props);
-  useEffect(() => {
-    if (selectedOption == "View All") {
-      const filteredProps = props.slice(0, 8);
-      setFiltered(filteredProps);
-    } else {
-      setFiltered(
-        props.filter((el) => el.filterOptions.includes(selectedOption))
-      );
-    }
-  }, [selectedOption, props]);
 
+  //   const [wishListList, setWishListList] = useState([]);
+
+  //   // sample wishListList [32 , 33 ]
+
+  //   const fetchWishlist = async () => {
+
+  //     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+  //     if (landsUser) {
+
+  //       try {
+  //         const data = await getUserWishList(landsUser.id);
+
+  //         if (data.success) {
+  //           setWishListList(data.wishList)
+  //         } else {
+  //           toast.error(data.message)
+  //         }
+  //       } catch (err) {
+  //         console.error('Error fetching categories:', err);
+  //       }
+  //     }
+  //   }
+
+  //   useEffect(() => {
+  //     fetchWishlist()
+  //   }, [])
+
+
+
+  //   const [properties, setProperties] = useState([]);
+
+  //   sampleProperties
+  //  [
+  //     {
+  //       "id": 32,
+  //       "sub_menuId": 1,
+  //       "sellerId": 1,
+  //       "location": "chennai",
+  //       "price": "200000000",
+  //       "status": "Available",
+  //       "file_path": "http://luxcycs.com:4400/lands-india-api/uploads/1736842210277-profile-new.jpg",
+  //       "isPremium": true,
+  //       "createdAt": "2025-01-14T08:10:10.000Z",
+  //       "updatedAt": "2025-01-14T08:10:10.000Z",
+  //       "inputs": [
+  //           {
+  //               "id": 31,
+  //               "properties_postId": 32,
+  //               "input_id": 1,
+  //               "input_value": "chk",
+  //               "createdAt": "2025-01-14T08:10:10.000Z",
+  //               "updatedAt": "2025-01-14T08:10:10.000Z",
+  //               "input_name": "title",
+  //               "input_type": "text",
+  //               "options": null
+  //           },
+  //           {
+  //               "id": 32,
+  //               "properties_postId": 32,
+  //               "input_id": 2,
+  //               "input_value": "chk desc",
+  //               "createdAt": "2025-01-14T08:10:10.000Z",
+  //               "updatedAt": "2025-01-14T08:10:10.000Z",
+  //               "input_name": "description",
+  //               "input_type": "textarea",
+  //               "options": null
+  //           },
+  //           {
+  //               "id": 33,
+  //               "properties_postId": 32,
+  //               "input_id": 3,
+  //               "input_value": "200000000",
+  //               "createdAt": "2025-01-14T08:10:10.000Z",
+  //               "updatedAt": "2025-01-14T08:10:10.000Z",
+  //               "input_name": "price",
+  //               "input_type": "text",
+  //               "options": null
+  //           },
+  //           {
+  //               "id": 34,
+  //               "properties_postId": 32,
+  //               "input_id": 4,
+  //               "input_value": "Chennai",
+  //               "createdAt": "2025-01-14T08:10:10.000Z",
+  //               "updatedAt": "2025-01-14T08:10:10.000Z",
+  //               "input_name": "location",
+  //               "input_type": "text",
+  //               "options": null
+  //           },
+  //           {
+  //               "id": 35,
+  //               "properties_postId": 32,
+  //               "input_id": 9,
+  //               "input_value": "45678",
+  //               "createdAt": "2025-01-14T08:10:10.000Z",
+  //               "updatedAt": "2025-01-14T08:10:10.000Z",
+  //               "input_name": "check ",
+  //               "input_type": "number",
+  //               "options": [
+  //                   ""
+  //               ]
+  //           },
+  //           {
+  //               "id": 36,
+  //               "properties_postId": 32,
+  //               "input_id": 10,
+  //               "input_value": "no,true",
+  //               "createdAt": "2025-01-14T08:10:10.000Z",
+  //               "updatedAt": "2025-01-14T08:10:10.000Z",
+  //               "input_name": "Propert Name",
+  //               "input_type": "checkbox",
+  //               "options": [
+  //                   "yes",
+  //                   "no",
+  //                   "true",
+  //                   "false"
+  //               ]
+  //           }
+  //       ]
+  //   },
+  //   {
+  //       "id": 36,
+  //       "sub_menuId": 1,
+  //       "sellerId": 1,
+  //       "location": "hyderabad",
+  //       "price": "5000000",
+  //       "status": "Available",
+  //       "file_path": "uploads/1736845533690-Default.jpg",
+  //       "isPremium": true,
+  //       "createdAt": "2025-01-14T09:05:41.000Z",
+  //       "updatedAt": "2025-01-14T09:05:41.000Z",
+  //       "inputs": [
+  //           {
+  //               "id": 51,
+  //               "properties_postId": 36,
+  //               "input_id": 1,
+  //               "input_value": "villa",
+  //               "createdAt": "2025-01-14T09:05:41.000Z",
+  //               "updatedAt": "2025-01-14T09:05:41.000Z",
+  //               "input_name": "title",
+  //               "input_type": "text",
+  //               "options": null
+  //           },
+  //           {
+  //               "id": 52,
+  //               "properties_postId": 36,
+  //               "input_id": 2,
+  //               "input_value": "Dreams",
+  //               "createdAt": "2025-01-14T09:05:41.000Z",
+  //               "updatedAt": "2025-01-14T09:05:41.000Z",
+  //               "input_name": "description",
+  //               "input_type": "textarea",
+  //               "options": null
+  //           },
+  //           {
+  //               "id": 53,
+  //               "properties_postId": 36,
+  //               "input_id": 3,
+  //               "input_value": "5000000",
+  //               "createdAt": "2025-01-14T09:05:41.000Z",
+  //               "updatedAt": "2025-01-14T09:05:41.000Z",
+  //               "input_name": "price",
+  //               "input_type": "text",
+  //               "options": null
+  //           },
+  //           {
+  //               "id": 54,
+  //               "properties_postId": 36,
+  //               "input_id": 4,
+  //               "input_value": "chennai",
+  //               "createdAt": "2025-01-14T09:05:41.000Z",
+  //               "updatedAt": "2025-01-14T09:05:41.000Z",
+  //               "input_name": "location",
+  //               "input_type": "text",
+  //               "options": null
+  //           },
+  //           {
+  //               "id": 55,
+  //               "properties_postId": 36,
+  //               "input_id": 10,
+  //               "input_value": "on",
+  //               "createdAt": "2025-01-14T09:05:41.000Z",
+  //               "updatedAt": "2025-01-14T09:05:41.000Z",
+  //               "input_name": "Propert Name",
+  //               "input_type": "checkbox",
+  //               "options": [
+  //                   "yes",
+  //                   "no",
+  //                   "true",
+  //                   "false"
+  //               ]
+  //           },
+  //           {
+  //               "id": 56,
+  //               "properties_postId": 36,
+  //               "input_id": 9,
+  //               "input_value": "-5",
+  //               "createdAt": "2025-01-14T09:05:41.000Z",
+  //               "updatedAt": "2025-01-14T09:05:41.000Z",
+  //               "input_name": "check ",
+  //               "input_type": "number",
+  //               "options": [
+  //                   ""
+  //               ]
+  //           }
+  //       ]
+  //   }
+  // ]
+
+  //   const fetchProperty = async () => {
+  //     try {
+  //       const filter = {
+  //         location: "",
+  //         minPrice: 0,
+  //         maxPrice: 0,
+  //         keyword: "",
+  //         category: "",
+  //         subCategory: "",
+  //       };
+  //       const data = await getProperties(filter);
+  //       if (data.success) {
+  //         const combined = data.properties.map((property) => {
+  //           const propertyInputs = data.propertyInputs.filter(input => input.properties_postId === property.id);
+
+  //           const inputsWithNames = propertyInputs.map((input) => {
+  //             const inputData = data.inputs.find(i => i.id === input.input_id);
+  //             return {
+  //               ...input,
+  //               input_name: inputData ? inputData.input_name : '',
+  //               input_type: inputData ? inputData.input_type : '',
+  //               options: inputData ? inputData.options : [],
+  //             };
+  //           });
+
+  //           return {
+  //             ...property,
+  //             inputs: inputsWithNames,
+  //           };
+  //         });
+
+  //         setProperties(combined);
+  //       } else {
+  //         toast.error(data.message)
+  //       }
+  //     } catch (err) {
+  //       console.error('Error fetching categories:', err);
+  //     }
+  //   };
+
+  //   useEffect(() => {
+  //     fetchProperty();
+  //   }, []);
+
+
+  //   const handleWishlist = async (elm) => {
+
+  //     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+  //     if (landsUser) {
+
+  //       const payLoad = {
+  //         userId: landsUser.id,
+  //         propertyId: elm.id,
+  //         action: 'add',
+  //       }
+
+  //       try {
+
+  //         const data = await updateWishlist(payLoad);
+  //         if (data.success) {
+  //           toast.success(data.message)
+  //         } else {
+  //           toast.error(data.message)
+  //         }
+  //       } catch (err) {
+  //         console.error('Error fetching categories:', err);
+  //       }
+
+  //     } else {
+  //       toast.error("Please Login to Continue")
+  //     }
+
+
+  //     console.log(elm)
+  //   }
+
+
+  // // const combineData = (e) => {
+  // //
+  // const combined = data.properties.map((property) => {
+  //   const propertyInputs = data.propertyInputs.filter(input => input.properties_postId === property.id);
+
+  //   const inputsWithNames = propertyInputs.map((input) => {
+  //     const inputData = data.inputs.find(i => i.id === input.input_id);
+  //     return {
+  //       ...input,
+  //       input_name: inputData ? inputData.input_name : '',
+  //       input_type: inputData ? inputData.input_type : '',
+  //       options: inputData ? inputData.options : [],
+  //     };
+  //   });
+
+  //   return {
+  //     ...property,
+  //     inputs: inputsWithNames,
+  //   };
+  // });
+
+  // setProperties(combined);
+  // // };
+
+
+  const [wishListList, setWishListList] = useState([]);
+  const [properties, setProperties] = useState([]);
+
+  const displayedProperties = (() => {
+    const maxCount = 8;
+    const slicedProperties = properties.slice(0, maxCount);
+
+    if (slicedProperties.length < maxCount && slicedProperties.length % 2 === 0) {
+      slicedProperties.pop();
+    }
+
+    return slicedProperties;
+  })();
+
+
+  const fetchWishlist = async () => {
+    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+    if (landsUser) {
+      try {
+        const data = await getUserWishList(landsUser.id);
+
+        if (data.success) {
+          setWishListList(data.wishList);
+        } else {
+          toast.error(data.message);
+        }
+      } catch (err) {
+        console.error('Error fetching wishlist:', err);
+      }
+    }
+  };
+
+  const fetchProperty = async () => {
+    try {
+      const filter = {
+        location: "",
+        minPrice: 0,
+        maxPrice: 0,
+        keyword: "",
+        category: "",
+        subCategory: "",
+      };
+      const data = await getProperties(filter);
+      if (data.success) {
+        const combined = data.properties.map((property) => {
+          const propertyInputs = data.propertyInputs.filter(input => input.properties_postId === property.id);
+
+          const inputsWithNames = propertyInputs.map((input) => {
+            const inputData = data.inputs.find(i => i.id === input.input_id);
+            return {
+              ...input,
+              input_name: inputData ? inputData.input_name : '',
+              input_type: inputData ? inputData.input_type : '',
+              options: inputData ? inputData.options : [],
+            };
+          });
+
+          return {
+            ...property,
+            inputs: inputsWithNames,
+            isWishlist: wishListList.includes(property.id), // Add isWishlist
+          };
+        });
+
+        setProperties(combined);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (err) {
+      console.error('Error fetching properties:', err);
+    }
+  };
+
+  useEffect(() => {
+    setProperties((prevProperties) =>
+      prevProperties.map((property) => ({
+        ...property,
+        isWishlist: wishListList.includes(property.id),
+      }))
+    );
+  }, [wishListList]);
+
+  useEffect(() => {
+    fetchWishlist();
+    fetchProperty();
+  }, []);
+
+  const handleWishlist = async (elm, act) => {
+    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+    if (landsUser) {
+      const payLoad = {
+        userId: landsUser.id,
+        propertyId: elm.id,
+        action: act, // Adjust the action based on your requirements
+      };
+
+      try {
+        const data = await updateWishlist(payLoad);
+        if (data.success) {
+          toast.success(data.message);
+
+          const updatedWishList = await getUserWishList(landsUser.id);
+          if (updatedWishList.success) {
+            setWishListList(updatedWishList.wishList);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      } catch (err) {
+        console.error('Error updating wishlist:', err);
+      }
+    } else {
+      toast.error("Please Login to Continue");
+    }
+  };
+
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
 
   return (
     <>
+      <EnquiryForm open={open} handleClose={handleClose} />
       <style>
         {`
           .list-header-custom {
@@ -107,24 +542,23 @@ export default function Properties() {
             <div className="tab-content" >
               <div className="tab-pane active show">
                 <div className="row">
-                  {filtered.map((property, index) => (
+                  {displayedProperties.length > 0 && displayedProperties.map((elm, index) => (
                     <div key={index} className="col-xl-3 col-lg-3 col-md-6 col-sm-12">
                       <div className="homelengo-box">
                         <div className="archive-top">
-                          <Link to={`/property-details/${property.id}`} className="images-group">
+                          <Link className="images-group">
                             <div className="images-style" style={{ position: "relative" }}>
                               <img
                                 className="lazyload"
-                                data-src={property.img[0]}
+                                data-src={elm.file_path ? elm.file_path.split(',')[0] : ""}
                                 alt=""
-                                src={property.img[0]}
+                                src={elm.file_path ? elm.file_path.split(',')[0] : ""}
                                 style={{
                                   width: "615px",
                                   height: "250px",
                                   objectFit: "cover",
                                 }}
                               />
-                              {/* Gradient Overlay */}
                               <div
                                 style={{
                                   position: "absolute",
@@ -158,8 +592,42 @@ export default function Properties() {
                                   strokeLinejoin="round"
                                 />
                               </svg>
-                              {property.propertyDetails.location.district}, {property.propertyDetails.location.state}
+                              {
+                                elm.inputs.find(item => item.input_name === "location")?.input_value || ""
+                              }
                             </div>
+                            {elm.isWishlist ? (
+                              <div
+                                style={{
+                                  position: "absolute",
+                                  bottom: 0,
+                                  left: 0,
+                                  right: 0,
+                                  height: "100%",
+                                  zIndex: 9999,
+                                  padding: '10px 0px 0px 15px',
+                                  background: "linear-gradient(to bottom, rgba(0, 0, 0, 0.), rgba(0, 0, 0, 0))",
+                                }}
+                              // Replace with your wishlist handling function
+                              >
+                                <FavoriteIcon onClick={() => handleWishlist(elm, "remove")} />{/* You can use Font Awesome for the heart icon */}
+                              </div>
+                            ) : (
+                              <div
+                                style={{
+                                  position: "absolute",
+                                  bottom: 0,
+                                  left: 0,
+                                  right: 0,
+                                  height: "100%",
+                                  zIndex: 9999,
+                                  padding: '10px 0px 0px 15px',
+                                  background: "linear-gradient(to bottom, rgba(0, 0, 0, 0.), rgba(0, 0, 0, 0))",
+                                }}
+                              >
+                                <FavoriteBorderIcon onClick={() => handleWishlist(elm, 'add')} />{/* You can use Font Awesome for the heart icon */}
+                              </div>
+                            )}
                           </Link>
                         </div>
 
@@ -167,64 +635,80 @@ export default function Properties() {
                           <div className="content-top">
                             <h6 className="text-capitalize">
                               <Link
-                                to={`/property-details/${property.id}`}
+                                to={`/property-details/${elm.id}`}
                                 className="link"
                               >
-                                {property.propertyDetails.title}
+                                {
+                                  elm.inputs.find(item => item.input_name === "title")?.input_value || ""
+                                }
                               </Link>
                             </h6>
                             <ul className="meta-list" style={{ paddingLeft: '0px' }}>
                               <li className="item">
                                 <i className="icon icon-bed" style={{ fontSize: '25px' }} />
                                 <span className="text-variant-1">Beds:</span>
-                                <span className="fw-6">{8}</span>
+                                <span className="fw-6">{
+                                  elm.inputs.find(item => item.input_name === "beds")?.input_value || ""
+                                }</span>
                               </li>
                               <li className="item">
                                 <i className="icon icon-bath" style={{ fontSize: '25px' }} />
                                 <span className="text-variant-1">Baths:</span>
-                                <span className="fw-6">{property.baths}</span>
+                                <span className="fw-6">{
+                                  elm.inputs.find(item => item.input_name === "baths")?.input_value || ""
+                                }</span>
                               </li>
                               <li className="item">
                                 <i className="icon icon-sqft" style={{ fontSize: '25px' }} />
                                 <span className="text-variant-1">Sqft:</span>
-                                <span className="fw-6">{property.sqft}</span>
+                                <span className="fw-6">{
+                                  elm.inputs.find(item => item.input_name === "sqft")?.input_value || ""
+                                }</span>
                               </li>
                             </ul>
                           </div>
                           <div className="content-bottom">
                             <h6 className="price">
-                              ₹{property.propertyDetails.price}
+                              ₹{
+                                elm.inputs.find(item => item.input_name === "price")?.input_value || ""
+                              }
                             </h6>
                             <div className="d-flex gap-8 align-items-center">
-                              <span style={{ cursor: 'pointer', fontWeight: 'bold', border: '1.5px dotted black', padding: '5px 10px' }} >View Details</span>
+                              <Link
+                                to={`/property-details/${elm.id}`}
+                                className="link"
+                              >
+                                <span style={{ cursor: 'pointer', fontWeight: 'bold', border: '1.5px dotted black', padding: '5px 10px' }} >View Details</span>
+                              </Link>
                             </div>
 
                           </div>
                           <div className="content-bottom mt-3">
                             <div
-                              className="d-flex justify-content-center align-items-center shadow-sm mt-3"
+                              onClick={handleClickOpen}
+                              className="d-flex justify-content-center align-items-center shadow-sm mt-1"
                               style={{
                                 cursor: 'pointer',
                                 fontWeight: 'bold',
                                 background: '#018df7',
                                 color: '#ffffff',
-                                padding: '10px 5px',
+                                padding: '10px 10px',
                                 borderRadius: '0px',
                                 textAlign: 'center',
                               }}
                             >
                               <DraftsTwoToneIcon sx={{ marginRight: '5px' }} />
-                              <span>Enquiry Now</span>
+                              <span style={{ fontSize: '14px' }}>Enquiry Now</span>
                             </div>
                             <div
-                              className="d-flex justify-content-around mt-3"
+                              className="d-flex justify-content-around mt-1"
                               style={{ gap: '15px' }}
                             >
                               <div
                                 className="d-flex justify-content-center align-items-center rounded-circle border shadow-sm"
                                 style={{
-                                  width: '50px',
-                                  height: '50px',
+                                  width: '44px',
+                                  height: '44px',
                                   cursor: 'pointer',
                                   background: '#ffffff',
                                 }}
@@ -234,8 +718,8 @@ export default function Properties() {
                               <div
                                 className="d-flex justify-content-center align-items-center rounded-circle border shadow-sm"
                                 style={{
-                                  width: '50px',
-                                  height: '50px',
+                                  width: '44px',
+                                  height: '44px',
                                   cursor: 'pointer',
                                   background: '#ffffff',
                                 }}
@@ -262,9 +746,9 @@ export default function Properties() {
               </div>
             </div>
           </div>
-        </div>
+        </div >
 
-      </section>
+      </section >
     </>
   );
 }

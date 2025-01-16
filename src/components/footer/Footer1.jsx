@@ -341,7 +341,7 @@ import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 const Footer1 = () => {
   return (
     <Grid sx={{ backgroundColor: '#1c1c1e', color: '#fff' }}>
-      <Box sx={{ py: 5, width: { xs: '98%', sm: '98%', md: '90%' }, margin: '0px auto' }}>
+      <Box sx={{ py: 5, width: { xs: '85%', sm: '85%', md: '90%' }, margin: '0px auto' }}>
         <Grid container sx={{ justifyContent: { xs: 'space-between' } }}>
           <Grid container sx={{ justifyContent: { xs: 'space-between' }, margin: '50px 0' }}>
 

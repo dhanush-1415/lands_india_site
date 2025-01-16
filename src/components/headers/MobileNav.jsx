@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import Nav from "./Nav";
+import NavTwo from "./Nav2";
 
 export default function MobileNav() {
   useEffect(() => {
@@ -57,6 +58,7 @@ export default function MobileNav() {
     >
       <ul className="navigation clearfix mobile-nav">
         <Nav />
+        <NavTwo />
       </ul>
     </div>
   );

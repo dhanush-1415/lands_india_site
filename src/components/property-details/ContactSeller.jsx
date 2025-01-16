@@ -1,16 +1,30 @@
-import React from "react";
+import React,{useState} from "react";
 import AttachEmailSharpIcon from '@mui/icons-material/AttachEmailSharp';
 import CallIcon from '@mui/icons-material/Call';
 import PermPhoneMsgIcon from '@mui/icons-material/PermPhoneMsg';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import DraftsTwoToneIcon from '@mui/icons-material/DraftsTwoTone';
-
+import EnquiryForm from "../common/Enquiry";
 
 export default function ContactSeller() {
+
+
+  
+    const [open, setOpen] = useState(false);
+  
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
   return (
+
     <>
       {" "}
+      <EnquiryForm open={open} handleClose={handleClose} />
       {/* <h5 className="title fw-6">Contact Sellers</h5> */}
       <h5 className="fw-6">Posted By: Owner</h5>
       {/* <div className="box-avatar">
@@ -73,6 +87,7 @@ export default function ContactSeller() {
               borderRadius: '0px',
               textAlign: 'center',
             }}
+            onClick={handleClickOpen}
           >
             <DraftsTwoToneIcon sx={{ marginRight: '5px' }} />
             <span>Enquiry Now</span>
@@ -87,7 +102,7 @@ export default function ContactSeller() {
             }}
           >
             <CallIcon sx={{ color: '#018df7' }} />
-            
+
           </div>
           <div
             className="d-flex justify-content-center align-items-center rounded-circle border shadow-sm"

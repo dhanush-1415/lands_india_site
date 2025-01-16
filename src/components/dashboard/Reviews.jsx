@@ -6,7 +6,7 @@ export default function Reviews() {
     <div className="main-content">
       <div className="main-content-inner">
         <div className="button-show-hide show-mb">
-          <span className="body-1">Show Dashboard</span>
+          <span className="body-1">Show Menu</span>
         </div>
         <div className="widget-box-2 mess-box">
           <h5 className="title">Recent Reviews</h5>

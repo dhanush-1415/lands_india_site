@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import LineChart from "./LineChart";
 import DropdownSelect from "../common/DropdownSelect";
 import { Link } from "react-router-dom";
@@ -6,22 +6,50 @@ import { Link } from "react-router-dom";
 import Pagination from "../common/Pagination";
 import { properties2, properties4 } from "@/data/properties";
 import Pagination2 from "../common/Pagination2";
+import { getUserCount } from "@/apiCalls";
+
 export default function Dashboard() {
 
-    const handleLogout = () => {
-      localStorage.removeItem("LandsUser");
-      // toast.success("Logout Successful");
-      window.location.href = "/"
-    }
+  const [data , setData ] = useState()
+
+    const fetchDashboard = async () => {
+      const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
   
+      if (landsUser) {
+        try {
+
+          const data = await getUserCount(landsUser.id);
+  
+          if (data.success) {
+            console.log(data , "ccccccccccccccccccccccccccccccccccccccc")
+            setData(data);
+          } else {
+            toast.error(data.message || data.error || "Something Went Wrong")
+          }
+        } catch (err) {
+          console.error('Error fetching categories:', err);
+        }
+      } else {
+        toast.error("Seller Not Found")
+        setTimeout(() => {
+          window.location.href = "/"
+        }, 4000);
+      }
+    }
+
+    useEffect(()=>{
+      fetchDashboard();
+    },[])
+  
+
   return (
-    <div className="main-content">
+    <div className="main-content" style={{width:'100%'}}>
       <div className="main-content-inner">
         <div className="button-show-hide show-mb">
-          <span className="body-1">Show Dashboard</span>
+          <span className="body-1">Show Menu</span>
         </div>
         <div className="flat-counter-v2 tf-counter">
-          <div className="counter-box" onClick={handleLogout}>
+          <div className="counter-box">
             <div className="box-icon">
               <span className="icon icon-listing" />
             </div>
@@ -29,12 +57,12 @@ export default function Dashboard() {
               <div className="title-count text-variant-1" >Your listing</div>
               <div className="box-count d-flex align-items-end">
                 {/* <h3 className="number fw-8" data-speed="2000" data-to="17" data-inviewport="yes">32</h3>       */}
-                <h3 className="fw-8">32</h3>
-                <span className="text">/50 remaining</span>
+                <h3 className="fw-8">{data?.propertyCount}</h3>
+                {/* <span className="text">/50 remaining</span> */}
               </div>
             </div>
           </div>
-          <div className="counter-box">
+          {/* <div className="counter-box">
             <div className="box-icon">
               <span className="icon icon-pending" />
             </div>
@@ -44,7 +72,7 @@ export default function Dashboard() {
                 <h3 className="fw-8">02</h3>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="counter-box">
             <div className="box-icon">
               <span className="icon icon-favorite" />
@@ -53,7 +81,7 @@ export default function Dashboard() {
               <div className="title-count text-variant-1">Favorites</div>
               <div className="d-flex align-items-end">
                 {/* <h6 className="number" data-speed="2000" data-to="1" data-inviewport="yes">1</h6>  */}
-                <h3 className="fw-8">06</h3>
+                <h3 className="fw-8">{data?.wishlist}</h3>
               </div>
             </div>
           </div>
@@ -62,9 +90,9 @@ export default function Dashboard() {
               <span className="icon icon-review" />
             </div>
             <div className="content-box">
-              <div className="title-count text-variant-1">Visitors</div>
+              <div className="title-count text-variant-1">Enquires</div>
               <div className="d-flex align-items-end">
-                <h3 className="fw-8">1.483</h3>
+                <h3 className="fw-8">{data?.queryCount}</h3>
               </div>
             </div>
           </div>

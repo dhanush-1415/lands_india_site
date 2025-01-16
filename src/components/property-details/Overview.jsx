@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid } from "@mui/material";
 
-export default function Overview({ additionalInformation }) {
+export default function Overview({ data }) {
   return (
     <>
       <h5 className="mt-8 fw-6 title">Overview</h5>
@@ -98,7 +98,9 @@ export default function Overview({ additionalInformation }) {
                 </a>
                 <div className="content">
                   <span className="label">Floors:</span>
-                  <span>{additionalInformation.numberOfFloors}</span>
+                  <span>{
+                      data[0].inputs.find(item => item.input_name === "floors")?.input_value || ""
+                    }</span>
                 </div>
               </li>
             </Grid>
@@ -111,7 +113,9 @@ export default function Overview({ additionalInformation }) {
                 </a>
                 <div className="content">
                   <span className="label">Bathrooms:</span>
-                  <span>{additionalInformation.bathrooms}</span>
+                  <span>{
+                      data[0].inputs.find(item => item.input_name === "baths")?.input_value || ""
+                    }</span>
                 </div>
               </li>
             </Grid>
@@ -124,7 +128,9 @@ export default function Overview({ additionalInformation }) {
                 </a>
                 <div className="content">
                   <span className="label">Furnished:</span>
-                  <span>{additionalInformation.furnished}</span>
+                  <span>{
+                      data[0].inputs.find(item => item.input_name === "furnished")?.input_value || ""
+                    }</span>
                 </div>
               </li>
             </Grid>
@@ -137,7 +143,9 @@ export default function Overview({ additionalInformation }) {
                 </a>
                 <div className="content">
                   <span className="label">Floor Type:</span>
-                  <span>{additionalInformation.floorType}</span>
+                  <span>{
+                      data[0].inputs.find(item => item.input_name === "floor")?.input_value || ""
+                    }</span>
                 </div>
               </li>
             </Grid>
@@ -150,7 +158,9 @@ export default function Overview({ additionalInformation }) {
                 </a>
                 <div className="content">
                   <span className="label">Property Age:</span>
-                  <span>{additionalInformation.propertyAge}</span>
+                  <span>{
+                      data[0].inputs.find(item => item.input_name === "age")?.input_value || ""
+                    }</span>
                 </div>
               </li>
             </Grid>
@@ -163,7 +173,9 @@ export default function Overview({ additionalInformation }) {
                 </a>
                 <div className="content">
                   <span className="label">Car Parking:</span>
-                  <span>{additionalInformation.carParking}</span>
+                  <span>{
+                      data[0].inputs.find(item => item.input_name === "parking")?.input_value || ""
+                    }</span>
                 </div>
               </li>
             </Grid>
@@ -176,7 +188,9 @@ export default function Overview({ additionalInformation }) {
                 </a>
                 <div className="content">
                   <span className="label">Frontage:</span>
-                  <span>{additionalInformation.frontage}</span>
+                  <span>{
+                      data[0].inputs.find(item => item.input_name === "frontage")?.input_value || ""
+                    }</span>
                 </div>
               </li>
             </Grid>
@@ -189,7 +203,9 @@ export default function Overview({ additionalInformation }) {
                 </a>
                 <div className="content">
                   <span className="label">Facing:</span>
-                  <span>{additionalInformation.facing}</span>
+                  <span>{
+                      data[0].inputs.find(item => item.input_name === "facing")?.input_value || ""
+                    }</span>
                 </div>
               </li>
             </Grid>
@@ -202,7 +218,9 @@ export default function Overview({ additionalInformation }) {
                 </a>
                 <div className="content">
                   <span className="label">EB Connection:</span>
-                  <span>{additionalInformation.ebConnection}</span>
+                  <span>{
+                      data[0].inputs.find(item => item.input_name === "eb")?.input_value || ""
+                    }</span>
                 </div>
               </li>
             </Grid>
@@ -215,7 +233,9 @@ export default function Overview({ additionalInformation }) {
                 </a>
                 <div className="content">
                   <span className="label">Has Solar:</span>
-                  <span>{additionalInformation.hasSolar}</span>
+                  <span>{
+                      data[0].inputs.find(item => item.input_name === "solar")?.input_value || ""
+                    }</span>
                 </div>
               </li>
             </Grid>
@@ -228,7 +248,9 @@ export default function Overview({ additionalInformation }) {
                 </a>
                 <div className="content">
                   <span className="label">Water:</span>
-                  <span>{additionalInformation.water}</span>
+                  <span>{
+                      data[0].inputs.find(item => item.input_name === "water")?.input_value || ""
+                    }</span>
                 </div>
               </li>
             </Grid>
@@ -241,7 +263,9 @@ export default function Overview({ additionalInformation }) {
                 </a>
                 <div className="content">
                   <span className="label">Compound:</span>
-                  <span>{additionalInformation.compound}</span>
+                  <span>{
+                      data[0].inputs.find(item => item.input_name === "compound")?.input_value || ""
+                    }</span>
                 </div>
               </li>
             </Grid>
@@ -254,7 +278,9 @@ export default function Overview({ additionalInformation }) {
                 </a>
                 <div className="content">
                   <span className="label">Ceiling:</span>
-                  <span>{additionalInformation.ceiling}</span>
+                  <span>{
+                      data[0].inputs.find(item => item.input_name === "ceilig")?.input_value || ""
+                    }</span>
                 </div>
               </li>
             </Grid>
@@ -267,7 +293,9 @@ export default function Overview({ additionalInformation }) {
                 </a>
                 <div className="content">
                   <span className="label">Rental Income:</span>
-                  <span>{additionalInformation.rentalIncome}</span>
+                  <span>{
+                      data[0].inputs.find(item => item.input_name === "income")?.input_value || ""
+                    }</span>
                 </div>
               </li>
             </Grid>
@@ -280,7 +308,9 @@ export default function Overview({ additionalInformation }) {
                 </a>
                 <div className="content">
                   <span className="label">Road Width:</span>
-                  <span>{additionalInformation.roadWidth}</span>
+                  <span>{
+                      data[0].inputs.find(item => item.input_name === "roadwidth")?.input_value || ""
+                    }</span>
                 </div>
               </li>
             </Grid>
@@ -293,7 +323,9 @@ export default function Overview({ additionalInformation }) {
                 </a>
                 <div className="content">
                   <span className="label">Garden:</span>
-                  <span>{additionalInformation.garden}</span>
+                  <span>{
+                      data[0].inputs.find(item => item.input_name === "garden")?.input_value || ""
+                    }</span>
                 </div>
               </li>
             </Grid>

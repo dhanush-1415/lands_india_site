@@ -30,26 +30,100 @@ export default function FilterTab({
   }, []);
 
 
+  const AllLocation = [
+    { "id": 1, "name": "Ariyalur" },
+    { "id": 2, "name": "Chengalpattu" },
+    { "id": 3, "name": "Chennai" },
+    { "id": 4, "name": "Coimbatore" },
+    { "id": 5, "name": "Cuddalore" },
+    { "id": 6, "name": "Dharmapuri" },
+    { "id": 7, "name": "Dindigul" },
+    { "id": 8, "name": "Erode" },
+    { "id": 9, "name": "Kallakurichi" },
+    { "id": 10, "name": "Kancheepuram" },
+    { "id": 11, "name": "Karur" },
+    { "id": 12, "name": "Krishnagiri" },
+    { "id": 13, "name": "Madurai" },
+    { "id": 14, "name": "Mayiladuthurai" },
+    { "id": 15, "name": "Nagapattinam" },
+    { "id": 16, "name": "Kanyakumari" },
+    { "id": 17, "name": "Namakkal" },
+    { "id": 18, "name": "Perambalur" },
+    { "id": 19, "name": "Pudukkottai" },
+    { "id": 20, "name": "Ramanathapuram" },
+    { "id": 21, "name": "Ranipet" },
+    { "id": 22, "name": "Salem" },
+    { "id": 23, "name": "Sivaganga" },
+    { "id": 24, "name": "Tenkasi" },
+    { "id": 25, "name": "Thanjavur" },
+    { "id": 26, "name": "Theni" },
+    { "id": 27, "name": "Thiruvallur" },
+    { "id": 28, "name": "Thiruvarur" },
+    { "id": 29, "name": "Thoothukudi" },
+    { "id": 30, "name": "Tiruchirappalli" },
+    { "id": 31, "name": "Tirunelveli" },
+    { "id": 32, "name": "Tirupathur" },
+    { "id": 33, "name": "Tiruppur" },
+    { "id": 34, "name": "Tiruvannamalai" },
+    { "id": 35, "name": "The Nilgiris" },
+    { "id": 36, "name": "Vellore" },
+    { "id": 37, "name": "Viluppuram" },
+    { "id": 38, "name": "Virudhunagar" }
+  ]
 
+  const budgetOptions = [
+    { label: "Below 5Lakhs-5 Lakhs", minValue: 50000, maxValue: 500000 },
+    { label: "5Lakhs-25Lakhs", minValue: 500000, maxValue: 2500000 },
+    { label: "25Lakhs-60Lakhs", minValue: 2500000, maxValue: 6000000 },
+    { label: "60Lakhs-1Cr", minValue: 6000000, maxValue: 10000000 },
+    { label: "1Cr-Above 1Cr", minValue: 10000000, maxValue: 10000000 },  // Assuming "Above 1Cr" has no specific upper limit
+  ];
+  
 
   const [searchText, setSearchText] = useState("");
   const [location, setLocation] = useState("Location");
-  const [budget, setBudget] = useState("Budget");
+  const [minValue, setMinValue] = useState(null);
+  const [maxValue, setMaxValue] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(searchText || location || budget){
-      window.location.href = `/properties/all?keyword=${searchText}&location=${location}&minPrice=1800&maxPrice=5500`;
-    }else{
 
+    // Create a query object with only the non-null or non-default values
+    const query = {};
+
+    if (searchText) query.keyword = searchText;
+    if (location && location !== "Location") query.location = location.name;
+    if (minValue !== null) query.minPrice = minValue;
+    if (maxValue !== null) query.maxPrice = maxValue;
+
+    // Construct the query string
+    const queryString = Object.keys(query)
+      .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
+      .join("&");
+
+    // Redirect only if there's a query string
+    if (queryString) {
+      window.location.href = `/properties/all?${queryString}`;
+    } else {
+      window.location.href = `/properties/all`;
     }
   };
 
 
 
 
+
   return (
     <div className="flat-tab flat-tab-form">
+      <style>{`
+        @media (max-width: 990px) {
+          .media-custom-class {
+            gap: 0;
+            padding-right: 0;
+          }
+        }
+      `}</style>
+
       <ul className={tabClass} role="tablist" style={{ paddingLeft: '0' }}>
         <li className="nav-tab-item" role="presentation">
           <a href="#" className="custom-home-icon">
@@ -286,23 +360,36 @@ export default function FilterTab({
                         onChange={(e) => setSearchText(e.target.value)}
                         name="s"
                         title="Search for"
-                        required
+
                       />
                     </div>
                   </div>
                   <div className="form-group-2 form-style custom-search-field">
                     <DropdownSelect
-                      options={["Location", "Villa", "Studio", "Office", "House"]}
-                      value={location}
-                      onChange={(value) => setLocation(value)}
+                      options={["Location", ...(AllLocation?.map((item) => item.name) || [])]} // Prepend "All" to the options
+                      onChange={(location) => {
+                        const item = AllLocation.find((cat) => cat.name === location);
+                        setLocation(item);
+                      }}
                     />
                   </div>
                   <div className="form-group-3 form-style custom-search-field">
-                    <DropdownSelect
-                      options={["Budget", "Villa", "Studio", "Office", "House"]}
+                    {/* <DropdownSelect
+                      options={["Budget", "1000-2000", "2000-3000", "3000-4000", "4000-5000"]}
                       value={budget}
                       onChange={(value) => setBudget(value)}
+                    /> */}
+                    <DropdownSelect
+                      options={["Budget", ...budgetOptions.map((item) => item.label)]} // Prepend "Budget" to the options
+                      onChange={(selectedLabel) => {
+                        const selectedOption = budgetOptions.find((option) => option.label === selectedLabel);
+                        if (selectedOption) {
+                          setMinValue(selectedOption.minValue);
+                          setMaxValue(selectedOption.maxValue);
+                        }
+                      }}
                     />
+
                   </div>
                 </div>
                 <div className="box-btn-advanced">

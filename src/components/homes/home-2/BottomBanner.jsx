@@ -14,8 +14,14 @@ export default function BottomBanner() {
                         }
 
                         @media (max-width: 1050px) {
-                            .custom-desktop-view{
+                            .custom-desktop-view , .custom-mobile-viewer{
                                 display:none;
+                            }
+                            
+                            .custom-insider{
+                                position: relative;
+                                background: rgb(0,143,247);
+                                padding:20px;
                             }
                         }
                         @media (min-width: 1051px) {
@@ -37,7 +43,7 @@ export default function BottomBanner() {
                     `}
                 </style>
                 <div className="custom-desktop-view" style={{ width: '80%', margin: '20px auto', position: 'relative' }}>
-                    <div style={{ position: 'relative', width: '100%' }}>
+                    <div className="custom-empty" style={{ position: 'relative', width: '100%' }}>
                         <img
                             src="https://protywpv1.live.vithemes.com/wp-content/uploads/2024/11/ds.webp"
                             alt="Background"
@@ -87,6 +93,7 @@ export default function BottomBanner() {
                                 borderRadius: '10px',
                                 cursor: 'pointer',
                             }}
+                            onClick={() => (window.location.href = "/support")}
                         >
                             Reach our support team
                         </button>
@@ -141,8 +148,8 @@ export default function BottomBanner() {
                             textAlign: 'center',
                         }}
                     >
-                        <h2 style={{ textAlign:'center',fontSize: '2rem', marginBottom: '10px', color: '#ffffff', fontWeight: 'bold' }}>Are you selling or renting your property ?</h2>
-                        <p style={{ textAlign:'center',fontSize: '1rem', marginBottom: '20px' }}>
+                        <h2 style={{ textAlign: 'center', fontSize: '2rem', marginBottom: '10px', color: '#ffffff', fontWeight: 'bold' }}>Are you selling or renting your property ?</h2>
+                        <p style={{ textAlign: 'center', fontSize: '1rem', marginBottom: '20px' }}>
                             Thousands of luxury homes enthusiasts just like you visit our website
                         </p>
                         <button
@@ -156,6 +163,7 @@ export default function BottomBanner() {
                                 borderRadius: '10px',
                                 cursor: 'pointer',
                             }}
+                            onClick={() => (window.location.href = "/support")}
                         >
                             Reach our support team
                         </button>

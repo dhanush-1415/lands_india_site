@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -20,60 +20,62 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import EastIcon from '@mui/icons-material/East';
 import WestIcon from '@mui/icons-material/West';
 import { Grid } from "@mui/material";
+import { getPremiumList } from "@/apiCalls";
+import EnquiryForm from "@/components/common/Enquiry";
+
 
 export default function Carousel() {
 
+    const [open, setOpen] = useState(false);
 
-    const properties = [
-        {
-            image:
-                "https://images.unsplash.com/photo-1560518883-ce09059eeffa?fm=jpg&q=60&w=3000",
-            title: "On-road New House Sale in Udumalpet",
-            location: "Udumalpet, Tamil Nadu, India",
-            price: "₹97,00,000",
-            badges: ["Residential Property", "Posted On: Sep 25"],
-            details: [
-                { label: "Beds", value: "2", icon: <i style={{ fontSize: '30px' }} className="icon icon-bed" /> },
-                { label: "Baths", value: "4", icon: <i style={{ fontSize: '30px' }} className="icon icon-bath" /> },
-                { label: "Sqft", value: "1744", icon: <i style={{ fontSize: '30px' }} className="icon icon-sqft" /> },
-                { label: "Furnished", value: "Semi", icon: <i style={{ fontSize: '30px' }} className="icon icon-house-fill" /> },
-                { label: "Floors",value: "Ground + 1", icon: <StairsIcon style={{ fontSize: '35px' }} /> },
-                { label: "Parking",value: "Open", icon: <LocalParkingIcon style={{ fontSize: '35px' }} /> },
-            ],
-        },
-        {
-            image:
-                "https://images.unsplash.com/photo-1570129477492-45c003edd2be?fm=jpg&q=60&w=3000",
-            title: "Modern Apartment in Coimbatore",
-            location: "Coimbatore, Tamil Nadu, India",
-            price: "₹85,00,000",
-            badges: ["Apartment", "Posted On: Sep 22"],
-            details: [
-                { label: "Beds", value: "3", icon: <i className="icon icon-bed" /> },
-                { label: "Baths", value: "3", icon: <i className="icon icon-bath" /> },
-                { label: "Sqft", value: "1200", icon: <i className="icon icon-sqft" /> },
-                { label: "Furnished", value: "Fully", icon: <HomeIcon style={{ fontSize: '40px' }} /> },
-                { label: "Floors",value: "5th Floor", icon: <StairsIcon style={{ fontSize: '40px' }} /> },
-                { label: "Parking",value: "Covered", icon: <LocalParkingIcon style={{ fontSize: '40px' }} /> },
-            ],
-        },
-        {
-            image:
-                "https://images.unsplash.com/photo-1600585154340-be6161b89bf8?fm=jpg&q=60&w=3000",
-            title: "Luxury Villa in Ooty",
-            location: "Ooty, Tamil Nadu, India",
-            price: "₹1,50,00,000",
-            badges: ["Villa", "Posted On: Sep 20"],
-            details: [
-                { label: "Beds", value: "5", icon: <i className="icon icon-bed" /> },
-                { label: "Baths", value: "6", icon: <i className="icon icon-bath" /> },
-                { label: "Sqft", value: "3000", icon: <i className="icon icon-sqft" /> },
-                { label: "Furnished", value: "Fully", icon: <HomeIcon style={{ fontSize: '40px' }} /> },
-                { label: "Floors",value: "2", icon: <StairsIcon style={{ fontSize: '40px' }} /> },
-                { label: "Parking",value: "Private Garage", icon: <LocalParkingIcon style={{ fontSize: '40px' }} /> },
-            ],
-        },
-    ];
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+
+    const [properties, setProperties] = useState([]);
+
+
+    const fetchPremiumList = async () => {
+        try {
+            const data = await getPremiumList();
+            if (data.success) {
+                const combined = data.props.map((property) => {
+                    const propertyInputs = data.propInputs.filter(input => input.properties_postId === property.id);
+
+                    const inputsWithNames = propertyInputs.map((input) => {
+                        const inputData = data.inputs.find(i => i.id === input.input_id);
+                        return {
+                            ...input,
+                            input_name: inputData ? inputData.input_name : '',
+                            input_type: inputData ? inputData.input_type : '',
+                            options: inputData ? inputData.options : [],
+                        };
+                    });
+
+                    return {
+                        ...property,
+                        inputs: inputsWithNames,
+                    };
+                });
+
+                setProperties(combined);
+            } else {
+                toast.error(data.message)
+            }
+        } catch (err) {
+            console.error('Error fetching categories:', err);
+        }
+    };
+
+    useEffect(() => {
+        fetchPremiumList();
+    }, []);
+
 
     // const properties = [
     //     {
@@ -84,12 +86,12 @@ export default function Carousel() {
     //         price: "₹97,00,000",
     //         badges: ["Residential Property", "Posted On: Sep 25"],
     //         details: [
-    //             { label: "Beds", value: "2" },
-    //             { label: "Baths", value: "4" },
-    //             { label: "Sqft", value: "1744" },
-    //             { label: "Furnished", value: "Semi" },
-    //             {  value: "Ground + 1" },
-    //             {  value: "Open" },
+    //             { label: "Beds", value: "2", icon: <i style={{ fontSize: '30px' }} className="icon icon-bed" /> },
+    //             { label: "Baths", value: "4", icon: <i style={{ fontSize: '30px' }} className="icon icon-bath" /> },
+    //             { label: "Sqft", value: "1744", icon: <i style={{ fontSize: '30px' }} className="icon icon-sqft" /> },
+    //             { label: "Furnished", value: "Semi", icon: <i style={{ fontSize: '30px' }} className="icon icon-house-fill" /> },
+    //             { label: "Floors", value: "Ground + 1", icon: <StairsIcon style={{ fontSize: '35px' }} /> },
+    //             { label: "Parking", value: "Open", icon: <LocalParkingIcon style={{ fontSize: '35px' }} /> },
     //         ],
     //     },
     //     {
@@ -100,12 +102,12 @@ export default function Carousel() {
     //         price: "₹85,00,000",
     //         badges: ["Apartment", "Posted On: Sep 22"],
     //         details: [
-    //             { label: "Beds", value: "3" },
-    //             { label: "Baths", value: "3" },
-    //             { label: "Sqft", value: "1200" },
-    //             { label: "Furnished", value: "Fully" },
-    //             {  value: "5th Floor" },
-    //             {  value: "Covered" },
+    //             { label: "Beds", value: "3", icon: <i className="icon icon-bed" /> },
+    //             { label: "Baths", value: "3", icon: <i className="icon icon-bath" /> },
+    //             { label: "Sqft", value: "1200", icon: <i className="icon icon-sqft" /> },
+    //             { label: "Furnished", value: "Fully", icon: <HomeIcon style={{ fontSize: '40px' }} /> },
+    //             { label: "Floors", value: "5th Floor", icon: <StairsIcon style={{ fontSize: '40px' }} /> },
+    //             { label: "Parking", value: "Covered", icon: <LocalParkingIcon style={{ fontSize: '40px' }} /> },
     //         ],
     //     },
     //     {
@@ -116,15 +118,17 @@ export default function Carousel() {
     //         price: "₹1,50,00,000",
     //         badges: ["Villa", "Posted On: Sep 20"],
     //         details: [
-    //             { label: "Beds", value: "5" },
-    //             { label: "Baths", value: "6" },
-    //             { label: "Sqft", value: "3000" },
-    //             { label: "Furnished", value: "Fully" },
-    //             {  value: "2" },
-    //             {  value: "Private Garage" },
+    //             { label: "Beds", value: "5", icon: <i className="icon icon-bed" /> },
+    //             { label: "Baths", value: "6", icon: <i className="icon icon-bath" /> },
+    //             { label: "Sqft", value: "3000", icon: <i className="icon icon-sqft" /> },
+    //             { label: "Furnished", value: "Fully", icon: <HomeIcon style={{ fontSize: '40px' }} /> },
+    //             { label: "Floors", value: "2", icon: <StairsIcon style={{ fontSize: '40px' }} /> },
+    //             { label: "Parking", value: "Private Garage", icon: <LocalParkingIcon style={{ fontSize: '40px' }} /> },
     //         ],
     //     },
     // ];
+
+
 
     const CustomNextArrow = (props) => {
         const { onClick } = props;
@@ -179,6 +183,7 @@ export default function Carousel() {
 
     return (
         <section className="property-carousel" style={{ background: '#ffffff' }} >
+            <EnquiryForm open={open} handleClose={handleClose} />
             <style>
                 {`
                 
@@ -328,13 +333,13 @@ export default function Carousel() {
                     Exclusive <br /> Premium Properties
                 </h3>
                 <Slider {...settings}>
-                    {properties.map((property, index) => (
+                    {properties.length && properties.map((elm, index) => (
                         <div key={index} className="property-slide">
                             <div className="custom-cont">
                                 <Col lg={7} md={12} className="image-column" style={{ background: '#f8f9fa', display: 'flex', justifyContent: 'center', aligntems: 'center' }}>
                                     <img
-                                        src={property.image}
-                                        alt={property.title}
+                                        src={elm.file_path ? elm.file_path.split(',')[0] : ""}
+                                        alt={elm.id}
                                         className="property-image"
                                     />
                                 </Col>
@@ -344,14 +349,18 @@ export default function Carousel() {
                                     style={{ background: '#008ff7' }}
                                     className="details-column d-flex flex-column justify-content-center"
                                 >
-                                    <h4 className="property-title text-white">{property.title}</h4>
-                                    <p className="property-location text-white"><span className="icon icon-mapPin" style={{ marginRight: '10px' }} />{property.location}</p>
+                                    <h4 className="property-title text-white">{
+                                        elm.inputs.find(item => item.input_name === "title")?.input_value || ""
+                                    }</h4>
+                                    <p className="property-location text-white"><span className="icon icon-mapPin" style={{ marginRight: '10px' }} />{
+                                        elm.inputs.find(item => item.input_name === "location")?.input_value || ""
+                                    }</p>
                                     <div className="badges-container" style={{ display: 'flex' }}>
                                         <p
                                             style={{ color: '#161e2d', fontSize: '1rem', borderRadius: '0px', padding: '7px 10px', background: '#ffffff', fontWeight: 'bold' }}
                                             className="property-badge"
                                         >
-                                            {property.badges[0]}
+                                            Premium Property
                                         </p>
                                         <p
                                             style={{
@@ -367,7 +376,7 @@ export default function Carousel() {
                                             }}
                                             className="property-badge"
                                         >
-                                            {property.badges[1]}
+                                            {elm.createdAt.split('T')[0] || ""}
                                         </p>
                                         {/* 
                                         <Badge
@@ -379,26 +388,117 @@ export default function Carousel() {
                                         </Badge> */}
                                     </div>
                                     <Row className="property-details">
-                                        {property.details.map((detail, i) => (
-                                            <Col xs={6} sm={4} key={i}>
-                                                <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
-                                                    <span className="detail-icon" style={{ color: "#ffffff" }}>
-                                                        {detail.icon}
+                                        <Col xs={6} sm={4}>
+                                            <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                    <i style={{ fontSize: '30px' }} className="icon icon-bed" />
+                                                </span>
+                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                    <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                        Beds:
                                                     </span>
-                                                    <div style={{display:'flex',flexDirection:'column'}}>
-                                                        <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
-                                                            {detail.label || ""}:
-                                                        </span>
-                                                        <span className="detail-value text-white" style={{ marginBottom: '3px' }}>{detail.value}</span>
-                                                    </div>
-                                                </p>
-                                            </Col>
-                                        ))}
+                                                    <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                        {
+                                                            elm.inputs.find(item => item.input_name === "beds")?.input_value || ""
+                                                        }
+                                                    </span>
+                                                </div>
+                                            </p>
+                                        </Col>
+                                        <Col xs={6} sm={4}>
+                                            <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                    <i style={{ fontSize: '30px' }} className="icon icon-bath" />
+                                                </span>
+                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                    <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                        Baths:
+                                                    </span>
+                                                    <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                        {
+                                                            elm.inputs.find(item => item.input_name === "baths")?.input_value || ""
+                                                        }
+                                                    </span>
+                                                </div>
+                                            </p>
+                                        </Col>
+                                        <Col xs={6} sm={4}>
+                                            <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                    <i style={{ fontSize: '30px' }} className="icon icon-sqft" />
+                                                </span>
+                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                    <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                        Sqft:
+                                                    </span>
+                                                    <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                        {
+                                                            elm.inputs.find(item => item.input_name === "sqft")?.input_value || ""
+                                                        }
+                                                    </span>
+                                                </div>
+                                            </p>
+                                        </Col>
+                                        <Col xs={6} sm={4}>
+                                            <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                    <i style={{ fontSize: '30px' }} className="icon icon-house-fill" />
+                                                </span>
+                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                    <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                        Furnished:
+                                                    </span>
+                                                    <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                        {
+                                                            elm.inputs.find(item => item.input_name === "furnished")?.input_value || ""
+                                                        }
+                                                    </span>
+                                                </div>
+                                            </p>
+                                        </Col>
+                                        <Col xs={6} sm={4}>
+                                            <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                    <StairsIcon style={{ fontSize: '35px' }} />
+                                                </span>
+                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                    <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                        Floor:
+                                                    </span>
+                                                    <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                        {
+                                                            elm.inputs.find(item => item.input_name === "floors")?.input_value || ""
+                                                        }
+                                                    </span>
+                                                </div>
+                                            </p>
+                                        </Col>
+                                        <Col xs={6} sm={4}>
+                                            <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                    <LocalParkingIcon style={{ fontSize: '35px' }} />
+                                                </span>
+                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                    <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                        Parking:
+                                                    </span>
+                                                    <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                        {
+                                                            elm.inputs.find(item => item.input_name === "parking")?.input_value || ""
+                                                        }
+                                                    </span>
+                                                </div>
+                                            </p>
+                                        </Col>
                                     </Row>
 
-                                    <h5 className="property-price text-white">{property.price}</h5>
+                                    <h5 className="property-price text-white">
+                                        ₹{
+                                            elm.inputs.find(item => item.input_name === "price")?.input_value || ""
+                                        }
+                                    </h5>
                                     <div className="button-group">
-                                        <Button variant="primary" className="me-2" style={{ borderRadius: '0px', fontWeight: 'bold', fontSize: '1rem', background: '#ffffff', color: '#161e2d' }}>
+                                        <Button onClick={handleClickOpen} variant="primary" className="me-2" style={{ borderRadius: '0px', fontWeight: 'bold', fontSize: '1rem', background: '#ffffff', color: '#161e2d' }}>
                                             <DraftsIcon sx={{ marginRight: '2px' }} />
                                             Enquiry now
                                         </Button>
@@ -410,7 +510,7 @@ export default function Carousel() {
                                                 <Grid item md={9}>
                                                     <Grid>
                                                         <Grid container direction='column' alignItems='flex-start'>
-                                                            <Grid item sx={{ lineHeight: '15px', textAlign: 'left' }}>
+                                                            <Grid item sx={{ lineHeight: '14px', textAlign: 'left' }}>
                                                                 <p style={{ fontSize: 'smaller', width: 'max-content', marginBottom: '0px' }}><strong>  Call Us</strong> <br />  <strong>+91 936 382 8393</strong></p>
                                                             </Grid>
                                                         </Grid>

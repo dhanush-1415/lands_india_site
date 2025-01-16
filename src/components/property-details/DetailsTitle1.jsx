@@ -1,7 +1,12 @@
 import { allProperties } from "@/data/properties";
 import React from "react";
 
-export default function DetailsTitle1({ propertyItem }) {
+export default function DetailsTitle1({ data }) {
+
+
+  console.log(data, "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
+
+
   return (
     <div className="flat-section-v43" style={{ padding: '30px 0' }}>
       <style>
@@ -15,9 +20,13 @@ export default function DetailsTitle1({ propertyItem }) {
       <div className="custom-cont-full">
         <div className="header-property-detail">
           <div className="content-top d-flex justify-content-between align-items-center">
-            <h3 className="title link fw-8">{propertyItem.title}</h3>
+            <h3 className="title link fw-8">{
+              data[0]?.inputs?.find(item => item.input_name === "title")?.input_value || ""
+            }</h3>
             <div className="box-price d-flex align-items-end">
-              <h3 className="fw-8">₹{propertyItem.price}</h3>
+              <h3 className="fw-8">₹{
+                data[0]?.inputs?.find(item => item.input_name === "price")?.input_value || ""
+              }</h3>
               {/* <span className="body-1 text-variant-1">/month</span> */}
             </div>
           </div>
@@ -28,7 +37,9 @@ export default function DetailsTitle1({ propertyItem }) {
                 <p className="meta-item">
                   <span className="icon icon-mapPin" />
                   <span className="text-variant-1">
-                    {propertyItem.location.village}, {propertyItem.location.district}, {propertyItem.location.state}, {propertyItem.location.country}
+                    {
+                      data[0].inputs.find(item => item.input_name === "location")?.input_value || ""
+                    }
                   </span>
                 </p>
               </div>
@@ -41,24 +52,24 @@ export default function DetailsTitle1({ propertyItem }) {
                   </span>
                 </p>
               </div>
-              {/* {propertyItem?.features &&
+              {/* {data?.features &&
               <div className="info-box">
                 <div className="label">Features</div>
                 <ul className="meta">
                   <li className="meta-item">
                     <i className="icon icon-bed" />
                     <span className="text-variant-1">Beds:</span>
-                    <span className="fw-6">{propertyItem.features?.beds}</span>
+                    <span className="fw-6">{data.features?.beds}</span>
                   </li>
                   <li className="meta-item">
                     <i className="icon icon-bath" />
                     <span className="text-variant-1">Baths:</span>
-                    <span className="fw-6">{propertyItem.features?.baths}</span>
+                    <span className="fw-6">{data.features?.baths}</span>
                   </li>
                   <li className="meta-item">
                     <i className="icon icon-sqft" />
                     <span className="text-variant-1">Sqft:</span>
-                    <span className="fw-6">{propertyItem.features?.sqfeet}</span>
+                    <span className="fw-6">{data.features?.sqfeet}</span>
                   </li>
                 </ul>
               </div>
@@ -70,7 +81,9 @@ export default function DetailsTitle1({ propertyItem }) {
                 <p className="meta-item">
                   <span className="icon icon-sqft" />
                   <span className="text-variant-1">
-                    2300Sqft
+                    {
+                      data[0].inputs.find(item => item.input_name === "sqft")?.input_value || ""
+                    }Sqft
                   </span>
                 </p>
               </div>

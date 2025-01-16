@@ -8,6 +8,8 @@ import { getAgents } from "@/apiCalls";
 import Pagination from "./Pagination";
 import DropdownSelect from "./DropdownSelect";
 import Footer2 from "../footer/Footer2";
+import CreateAgent from "./CreateAgent";
+
 export default function Agents() {
 
 
@@ -35,13 +37,30 @@ export default function Agents() {
     fetchAgents();
   }, []);
 
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
+      <CreateAgent open={open} handleClose={handleClose} />
       <section className="flat-section flat-agents" style={{ paddingTop: '0px' }}>
         <style>{`
       .custom-aligner{
       width:60%;
       }
+        .image-style {
+          min-height: 320px !important;
+          max-height: 320px !important;
+          border-radius: 3px;
+        }
         @media (max-width: 768px) {
           .custom-aligner{
             flex-direction:column;
@@ -67,8 +86,6 @@ export default function Agents() {
             </div>
           </div>
         </div>
-
-
 
         <div className="d-flex align-items-center justify-content-end container custom-container-header">
           <div style={{ width: '17%', marginTop: '2rem', marginRight: '2rem' }}>
@@ -112,16 +129,14 @@ export default function Agents() {
                     className="box-agent hover-img wow fadeInUp"
                     style={{ animationDelay: agent.wowDelay, padding: '20px', boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", gap: '10px', borderRadius: '3px' }} // WOW.js animation delay
                   >
-                    <a href="#" className="box-img img-style" style={{ borderRadius: '0px' }}>
+                    <a className="box-img img-style" style={{ borderRadius: '0px' }}>
                       <img
-                        className="lazyload mh-100"
-                        data-src={agent.imgSrc}
+                        className="lazyload image-style"
+                        data-src={agent.imageURLs[0]}
                         alt={`image-agent-${agent.name}`}
-                        src={agent.imageURL}
-                        // width={450}
-                        style={{ maxHeight: '50px !importent', borderRadius: '3px' }}
-                        height={450}
+                        src={agent.imageURLs[0]}
                       />
+
                     </a>
                     <div className="content justify-content-center">
                       <div className="info" style={{ textAlign: 'center' }}>
@@ -219,7 +234,7 @@ export default function Agents() {
           <div className="sw-pagination spb3 sw-pagination-mb-1 text-center d-sm-none d-block" />
         </Swiper> */}
         </div>
-
+        {/* 
         <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
           <Pagination
             currentPage={currentPage}
@@ -227,7 +242,7 @@ export default function Agents() {
             itemLength={sorted?.length}
             itemPerPage={itemPerPage}
           />
-        </ul>
+        </ul> */}
       </section>
       <Footer2 />
     </>

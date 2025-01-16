@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Divider } from "@mui/material";
 import { Button } from "react-bootstrap";
-import { getAgents } from "@/apiCalls";
+import { getValueAddedServiceList } from "@/apiCalls";
 import DropdownSelect from "./DropdownSelect";
 
 import Pagination from "./Pagination";
@@ -17,13 +17,13 @@ export default function ValueAddedServices() {
   const [sorted, setSorted] = useState();
   const [itemPerPage, setItemPerPage] = useState(9);
 
-  console.log(data, "ppppppppppppppppppp")
-
-  const fetchAgents = async () => {
+  const fetchServices = async () => {
     try {
-      const data = await getAgents();
+      const data = await getValueAddedServiceList();
+      console.log(data , "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
+
       if (data.success) {
-        setData(data.data)
+        console.log(data , "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
       } else {
         toast.error(data.message)
       }
@@ -33,7 +33,7 @@ export default function ValueAddedServices() {
   };
 
   useEffect(() => {
-    fetchAgents();
+    fetchServices();
   }, []);
 
   return (
@@ -221,14 +221,14 @@ export default function ValueAddedServices() {
         </Swiper> */}
         </div>
 
-        <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
+        {/* <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
           <Pagination
             currentPage={currentPage}
             setPage={setCurrentPage}
             itemLength={sorted?.length}
             itemPerPage={itemPerPage}
           />
-        </ul>
+        </ul> */}
       </section>
       <Footer2 />
     </>

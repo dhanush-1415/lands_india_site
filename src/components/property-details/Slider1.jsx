@@ -1,7 +1,11 @@
 import { Gallery, Item } from "react-photoswipe-gallery";
 import CollectionsIcon from '@mui/icons-material/Collections';
 
-export default function Slider1({ imageItem }) {
+export default function Slider1({ data }) {
+  // Split the file_path string into an array of image URLs
+  const filePaths = data[0]?.file_path || "";
+  const imageItems = filePaths.split(',');
+
   return (
     <Gallery>
       <section
@@ -14,7 +18,7 @@ export default function Slider1({ imageItem }) {
           position: "relative",
         }}
       >
-        <button
+        {/* <button
           style={{
             position: "absolute",
             top: "30px",
@@ -29,7 +33,7 @@ export default function Slider1({ imageItem }) {
         >
           <CollectionsIcon sx={{marginRight:'5px'}} />
           View All Photos
-        </button>
+        </button> */}
 
         <div
           style={{
@@ -46,19 +50,19 @@ export default function Slider1({ imageItem }) {
               height: "100%",
             }}
           >
-            <Item original={imageItem[0]} thumbnail={imageItem[0]} width={500} height={500}>
+            <Item original={imageItems[0]} thumbnail={imageItems[0]} width={500} height={500}>
               {({ ref, open }) => (
                 <img
                   ref={ref}
                   onClick={open}
-                  src={imageItem[0]}
+                  src={imageItems[0]}
                   style={{
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
                     cursor: "pointer",
                   }}
-                  alt=""
+                  alt="Image 1"
                 />
               )}
             </Item>
@@ -81,7 +85,7 @@ export default function Slider1({ imageItem }) {
                 display: "flex",
               }}
             >
-              <Item original={imageItem[1]} thumbnail={imageItem[1]} width={500} height={500}>
+              <Item original={imageItems[1]} thumbnail={imageItems[1]} width={500} height={500}>
                 {({ ref, open }) => (
                   <div
                     style={{
@@ -94,18 +98,18 @@ export default function Slider1({ imageItem }) {
                     <img
                       ref={ref}
                       onClick={open}
-                      src={imageItem[1]}
+                      src={imageItems[1]}
                       style={{
                         width: "100%",
                         height: "100%",
                         objectFit: "cover",
                       }}
-                      alt=""
+                      alt="Image 2"
                     />
                   </div>
                 )}
               </Item>
-              <Item original={imageItem[2]} thumbnail={imageItem[2]} width={500} height={500}>
+              <Item original={imageItems[2]} thumbnail={imageItems[2]} width={500} height={500}>
                 {({ ref, open }) => (
                   <div
                     style={{
@@ -119,13 +123,13 @@ export default function Slider1({ imageItem }) {
                     <img
                       ref={ref}
                       onClick={open}
-                      src={imageItem[2]}
+                      src={imageItems[2]}
                       style={{
                         width: "100%",
                         height: "100%",
                         objectFit: "cover",
                       }}
-                      alt=""
+                      alt="Image 3"
                     />
                   </div>
                 )}
@@ -140,7 +144,7 @@ export default function Slider1({ imageItem }) {
                 display: "flex",
               }}
             >
-              <Item original={imageItem[3]} thumbnail={imageItem[3]} width={500} height={500}>
+              <Item original={imageItems[3]} thumbnail={imageItems[3]} width={500} height={500}>
                 {({ ref, open }) => (
                   <div
                     style={{
@@ -153,18 +157,18 @@ export default function Slider1({ imageItem }) {
                     <img
                       ref={ref}
                       onClick={open}
-                      src={imageItem[3]}
+                      src={imageItems[3]}
                       style={{
                         width: "100%",
                         height: "100%",
                         objectFit: "cover",
                       }}
-                      alt=""
+                      alt="Image 4"
                     />
                   </div>
                 )}
               </Item>
-              <Item original={imageItem[4]} thumbnail={imageItem[4]} width={500} height={500}>
+              <Item original={imageItems[4]} thumbnail={imageItems[4]} width={500} height={500}>
                 {({ ref, open }) => (
                   <div
                     style={{
@@ -178,13 +182,13 @@ export default function Slider1({ imageItem }) {
                     <img
                       ref={ref}
                       onClick={open}
-                      src={imageItem[4]}
+                      src={imageItems[4]}
                       style={{
                         width: "100%",
                         height: "100%",
                         objectFit: "cover",
                       }}
-                      alt=""
+                      alt="Image 5"
                     />
                   </div>
                 )}

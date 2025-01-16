@@ -2,7 +2,12 @@ import { blogPosts2 } from "@/data/blogs";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Link } from "react-router-dom";
 import { Pagination } from "swiper/modules";
+
 export default function Blogs() {
+
+
+
+
   return (
     <section className="flat-section">
       <div className="container">

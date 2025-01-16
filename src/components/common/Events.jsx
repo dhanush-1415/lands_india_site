@@ -8,6 +8,7 @@ import DropdownSelect from "./DropdownSelect";
 
 import Pagination from "./Pagination";
 import Footer2 from "../footer/Footer2";
+import { Upcoming } from "@mui/icons-material";
 export default function Events() {
 
 
@@ -22,21 +23,24 @@ export default function Events() {
     console.log(data, "ppppppppppppppppppp")
 
     const fetchAgents = async () => {
+        const flag = activeTab === 'upcoming' ? true : false;
         try {
-            const data = await getEventsList();
+            const data = await getEventsList(flag);
             if (data.success) {
-                setData(data.data)
+                setData(data.data);
             } else {
-                toast.error(data.message)
+                toast.error(data.message);
+                setData()
             }
         } catch (err) {
+            setData()
             console.error('Error fetching categories:', err);
         }
     };
 
     useEffect(() => {
         fetchAgents();
-    }, []);
+    }, [activeTab]);
 
     return (
         <>
@@ -113,13 +117,13 @@ export default function Events() {
                         <div className="container custom-container-header" style={{ padding: '30px 0 40px' }}>
                             <div className="swiper tf-sw-mobile-1 non-swiper-on-575" style={{ overflow: 'visible', padding: '0px 20px' }}>
                                 <div className="tf-layout-mobile-sm xl-col-4 sm-col-2 swiper-wrapper">
-                                    {data?.length && data.map((agent) => (
-                                        <SwiperSlide key={agent.id} className="swiper-slide">
+                                    {data?.length && data.map((event) => (
+                                        <SwiperSlide key={event.id} className="swiper-slide">
                                             <div
                                                 className="box-agent hover-img wow fadeInUp"
-                                                style={{ animationDelay: agent.wowDelay, boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", borderRadius: '3px' }} // WOW.js animation delay
+                                                style={{ animationDelay: event.wowDelay, boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", borderRadius: '3px' }} // WOW.js animation delay
                                             >
-                                                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2c/TimesSquare-500px.jpg" alt="sin" />
+                                                <img src={event.images[0]} alt="sin" />
                                             </div>
                                         </SwiperSlide>
                                     ))}
@@ -128,27 +132,27 @@ export default function Events() {
                             </div>
                         </div>
 
-                        <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
+                        {/* <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
                             <Pagination
                                 currentPage={currentPage}
                                 setPage={setCurrentPage}
                                 itemLength={sorted?.length}
                                 itemPerPage={itemPerPage}
                             />
-                        </ul>
+                        </ul> */}
                     </>
                 ) : (
                     <>
                         <div className="container custom-container-header" style={{ padding: '30px 0 40px' }}>
                             <div className="swiper tf-sw-mobile-1 non-swiper-on-575" style={{ overflow: 'visible', padding: '0px 20px' }}>
                                 <div className="tf-layout-mobile-sm xl-col-4 sm-col-2 swiper-wrapper">
-                                    {data?.length && data.map((agent) => (
-                                        <SwiperSlide key={agent.id} className="swiper-slide">
+                                    {data?.length && data.map((event) => (
+                                        <SwiperSlide key={event.id} className="swiper-slide">
                                             <div
                                                 className="box-agent hover-img wow fadeInUp"
-                                                style={{ animationDelay: agent.wowDelay, boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", borderRadius: '3px' }} // WOW.js animation delay
+                                                style={{ animationDelay: event.wowDelay, boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", borderRadius: '3px' }} // WOW.js animation delay
                                             >
-                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTI1XZI4gbotaBIhv7fuExFGLTJg_JjaaUDnA&s" alt="sin" />
+                                                <img src={event.images[0]} alt="sin" />
                                             </div>
                                         </SwiperSlide>
                                     ))}
@@ -156,7 +160,7 @@ export default function Events() {
                                 <div className="sw-pagination spb3 sw-pagination-mb-1 text-center d-sm-none d-block" />
                             </div>
                         </div>
-
+{/* 
                         <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
                             <Pagination
                                 currentPage={currentPage}
@@ -164,7 +168,7 @@ export default function Events() {
                                 itemLength={sorted?.length}
                                 itemPerPage={itemPerPage}
                             />
-                        </ul>
+                        </ul> */}
                     </>
                 )}
             </section>

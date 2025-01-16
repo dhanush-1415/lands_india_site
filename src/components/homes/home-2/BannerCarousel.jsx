@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState , useEffect} from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -7,6 +7,7 @@ import { IconButton } from "@mui/material";
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import EastIcon from '@mui/icons-material/East';
 import WestIcon from '@mui/icons-material/West';
+import { getEventsList } from "@/apiCalls";
 
 export default function BottomCarousel() {
     const properties = [
@@ -35,6 +36,26 @@ export default function BottomCarousel() {
             img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbBP9hP7Jm_4huGfkP_uxcU9ruAa22fOqimg&s'
         }
     ];
+
+        const [events , setEvents ] = useState();
+
+        const fetchEvents = async () => {
+            try {
+                const data = await getEventsList(true);
+                if (data.success) {
+                    setEvents(data.data)
+                } else {
+                    toast.error(data.message)
+                }
+            } catch (err) {
+                console.error('Error fetching categories:', err);
+            }
+        };
+    
+        useEffect(() => {
+            fetchEvents();
+        }, []);
+    
 
     const CustomNextArrow = (props) => {
         const { onClick } = props;
@@ -145,7 +166,7 @@ export default function BottomCarousel() {
                 }
                 `}
             </style>
-            <div className="container custom-container-header mx-3">
+            <div className="container custom-container-header">
                 <div className="list-header-custom">
                     <div>
                         <h3 className="carousel-title">
@@ -165,9 +186,9 @@ export default function BottomCarousel() {
                 </div>
                 <div className="custom-multi-banner">
                     <Slider {...settings}>
-                        {properties.map((property, index) => (
-                            <div style={{ margin: '0 10px' }} key={property.id}>
-                                <img style={{ width: '90%', borderRadius: '8px', margin: '0px auto' }} src={property.img || ""} alt="banner" />
+                        {events?.length && events.map((elm, index) => (
+                            <div style={{ margin: '0 10px' }} key={index}>
+                                <img style={{ width: '90%', borderRadius: '8px', margin: '0px auto' }} src={elm.images[0] || ""} alt="banner" />
                             </div>
                         ))}
                     </Slider>
