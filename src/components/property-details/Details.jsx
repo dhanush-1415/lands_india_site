@@ -11,17 +11,18 @@ const items = [
   { label: "Garage", content: "1" },
 ];
 
-export default function Details() {
+export default function Details({data}) {
+
   return (
     <>
       {" "}
       <h5 className="title fw-6">Additional Details</h5>
       <div className="row">
-        {items.map((item, index) => (
+        {data[0]?.inputs?.length && data[0].inputs.map((item, index) => (
           <div className="col-md-6" key={index}>
             <div className="inner-box">
-              <span className="label text-black-3">{item.label}</span>
-              <div className="content text-black-3">{item.content}</div>
+              <span className="label text-black-3">{item.input_name}</span>
+              <div className="content text-black-3">{item.input_value}</div>
             </div>
           </div>
         ))}

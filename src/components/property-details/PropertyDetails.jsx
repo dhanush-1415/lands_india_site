@@ -14,9 +14,8 @@ import ContactSeller from "./ContactSeller";
 import WidgetBox from "./WidgetBox";
 import WhyChoose from "./WhyChoose";
 import LeatestProperties from "./LeatestProperties";
-export default function PropertyDetails({propertyDetails , additionalInformation}) {
+export default function PropertyDetails({data}) {
 
-  console.log(propertyDetails , additionalInformation , "pppppppppppppppppppppppppppppppppppppp")
   return (
     <>
       <section className="flat-section-v3 flat-property-detail" style={{background:'#f0f3f4'}}>
@@ -32,16 +31,16 @@ export default function PropertyDetails({propertyDetails , additionalInformation
           <div className="row">
             <div className="col-xl-8 col-lg-6" style={{background:'#ffffff',padding:'30px'}}>
               <div className="single-property-element single-property-desc">
-                <Description propertyDetails={propertyDetails} />
+                <Description data={data} />
               </div>
-              {additionalInformation && <div className="single-property-element single-property-overview">
-                <Overview additionalInformation={additionalInformation} />
+              {data && <div className="single-property-element single-property-overview">
+                <Overview data={data} />
               </div>}
               {/* <div className="single-property-element single-property-video">
                 <Video />
               </div> */}
               <div className="single-property-element single-property-info">
-                <Details />
+                <Details data={data} />
               </div>
               {/* <div className="single-property-element single-property-feature">
                 <Features />

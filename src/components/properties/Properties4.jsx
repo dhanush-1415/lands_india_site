@@ -9,11 +9,13 @@ import Pagination from "../common/Pagination";
 import Slider from "rc-slider";
 import { allProperties, featureOptions, projectData, indvidualData, props } from "@/data/properties";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { getCategories, getProperties } from "@/apiCalls";
+import { getCategories, getProperties, getUserWishList, updateWishlist } from "@/apiCalls";
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import DraftsTwoToneIcon from '@mui/icons-material/DraftsTwoTone';
-
+import EnquiryForm from "@/components/common/Enquiry";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import { useParams } from "react-router-dom";
 
@@ -26,7 +28,7 @@ export default function Properties4() {
 
   const [sorted, setSorted] = useState();
   const [filtered, setFiltered] = useState([]);
-  const [price, setPrice] = useState([1800, 5500]);
+  const [price, setPrice] = useState([500000, 10000000]);
   const [size, setSize] = useState([800, 2200]);
   const [rooms, setRooms] = useState("All");
   const [bedrooms, setBedrooms] = useState("All");
@@ -36,6 +38,7 @@ export default function Properties4() {
   const [sortingOption, setSortingOption] = useState("Sort by (Default)");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemPerPage, setItemPerPage] = useState(9);
+  const [page, setPage] = useState(1);
 
   const [properties, setProperties] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -43,50 +46,9 @@ export default function Properties4() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [keyword, setKeyword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState("");
-  const [combinedData, setCombinedData] = useState([]); // Final combined data
-  const [inputDetails, setInputDetails] = useState([]); // inputDetails data
-  const [propertyInputs, setPropertyInputs] = useState([]); // propertyInputs data
 
-  console.log(properties, "mmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
-
-  // useEffect(() => {
-  //   // Ensure all required data is available
-  //   if (properties.length && propertyInputs.length && inputDetails.length) {
-  //     // Combine data
-  //     const result = properties.map((property) => {
-  //       // Filter inputs related to the current property
-  //       const relatedInputs = propertyInputs.filter(
-  //         (input) => input.properties_postId === property.id
-  //       );
-
-  //       // Map inputs to include inputDetails
-  //       const inputsWithDetails = relatedInputs.map((input) => {
-  //         const inputDetail = inputDetails.find(
-  //           (detail) => detail.id === input.input_id
-  //         );
-  //         return {
-  //           ...input,
-  //           inputDetail, // Add input detail if available
-  //         };
-  //       });
-
-  //       // Combine property with its inputs
-  //       return {
-  //         ...property,
-  //         inputs: inputsWithDetails, // Attach processed inputs
-  //       };
-  //     });
-
-  //     // Store the result in state
-  //     setCombinedData(result);
-  //   }
-  // }, [properties, propertyInputs, inputDetails]);
-
-  // console.log(combinedData,  "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
-
-
-  // Clear filters function
   const clearFilter = () => {
     setPrice([1800, 5500]);
     setSize([800, 2200]);
@@ -118,19 +80,6 @@ export default function Properties4() {
     navigate(`/properties/all?${params.toString()}`);
   };
 
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   const params = new URLSearchParams();
-  //   if (keyword) params.append("keyword", keyword);
-  //   if (location) params.append("location", location);
-  //   if (selectedCategory !== "category" || selectedCategory != null || selectedCategory != '' ) { params.append("category", selectedCategory)};
-  //   if (selectedSubCategory !== "Sub Category" || selectedSubCategory != null || selectedSubCategory != ''  )  {params.append("subcategory", selectedSubCategory)};
-  //   params.append("minPrice", price[0].toString());
-  //   params.append("maxPrice", price[1].toString());
-  //   navigate(`/properties/all?${params.toString()}`);
-  // };
-
   useEffect(() => {
     const fetchCategoriesData = async () => {
       try {
@@ -138,7 +87,7 @@ export default function Properties4() {
         if (data.success) {
           setCategories(data.data);
         } else {
-          toast.error(data.message);
+          // toast.error(data.message);
         }
       } catch (err) {
         console.error('Error fetching categories:', err);
@@ -147,7 +96,6 @@ export default function Properties4() {
     fetchCategoriesData();
   }, []);
 
-  // Handle category selection
   const handleCategoryChange = (category) => {
     setSelectedCategory(category.name);
     const selectedSubCategories = category.subMenus || [];
@@ -155,54 +103,133 @@ export default function Properties4() {
     setSelectedSubCategory(null);
   };
 
-  // Handle subcategory selection
   const handleSubCategoryChange = (subCategory) => {
     setSelectedSubCategory(subCategory.name);
   };
 
-  // Handle location change
   const handleLocationChange = (data) => {
     setLocation(data.name);
   };
 
-  // Fetch properties based on search parameters
-  useEffect(() => {
-    const fetchProperties = async () => {
-      const location = searchParams.get("location");
-      const minPrice = searchParams.get("minPrice");
-      const maxPrice = searchParams.get("maxPrice");
-      const keyword = searchParams.get("keyword");
-      const category = searchParams.get("category");
-      const subCategory = searchParams.get("subcategory");
 
-      const filter = {
-        location: location || "",
-        minPrice: minPrice ? parseInt(minPrice) : 0,
-        maxPrice: maxPrice ? parseInt(maxPrice) : 0,
-        keyword: keyword || "",
-        category: category || "",
-        subCategory: subCategory || "",
+  const [wishListList, setWishListList] = useState([]);
+
+  const fetchWishlist = async () => {
+    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+    if (landsUser) {
+      try {
+        const data = await getUserWishList(landsUser.id);
+
+        if (data.success) {
+          setWishListList(data.wishList);
+        } else {
+          // toast.error(data.message);
+        }
+      } catch (err) {
+        console.error('Error fetching wishlist:', err);
+      }
+    }
+  };
+
+
+  const fetchProperties = async () => {
+    const location = searchParams.get("location");
+    const minPrice = searchParams.get("minPrice");
+    const maxPrice = searchParams.get("maxPrice");
+    const keyword = searchParams.get("keyword");
+    const category = searchParams.get("category");
+    const subCategory = searchParams.get("subcategory");
+
+    const filter = {
+      location: location || "",
+      minPrice: minPrice ? parseInt(minPrice) : 0,
+      maxPrice: maxPrice ? parseInt(maxPrice) : 0,
+      keyword: keyword || "",
+      category: category || "",
+      subCategory: subCategory || "",
+      page
+    };
+
+    try {
+      const data = await getProperties(filter);
+      if (data.success) {
+        const combined = data.properties.map((property) => {
+          const propertyInputs = data.propertyInputs.filter(input => input.properties_postId === property.id);
+
+          const inputsWithNames = propertyInputs.map((input) => {
+            const inputData = data.inputs.find(i => i.id === input.input_id);
+            return {
+              ...input,
+              input_name: inputData ? inputData.input_name : '',
+              input_type: inputData ? inputData.input_type : '',
+              options: inputData ? inputData.options : [],
+            };
+          });
+
+          return {
+            ...property,
+            inputs: inputsWithNames,
+            isWishlist: wishListList.includes(property.id), // Add isWishlist
+          };
+        });
+
+        setProperties((prevProperties) => [...prevProperties, ...combined]);
+        setPage(page + 1);
+        // setProperties(combined);
+      } else {
+        // toast.error(data.message);
+      }
+    } catch (err) {
+      console.error('Error fetching properties:', err);
+    }
+  };
+
+
+  useEffect(() => {
+    setProperties((prevProperties) =>
+      prevProperties.map((property) => ({
+        ...property,
+        isWishlist: wishListList.includes(property.id),
+      }))
+    );
+  }, [wishListList]);
+
+  useEffect(() => {
+    fetchWishlist();
+    fetchProperties();
+  }, [searchParams]);
+
+  const handleWishlist = async (elm, act) => {
+    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+    if (landsUser) {
+      const payLoad = {
+        userId: landsUser.id,
+        propertyId: elm.id,
+        action: act, // Adjust the action based on your requirements
       };
 
       try {
-        const data = await getProperties(filter);
-        setProperties(data.data);
+        const data = await updateWishlist(payLoad);
         if (data.success) {
-          setProperties(data.data);
-          // setInputDetails(data.inputDetails);
-          // setPropertyInputs(data.propertyInputs);
+          toast.success(data.message);
+
+          const updatedWishList = await getUserWishList(landsUser.id);
+          if (updatedWishList.success) {
+            setWishListList(updatedWishList.wishList);
+          }
         } else {
           toast.error(data.message);
         }
       } catch (err) {
-        console.error('Error fetching properties:', err);
+        console.error('Error updating wishlist:', err);
       }
-    };
+    } else {
+      toast.error("Please Login to Continue");
+    }
+  };
 
-    fetchProperties();
-  }, [searchParams]);
-
-  // Set sorted data based on URL params
   useEffect(() => {
     if (!params.name) {
       window.location.href = '/properties/all';
@@ -231,128 +258,235 @@ export default function Properties4() {
     features,
     setFeatures,
   };
+
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+
+  const handleScroll = (event) => {
+    const bottom = event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight;
+    console.log(bottom, loading, "Scroll Position");
+
+    // Allow a small tolerance, e.g., 5px, to trigger loading when close to the bottom
+    if (bottom || event.target.scrollHeight - event.target.scrollTop <= event.target.clientHeight + 5) {
+      if (!loading) {
+        fetchProperties();
+      }
+    }
+  };
+
+
+  const AllLocation = [
+    { "id": 1, "name": "Ariyalur" },
+    { "id": 2, "name": "Chengalpattu" },
+    { "id": 3, "name": "Chennai" },
+    { "id": 4, "name": "Coimbatore" },
+    { "id": 5, "name": "Cuddalore" },
+    { "id": 6, "name": "Dharmapuri" },
+    { "id": 7, "name": "Dindigul" },
+    { "id": 8, "name": "Erode" },
+    { "id": 9, "name": "Kallakurichi" },
+    { "id": 10, "name": "Kancheepuram" },
+    { "id": 11, "name": "Karur" },
+    { "id": 12, "name": "Krishnagiri" },
+    { "id": 13, "name": "Madurai" },
+    { "id": 14, "name": "Mayiladuthurai" },
+    { "id": 15, "name": "Nagapattinam" },
+    { "id": 16, "name": "Kanyakumari" },
+    { "id": 17, "name": "Namakkal" },
+    { "id": 18, "name": "Perambalur" },
+    { "id": 19, "name": "Pudukkottai" },
+    { "id": 20, "name": "Ramanathapuram" },
+    { "id": 21, "name": "Ranipet" },
+    { "id": 22, "name": "Salem" },
+    { "id": 23, "name": "Sivaganga" },
+    { "id": 24, "name": "Tenkasi" },
+    { "id": 25, "name": "Thanjavur" },
+    { "id": 26, "name": "Theni" },
+    { "id": 27, "name": "Thiruvallur" },
+    { "id": 28, "name": "Thiruvarur" },
+    { "id": 29, "name": "Thoothukudi" },
+    { "id": 30, "name": "Tiruchirappalli" },
+    { "id": 31, "name": "Tirunelveli" },
+    { "id": 32, "name": "Tirupathur" },
+    { "id": 33, "name": "Tiruppur" },
+    { "id": 34, "name": "Tiruvannamalai" },
+    { "id": 35, "name": "The Nilgiris" },
+    { "id": 36, "name": "Vellore" },
+    { "id": 37, "name": "Viluppuram" },
+    { "id": 38, "name": "Virudhunagar" }
+  ]
+
+
+  const sortProperties = (option) => {
+    let sortedProperties;
+    switch (option) {
+      case 'Price Ascending':
+        sortedProperties = [...properties].sort((a, b) => a.price - b.price);
+        break;
+      case 'Price Descending':
+        sortedProperties = [...properties].sort((a, b) => b.price - a.price);
+        break;
+      default:
+        sortedProperties = [...properties]; // Default: no sorting
+    }
+    setProperties(sortedProperties);
+  };
+
+
+
+
   return (
     <section className="flat-section flat-recommended flat-sidebar" style={{ position: 'relative', padding: '0' }}>
-      <div className="box-title-listing" style={{ background: '#f0f3f4', padding: '40px 8%' }}>
-          
-          <div >
-            <div style={{  }}>
-              <h4>Residential Property</h4>
-            </div>
+      <style>
+        {`
+        .custom-col-one {
+          width: 25%;
+        }
+        .custom-col-two {
+          width: 75%;
+        }
 
+        @media (max-width: 750px) {
+          .custom-col-one, .custom-col-two {
+            width: 100%;
+          }
+        }
+      `}
+      </style>
+
+
+      <EnquiryForm open={open} handleClose={handleClose} />
+      <div className="box-title-listing" style={{ background: '#f0f3f4', padding: '40px 8%' }}>
+
+        <div >
+          <div style={{}}>
+            <h4>Residential Property</h4>
           </div>
-            
-            <div className="box-filter-tab" >
-  
-              <DropdownSelect
-                onChange={setSortingOption}
-                addtionalParentClass="list-sort"
-                style={{border: 'none', borderBottom: '1px solid #e4e4e4', background: '#f0f3f4' }}
-                options={[
-                  "Sort by price",
-  
-                  "Price Ascending",
-                  "Price Descending",
-                ]}
-              />
-              <ul className="nav-tab-filter" role="tablist" style={{margin: 0}} >
-                <li className="nav-tab-item" role="presentation">
-                  <a
-                    href="#gridLayout"
-                    className="nav-link-item active"
-                    data-bs-toggle="tab"
-                  >
-                    <svg
-                      className="icon"
-                      width={24}
-                      height={24}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M4.54883 5.90508C4.54883 5.1222 5.17272 4.5 5.91981 4.5C6.66686 4.5 7.2908 5.12221 7.2908 5.90508C7.2908 6.68801 6.66722 7.3101 5.91981 7.3101C5.17241 7.3101 4.54883 6.68801 4.54883 5.90508Z"
-                        stroke="#A3ABB0"
-                      />
-                      <path
-                        d="M10.6045 5.90508C10.6045 5.12221 11.2284 4.5 11.9755 4.5C12.7229 4.5 13.3466 5.1222 13.3466 5.90508C13.3466 6.68789 12.7227 7.3101 11.9755 7.3101C11.2284 7.3101 10.6045 6.68794 10.6045 5.90508Z"
-                        stroke="#A3ABB0"
-                      />
-                      <path
-                        d="M19.4998 5.90514C19.4998 6.68797 18.8757 7.31016 18.1288 7.31016C17.3818 7.31016 16.7578 6.68794 16.7578 5.90508C16.7578 5.12211 17.3813 4.5 18.1288 4.5C18.8763 4.5 19.4998 5.12215 19.4998 5.90514Z"
-                        stroke="#A3ABB0"
-                      />
-                      <path
-                        d="M7.24249 12.0098C7.24249 12.7927 6.61849 13.4148 5.87133 13.4148C5.12411 13.4148 4.5 12.7926 4.5 12.0098C4.5 11.2268 5.12419 10.6045 5.87133 10.6045C6.61842 10.6045 7.24249 11.2267 7.24249 12.0098Z"
-                        stroke="#A3ABB0"
-                      />
-                      <path
-                        d="M13.2976 12.0098C13.2976 12.7927 12.6736 13.4148 11.9266 13.4148C11.1795 13.4148 10.5557 12.7928 10.5557 12.0098C10.5557 11.2266 11.1793 10.6045 11.9266 10.6045C12.6741 10.6045 13.2976 11.2265 13.2976 12.0098Z"
-                        stroke="#A3ABB0"
-                      />
-                      <path
-                        d="M19.4516 12.0098C19.4516 12.7928 18.828 13.4148 18.0807 13.4148C17.3329 13.4148 16.709 12.7926 16.709 12.0098C16.709 11.2268 17.3332 10.6045 18.0807 10.6045C18.8279 10.6045 19.4516 11.2266 19.4516 12.0098Z"
-                        stroke="#A3ABB0"
-                      />
-                      <path
-                        d="M4.54297 18.0945C4.54297 17.3116 5.16709 16.6895 5.9143 16.6895C6.66137 16.6895 7.28523 17.3114 7.28523 18.0945C7.28523 18.8776 6.66139 19.4996 5.9143 19.4996C5.16714 19.4996 4.54297 18.8771 4.54297 18.0945Z"
-                        stroke="#A3ABB0"
-                      />
-                      <path
-                        d="M10.5986 18.0945C10.5986 17.3116 11.2227 16.6895 11.97 16.6895C12.7169 16.6895 13.3409 17.3115 13.3409 18.0945C13.3409 18.8776 12.7169 19.4996 11.97 19.4996C11.2225 19.4996 10.5986 18.8772 10.5986 18.0945Z"
-                        stroke="#A3ABB0"
-                      />
-                      <path
-                        d="M16.752 18.0945C16.752 17.3115 17.376 16.6895 18.1229 16.6895C18.8699 16.6895 19.4939 17.3115 19.4939 18.0945C19.4939 18.8776 18.8702 19.4996 18.1229 19.4996C17.376 19.4996 16.752 18.8772 16.752 18.0945Z"
-                        stroke="#A3ABB0"
-                      />
-                    </svg>
-                  </a>
-                </li>
-                <li className="nav-tab-item" role="presentation">
-                  <a
-                    href="#listLayout"
-                    className="nav-link-item"
-                    data-bs-toggle="tab"
-                  >
-                    <svg
-                      className="icon"
-                      width={24}
-                      height={24}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M19.2016 17.8316H8.50246C8.0615 17.8316 7.7041 17.4742 7.7041 17.0332C7.7041 16.5923 8.0615 16.2349 8.50246 16.2349H19.2013C19.6423 16.2349 19.9997 16.5923 19.9997 17.0332C19.9997 17.4742 19.6426 17.8316 19.2016 17.8316Z"
-                        fill="#A3ABB0"
-                      />
-                      <path
-                        d="M19.2016 12.8199H8.50246C8.0615 12.8199 7.7041 12.4625 7.7041 12.0215C7.7041 11.5805 8.0615 11.2231 8.50246 11.2231H19.2013C19.6423 11.2231 19.9997 11.5805 19.9997 12.0215C20 12.4625 19.6426 12.8199 19.2016 12.8199Z"
-                        fill="#A3ABB0"
-                      />
-                      <path
-                        d="M19.2016 7.80913H8.50246C8.0615 7.80913 7.7041 7.45173 7.7041 7.01077C7.7041 6.5698 8.0615 6.2124 8.50246 6.2124H19.2013C19.6423 6.2124 19.9997 6.5698 19.9997 7.01077C19.9997 7.45173 19.6426 7.80913 19.2016 7.80913Z"
-                        fill="#A3ABB0"
-                      />
-                      <path
-                        d="M5.0722 8.1444C5.66436 8.1444 6.1444 7.66436 6.1444 7.0722C6.1444 6.48004 5.66436 6 5.0722 6C4.48004 6 4 6.48004 4 7.0722C4 7.66436 4.48004 8.1444 5.0722 8.1444Z"
-                        fill="#A3ABB0"
-                      />
-                      <path
-                        d="M5.0722 13.0941C5.66436 13.0941 6.1444 12.6141 6.1444 12.0219C6.1444 11.4297 5.66436 10.9497 5.0722 10.9497C4.48004 10.9497 4 11.4297 4 12.0219C4 12.6141 4.48004 13.0941 5.0722 13.0941Z"
-                        fill="#A3ABB0"
-                      />
-                      <path
-                        d="M5.0722 18.0433C5.66436 18.0433 6.1444 17.5633 6.1444 16.9711C6.1444 16.379 5.66436 15.8989 5.0722 15.8989C4.48004 15.8989 4 16.379 4 16.9711C4 17.5633 4.48004 18.0433 5.0722 18.0433Z"
-                        fill="#A3ABB0"
-                      />
-                    </svg>
-                  </a>
-                </li>
-              </ul>
-  
-              {/* <DropdownSelect
+
+        </div>
+
+        <div className="box-filter-tab" >
+
+          <DropdownSelect
+            onChange={(option) => {
+              setSortingOption(option);
+              sortProperties(option); // Update properties when sorting option changes
+            }}
+            additionalParentClass="list-sort"
+            style={{ border: 'none', borderBottom: '1px solid #e4e4e4', background: '#f0f3f4' }}
+            options={[
+              "Sort by price",
+              "Price Ascending",
+              "Price Descending",
+            ]}
+          />
+          {/* <ul className="nav-tab-filter" role="tablist" style={{ margin: 0 }} >
+            <li className="nav-tab-item" role="presentation">
+              <a
+                href="#gridLayout"
+                className="nav-link-item active"
+                data-bs-toggle="tab"
+              >
+                <svg
+                  className="icon"
+                  width={24}
+                  height={24}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4.54883 5.90508C4.54883 5.1222 5.17272 4.5 5.91981 4.5C6.66686 4.5 7.2908 5.12221 7.2908 5.90508C7.2908 6.68801 6.66722 7.3101 5.91981 7.3101C5.17241 7.3101 4.54883 6.68801 4.54883 5.90508Z"
+                    stroke="#A3ABB0"
+                  />
+                  <path
+                    d="M10.6045 5.90508C10.6045 5.12221 11.2284 4.5 11.9755 4.5C12.7229 4.5 13.3466 5.1222 13.3466 5.90508C13.3466 6.68789 12.7227 7.3101 11.9755 7.3101C11.2284 7.3101 10.6045 6.68794 10.6045 5.90508Z"
+                    stroke="#A3ABB0"
+                  />
+                  <path
+                    d="M19.4998 5.90514C19.4998 6.68797 18.8757 7.31016 18.1288 7.31016C17.3818 7.31016 16.7578 6.68794 16.7578 5.90508C16.7578 5.12211 17.3813 4.5 18.1288 4.5C18.8763 4.5 19.4998 5.12215 19.4998 5.90514Z"
+                    stroke="#A3ABB0"
+                  />
+                  <path
+                    d="M7.24249 12.0098C7.24249 12.7927 6.61849 13.4148 5.87133 13.4148C5.12411 13.4148 4.5 12.7926 4.5 12.0098C4.5 11.2268 5.12419 10.6045 5.87133 10.6045C6.61842 10.6045 7.24249 11.2267 7.24249 12.0098Z"
+                    stroke="#A3ABB0"
+                  />
+                  <path
+                    d="M13.2976 12.0098C13.2976 12.7927 12.6736 13.4148 11.9266 13.4148C11.1795 13.4148 10.5557 12.7928 10.5557 12.0098C10.5557 11.2266 11.1793 10.6045 11.9266 10.6045C12.6741 10.6045 13.2976 11.2265 13.2976 12.0098Z"
+                    stroke="#A3ABB0"
+                  />
+                  <path
+                    d="M19.4516 12.0098C19.4516 12.7928 18.828 13.4148 18.0807 13.4148C17.3329 13.4148 16.709 12.7926 16.709 12.0098C16.709 11.2268 17.3332 10.6045 18.0807 10.6045C18.8279 10.6045 19.4516 11.2266 19.4516 12.0098Z"
+                    stroke="#A3ABB0"
+                  />
+                  <path
+                    d="M4.54297 18.0945C4.54297 17.3116 5.16709 16.6895 5.9143 16.6895C6.66137 16.6895 7.28523 17.3114 7.28523 18.0945C7.28523 18.8776 6.66139 19.4996 5.9143 19.4996C5.16714 19.4996 4.54297 18.8771 4.54297 18.0945Z"
+                    stroke="#A3ABB0"
+                  />
+                  <path
+                    d="M10.5986 18.0945C10.5986 17.3116 11.2227 16.6895 11.97 16.6895C12.7169 16.6895 13.3409 17.3115 13.3409 18.0945C13.3409 18.8776 12.7169 19.4996 11.97 19.4996C11.2225 19.4996 10.5986 18.8772 10.5986 18.0945Z"
+                    stroke="#A3ABB0"
+                  />
+                  <path
+                    d="M16.752 18.0945C16.752 17.3115 17.376 16.6895 18.1229 16.6895C18.8699 16.6895 19.4939 17.3115 19.4939 18.0945C19.4939 18.8776 18.8702 19.4996 18.1229 19.4996C17.376 19.4996 16.752 18.8772 16.752 18.0945Z"
+                    stroke="#A3ABB0"
+                  />
+                </svg>
+              </a>
+            </li>
+            <li className="nav-tab-item" role="presentation">
+              <a
+                href="#listLayout"
+                className="nav-link-item"
+                data-bs-toggle="tab"
+              >
+                <svg
+                  className="icon"
+                  width={24}
+                  height={24}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19.2016 17.8316H8.50246C8.0615 17.8316 7.7041 17.4742 7.7041 17.0332C7.7041 16.5923 8.0615 16.2349 8.50246 16.2349H19.2013C19.6423 16.2349 19.9997 16.5923 19.9997 17.0332C19.9997 17.4742 19.6426 17.8316 19.2016 17.8316Z"
+                    fill="#A3ABB0"
+                  />
+                  <path
+                    d="M19.2016 12.8199H8.50246C8.0615 12.8199 7.7041 12.4625 7.7041 12.0215C7.7041 11.5805 8.0615 11.2231 8.50246 11.2231H19.2013C19.6423 11.2231 19.9997 11.5805 19.9997 12.0215C20 12.4625 19.6426 12.8199 19.2016 12.8199Z"
+                    fill="#A3ABB0"
+                  />
+                  <path
+                    d="M19.2016 7.80913H8.50246C8.0615 7.80913 7.7041 7.45173 7.7041 7.01077C7.7041 6.5698 8.0615 6.2124 8.50246 6.2124H19.2013C19.6423 6.2124 19.9997 6.5698 19.9997 7.01077C19.9997 7.45173 19.6426 7.80913 19.2016 7.80913Z"
+                    fill="#A3ABB0"
+                  />
+                  <path
+                    d="M5.0722 8.1444C5.66436 8.1444 6.1444 7.66436 6.1444 7.0722C6.1444 6.48004 5.66436 6 5.0722 6C4.48004 6 4 6.48004 4 7.0722C4 7.66436 4.48004 8.1444 5.0722 8.1444Z"
+                    fill="#A3ABB0"
+                  />
+                  <path
+                    d="M5.0722 13.0941C5.66436 13.0941 6.1444 12.6141 6.1444 12.0219C6.1444 11.4297 5.66436 10.9497 5.0722 10.9497C4.48004 10.9497 4 11.4297 4 12.0219C4 12.6141 4.48004 13.0941 5.0722 13.0941Z"
+                    fill="#A3ABB0"
+                  />
+                  <path
+                    d="M5.0722 18.0433C5.66436 18.0433 6.1444 17.5633 6.1444 16.9711C6.1444 16.379 5.66436 15.8989 5.0722 15.8989C4.48004 15.8989 4 16.379 4 16.9711C4 17.5633 4.48004 18.0433 5.0722 18.0433Z"
+                    fill="#A3ABB0"
+                  />
+                </svg>
+              </a>
+            </li>
+          </ul> */}
+
+          {/* <DropdownSelect
                 onChange={(value) => {
                   const match = value.match(/\d+/); // Match the digits in the value
                   if (match) {
@@ -363,14 +497,12 @@ export default function Properties4() {
                 addtionalParentClass="list-page"
                 options={["Show: 8", "Show: 10", "Show: 12"]}
               /> */}
-  
-            </div>
-          </div>
-      <div className="container custom-container-header" style={{maxWidth: '95%', marginBottom: '50px'}} >
-      
-        
+
+        </div>
+      </div>
+      <div className="container custom-container-header" style={{ maxWidth: '95%', marginBottom: '50px' }} >
         <div className="row">
-          <div className="col-xl-4 col-lg-5" style={{ width: '25%' }}>
+          <div className="col-xl-4 col-lg-5 col-sm-12 custom-col-one" >
             <div className="widget-sidebar fixed-sidebar" >
               <div className="flat-tab flat-tab-form widget-filter-search widget-box" style={{ margin: "0", padding: '20px 20px' }}>
                 {/* <ul className="nav-tab-form" role="tablist">
@@ -412,16 +544,15 @@ export default function Properties4() {
                                   onChange={(e) => setKeyword(e.target.value)}
                                   title="Search for"
                                   style={{ border: 'none' }}
-                                  required
                                 />
                               </div>
                               <div className="form-style">
                                 <div className="group-select" style={{ borderBottom: '1px solid #e4e4e4' }}>
                                   <DropdownSelect
-                                    options={["Location", ...(categories?.map((category) => category.name) || [])]} // Prepend "All" to the options
-                                    onChange={(selectedCategory) => {
-                                      const category = categories.find((cat) => cat.name === selectedCategory);
-                                      handleLocationChange(category);
+                                    options={["Location", ...(AllLocation?.map((loc) => loc.name) || [])]} // Prepend "Location" to the options
+                                    onChange={(selectedLocation) => {  // Renamed parameter to avoid conflict
+                                      const location = AllLocation.find((loc) => loc.name === selectedLocation);
+                                      handleLocationChange(location);
                                     }}
                                     style={{ border: 'none' }}
                                   />
@@ -476,8 +607,8 @@ export default function Properties4() {
                                 <Slider
                                   range
                                   // formatLabel={() => ``}
-                                  max={6000}
-                                  min={1500}
+                                  max={10000000}
+                                  min={500000}
                                   value={price}
                                   onChange={setPrice}
                                 />
@@ -546,38 +677,36 @@ export default function Properties4() {
 
             </div>
           </div>
-          <div className="col-xl-8 col-lg-7 flat-animate-tab" style={{ width: '75%' }} >
+          <div className="col-xl-8 col-lg-7 col-sm-12  custom-col-two flat-animate-tab" >
             <div className="tab-content" style={{ width: '100%' }}  >
               <div
                 className="tab-pane active show"
                 id="gridLayout"
                 role="tabpanel"
               >
-                <div className="row">
-                  {sorted && sorted
-                    .slice(
-                      (currentPage - 1) * itemPerPage,
-                      currentPage * itemPerPage
-                    )
-                    .map((property, index) => (
 
+                <div className="row"
+                  style={{ maxHeight: '1000px', overflowY: 'auto' }} // Set height and enable scrolling
+                  onScroll={handleScroll} // Listen for scroll events
+                >
+                  {properties.length ? (
+                    properties.map((elm, index) => (
                       <div key={index} className="col-xl-4 col-lg-6 col-md-6">
                         <div className="homelengo-box">
                           <div className="archive-top">
-                            <Link to={`/property-details/${property.id}`} className="images-group">
+                            <Link className="images-group">
                               <div className="images-style" style={{ position: "relative" }}>
                                 <img
                                   className="lazyload"
-                                  data-src={property.img[0]}
+                                  data-src={elm.file_path ? elm.file_path.split(',')[0] : ""}
                                   alt=""
-                                  src={property.img[0]}
+                                  src={elm.file_path ? elm.file_path.split(',')[0] : ""}
                                   style={{
                                     width: "615px",
                                     height: "250px",
                                     objectFit: "cover",
                                   }}
                                 />
-                                {/* Gradient Overlay */}
                                 <div
                                   style={{
                                     position: "absolute",
@@ -611,8 +740,42 @@ export default function Properties4() {
                                     strokeLinejoin="round"
                                   />
                                 </svg>
-                                {property.propertyDetails.location.district}, {property.propertyDetails.location.state}
+                                {
+                                  elm.inputs.find(item => item.input_name === "location")?.input_value || ""
+                                }
                               </div>
+                              {elm.isWishlist ? (
+                                <div
+                                  style={{
+                                    position: "absolute",
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    height: "100%",
+                                    zIndex: 9999,
+                                    padding: '10px 0px 0px 15px',
+                                    background: "linear-gradient(to bottom, rgba(0, 0, 0, 0.), rgba(0, 0, 0, 0))",
+                                  }}
+                                // Replace with your wishlist handling function
+                                >
+                                  <FavoriteIcon onClick={() => handleWishlist(elm, "remove")} />{/* You can use Font Awesome for the heart icon */}
+                                </div>
+                              ) : (
+                                <div
+                                  style={{
+                                    position: "absolute",
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    height: "100%",
+                                    zIndex: 9999,
+                                    padding: '10px 0px 0px 15px',
+                                    background: "linear-gradient(to bottom, rgba(0, 0, 0, 0.), rgba(0, 0, 0, 0))",
+                                  }}
+                                >
+                                  <FavoriteBorderIcon onClick={() => handleWishlist(elm, 'add')} />{/* You can use Font Awesome for the heart icon */}
+                                </div>
+                              )}
                             </Link>
                           </div>
 
@@ -620,41 +783,57 @@ export default function Properties4() {
                             <div className="content-top">
                               <h6 className="text-capitalize">
                                 <Link
-                                  to={`/property-details/${property.id}`}
+                                  to={`/property-details/${elm.id}`}
                                   className="link"
                                 >
-                                  {property.propertyDetails.title}
+                                  {
+                                    elm.inputs.find(item => item.input_name === "title")?.input_value || ""
+                                  }
                                 </Link>
                               </h6>
                               <ul className="meta-list" style={{ paddingLeft: '0px' }}>
                                 <li className="item">
                                   <i className="icon icon-bed" style={{ fontSize: '25px' }} />
                                   <span className="text-variant-1">Beds:</span>
-                                  <span className="fw-6">{8}</span>
+                                  <span className="fw-6">{
+                                    elm.inputs.find(item => item.input_name === "beds")?.input_value || ""
+                                  }</span>
                                 </li>
                                 <li className="item">
                                   <i className="icon icon-bath" style={{ fontSize: '25px' }} />
                                   <span className="text-variant-1">Baths:</span>
-                                  <span className="fw-6">{property.baths}</span>
+                                  <span className="fw-6">{
+                                    elm.inputs.find(item => item.input_name === "baths")?.input_value || ""
+                                  }</span>
                                 </li>
                                 <li className="item">
                                   <i className="icon icon-sqft" style={{ fontSize: '25px' }} />
                                   <span className="text-variant-1">Sqft:</span>
-                                  <span className="fw-6">{property.sqft}</span>
+                                  <span className="fw-6">{
+                                    elm.inputs.find(item => item.input_name === "sqft")?.input_value || ""
+                                  }</span>
                                 </li>
                               </ul>
                             </div>
                             <div className="content-bottom">
                               <h6 className="price">
-                                ₹{property.propertyDetails.price}
+                                ₹{
+                                  elm.inputs.find(item => item.input_name === "price")?.input_value || ""
+                                }
                               </h6>
                               <div className="d-flex gap-8 align-items-center">
-                                <span style={{ cursor: 'pointer', fontWeight: 'bold', border: '1.5px dotted black', padding: '5px 10px' }} >View Details</span>
+                                <Link
+                                  to={`/property-details/${elm.id}`}
+                                  className="link"
+                                >
+                                  <span style={{ cursor: 'pointer', fontWeight: 'bold', border: '1.5px dotted black', padding: '5px 10px' }} >View Details</span>
+                                </Link>
                               </div>
 
                             </div>
                             <div className="content-bottom mt-3">
                               <div
+                                onClick={handleClickOpen}
                                 className="d-flex justify-content-center align-items-center shadow-sm mt-1"
                                 style={{
                                   cursor: 'pointer',
@@ -667,7 +846,7 @@ export default function Properties4() {
                                 }}
                               >
                                 <DraftsTwoToneIcon sx={{ marginRight: '5px' }} />
-                                <span style={{fontSize: '14px'}}>Enquiry Now</span>
+                                <span style={{ fontSize: '14px' }}>Enquiry Now</span>
                               </div>
                               <div
                                 className="d-flex justify-content-around mt-1"
@@ -701,16 +880,24 @@ export default function Properties4() {
                           </div>
                         </div>
                       </div>
-                    ))}
+                    ))
+                  ) : (
+                    <div className="col-xl-4 col-lg-6 col-md-6">
+                      <h5>No Properties Found</h5>
+                    </div>
+                  )}
+                  {loading && <div>Loading...</div>} {/* Show loading indicator when fetching */}
                 </div>
-                <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
+
+
+                {/* <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
                   <Pagination
                     currentPage={currentPage}
                     setPage={setCurrentPage}
                     itemLength={sorted?.length}
                     itemPerPage={itemPerPage}
                   />
-                </ul>
+                </ul> */}
               </div>
               <div className="tab-pane" id="listLayout" role="tabpanel">
                 {sorted && sorted
@@ -819,14 +1006,14 @@ export default function Properties4() {
                       </div>
                     </div>
                   ))}
-                <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
+                {/* <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
                   <Pagination
                     currentPage={currentPage}
                     setPage={setCurrentPage}
                     itemLength={sorted?.length}
                     itemPerPage={itemPerPage}
                   />
-                </ul>
+                </ul> */}
               </div>
             </div>
           </div>

@@ -1,35 +1,421 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { UpdateUser, getUserDetails, UpdateUserPassword, createAgent, getAgentDetails, updateAgent } from "@/apiCalls";
+import { toast } from "react-toastify";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import DropdownSelect from "../common/DropdownSelect";
 
 export default function MyProfile() {
-  const [preview, setPreview] = useState("/images/avatar/account.jpg");
+
+
+  const [userData, setUserData] = useState();
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [isAgent, setAgent] = useState(false);
+
+  const [isNew, setIsNew] = useState(false);
+
+  const [agentArray, setAgentArray] = useState();
+
+  
+  const [agentData, setAgentData] = useState({
+    id:'',
+    agentAge: "",
+    agentGender: "",
+    agentService: "",
+  });
+
+  console.log(agentData , "bbbbbbbb")
+
+  useEffect(() => {
+    const fetchAgentDetails = async () => {
+      const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+      if (landsUser?.type === 'Agent') {
+        setAgent(true);
+
+        try {
+          const data = await getAgentDetails(landsUser.phoneNumber);
+          if (data.success) {
+            console.log(data.data);
+            if (data.data) {
+              setIsNew(false);
+              setAgentArray(data.data)
+              setAgentData({
+                id: data.data[0].adviser_id,
+                agentAge: data.data[0].age,
+                agentGender: data.data[0].gender,
+                agentService: data.data[0].service,
+              })
+            } else {
+              setIsNew(true)
+            }
+          } else {
+            toast.error(data.message || data.error || "Something Went Wrong");
+          }
+        } catch (error) {
+          toast.error("Error fetching agent details");
+        }
+      }
+    };
+
+    fetchAgentDetails();
+  }, []);
+
+
+  const [avatar, setAvatar] = useState({
+    file: null,
+    preview: null,
+  });
+
+  const [imgUrl, setimgUrl] = useState("");
 
   const handleImageUpload = (event) => {
-    const file = event.target.files[0];
+    const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result); // Set the preview to the uploaded image
-      };
-      reader.readAsDataURL(file);
+      const imageUrl = URL.createObjectURL(file);
+      setAvatar({
+        file: file,
+        preview: imageUrl, // Set the preview URL
+      });
     }
   };
-  const [preview2, setPreview2] = useState("/images/avatar/account-2.jpg");
 
-  const handleImageUpload2 = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview2(reader.result); // Set the preview to the uploaded image
-      };
-      reader.readAsDataURL(file);
+
+  const togglePasswordVisibility = (field) => {
+    if (field === 'oldPassword') {
+      setShowOldPassword(!showOldPassword);
+    } else if (field === 'newPassword') {
+      setShowNewPassword(!showNewPassword);
+    } else if (field === 'confirmPassword') {
+      setShowConfirmPassword(!showConfirmPassword);
     }
   };
+
+  const [formData, setFormData] = useState({
+    name: '',
+    mobileNumber: '',
+    email: '',
+  });
+
+  const [errors, setErrors] = useState({
+    name: '',
+    mobileNumber: '',
+    email: '',
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+
+    // Reset error for the field when the user starts typing
+    setErrors({
+      ...errors,
+      [name]: '',
+    });
+  };
+
+
+
+
+  const [passwordFields, setPasswordFields] = useState({
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+
+  const [validationErrors, setValidationErrors] = useState({
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+
+  // Handle input changes and validate in real-time
+  const updatePasswordField = (e) => {
+    const { name, value } = e.target;
+
+    // Update the corresponding password field value
+    setPasswordFields({
+      ...passwordFields,
+      [name]: value,
+    });
+
+    // Real-time validation for new password and confirm password
+    let updatedErrors = { ...validationErrors };
+
+    if (name === 'newPassword' || name === 'confirmPassword') {
+      // Validate new password (at least 8 characters)
+      if (name === 'newPassword' && value.length < 8) {
+        updatedErrors.newPassword = 'New password must be at least 8 characters long.';
+      } else if (name === 'newPassword') {
+        updatedErrors.newPassword = ''; // Clear error if valid
+      }
+
+      // Validate confirm password (should match new password)
+      if (name === 'confirmPassword' && value !== passwordFields.newPassword) {
+        updatedErrors.confirmPassword = 'Confirm password does not match the new password.';
+      } else if (name === 'confirmPassword') {
+        updatedErrors.confirmPassword = ''; // Clear error if valid
+      }
+    }
+
+    // Reset error for old password if the user starts typing
+    if (name === 'oldPassword') {
+      updatedErrors.oldPassword = '';
+    }
+
+    setValidationErrors(updatedErrors);
+  };
+
+
+  const [validationAgentErrors, setValidationAgentErrors] = useState({});
+
+  const updateAgentField = (e) => {
+    const { name, value } = e.target;
+    setAgentData({ ...agentData, [name]: value });
+    validateAgentField(name, value);
+  };
+
+  const updateDropdownValue = (field, value) => {
+    setAgentData({ ...agentData, [field]: value });
+    validateAgentField(field, value);
+  };
+
+  const validateAgentField = (field, value) => {
+    let error = "";
+    if (!value || value === "Select") {
+      error = `${field} is required`;
+    }
+    setValidationAgentErrors({ ...validationAgentErrors, [field]: error });
+  };
+
+
+
+  const handleProfileUpdate = async () => {
+    let valid = true;
+    let newErrors = { ...errors };
+
+    // Validate Full name
+    if (!formData.name.trim()) {
+      newErrors.name = 'Full name is required.';
+      valid = false;
+    }
+
+    // Validate Mobile Number (10 digits)
+    if (!/^\d{10}$/.test(formData.mobileNumber)) {
+      newErrors.mobileNumber = 'Mobile number must be 10 digits.';
+      valid = false;
+    }
+
+    // Validate Email address
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address.';
+      valid = false;
+    }
+
+    // Update the errors state
+    setErrors(newErrors);
+
+    // Proceed with form submission if valid
+    if (valid) {
+      const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+      if (landsUser) {
+        try {
+          const payload = {
+            ...(avatar?.file ? { image: avatar } : {}),
+            fullName: formData.name,
+            email: formData.email,
+            phone: formData.mobileNumber,
+          };
+
+          const payload2 = {
+            ...(avatar?.file ? { image: avatar } : {}),
+            ...(!isNew ? {id: agentData.id} : {}),
+            fullName: formData.name,
+            email: formData.email,
+            phone: formData.mobileNumber,
+            gender: agentData.agentGender,
+            age: agentData.agentAge,
+            service: agentData.agentService,
+          };
+
+          if (isAgent) {
+
+            if (isNew) {
+              const data = await createAgent(payload2);
+              if (data.success) {
+                console.log(data);
+                toast.success("User updated successfully");
+              } else {
+                toast.error(data.message || data.error || "Something Went Wrong");
+              }
+            } else {
+              const data = await updateAgent(payload2);
+              if (data.success) {
+                console.log(data);
+                toast.success("User updated successfully");
+              } else {
+                toast.error(data.message || data.error || "Something Went Wrong");
+              }
+            }
+          } else {
+
+            const data = await UpdateUser(payload);
+
+            if (data.success) {
+              console.log(data);
+              toast.success("User updated successfully");
+            } else {
+              toast.error(data.message || data.error || "Something Went Wrong");
+            }
+          }
+
+        } catch (err) {
+          console.error('Error updating user:', err);
+        }
+
+      } else {
+        toast.error("Seller Not Found")
+        setTimeout(() => {
+          window.location.href = "/"
+        }, 4000);
+      }
+    }
+  };
+
+  const getUser = async () => {
+
+    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+    if (landsUser) {
+      try {
+        const data = await getUserDetails(landsUser.id);
+        if (data.success) {
+          setUserData(data.user);
+          setFormData({
+            name: data.user.full_name,
+            mobileNumber: data.user.phone_number,
+            email: data.user.email,
+          });
+          setimgUrl(data.user.imageUrl || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=")
+        } else {
+          toast.error(data.message || data.error || "Something Went Wrong")
+        }
+      } catch (err) {
+        console.error('Error fetching categories:', err);
+      }
+    } else {
+      toast.error("Seller Not Found")
+      setTimeout(() => {
+        window.location.href = "/"
+      }, 4000);
+    }
+
+  }
+
+  useEffect(() => {
+    getUser();
+  }, [])
+
+
+
+  // Handle password update submission
+  const submitPasswordUpdate = async () => {
+    let isValid = true;
+    let updatedErrors = { ...validationErrors };
+
+    // Validate Old Password
+    if (!passwordFields.oldPassword.trim()) {
+      updatedErrors.oldPassword = 'Old password is required.';
+      isValid = false;
+    }
+
+    // Validate New Password (at least 8 characters)
+    if (passwordFields.newPassword.length < 8) {
+      updatedErrors.newPassword = 'New password must be at least 8 characters long.';
+      isValid = false;
+    }
+
+    // Validate Confirm Password (should match New Password)
+    if (passwordFields.newPassword !== passwordFields.confirmPassword) {
+      updatedErrors.confirmPassword = 'Confirm password does not match the new password.';
+      isValid = false;
+    }
+
+    setValidationErrors(updatedErrors);
+
+    // Proceed with password update if valid
+    if (isValid) {
+      const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+      if (landsUser) {
+        try {
+
+          const postData = {
+            id: landsUser.id,
+            oldPassword: passwordFields.oldPassword,
+            newPassword: passwordFields.newPassword,
+          }
+
+          const data = await UpdateUserPassword(postData);
+          if (data.success) {
+            setPasswordFields({
+              oldPassword: '',
+              newPassword: '',
+              confirmPassword: '',
+            });
+            toast.success("Password Updated Successfully");
+          } else {
+            toast.error(data.message || data.error || "Something Went Wrong")
+          }
+        } catch (err) {
+          console.error('Error fetching categories:', err);
+        }
+      } else {
+        toast.error("Seller Not Found")
+        setTimeout(() => {
+          window.location.href = "/"
+        }, 4000);
+      }
+    }
+  };
+
+
   return (
     <div className="main-content">
+      <style>
+        {`
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+          }
+        @media (min-width: 800px) {
+          .custom-mobile-class {
+            display: none !important;
+          }
+          .custom-desktop-class {
+            display: flex !important;
+          }
+        }
+        @media (max-width: 799px) {
+          .custom-desktop-class {
+            display: none !important;
+          }
+          .custom-mobile-class {
+            display: flex !important;
+          }
+        }`}
+      </style>
       <div className="main-content-inner wrap-dashboard-content-2">
         <div className="button-show-hide show-mb">
-          <span className="body-1">Show Dashboard</span>
+          <span className="body-1">Show Menu</span>
         </div>
         <div className="widget-box-2">
           {/* <div className="box">
@@ -55,7 +441,7 @@ export default function MyProfile() {
                   loading="lazy"
                   width={128}
                   height={128}
-                  src={preview}
+                  src={avatar.preview || imgUrl || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0="} // Fallback to default avatar if no image is selected
                 />
               </div>
               <div className="content uploadfile">
@@ -65,178 +451,114 @@ export default function MyProfile() {
                     type="file"
                     className="ip-file"
                     accept="image/*"
-                    onChange={handleImageUpload}
+                    onChange={handleImageUpload} // Handle the file selection
                   />
                 </div>
                 <p>JPEG 100x100</p>
               </div>
             </div>
           </div>
-          {/* <div className="box">
-            <h5 className="title">Agent Poster</h5>
-            <div className="box-agent-avt">
-              <div className="img-poster">
-                <img
-                  alt="avatar"
-                  loading="lazy"
-                  width={875}
-                  height={500}
-                  src={preview2}
-                />
-              </div>
-              <div className="content uploadfile">
-                <p>Upload a new avatar</p>
-                <div className="box-ip">
-                  <input
-                    type="file"
-                    className="ip-file"
-                    accept="image/*"
-                    onChange={handleImageUpload2}
-                  />
-                </div>
-                <p>JPEG 100x100</p>
-              </div>
-            </div>
-          </div> */}
           <h5 className="title">Information</h5>
-          <div className="box box-fieldset">
-            <label htmlFor="name">
-              Full name:<span>*</span>
-            </label>
-            <input
-              type="text"
-              defaultValue="Demo Agent"
-              className="form-control style-1"
-            />
-          </div>
-          <div className="box box-fieldset">
-            <label htmlFor="desc">
-              Description:<span>*</span>
-            </label>
-            <textarea
-              defaultValue={
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-              }
-            />
-          </div>
-          <div className="box grid-4 gap-30">
-            <div className="box-fieldset">
-              <label htmlFor="company">
-                Your Company:<span>*</span>
+          <div className="box grid-2 gap-30" style={{ marginBottom: '10px' }}>
+            <div className="box box-fieldset">
+              <label htmlFor="name">
+                Full name:<span>*</span>
               </label>
               <input
                 type="text"
-                defaultValue="Your Company"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
                 className="form-control style-1"
               />
-            </div>
-            <div className="box-fieldset">
-              <label htmlFor="position">
-                Position:<span>*</span>
-              </label>
-              <input
-                type="text"
-                defaultValue="Your Company"
-                className="form-control style-1"
-              />
+              {errors.name && <span className="error-message">{errors.name}</span>}
             </div>
             <div className="box-fieldset">
               <label htmlFor="num">
-                Office Number:<span>*</span>
+                Mobile Number:<span>*</span>
               </label>
               <input
                 type="number"
-                defaultValue={1332565894}
+                name="mobileNumber"
+                disabled
+                value={formData.mobileNumber}
+                onChange={handleInputChange}
                 className="form-control style-1"
               />
-            </div>
-            <div className="box-fieldset">
-              <label htmlFor="address">
-                Office Address:<span>*</span>
-              </label>
-              <input
-                type="text"
-                defaultValue="10 Bringhurst St, Houston, TX"
-                className="form-control style-1"
-              />
+              {errors.mobileNumber && (
+                <span className="error-message">{errors.mobileNumber}</span>
+              )}
             </div>
           </div>
-          <div className="box grid-4 gap-30 box-info-2">
-            <div className="box-fieldset">
-              <label htmlFor="job">
-                Job:<span>*</span>
-              </label>
-              <input
-                type="text"
-                defaultValue="Realter"
-                className="form-control style-1"
-              />
-            </div>
+          <div className="box grid-2 gap-30">
             <div className="box-fieldset">
               <label htmlFor="email">
                 Email address:<span>*</span>
               </label>
               <input
                 type="text"
-                defaultValue="themeflat@gmail.com"
+                name="email"
+                disabled
+                value={formData.email}
+                onChange={handleInputChange}
                 className="form-control style-1"
               />
+              {errors.email && <span className="error-message">{errors.email}</span>}
             </div>
-            <div className="box-fieldset">
-              <label htmlFor="phone">
-                Your Phone:<span>*</span>
-              </label>
-              <input
-                type="number"
-                defaultValue={1332565894}
-                className="form-control style-1"
-              />
-            </div>
+            {isAgent && (
+              <div className="box-fieldset">
+                <label htmlFor="agentAge">
+                  Age:
+                </label>
+                <input
+                  type="number"
+                  name="agentAge"
+                  value={agentData.agentAge}
+                  onChange={updateAgentField}
+                  className="form-control style-1"
+                />
+                {validationErrors.agentAge && (
+                  <span className="error-message">{validationErrors.agentAge}</span>
+                )}
+              </div>
+            )}
           </div>
-          {/* <div className="box box-fieldset">
-            <label htmlFor="location">
-              Location:<span>*</span>
-            </label>
-            <input
-              type="text"
-              defaultValue="634 E 236th St, Bronx, NY 10466"
-              className="form-control style-1"
-            />
-          </div> */}
-          {/* <div className="box box-fieldset">
-            <label htmlFor="fb">
-              Facebook:<span>*</span>
-            </label>
-            <input
-              type="text"
-              defaultValue="#"
-              className="form-control style-1"
-            />
-          </div> */}
-          {/* <div className="box box-fieldset">
-            <label htmlFor="tw">
-              Twitter:<span>*</span>
-            </label>
-            <input
-              type="text"
-              defaultValue="#"
-              className="form-control style-1"
-            />
-          </div> */}
-          {/* <div className="box box-fieldset">
-            <label htmlFor="linkedin">
-              Linkedin:<span>*</span>
-            </label>
-            <input
-              type="text"
-              defaultValue="#"
-              className="form-control style-1"
-            />
-          </div> */}
-          <div className="box">
-            <a href="#" className="tf-btn primary">
-              Save &amp; Update
-            </a>
+          {isAgent && (
+            <div className="box grid-2 gap-30">
+              <div className="box-fieldset">
+                <label htmlFor="agentGender">
+                  Gender:
+                </label>
+                <DropdownSelect
+                  options={["Select", "Male", "Female", "Other"]}
+                  onChange={(value) => updateDropdownValue("agentGender", value)}
+                />
+                {validationErrors.agentGender && (
+                  <span className="error-message">{validationErrors.agentGender}</span>
+                )}
+              </div>
+
+              <div className="box-fieldset">
+                <label htmlFor="agentService">
+                  Service:
+                </label>
+                <DropdownSelect
+                  options={[
+                    "Select",
+                    "RealEstate Broker",
+                    "RealEstate Promoter",
+                    "RealEstate Marketer",
+                  ]}
+                  onChange={(value) => updateDropdownValue("agentService", value)}
+                />
+                {validationErrors.agentService && (
+                  <span className="error-message">{validationErrors.agentService}</span>
+                )}
+              </div>
+            </div>
+          )}
+          <div className="box" onClick={handleProfileUpdate}>
+            <a className="tf-btn primary">Save &amp; Update</a>
           </div>
           <h5 className="title">Change password</h5>
           <div className="box grid-3 gap-30">
@@ -246,13 +568,17 @@ export default function MyProfile() {
               </label>
               <div className="box-password">
                 <input
-                  type="password"
+                  type={showOldPassword ? 'text' : 'password'}
+                  name="oldPassword"
+                  value={passwordFields.oldPassword}
+                  onChange={updatePasswordField}
                   className="form-contact style-1 password-field"
                   placeholder="Password"
                 />
-                <span className="show-pass">
-                  <i className="icon-pass icon-eye" />
-                  <i className="icon-pass icon-eye-off" />
+                {validationErrors.oldPassword && <span className="error-message">{validationErrors.oldPassword}</span>}
+                <span className="show-pass" onClick={() => togglePasswordVisibility('oldPassword')}>
+                  {showOldPassword ? <FaEyeSlash style={{ marginBottom: '5px' }} /> : <FaEye style={{ marginBottom: '5px' }} />}
+
                 </span>
               </div>
             </div>
@@ -262,13 +588,17 @@ export default function MyProfile() {
               </label>
               <div className="box-password">
                 <input
-                  type="password"
+                  type={showNewPassword ? 'text' : 'password'}
+                  name="newPassword"
+                  value={passwordFields.newPassword}
+                  onChange={updatePasswordField}
                   className="form-contact style-1 password-field2"
                   placeholder="Password"
                 />
-                <span className="show-pass2">
-                  <i className="icon-pass icon-eye" />
-                  <i className="icon-pass icon-eye-off" />
+                {validationErrors.newPassword && <span className="error-message">{validationErrors.newPassword}</span>}
+                <span className="show-pass2" onClick={() => togglePasswordVisibility('newPassword')}                >
+                  {showNewPassword ? <FaEyeSlash style={{ marginBottom: '5px' }} /> : <FaEye style={{ marginBottom: '5px' }} />}
+
                 </span>
               </div>
             </div>
@@ -278,21 +608,22 @@ export default function MyProfile() {
               </label>
               <div className="box-password">
                 <input
-                  type="password"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  name="confirmPassword"
+                  value={passwordFields.confirmPassword}
+                  onChange={updatePasswordField}
                   className="form-contact style-1 password-field3"
                   placeholder="Password"
                 />
-                <span className="show-pass3">
-                  <i className="icon-pass icon-eye" />
-                  <i className="icon-pass icon-eye-off" />
+                {validationErrors.confirmPassword && <span className="error-message">{validationErrors.confirmPassword}</span>}
+                <span className="show-pass3" onClick={() => togglePasswordVisibility('confirmPassword')} >
+                  {showConfirmPassword ? <FaEyeSlash style={{ marginBottom: '5px' }} /> : <FaEye style={{ marginBottom: '5px' }} />}
                 </span>
               </div>
             </div>
           </div>
-          <div className="box">
-            <a href="#" className="tf-btn primary">
-              Update Password
-            </a>
+          <div className="box" onClick={submitPasswordUpdate}>
+            <a className="tf-btn primary">Update Password</a>
           </div>
         </div>
       </div>

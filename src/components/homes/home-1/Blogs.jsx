@@ -1,11 +1,38 @@
 import { blogPosts } from "@/data/blogs";
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Link } from "react-router-dom";
 import { Pagination } from "swiper/modules";
 import NorthEastIcon from '@mui/icons-material/NorthEast';
+import { getBlogsList } from "@/apiCalls";
+import { toast } from "react-toastify";
 
 export default function Blogs() {
+
+
+  const [ blogs , setBlogs ] = useState([]);
+
+
+    const fetchBlogs = async () => {
+      try {
+        const data = await getBlogsList();
+        setBlogs(data.data)
+        if (data.success) {
+          setBlogs(data.data)
+        } else {
+          toast.error(data.message)
+        }
+      } catch (err) {
+        console.error('Error fetching categories:', err);
+      }
+    };
+  
+    useEffect(() => {
+      fetchBlogs();
+    }, []);
+
+
+
   return (
     <section className="flat-section bg-primary-new" style={{background:'#f0f3f4'}}>
       <style>
@@ -61,7 +88,7 @@ export default function Blogs() {
           modules={[Pagination]}
           pagination={{ clickable: true }}
         >
-          {blogPosts.map((post, index) => (
+          {blogs.length && blogs.map((post, index) => (
             <SwiperSlide className="swiper-slide" key={index}>
               <Link
                 // to={`/blog-detail/${post.id}`}
@@ -71,9 +98,9 @@ export default function Blogs() {
                   <img
                     style={{ position: 'relative' }}
                     className="lazyload"
-                    data-src={post.imgSrc}
-                    alt={post.alt}
-                    src={post.imgSrc}
+                    data-src={post.image}
+                    alt={post.author}
+                    src={post.image}
                     width={615}
                     height={405}
                   />
@@ -83,7 +110,7 @@ export default function Blogs() {
                     <span className="fw-6" style={{color:'gray'}}>{post.author}</span>
                   </div>
                   <h5 className="title link" style={{padding:'5px 0'}}>{post.title}</h5>
-                  <p className="description">{post.date}</p>
+                  <p className="description">{post.createdAt.split("T")[0]}</p>
                 </div>
               </Link>
             </SwiperSlide>
