@@ -188,7 +188,7 @@ const Footer2 = () => {
             </Link>
           </Grid>
 
-          {/* <Grid item xs={12} md={2.5}>
+          <Grid item xs={12} md={2.5}>
             <Typography variant="h6" gutterBottom color='#ffffff' fontWeight='bold'>
               Group Of Companies
             </Typography>
@@ -207,7 +207,7 @@ const Footer2 = () => {
             <Link href="#" color="inherit" underline="hover" variant="body2" display="block">
               <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />Blogs
             </Link>
-          </Grid> */}
+          </Grid>
         </Grid>
 
         <Box

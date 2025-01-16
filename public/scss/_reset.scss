@@ -164,7 +164,7 @@ li {
 }
 
 .container {
-    max-width: 1250px;
+    max-width: 1250px !important;
 }
 
 .custom-container-header{
@@ -758,4 +758,8 @@ label {
     li {
         list-style: disc;
     }
+}
+
+.container {
+    max-width: 1250px ;
 }

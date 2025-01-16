@@ -7,7 +7,7 @@ import { props } from "@/data/properties";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getPropertyEdit } from "@/apiCalls";
-
+import { toast } from "react-toastify";
 import MetaComponent from "@/components/common/MetaComponent";
 const metadata = {
   title: "Property Details 01 || Homelengo - Real Estate Reactjs Template",
@@ -23,9 +23,9 @@ export default function PropertyDetailsPageV1() {
   useEffect(() => {
     const fetchData = async () => {
       if (params.id) {
-        const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+        // const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
-        if (landsUser) {
+        // if (landsUser) {
           try {
             const data = await getPropertyEdit(params.id);
             if (data.success) {
@@ -56,9 +56,9 @@ export default function PropertyDetailsPageV1() {
           } catch (err) {
             console.error('Error fetching categories:', err);
           }
-        } else {
-          toast.error('You must be logged in to access this page');
-        }
+        // } else {
+        //   toast.error('You must be logged in to access this page');
+        // }
       }
     };
 

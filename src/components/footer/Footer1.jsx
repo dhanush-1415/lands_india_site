@@ -325,7 +325,6 @@
 //     </footer>
 //   );
 // }
-
 import React from 'react';
 import { Box, Grid, Typography, Button, Link, IconButton, Divider } from '@mui/material';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -338,7 +337,25 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 
 
-const Footer1 = () => {
+const Footer2 = () => {
+
+  const handleNavigation = (path) => {
+    if (path === "add-property") {
+      const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+      if (landsUser) {
+        window.location.href = `/${path}`
+      } else {
+        toast.error("Please Login to Continue")
+      }
+    } else {
+
+      window.location.href = `/${path}`
+    }
+
+  }
+
+
   return (
     <Grid sx={{ backgroundColor: '#1c1c1e', color: '#fff' }}>
       <Box sx={{ py: 5, width: { xs: '85%', sm: '85%', md: '90%' }, margin: '0px auto' }}>
@@ -370,7 +387,7 @@ const Footer1 = () => {
                 </Grid>
                 <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                   <Grid>
-                    <Grid container justifyContent='space-between' flexDirection="row" sx={{ backgroundColor: '#343434', borderRadius: '5px', boxShadow: " rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", marginBottom: '-20px', padding: '10px 20px' }} >
+                    <Grid onClick={() => { handleNavigation('support') }} container justifyContent='space-between' flexDirection="row" sx={{ backgroundColor: '#343434', borderRadius: '5px', boxShadow: " rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", marginBottom: '-20px', padding: '10px 20px' }} >
                       <Grid>
                         <PhoneIcon />
                       </Grid>
@@ -409,7 +426,7 @@ const Footer1 = () => {
 
                   </Box>
                 </Grid>
-                <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Grid onClick={() => { handleNavigation('add-property') }} container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                   <Grid>
                     <Grid container justifyContent='space-between' flexDirection="row" sx={{ backgroundColor: '#343434', borderRadius: '5px', boxShadow: " rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", marginBottom: '-20px', padding: '10px 20px' }} >
                       <Grid>
@@ -481,16 +498,16 @@ const Footer1 = () => {
             <Typography variant="h6" gutterBottom color='#ffffff' fontWeight='bold'>
               Our Company
             </Typography>
-            <Link href="#" color="inherit" underline="hover" variant="body2" display="block" sx={{ mt: 3 }}>
+            <Link href="/about-us" color="inherit" underline="hover" variant="body2" display="block" sx={{ mt: 3 }}>
               <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />About Us
             </Link>
             <Link href="#" color="inherit" underline="hover" variant="body2" display="block">
-              <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} /> Career
+              <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />Career
             </Link>
-            <Link href="#" color="inherit" underline="hover" variant="body2" display="block">
+            <Link href="/agents" color="inherit" underline="hover" variant="body2" display="block">
               <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />Our Agents
             </Link>
-            <Link href="#" color="inherit" underline="hover" variant="body2" display="block">
+            <Link href="/properties/all" color="inherit" underline="hover" variant="body2" display="block">
               <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />Join Us
             </Link>
             <Link href="#" color="inherit" underline="hover" variant="body2" display="block">
@@ -605,5 +622,4 @@ const Footer1 = () => {
   );
 };
 
-export default Footer1;
-
+export default Footer2;

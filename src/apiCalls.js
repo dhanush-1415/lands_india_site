@@ -312,6 +312,8 @@ export const createNewProperty = async (data) => {
   const formData = new FormData();
 
   formData.append('sellerId', data.propertiesPost.sellerId);
+  formData.append('price', data.propertiesPost.price);
+  formData.append('location', data.propertiesPost.location);
   formData.append('subMenuId', data.propertiesPost.subMenuId);
   formData.append('PropertyInput', JSON.stringify(data.PropertiesInput));
 
@@ -848,7 +850,10 @@ export const updateProperty = async (data) => {
 
   const formData = new FormData();
 
-  formData.append('data', JSON.stringify(data.data));
+  console.log("ddddd", data);
+  
+  formData.append('properties', JSON.stringify(data.data.properties));
+  formData.append('propertyInputs', JSON.stringify(data.data.propertyInputs));
 
   if (data?.images?.length > 0) {
     data.images.forEach((image) => {

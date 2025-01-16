@@ -7,6 +7,7 @@ import PinDropIcon from '@mui/icons-material/PinDrop';
 import Footer2 from '../footer/Footer2';
 import Pagination from './Pagination';
 import { getFranchiseList, createFranchise } from '@/apiCalls';
+import { toast } from "react-toastify";
 
 const Franchise = () => {
   const [currentPage, setCurrentPage] = useState(1);
