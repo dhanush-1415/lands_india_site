@@ -174,7 +174,7 @@ export default function BoxCategory() {
                   border: "2px solid #ddd",
                   borderTop: index < 4 ? "none" : "1px solid #ddd",
                   borderRight: index % 4 === 3 ? "none" : "1px solid #ddd",
-                  borderBottom: index % 4 === 1 || index % 4 === 2 || index % 4 === 3 ? "none" : "1px solid #ddd",
+                  borderBottom: index % 4 === 1 || index % 4 === 0|| index % 4 === 2 || index % 4 === 3 ? "none" : "1px solid #ddd",
                   borderLeft: index % 4 === 0 ? "none" : "1px solid #ddd",
                   cursor: "pointer",
                   position: "relative",
@@ -196,7 +196,7 @@ export default function BoxCategory() {
                   </div>
                   <h5 className="fw-bold">{service.title}</h5>
                   <p className="text-muted" style={{ marginBottom: "0.5rem" }}>{service.description}</p>
-                  <h6 onClick={() => (window.location.href = service.url)} className="learn-more-button" style={{ marginTop: "0.5rem" }}>Learn More</h6>
+                  <h6 onClick={() => (window.location.href = service.url)} className="learn-more-button" style={{ marginTop: "0.5rem" }}>View Details</h6>
                 </div>
               </div>
 

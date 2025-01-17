@@ -26,6 +26,10 @@ import 'react-multi-carousel/lib/styles.css';
 import { UserLogin, RegisterUser, verifyMobileOtp } from "@/apiCalls";
 import { toast } from "react-toastify";
 import InfoIcon from '@mui/icons-material/Info';
+import Avatar from '@mui/material/Avatar';
+import { Home, Person, PostAdd, Favorite, AddCircle, RequestPage } from '@mui/icons-material';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+
 
 const buttonStyle = {
   background: 'linear-gradient(to right, #0d7ae3 50%, white 50%)',
@@ -49,6 +53,37 @@ import MobileNav from "./MobileNav";
 export default function Header1({
   parentClass = "main-header header-fixed fixed-header",
 }) {
+
+
+
+  const [anchorTwoEl, setTwoAnchorEl] = useState(null);
+
+
+  const open = (anchorTwoEl);
+
+  const handleClick = (event) => {
+    setTwoAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setTwoAnchorEl(null);
+  };
+
+  const handleNavigation = (path) => {
+    window.location.href = `/${path}`
+  }
+
+
+
+  const handleLogout = () => {
+    console.log("logout")
+    localStorage.removeItem("LandsUser");
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 2400);
+    toast.success("Logout Successful");
+
+  };
+
   const [isFixed, setIsFixed] = useState(false);
 
   // individual , project , value-added service
@@ -743,7 +778,7 @@ export default function Header1({
                                     endAdornment: (
                                       <InputAdornment position="end">
                                         <IconButton onClick={() => togglePasswordVisibility('newPassword')}>
-                                          {showNewPassword ? <FaEyeSlash sx={{marginRight:'3px'}}/> : <FaEye sx={{marginRight:'3px'}} />}
+                                          {showNewPassword ? <FaEyeSlash sx={{ marginRight: '3px' }} /> : <FaEye sx={{ marginRight: '3px' }} />}
                                           <Tooltip title={errors.password} placement="left-start">
                                             <InfoIcon />
                                           </Tooltip>
@@ -929,46 +964,8 @@ export default function Header1({
                         <ul className="navigation clearfix">
                           <NavTwo />{isLogin ? (
 
-<a
-  href="/add-property"
-  style={{
-    textAlign: 'center',
-    fontWeight: 600,
-    padding: '27px 20px 27px 0px',
-    letterSpacing: '0px',
-    color: '#161e2d',
-    fontSize: '15px',
-    lineHeight: '21.86px',
-    textTransform: 'capitalize',
-  }}
-
->
-  Sell Property
-</a>
-) : (
-<a
-  onClick={handleDialogOpen}
-  style={{
-    textAlign: 'center',
-    fontWeight: 600,
-    padding: '27px 20px 27px 0px',
-    letterSpacing: '0px',
-    color: '#161e2d',
-    fontSize: '15px',
-    lineHeight: '21.86px',
-    textTransform: 'capitalize',
-  }}
-
->
- 
-  
-  Sell Property
-</a>
-)}
-                          {isLogin ? (
-
                             <a
-                              href="/dashboard"
+                              href="/add-property"
                               style={{
                                 textAlign: 'center',
                                 fontWeight: 600,
@@ -981,7 +978,7 @@ export default function Header1({
                               }}
 
                             >
-                              Dashboard
+                              Sell Property
                             </a>
                           ) : (
                             <a
@@ -998,11 +995,125 @@ export default function Header1({
                               }}
 
                             >
-                             
+
+
+                              Sell Property
+                            </a>
+                          )}
+                          {isLogin ? (
+                            <>
+
+                              <a
+                                aria-controls={open ? 'account-menu' : undefined}
+                                aria-haspopup="true"
+                                onClick={handleClick}
+                                aria-expanded={open ? 'true' : undefined}
+                                style={{
+                                  textAlign: 'center',
+                                  fontWeight: 600,
+                                  padding: '27px 20px 27px 0px',
+                                  letterSpacing: '0px',
+                                  color: '#161e2d',
+                                  fontSize: '15px',
+                                  lineHeight: '21.86px',
+                                  textTransform: 'capitalize',
+                                }}
+
+                              >
+                                <AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#161e2d', marginRight: '5px' }} />
+                                My Profile
+                              </a>
+                              <Menu
+                                anchorEl={anchorTwoEl}
+                                id="account-menu"
+                                open={open}
+                                onClose={handleClose}
+                                onClick={handleClose}
+                                slotProps={{
+                                  paper: {
+                                    elevation: 0,
+                                    sx: {
+                                      overflow: 'visible',
+                                      filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                      mt: 1.5,
+                                      top: '50px !important',
+                                      '& .MuiAvatar-root': {
+                                        width: 32,
+                                        height: 32,
+                                        ml: -0.5,
+                                        mr: 1,
+                                      },
+                                      '&::before': {
+                                        content: '""',
+                                        display: 'block',
+                                        position: 'absolute',
+                                        top: 0,
+                                        right: 14,
+                                        width: 10,
+                                        height: 10,
+                                        bgcolor: 'background.paper',
+                                        transform: 'translateY(-50%) rotate(45deg)',
+                                        zIndex: 0,
+                                      },
+                                    },
+                                  },
+                                }}
+                                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                              >
+
+                                <MenuItem onClick={() => { handleNavigation("Dashboard") }}>
+                                  <Home style={{ fontSize: '20px' }} />
+                                  <span style={{ fontSize: '15px', marginLeft: '9px' }}>My Dashboard </span>
+                                </MenuItem>
+                                <MenuItem onClick={() => { handleNavigation("my-profile") }}>
+                                  <Person style={{ fontSize: '20px' }} />
+                                  <span style={{ fontSize: '15px', marginLeft: '9px' }}>My Profile</span>
+                                </MenuItem>
+                                <MenuItem onClick={() => { handleNavigation("my-property") }}>
+                                  <PostAdd style={{ fontSize: '20px' }} />
+                                  <span style={{ fontSize: '15px', marginLeft: '9px' }}>My Post</span>
+                                </MenuItem>
+                                <MenuItem onClick={() => { handleNavigation("add-property") }}>
+                                  <AddCircle style={{ fontSize: '20px' }} />
+                                  <span style={{ fontSize: '15px', marginLeft: '9px' }}>Add Property </span>
+
+                                </MenuItem>
+                                <MenuItem onClick={() => { handleNavigation("my-favourites") }}>
+                                  <Favorite style={{ fontSize: '20px' }} />
+                                  <span style={{ fontSize: '15px', marginLeft: '9px' }}>My Favourites </span>
+                                </MenuItem>
+                                <MenuItem onClick={() => { handleNavigation("my-requests") }}>
+                                  <RequestPage style={{ fontSize: '20px' }} />
+                                  <span style={{ fontSize: '15px', marginLeft: '9px' }}>My Requests </span>
+                                </MenuItem>
+                                <MenuItem onClick={handleLogout}>
+                                  <ExitToAppIcon style={{ fontSize: '20px' }} />
+                                  <span style={{ fontSize: '15px', marginLeft: '9px' }}>Logout </span>
+                                </MenuItem>
+                              </Menu>
+                            </>
+                          ) : (
+                            <a
+                              onClick={handleDialogOpen}
+                              style={{
+                                textAlign: 'center',
+                                fontWeight: 600,
+                                padding: '27px 20px 27px 0px',
+                                letterSpacing: '0px',
+                                color: '#161e2d',
+                                fontSize: '15px',
+                                lineHeight: '21.86px',
+                                textTransform: 'capitalize',
+                              }}
+
+                            >
+
                               <AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#161e2d', marginRight: '5px' }} />
                               Login/Register
                             </a>
                           )}
+
                         </ul>
                       </div>
                     </nav>

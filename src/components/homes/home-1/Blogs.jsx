@@ -46,6 +46,12 @@ export default function Blogs() {
               float: right;
               padding: 10px;
           }
+          .custom-description{
+            font-weight:600 !important;
+            color:#008FF7 !important;
+          }
+       
+      </style>
         `}
       </style>
       <div className="container">
@@ -110,7 +116,7 @@ export default function Blogs() {
                     <span className="fw-6" style={{color:'gray'}}>{post.author}</span>
                   </div>
                   <h5 className="title link" style={{padding:'5px 0'}}>{post.title}</h5>
-                  <p className="description">{post.createdAt.split("T")[0]}</p>
+                  <p className="description custom-description" style={{fontWeight:'600 !important'}}>{post.createdAt.split("T")[0]}</p>
                 </div>
               </Link>
             </SwiperSlide>

@@ -60,7 +60,7 @@ export default function Blogs() {
                     <span>{post.category}</span>
                   </div>
                   <h5 className="title link">{post.title}</h5>
-                  <p className="description">{post.description}</p>
+                  <p className="description custom-description">{post.description}</p>
                 </div>
               </Link>
             </SwiperSlide>
@@ -68,6 +68,13 @@ export default function Blogs() {
           <div className="sw-pagination spb8 sw-pagination-latest text-center" />
         </Swiper>
       </div>
+      <style>
+        {`
+          .custom-description{
+            font-weight:600 !important;
+          }
+        `}
+      </style>
     </section>
   );
 }

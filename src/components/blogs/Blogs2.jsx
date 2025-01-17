@@ -4,12 +4,15 @@ import { Link } from "react-router-dom";
 import { blogPosts8 } from "@/data/blogs";
 import Pagination from "../common/Pagination";
 import Pagination2 from "../common/Pagination2";
-export default function Blogs2() {
+import { getBlogsList } from "@/apiCalls";
+
+export default function Blogs2({blogs}) {
+
   return (
     <section className="flat-section">
-      <div className="container">
+      <div className="container custom-container-header">
         <div className="row">
-          {blogPosts8.map((post, index) => (
+          {blogs.length && blogs.map((post, index) => (
             <div className="col-lg-4 col-md-6" key={index}>
               <Link
                 to={`/blog-detail/${post.id}`}
@@ -18,18 +21,17 @@ export default function Blogs2() {
                 <div className="img-style">
                   <img
                     className="lazyload"
-                    data-src={post.imgSrc}
+                    data-src={post.image}
                     alt="img-blog"
-                    src={post.imgSrc}
+                    src={post.image}
                     width={615}
                     height={405}
                   />
-                  <span className="date-post">{post.date}</span>
                 </div>
                 <div className="content-box">
                   <div className="post-author">
-                    <span className="fw-7">{post.author.name}</span>
-                    <span>{post.author.category}</span>
+                    <span className="fw-7">{post?.author}</span>
+                    <span>{post.createdAt?.split('T')[0]}</span>
                   </div>
                   <h5 className="title link">{post.title}</h5>
                   <p className="description">{post.description}</p>
@@ -38,9 +40,7 @@ export default function Blogs2() {
             </div>
           ))}
           <div className="col-12 text-center pt-26 line-t">
-            <ul className="justify-content-center wd-navigation">
-              <Pagination2 />
-            </ul>
+            
           </div>
         </div>
       </div>

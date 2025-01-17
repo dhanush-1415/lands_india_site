@@ -6,7 +6,7 @@ import Sidebar from "./Sidebar";
 export default function BlogDetails({ blogItem }) {
   return (
     <section className="flat-section">
-      <div className="container">
+      <div className="container custom-container-header">
         <div className="row">
           <div className="col-lg-12">
             <div className="flat-blog-detail">
@@ -29,43 +29,7 @@ export default function BlogDetails({ blogItem }) {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    <span className="text-primary fw-6">Kathryn Murphy</span>
-                  </li>
-                  <li className="item">
-                    <svg
-                      className="icon"
-                      width={16}
-                      height={16}
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M1.5 8.5V8C1.5 7.60218 1.65804 7.22064 1.93934 6.93934C2.22064 6.65804 2.60218 6.5 3 6.5H13C13.3978 6.5 13.7794 6.65804 14.0607 6.93934C14.342 7.22064 14.5 7.60218 14.5 8V8.5M8.70667 4.20667L7.29333 2.79333C7.20048 2.70037 7.09022 2.62661 6.96886 2.57628C6.84749 2.52595 6.71739 2.50003 6.586 2.5H3C2.60218 2.5 2.22064 2.65804 1.93934 2.93934C1.65804 3.22064 1.5 3.60218 1.5 4V12C1.5 12.3978 1.65804 12.7794 1.93934 13.0607C2.22064 13.342 2.60218 13.5 3 13.5H13C13.3978 13.5 13.7794 13.342 14.0607 13.0607C14.342 12.7794 14.5 12.3978 14.5 12V6C14.5 5.60218 14.342 5.22064 14.0607 4.93934C13.7794 4.65804 13.3978 4.5 13 4.5H9.414C9.14887 4.49977 8.89402 4.39426 8.70667 4.20667Z"
-                        stroke="#A3ABB0"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    <span className="text-primary fw-6">Furniture</span>
-                  </li>
-                  <li className="item">
-                    <svg
-                      className="icon"
-                      width={16}
-                      height={16}
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M5.75 6.5C5.75 6.56631 5.72366 6.62989 5.67678 6.67678C5.62989 6.72366 5.5663 6.75 5.5 6.75C5.4337 6.75 5.37011 6.72366 5.32322 6.67678C5.27634 6.62989 5.25 6.56631 5.25 6.5C5.25 6.4337 5.27634 6.37011 5.32322 6.32322C5.37011 6.27634 5.4337 6.25 5.5 6.25C5.5663 6.25 5.62989 6.27634 5.67678 6.32322C5.72366 6.37011 5.75 6.4337 5.75 6.5ZM5.75 6.5H5.5M8.25 6.5C8.25 6.56631 8.22366 6.62989 8.17678 6.67678C8.12989 6.72366 8.0663 6.75 8 6.75C7.9337 6.75 7.87011 6.72366 7.82322 6.67678C7.77634 6.62989 7.75 6.56631 7.75 6.5C7.75 6.4337 7.77634 6.37011 7.82322 6.32322C7.87011 6.27634 7.9337 6.25 8 6.25C8.0663 6.25 8.12989 6.27634 8.17678 6.32322C8.22366 6.37011 8.25 6.4337 8.25 6.5ZM8.25 6.5H8M10.75 6.5C10.75 6.56631 10.7237 6.62989 10.6768 6.67678C10.6299 6.72366 10.5663 6.75 10.5 6.75C10.4337 6.75 10.3701 6.72366 10.3232 6.67678C10.2763 6.62989 10.25 6.56631 10.25 6.5C10.25 6.4337 10.2763 6.37011 10.3232 6.32322C10.3701 6.27634 10.4337 6.25 10.5 6.25C10.5663 6.25 10.6299 6.27634 10.6768 6.32322C10.7237 6.37011 10.75 6.4337 10.75 6.5ZM10.75 6.5H10.5M1.5 8.50667C1.5 9.57333 2.24867 10.5027 3.30467 10.658C4.02933 10.7647 4.76133 10.8467 5.5 10.904V14L8.28933 11.2113C8.42744 11.0738 8.61312 10.9945 8.808 10.99C10.1091 10.958 11.407 10.8471 12.6947 10.658C13.7513 10.5027 14.5 9.574 14.5 8.506V4.494C14.5 3.426 13.7513 2.49733 12.6953 2.342C11.1406 2.11381 9.57135 1.99951 8 2C6.40533 2 4.83733 2.11667 3.30467 2.342C2.24867 2.49733 1.5 3.42667 1.5 4.494V8.506V8.50667Z"
-                        stroke="#A3ABB0"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    <span className="text-variant-1">0 comment</span>
+                    <span className="text-primary fw-6">{blogItem.author}</span>
                   </li>
                   <li className="item">
                     <svg
@@ -83,153 +47,27 @@ export default function BlogDetails({ blogItem }) {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    <span className="text-variant-1">April 6, 2023</span>
+                    <span className="text-variant-1">{blogItem.createdAt?.split('T')[0]}</span>
                   </li>
                 </ul>
               </div>
               <div className="pb-30 line-b">
-                <p className="text-black-2 fw-6">
-                  The housing sector has long been a focal point for investors
-                  seeking stability and growth. Understanding the dynamics of
-                  housing stocks and effectively trading within this sector can
-                  lead to substantial gains.
-                </p>
+                
                 <div className="my-30 round-30 o-hidden">
                   <img
                     className="lazyload w-100"
                     alt="img-blog"
-                    src={blogItem.imgSrc}
-                    width={840}
-                    height={473}
+                    src={blogItem.image}
+                    style={{width:'100%',maxHeight:'500px'}}
+                    
                   />
                 </div>
-                <h5 className="mb-16 text-black-2">
-                  Understanding Housing Stocks
-                </h5>
                 <p className="mb-20">
-                  Housing stocks encompass companies involved in various aspects
-                  of the real estate industry, including homebuilders,
-                  developers, and related service providers. Factors influencing
-                  these stocks range from interest rates and economic indicators
-                  to trends in homeownership rates.
+                  {blogItem.content}
                 </p>
-                <p className="mb-20">
-                  Pay close attention to economic indicators such as employment
-                  rates, GDP growth, and consumer confidence. A strong economy
-                  often correlates with increased demand for housing, benefiting
-                  related stocks.
-                </p>
-                <div className="my-20 flat-quote">
-                  <blockquote className="quote text-primary">
-                    “Lower rates can boost homebuying activity, benefiting
-                    housing stocks, while higher rates may have the opposite
-                    effect.”
-                  </blockquote>
-                  <cite className="author text-primary fw-5">
-                    said Mike Fratantoni, MBA’s chief economist.
-                  </cite>
-                </div>
-                <div className="box-image grid-2 gap-20 mb-20">
-                  <div className="overflow-hidden round-30">
-                    <img
-                      className="w-100"
-                      alt="imag-blog"
-                      src="/images/blog/blog-md-1.jpg"
-                      width={410}
-                      height={273}
-                    />
-                  </div>
-                  <div className="overflow-hidden round-30">
-                    <img
-                      className="w-100"
-                      alt="imag-blog"
-                      src="/images/blog/blog-md-2.jpg"
-                      width={410}
-                      height={273}
-                    />
-                  </div>
-                </div>
-                <h5 className="mb-16 text-black-2">Identify Emerging Trends</h5>
-                <p className="mb-20">
-                  Stay informed about emerging trends in the housing market,
-                  such as the demand for sustainable homes, technological
-                  advancements, and demographic shifts. Companies aligning with
-                  these trends may present attractive investment opportunities.
-                </p>
-                <p>
-                  Take a long-term investment approach if you believe in the
-                  stability and growth potential of the housing sector. Look for
-                  companies with solid fundamentals and a track record of
-                  success. For short-term traders, capitalize on market
-                  fluctuations driven by economic reports, interest rate
-                  changes, or industry-specific news. Keep a close eye on
-                  earnings reports and government housing data releases.
-                </p>
+                
               </div>
-              <div className="mt-16 d-flex justify-content-between flex-wrap gap-16">
-                <div className="d-flex flex-wrap align-items-center gap-12">
-                  <span className="text-black fw-6">Tag:</span>
-                  <ul className="d-flex flex-wrap gap-9">
-                    <li>
-                      <a href="#" className="blog-tag">
-                        Furniture
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="blog-tag">
-                        Interior
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div className="d-flex flex-wrap align-items-center gap-16">
-                  <span className="font-rubik text-variant-1">
-                    Share this post:
-                  </span>
-                  <ul className="d-flex flex-wrap gap-12">
-                    <li>
-                      <a href="#" className="box-icon line w-44 round">
-                        <i className="icon icon-fb" />
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="box-icon line w-44 round">
-                        <i className="icon icon-x" />
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="box-icon line w-44 round">
-                        <i className="icon icon-in" />
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="box-icon line w-44 round">
-                        <i className="icon icon-instargram" />
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div className="wrap-review">
-                <div className="pb-12 line-b mb-0">
-                  <h5 className="text-black-2">Comment (4)</h5>
-                </div>
-                <ul className="box-review">
-                  <Comments />
-                </ul>
-              </div>
-              <div className="wrap-form-comment">
-                <h5 className="text-black-2">Leave A comment</h5>
-                <p className="text-variant-1 mt-8">
-                  Your email address will not be published. Required fields are
-                  marked *
-                </p>
-                <div id="comments" className="comments">
-                  <div className="respond-comment">
-                    <CommentForm />
-                  </div>
-                </div>
-              </div>
+ 
             </div>
           </div>
         </div>
