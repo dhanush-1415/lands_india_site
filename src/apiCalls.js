@@ -216,10 +216,10 @@ export const getProperties = async (data) => {
     searchParArr.push(`search=${data.keyword}`);
   }
   if (data.category) {
-    searchParArr.push(`category=${data.category}`);
+    searchParArr.push(`menu=${data.category}`);
   }
   if (data.subCategory) {
-    searchParArr.push(`subCategory=${data.subCategory}`);
+    searchParArr.push(`submenu=${data.subCategory}`);
   }
 
   url += searchParArr.join('&');
@@ -855,13 +855,13 @@ export const updateProperty = async (data) => {
   formData.append('properties', JSON.stringify(data.data.properties));
   formData.append('propertyInputs', JSON.stringify(data.data.propertyInputs));
 
-  if (data?.images?.length > 0) {
-    data.images.forEach((image) => {
-      if (image.file) {
-        formData.append(`files`, image.file);
-      }
-    });
-  }
+  // if (data?.images?.length > 0) {
+  //   data.images.forEach((image) => {
+  //     if (image.file) {
+  //       formData.append(`files`, image.file);
+  //     }
+  //   });
+  // }
 
   // Fetch options
   const options = {
@@ -990,3 +990,27 @@ export const createFranchise = async (data) => {
   }
 };
 
+
+
+export const getBlogDetail = async (id) => {
+
+  const url = `${baseUrl}/blogs/get-blog/${id}`;
+
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error('Failed to fetch data');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+};

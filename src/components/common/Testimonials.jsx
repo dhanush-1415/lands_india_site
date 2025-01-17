@@ -61,21 +61,21 @@ export default function Testimonials() {
           }) => (
             <SwiperSlide className="swiper-slide" key={id}>
               <div className="box-tes-item">
-                <span className="icon icon-quote" />
+                <span className="icon icon-quote" style={{color:'#008FF7'}} />
                 <p className="note body-2">"{quote}"</p>
                 <div className="box-avt d-flex align-items-center gap-12">
-                  <div className={`avatar avt-${avatarSize} round`}>
+                  {/* <div className={`avatar avt-${avatarSize} round`}>
                     <img
                       alt={avatarAlt}
                       src={avatarSrc}
                       width={avatarSize}
                       height={avatarSize}
                     />
-                  </div>
+                  </div> */}
                   <div className="info">
                     <h6>{name}</h6>
                     <p className="caption-2 text-variant-1 mt-4">{position}</p>
-                    <ul className="list-star">
+                    <ul className="list-star" style={{paddingLeft:'0px'}}>
                       {[...Array(stars)].map((_, index) => (
                         <li key={index} className="icon icon-star" />
                       ))}

@@ -328,124 +328,256 @@ export default function Properties() {
   // // };
 
 
+  // const [wishListList, setWishListList] = useState([]);
+  // const [properties, setProperties] = useState([]);
+  // const [selectedCategory , setSelectedCategory ] = useState()
+
+  // const displayedProperties = (() => {
+  //   const maxCount = 8;
+  //   const slicedProperties = properties.slice(0, maxCount);
+
+  //   if (slicedProperties.length < maxCount && slicedProperties.length % 2 === 0) {
+  //     slicedProperties.pop();
+  //   }
+
+  //   return slicedProperties;
+  // })();
+
+  // const fetchProperty = async () => {
+  //   try {
+  //     const filter = {
+  //       location: "",
+  //       minPrice: 0,
+  //       maxPrice: 0,
+  //       keyword: "",
+  //       category: selectedCategory || "",
+  //       subCategory: "",
+  //     };
+  //     const data = await getProperties(filter);
+  //     if (data.success) {
+  //       const combined = data.properties.map((property) => {
+  //         const propertyInputs = data.propertyInputs.filter(input => input.properties_postId === property.id);
+
+  //         const inputsWithNames = propertyInputs.map((input) => {
+  //           const inputData = data.inputs.find(i => i.id === input.input_id);
+  //           return {
+  //             ...input,
+  //             input_name: inputData ? inputData.input_name : '',
+  //             input_type: inputData ? inputData.input_type : '',
+  //             options: inputData ? inputData.options : [],
+  //           };
+  //         });
+
+  //         return {
+  //           ...property,
+  //           inputs: inputsWithNames,
+  //           isWishlist: wishListList.includes(property.id), // Add isWishlist
+  //         };
+  //       });
+
+  //       setProperties(combined);
+  //     } else {
+  //       toast.error(data.message);
+  //     }
+  //   } catch (err) {
+  //     console.error('Error fetching properties:', err);
+  //   }
+  // };
+
+  // const fetchWishlist = async () => {
+  //   const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+  //   if (landsUser) {
+  //     try {
+  //       const data = await getUserWishList(landsUser.id);
+
+  //       if (data.success) {
+  //         setWishListList(data.wishList);
+  //         fetchProperty();
+  //       } else {
+  //         toast.error(data.message);
+  //       }
+  //     } catch (err) {
+  //       console.error('Error fetching wishlist:', err);
+  //     }
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   setProperties((prevProperties) =>
+  //     prevProperties.map((property) => ({
+  //       ...property,
+  //       isWishlist: wishListList?.includes(property.id),
+  //     }))
+  //   );
+  // }, [wishListList]);
+
+  // useEffect(() => {
+  //   fetchWishlist();
+  //   fetchProperty();
+  // }, [selectedCategory]);
+
+  // const handleWishlist = async (elm, act) => {
+  //   const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+  //   if (landsUser) {
+  //     const payLoad = {
+  //       userId: landsUser.id,
+  //       propertyId: elm.id,
+  //       action: act, // Adjust the action based on your requirements
+  //     };
+
+  //     try {
+  //       const data = await updateWishlist(payLoad);
+  //       if (data.success) {
+  //         toast.success(data.message);
+
+  //         const updatedWishList = await getUserWishList(landsUser.id);
+  //         if (updatedWishList.success) {
+  //           setWishListList(updatedWishList.wishList);
+  //         }
+  //       } else {
+  //         toast.error(data.message);
+  //       }
+  //     } catch (err) {
+  //       console.error('Error updating wishlist:', err);
+  //     }
+  //   } else {
+  //     toast.error("Please Login to Continue");
+  //   }
+  // };
+
+
+  // const [open, setOpen] = React.useState(false);
+
+  // const handleClickOpen = () => {
+  //   setOpen(true);
+  // };
+
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
+
+  // const handleNavigation = (category) => {
+  //   setSelectedCategory(category);
+  // }
+
+
   const [wishListList, setWishListList] = useState([]);
-  const [properties, setProperties] = useState([]);
+const [properties, setProperties] = useState([]);
+const [selectedCategory, setSelectedCategory] = useState();
+const [wishlistLoaded, setWishlistLoaded] = useState(false); // Track if wishlist has been loaded
 
-  const displayedProperties = (() => {
-    const maxCount = 8;
-    const slicedProperties = properties.slice(0, maxCount);
+const displayedProperties = (() => {
+  const maxCount = 8;
+  const slicedProperties = properties.slice(0, maxCount);
 
-    if (slicedProperties.length < maxCount && slicedProperties.length % 2 === 0) {
-      slicedProperties.pop();
-    }
+  if (slicedProperties.length < maxCount && slicedProperties.length % 2 === 0) {
+    slicedProperties.pop();
+  }
 
-    return slicedProperties;
-  })();
+  return slicedProperties;
+})();
 
+const fetchProperty = async () => {
+  try {
+    const filter = {
+      location: "",
+      minPrice: 0,
+      maxPrice: 0,
+      keyword: "",
+      category: selectedCategory || "",
+      subCategory: "",
+    };
+    const data = await getProperties(filter);
+    if (data.success) {
+      const combined = data.properties.map((property) => {
+        const propertyInputs = data.propertyInputs.filter(input => input.properties_postId === property.id);
 
-  const fetchWishlist = async () => {
-    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
-
-    if (landsUser) {
-      try {
-        const data = await getUserWishList(landsUser.id);
-
-        if (data.success) {
-          setWishListList(data.wishList);
-        } else {
-          toast.error(data.message);
-        }
-      } catch (err) {
-        console.error('Error fetching wishlist:', err);
-      }
-    }
-  };
-
-  const fetchProperty = async () => {
-    try {
-      const filter = {
-        location: "",
-        minPrice: 0,
-        maxPrice: 0,
-        keyword: "",
-        category: "",
-        subCategory: "",
-      };
-      const data = await getProperties(filter);
-      if (data.success) {
-        const combined = data.properties.map((property) => {
-          const propertyInputs = data.propertyInputs.filter(input => input.properties_postId === property.id);
-
-          const inputsWithNames = propertyInputs.map((input) => {
-            const inputData = data.inputs.find(i => i.id === input.input_id);
-            return {
-              ...input,
-              input_name: inputData ? inputData.input_name : '',
-              input_type: inputData ? inputData.input_type : '',
-              options: inputData ? inputData.options : [],
-            };
-          });
-
+        const inputsWithNames = propertyInputs.map((input) => {
+          const inputData = data.inputs.find(i => i.id === input.input_id);
           return {
-            ...property,
-            inputs: inputsWithNames,
-            isWishlist: wishListList.includes(property.id), // Add isWishlist
+            ...input,
+            input_name: inputData ? inputData.input_name : '',
+            input_type: inputData ? inputData.input_type : '',
+            options: inputData ? inputData.options : [],
           };
         });
 
-        setProperties(combined);
+        return {
+          ...property,
+          inputs: inputsWithNames,
+          isWishlist: wishListList.includes(property.id), // Add isWishlist
+        };
+      });
+
+      setProperties(combined);
+    } else {
+      toast.error(data.message);
+    }
+  } catch (err) {
+    console.error('Error fetching properties:', err);
+  }
+};
+
+const fetchWishlist = async () => {
+  const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+  if (landsUser) {
+    try {
+      const data = await getUserWishList(landsUser.id);
+
+      if (data.success) {
+        setWishListList(data.wishList);
+        setWishlistLoaded(true); // Mark wishlist as loaded
       } else {
         toast.error(data.message);
       }
     } catch (err) {
-      console.error('Error fetching properties:', err);
+      console.error('Error fetching wishlist:', err);
     }
-  };
+  }
+};
 
-  useEffect(() => {
-    setProperties((prevProperties) =>
-      prevProperties.map((property) => ({
-        ...property,
-        isWishlist: wishListList.includes(property.id),
-      }))
-    );
-  }, [wishListList]);
+useEffect(() => {
+  fetchWishlist();
+}, []);
 
-  useEffect(() => {
-    fetchWishlist();
-    fetchProperty();
-  }, []);
+useEffect(() => {
+  if (wishlistLoaded) {
+    fetchProperty(); // Fetch properties only after wishlist has been loaded
+  }
+}, [wishlistLoaded, selectedCategory]);
 
-  const handleWishlist = async (elm, act) => {
-    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+const handleWishlist = async (elm, act) => {
+  const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
-    if (landsUser) {
-      const payLoad = {
-        userId: landsUser.id,
-        propertyId: elm.id,
-        action: act, // Adjust the action based on your requirements
-      };
+  if (landsUser) {
+    const payLoad = {
+      userId: landsUser.id,
+      propertyId: elm.id,
+      action: act, // Adjust the action based on your requirements
+    };
 
-      try {
-        const data = await updateWishlist(payLoad);
-        if (data.success) {
-          toast.success(data.message);
+    try {
+      const data = await updateWishlist(payLoad);
+      if (data.success) {
+        toast.success(data.message);
 
-          const updatedWishList = await getUserWishList(landsUser.id);
-          if (updatedWishList.success) {
-            setWishListList(updatedWishList.wishList);
-          }
-        } else {
-          toast.error(data.message);
+        const updatedWishList = await getUserWishList(landsUser.id);
+        if (updatedWishList.success) {
+          setWishListList(updatedWishList.wishList);
         }
-      } catch (err) {
-        console.error('Error updating wishlist:', err);
+      } else {
+        toast.error(data.message);
       }
-    } else {
-      toast.error("Please Login to Continue");
+    } catch (err) {
+      console.error('Error updating wishlist:', err);
     }
-  };
-
+  } else {
+    toast.error("Please Login to Continue");
+  }
+};
 
   const [open, setOpen] = React.useState(false);
 
@@ -453,9 +585,14 @@ export default function Properties() {
     setOpen(true);
   };
 
+
   const handleClose = () => {
     setOpen(false);
   };
+
+const handleNavigation = (category) => {
+  setSelectedCategory(category);
+};
 
 
   return (
@@ -518,19 +655,19 @@ export default function Properties() {
             </div>
             <div className="d-flex gap-3 filter-list" style={{ fontWeight: 'bold', fontSize: '1rem' }}>
               <div className="custom-two">
-                <p>Residential</p>
+                <p style={{ cursor: 'pointer' }} onClick={() => { handleNavigation("residential") }}>Residential</p>
               </div>
               <div className="custom-two">
-                <p>Commercial</p>
+                <p style={{ cursor: 'pointer' }} onClick={() => { handleNavigation("commercial") }}>Commercial</p>
               </div>
               <div className="custom-two">
-                <p>Land & Plots</p>
+                <p style={{ cursor: 'pointer' }} onClick={() => { handleNavigation("land/plot") }}>Land & Plots</p>
               </div>
               <div className="custom-two">
-                <p>Projects</p>
+                <p style={{ cursor: 'pointer' }} onClick={() => { handleNavigation("projects") }}>Projects</p>
               </div>
               <div className="custom-two custom-last-two">
-                <p>See All Properties</p>
+                <p style={{ cursor: 'pointer' }} onClick={() => { window.location.href = "/properties/all" }}>See All Properties</p>
                 < NorthEastIcon sx={{ margin: ' -5px 0px 0px 5px' }} />
               </div>
             </div>
@@ -697,7 +834,7 @@ export default function Properties() {
                                 textAlign: 'center',
                               }}
                             >
-                              <DraftsTwoToneIcon sx={{ marginRight: '5px', fontSize: '20px'  }} />
+                              <DraftsTwoToneIcon sx={{ marginRight: '5px', fontSize: '20px' }} />
                               <span style={{ fontSize: '14px' }}>Enquiry Now</span>
                             </div>
                             <div
@@ -712,10 +849,12 @@ export default function Properties() {
                                   cursor: 'pointer',
                                   background: '#ffffff',
                                 }}
+                                onClick={() => window.location.href = 'tel:+919363828393'}
                               >
                                 <CallIcon sx={{ color: '#018df7' }} />
                               </div>
                               <div
+                                onClick={() => window.open('https://wa.me/919363828393?text=Hi, I would like to know more.', '_blank')}
                                 className="d-flex justify-content-center align-items-center rounded-circle border shadow-sm"
                                 style={{
                                   width: '44px',

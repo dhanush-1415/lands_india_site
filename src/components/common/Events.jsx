@@ -19,9 +19,6 @@ export default function Events() {
     const [itemPerPage, setItemPerPage] = useState(9);
     const [activeTab, setActiveTab] = useState('upcoming'); // State for active tab
 
-
-    console.log(data, "ppppppppppppppppppp")
-
     const fetchAgents = async () => {
         const flag = activeTab === 'upcoming' ? true : false;
         try {

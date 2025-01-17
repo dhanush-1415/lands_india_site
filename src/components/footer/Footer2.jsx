@@ -58,7 +58,7 @@ const Footer2 = () => {
                     </Typography>
                   </Box>
                 </Grid>
-                <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center',cursor:'pointer' }}>
                   <Grid>
                     <Grid onClick={() => { handleNavigation('support') }} container justifyContent='space-between' flexDirection="row" sx={{ backgroundColor: '#343434', borderRadius: '5px', boxShadow: " rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", marginBottom: '-20px', padding: '10px 20px' }} >
                       <Grid>
@@ -99,7 +99,7 @@ const Footer2 = () => {
 
                   </Box>
                 </Grid>
-                <Grid onClick={() => { handleNavigation('add-property') }} container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Grid onClick={() => { handleNavigation('add-property') }} container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', cursor:'pointer'  }}>
                   <Grid>
                     <Grid container justifyContent='space-between' flexDirection="row" sx={{ backgroundColor: '#343434', borderRadius: '5px', boxShadow: " rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", marginBottom: '-20px', padding: '10px 20px' }} >
                       <Grid>
@@ -127,19 +127,22 @@ const Footer2 = () => {
               Office Address
             </Typography>
             <Typography variant="body2" fontWeight='bold' color='gray' sx={{ mt: 3 }}>
-              Head office:
+              Corporate office:
             </Typography>
             <Typography variant="body2" fontWeight='bold'>
-              2118 Thornridge Cir. Syracuse, Connecticut 35624
+              #59 Dharga Road, Zamin pallavaram, Chennai-600043 
+            </Typography>
+            <Typography variant="body2" fontWeight='bold' color='gray' sx={{ mt: 3 }}>
+              Dubai office:
+            </Typography>
+            <Typography variant="body2" fontWeight='bold'>
+              No.12, Al Masraf Tower, Baniyas Square, Deira - Dubai
             </Typography>
             <Typography variant="body2" fontWeight='bold' color='gray' sx={{ mt: 1 }}>
-              Branch:
+              Branch office in India:
             </Typography>
             <Typography variant="body2" fontWeight='bold' >
-              3891 Ranchview Dr. Richardson, California 62639
-            </Typography>
-            <Typography variant="body2" sx={{ mt: 1 }} fontWeight='bold'>
-              3517 W. Gray St. Utica, Pennsylvania 57867
+              Chrompet, Kalpakkam, Thuvakudi, Melmaruvathur, Veppur, Pannadam, Ullundhurpet, Chidambaram, Trichy, Preambalur, Courtallam & More
             </Typography>
           </Grid>
 
@@ -174,16 +177,16 @@ const Footer2 = () => {
             <Link href="/about-us" color="inherit" underline="hover" variant="body2" display="block" sx={{ mt: 3 }}>
               <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />About Us
             </Link>
-            <Link href="#" color="inherit" underline="hover" variant="body2" display="block">
+            <Link href="/" color="inherit" underline="hover" variant="body2" display="block">
               <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />Career
             </Link>
             <Link href="/agents" color="inherit" underline="hover" variant="body2" display="block">
               <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />Our Agents
             </Link>
-            <Link href="/properties/all" color="inherit" underline="hover" variant="body2" display="block">
+            <Link href="/support" color="inherit" underline="hover" variant="body2" display="block">
               <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />Join Us
             </Link>
-            <Link href="#" color="inherit" underline="hover" variant="body2" display="block">
+            <Link href="/blogs" color="inherit" underline="hover" variant="body2" display="block">
               <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />Blogs
             </Link>
           </Grid>
@@ -193,19 +196,19 @@ const Footer2 = () => {
               Group Of Companies
             </Typography>
             <Link href="#" color="inherit" underline="hover" variant="body2" display="block" sx={{ mt: 3 }}>
-              <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />About Us
+              <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />LIP Properties pvt ltd 
             </Link>
             <Link href="#" color="inherit" underline="hover" variant="body2" display="block">
-              <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />Career
+              <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />Modern Tourism Network
             </Link>
             <Link href="#" color="inherit" underline="hover" variant="body2" display="block">
-              <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />Our Agents
+              <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />Addsbazar Classifieds Pvt Ltd
             </Link>
             <Link href="#" color="inherit" underline="hover" variant="body2" display="block">
-              <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />Join Us
+              <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />Wise Global Realestate LLC Dubai
             </Link>
             <Link href="#" color="inherit" underline="hover" variant="body2" display="block">
-              <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />Blogs
+              <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />Signmedia Infotech
             </Link>
           </Grid>
         </Grid>

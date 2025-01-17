@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import DropdownSelect from "./DropdownSelect";
+import DropdownSelect from "./CustomDropdownSelect";
 import AdvanceSearch from "./AdvanceSearch";
 
 export default function FilterTab({
@@ -8,6 +8,9 @@ export default function FilterTab({
 }) {
   const ddContainer = useRef();
   const advanceBtnRef = useRef();
+
+  const [selectedCat, setSelectedcat] = useState(null);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       // Check if the click is outside the dropdown and the button
@@ -71,13 +74,13 @@ export default function FilterTab({
   ]
 
   const budgetOptions = [
-    { label: "Below 5Lakhs-5 Lakhs", minValue: 50000, maxValue: 500000 },
+    { label: "Below 5Lakhs", minValue: 50000, maxValue: 500000 },
     { label: "5Lakhs-25Lakhs", minValue: 500000, maxValue: 2500000 },
     { label: "25Lakhs-60Lakhs", minValue: 2500000, maxValue: 6000000 },
     { label: "60Lakhs-1Cr", minValue: 6000000, maxValue: 10000000 },
-    { label: "1Cr-Above 1Cr", minValue: 10000000, maxValue: 10000000 },  // Assuming "Above 1Cr" has no specific upper limit
+    { label: "Above 1Cr", minValue: 10000000, maxValue: 10000000 },  // Assuming "Above 1Cr" has no specific upper limit
   ];
-  
+
 
   const [searchText, setSearchText] = useState("");
   const [location, setLocation] = useState("Location");
@@ -87,28 +90,56 @@ export default function FilterTab({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Create a query object with only the non-null or non-default values
     const query = {};
 
-    if (searchText) query.keyword = searchText;
-    if (location && location !== "Location") query.location = location.name;
-    if (minValue !== null) query.minPrice = minValue;
-    if (maxValue !== null) query.maxPrice = maxValue;
+    // Process search text
+    if (searchText && searchText.trim() !== '') {
+      query.keyword = searchText
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, '_');
+    }
+
+    // Process location
+    if (location && location.name && location.name.trim() !== '' && location !== "Location") {
+      query.location = location.name
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, '_');
+    }
+
+    // Process price values
+    if (minValue !== null) {
+      query.minPrice = minValue;
+    }
+    if (maxValue !== null) {
+      query.maxPrice = maxValue;
+    }
+
+    // Process selected category
+    if (selectedCat && selectedCat.trim() !== '') {
+      query.category = selectedCat
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, '_');
+    }
 
     // Construct the query string
     const queryString = Object.keys(query)
       .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
       .join("&");
 
-    // Redirect only if there's a query string
-    if (queryString) {
-      window.location.href = `/properties/all?${queryString}`;
-    } else {
-      window.location.href = `/properties/all`;
-    }
+    // Redirect based on the query string
+    const redirectUrl = queryString
+      ? `/properties/all?${queryString}`
+      : `/properties/all`;
+    window.location.href = redirectUrl;
   };
 
 
+  const handlSelect = (name) => {
+    setSelectedcat(name);
+  }
 
 
 
@@ -125,7 +156,7 @@ export default function FilterTab({
 
       <ul className={tabClass} role="tablist" style={{ paddingLeft: '0' }}>
         <li className="nav-tab-item" role="presentation">
-          <a href="#" className="custom-home-icon">
+          <a onClick={() => { handlSelect("Residential Properties") }} className="custom-home-icon">
             <div className="icon-box">
               <svg
                 color="#000000"
@@ -157,11 +188,11 @@ export default function FilterTab({
                 </defs>
               </svg>
             </div>
-            <p className="content text-center fw-7" style={{ fontSize: '14px' }}>Residential Properties</p>
+            <p className="content text-center fw-7" style={{ fontSize: '14px', color: selectedCat === 'Residential Properties' ? "#008FF7" : "#000000" }}>Residential Properties</p>
           </a>
         </li>
         <li className="nav-tab-item" role="presentation">
-          <a href="#" className="custom-home-icon">
+          <a onClick={() => { handlSelect("Commercial Properties") }} className="custom-home-icon">
             <div className="icon-box">
               <svg
                 width={41}
@@ -196,11 +227,11 @@ export default function FilterTab({
                 </defs>
               </svg>
             </div>
-            <p className="content text-center fw-7" style={{ fontSize: '14px' }}>Commercial Properties</p>
+            <p className="content text-center fw-7" style={{ fontSize: '14px', color: selectedCat === 'Commercial Properties' ? "#008FF7" : "#000000" }}>Commercial Properties</p>
           </a>
         </li>
         <li className="nav-tab-item" role="presentation">
-          <a href="#" className="custom-home-icon">
+          <a onClick={() => { handlSelect("Industrial Properties") }} className="custom-home-icon">
             <div className="icon-box">
               <svg
                 width={41}
@@ -231,11 +262,11 @@ export default function FilterTab({
                 />
               </svg>
             </div>
-            <p className="content text-center fw-7" style={{ fontSize: '14px' }}>Industrial Properties</p>
+            <p className="content text-center fw-7" style={{ fontSize: '14px', color: selectedCat === 'Industrial Properties' ? "#008FF7" : "#000000" }}>Industrial Properties</p>
           </a>
         </li>
         <li className="nav-tab-item" role="presentation">
-          <a href="#" className="custom-home-icon" style={{ marginLeft: '-20px' }}>
+          <a onClick={() => { handlSelect("Lands and Plots") }} className="custom-home-icon" style={{ marginLeft: '-20px' }}>
             <div className="icon-box">
               <svg
                 width={41}
@@ -276,11 +307,11 @@ export default function FilterTab({
                 </defs>
               </svg>
             </div>
-            <p className="content text-center fw-7" style={{ fontSize: '14px' }}>Land <br /> & Plots</p>
+            <p className="content text-center fw-7" style={{ fontSize: '14px', color: selectedCat === 'Lands and Plots' ? "#008FF7" : "#000000" }}>Land <br /> & Plots</p>
           </a>
         </li>
         <li className="nav-tab-item" role="presentation">
-          <a href="#" className="custom-home-icon" style={{ marginLeft: '-20px' }}>
+          <a onClick={() => { handlSelect("New Projects") }} className="custom-home-icon" style={{ marginLeft: '-20px' }}>
             <div className="icon-box">
               <svg
                 width={41}
@@ -295,7 +326,7 @@ export default function FilterTab({
                 />
               </svg>
             </div>
-            <p className="content text-center fw-7" style={{ fontSize: '14px' }}>New <br /> Projects</p>
+            <p className="content text-center fw-7" style={{ fontSize: '14px', color: selectedCat === 'New Projects' ? "#008FF7" : "#000000" }}>New <br /> Projects</p>
           </a>
         </li>
       </ul>
@@ -347,7 +378,7 @@ export default function FilterTab({
             </form> */}
             <form onSubmit={handleSubmit}>
               <div className={`wd-find-select`}>
-                <div className="inner-group">
+                <div className="inner-group" style={{ gap: '0px', paddingRight: '0px' }}>
                   <div className="form-group-1 search-form form-style custom-search-field">
                     <div className="group-select">
                       <input
@@ -365,6 +396,7 @@ export default function FilterTab({
                   </div>
                   <div className="form-group-2 form-style custom-search-field">
                     <DropdownSelect
+                      style={{ paddingTop: '0px' }}
                       options={["Location", ...(AllLocation?.map((item) => item.name) || [])]} // Prepend "All" to the options
                       onChange={(location) => {
                         const item = AllLocation.find((cat) => cat.name === location);
@@ -379,6 +411,7 @@ export default function FilterTab({
                       onChange={(value) => setBudget(value)}
                     /> */}
                     <DropdownSelect
+                      style={{ paddingTop: '0px' }}
                       options={["Budget", ...budgetOptions.map((item) => item.label)]} // Prepend "Budget" to the options
                       onChange={(selectedLabel) => {
                         const selectedOption = budgetOptions.find((option) => option.label === selectedLabel);
@@ -394,7 +427,7 @@ export default function FilterTab({
                 <div className="box-btn-advanced">
                   <button
                     style={{
-                      width: "130px",
+                      minWidth: '155px !important',
                       background: "#008ff7",
                       borderColor: "#008ff7",
                       color: "#ffffff",

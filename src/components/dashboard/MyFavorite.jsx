@@ -71,7 +71,7 @@ export default function MyFavorite() {
 
 
   useEffect(() => {
-    if (wishListList.length > 0) {
+    if (wishListList?.length > 0) {
       fetchWishlistProperties(wishListList)
     } else {
       setEmpty(true)

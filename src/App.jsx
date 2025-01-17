@@ -109,8 +109,9 @@ function App() {
               <Route path="my-profile" element={<MyProfilePage />} />
               <Route path="add-property" element={<AddPropertyPage />} />
               <Route path="add-property/:id" element={<AddPropertyPage />} />
-              <Route path="my-favorites" element={<MyFavoritePage />} />
+              <Route path="my-favourites" element={<MyFavoritePage />} />
               <Route path="blog-detail/:id" element={<BlogDetailsPage />} />
+              <Route path="blogs" element={<BlogGridPage />} />
 
 
 
@@ -157,7 +158,6 @@ function App() {
               <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
 
               <Route path="blog" element={<BlogPage />} />
-              <Route path="blog-grid" element={<BlogGridPage />} />
               <Route path="blog-detail/:id" element={<BlogDetailsPage />} />
 
               <Route path="dashboard" element={<DashboardPage />} />

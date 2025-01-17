@@ -1,4 +1,4 @@
-import React, {useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -10,52 +10,31 @@ import WestIcon from '@mui/icons-material/West';
 import { getEventsList } from "@/apiCalls";
 
 export default function BottomCarousel() {
-    const properties = [
-        {
-            id: 1,
-            img: 'https://st4.depositphotos.com/14327976/26436/v/1600/depositphotos_264361400-stock-illustration-modern-square-banner-design-social.jpg'
-        },
-        {
-            id: 2,
-            img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbBP9hP7Jm_4huGfkP_uxcU9ruAa22fOqimg&s'
-        },
-        {
-            id: 3,
-            img: 'https://st4.depositphotos.com/14327976/26436/v/1600/depositphotos_264361400-stock-illustration-modern-square-banner-design-social.jpg'
-        },
-        {
-            id: 4,
-            img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbBP9hP7Jm_4huGfkP_uxcU9ruAa22fOqimg&s'
-        },
-        {
-            id: 5,
-            img: 'https://st4.depositphotos.com/14327976/26436/v/1600/depositphotos_264361400-stock-illustration-modern-square-banner-design-social.jpg'
-        },
-        {
-            id: 6,
-            img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbBP9hP7Jm_4huGfkP_uxcU9ruAa22fOqimg&s'
-        }
-    ];
 
-        const [events , setEvents ] = useState();
 
-        const fetchEvents = async () => {
-            try {
-                const data = await getEventsList(true);
-                if (data.success) {
-                    setEvents(data.data)
-                } else {
-                    toast.error(data.message)
-                }
-            } catch (err) {
-                console.error('Error fetching categories:', err);
+    const [events, setEvents] = useState();
+
+    const [activeTab, setActiveTab] = useState('upcoming'); // State for active tab
+
+    const fetchEvents = async () => {
+        try {
+            const flag = activeTab === 'upcoming' ? true : false;
+
+            const data = await getEventsList(flag);
+            if (data.success) {
+                setEvents(data.data)
+            } else {
+                toast.error(data.message)
             }
-        };
-    
-        useEffect(() => {
-            fetchEvents();
-        }, []);
-    
+        } catch (err) {
+            console.error('Error fetching categories:', err);
+        }
+    };
+
+    useEffect(() => {
+        fetchEvents();
+    }, [activeTab]);
+
 
     const CustomNextArrow = (props) => {
         const { onClick } = props;
@@ -128,7 +107,7 @@ export default function BottomCarousel() {
     };
 
     return (
-        <section className="property-carousel" style={{background:'#ffffff'}}>
+        <section className="property-carousel custom-container" style={{ background: '#ffffff', marginBottom:'50px' }}>
             <style>
                 {`
                 .list-header-custom {
@@ -166,7 +145,7 @@ export default function BottomCarousel() {
                 }
                 `}
             </style>
-            <div className="container custom-container-header">
+            <div className="container custom-container-header ">
                 <div className="list-header-custom">
                     <div>
                         <h3 className="carousel-title">
@@ -176,10 +155,10 @@ export default function BottomCarousel() {
                     </div>
                     <div className="d-flex gap-3 filter-list" style={{ fontWeight: 'bold', fontSize: '1rem' }}>
                         <div className="custom-two">
-                            <p>Upcoming Events</p>
+                            <p onClick={() => setActiveTab('upcoming')} style={{cursor:'pointer'}} >Upcoming Events</p>
                         </div>
                         <div className="custom-last-two">
-                            <p>Post Events</p>
+                            <p  onClick={() => setActiveTab('past')} style={{cursor:'pointer'}}>Past Events</p>
                             < NorthEastIcon sx={{ margin: ' -5px 0px 0px 5px' }} />
                         </div>
                     </div>
@@ -188,7 +167,7 @@ export default function BottomCarousel() {
                     <Slider {...settings}>
                         {events?.length && events.map((elm, index) => (
                             <div style={{ margin: '0 10px' }} key={index}>
-                                <img style={{ width: '90%', borderRadius: '8px', margin: '0px auto' }} src={elm.images[0] || ""} alt="banner" />
+                                <img style={{ width: '90%', borderRadius: '8px', margin: '0px auto', maxHeight:'350px' }} src={elm.images[0] || ""} alt="banner" />
                             </div>
                         ))}
                     </Slider>

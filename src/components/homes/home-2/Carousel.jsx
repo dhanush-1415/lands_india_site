@@ -376,7 +376,7 @@ export default function Carousel() {
                                             }}
                                             className="property-badge"
                                         >
-                                            {elm.createdAt.split('T')[0] || ""}
+                                            Posted On: {elm.createdAt.split('T')[0] || ""}
                                         </p>
                                         {/* 
                                         <Badge
@@ -494,7 +494,8 @@ export default function Carousel() {
 
                                     <h5 className="property-price text-white">
                                         ₹{
-                                            elm.inputs.find(item => item.input_name === "price")?.input_value || ""
+                                            Number(elm.inputs.find(item => item.input_name === "price")?.input_value || 0)
+                                                .toLocaleString('en-IN')
                                         }
                                     </h5>
                                     <div className="button-group">
@@ -510,7 +511,7 @@ export default function Carousel() {
                                                 <Grid item md={9}>
                                                     <Grid>
                                                         <Grid container direction='column' alignItems='flex-start'>
-                                                            <Grid item sx={{ lineHeight: '14px', textAlign: 'left' }}>
+                                                            <Grid item sx={{ lineHeight: '14px', textAlign: 'left' }} onClick={() => window.location.href = 'tel:+919363828393'} >
                                                                 <p style={{ fontSize: 'smaller', width: 'max-content', marginBottom: '0px' }}><strong>  Call Us</strong> <br />  <strong>+91 936 382 8393</strong></p>
                                                             </Grid>
                                                         </Grid>
@@ -519,7 +520,7 @@ export default function Carousel() {
                                             </Grid>
                                         </Button>
                                         <Button variant="outline-success" className="whatsapp-btn" style={{ background: 'white', color: '#161e2d', fontWeight: 'bold', borderRadius: '0px' }}>
-                                            <WhatsAppIcon sx={{ fontSize: '25px' }} />
+                                            <WhatsAppIcon sx={{ fontSize: '25px' }} onClick={() => window.open('https://wa.me/919363828393?text=Hi, I would like to know more.', '_blank')} />
                                         </Button>
                                     </div>
 

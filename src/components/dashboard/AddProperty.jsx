@@ -15,12 +15,13 @@ export default function AddProperty() {
 
   const [images, setImages] = useState([]);
 
+  console.log(images , "kkkkkkkkkkkkkkkkk")
+
   const [location, setLocation] = useState('')
   const [price, setPrice] = useState('')
 
   const handlePrevChange = (inputId, value, input_name) => {
-    console.log("ddddddddd", input_name);
-    
+
     setUpdatedData(prevState => {
       const updatedInputs = prevState[0]?.inputs?.map(input =>
         input.id === inputId ? { ...input, input_value: value } : input
@@ -31,7 +32,10 @@ export default function AddProperty() {
 
 
   const transformData = (updatedData) => {
-    // Extract the main properties and create the "properties" array
+
+    const updatedPaths = images.length && images.map((image) => image.preview).join(",");
+
+
     const properties = updatedData.map(item => ({
       id: item.id,
       sub_menuId: item.sub_menuId,
@@ -39,11 +43,13 @@ export default function AddProperty() {
       location: item.location,
       price: item.price,
       status: item.status,
-      updatedFiles: item.file_path,
+      updatedFiles: updatedPaths,
       isPremium: item.isPremium,
       createdAt: item.createdAt,
     }));
 
+
+    console.log(properties , "ppppppppppppppppppppppppppppppp")
     // Extract the inputs and create the "propertyInputs" array
     const propertyInputs = updatedData.flatMap(item => item.inputs.map(input => ({
       properties_postId: input.properties_postId,
@@ -68,14 +74,12 @@ export default function AddProperty() {
   };
 
   const handlePrevSubmit = async () => {
-    const structuredData = transformData(updatedData);
+    const structuredData = transformData(updatedData , images);
 
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
-    console.log(structuredData, "ooooo");
-    
 
     const payLoad = {
-      data : structuredData,
+      data: structuredData,
       images,
     }
 
@@ -83,6 +87,7 @@ export default function AddProperty() {
       try {
         const data = await updateProperty(payLoad);
         if (data.success) {
+          toast.success("UpdatedSuccessfully")
         } else {
           toast.error(data.message)
         }
@@ -122,6 +127,17 @@ export default function AddProperty() {
                   inputs: inputsWithNames,
                 };
               });
+
+              if (combined.length > 0) {
+                const filePathsArray = combined[0].file_path.split(",").map((url, index) => ({
+                  id: index + 1, 
+                  preview: url, 
+                }));
+
+                if (filePathsArray.length > 0) {
+                  setImages(filePathsArray);
+                }
+              }
 
               setEditData(combined);
               setUpdatedData(combined)
@@ -198,7 +214,7 @@ export default function AddProperty() {
   const [selectedSubCategoryId, setSelectedSubCategoryId] = useState(null);
   const [menuInputs, setMenuInputs] = useState();
   const [formData, setFormData] = useState({});
-  
+
 
   const fetchCategories = async () => {
     try {
@@ -250,9 +266,9 @@ export default function AddProperty() {
   };
 
   const handleChange = (id, value, name) => {
-    name == "location" && setLocation(value) 
-    name == "price" && setPrice(value) 
-    
+    name == "location" && setLocation(value)
+    name == "price" && setPrice(value)
+
     setFormData((prev) => ({
       ...prev,
       [id]: value,
