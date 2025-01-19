@@ -74,7 +74,7 @@ export default function Testimonials() {
                   </div> */}
                   <div className="info">
                     <h6>{name}</h6>
-                    <p className="caption-2 text-variant-1 mt-4">{position}</p>
+                    <p className="caption-2 text-variant-1">{position}</p>
                     <ul className="list-star" style={{paddingLeft:'0px'}}>
                       {[...Array(stars)].map((_, index) => (
                         <li key={index} className="icon icon-star" />

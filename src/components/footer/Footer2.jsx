@@ -7,7 +7,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 
 
 const Footer2 = () => {
@@ -58,7 +58,7 @@ const Footer2 = () => {
                     </Typography>
                   </Box>
                 </Grid>
-                <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center',cursor:'pointer' }}>
+                <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' }}>
                   <Grid>
                     <Grid onClick={() => { handleNavigation('support') }} container justifyContent='space-between' flexDirection="row" sx={{ backgroundColor: '#343434', borderRadius: '5px', boxShadow: " rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", marginBottom: '-20px', padding: '10px 20px' }} >
                       <Grid>
@@ -99,7 +99,7 @@ const Footer2 = () => {
 
                   </Box>
                 </Grid>
-                <Grid onClick={() => { handleNavigation('add-property') }} container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', cursor:'pointer'  }}>
+                <Grid onClick={() => { handleNavigation('add-property') }} container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' }}>
                   <Grid>
                     <Grid container justifyContent='space-between' flexDirection="row" sx={{ backgroundColor: '#343434', borderRadius: '5px', boxShadow: " rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", marginBottom: '-20px', padding: '10px 20px' }} >
                       <Grid>
@@ -122,7 +122,7 @@ const Footer2 = () => {
           </Grid>
 
           {/* Bottom Section */}
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={4} style={{ paddingRight: '3%' }}>
             <Typography variant="h6" gutterBottom color='#ffffff' fontWeight='bold'>
               Office Address
             </Typography>
@@ -130,7 +130,7 @@ const Footer2 = () => {
               Corporate office:
             </Typography>
             <Typography variant="body2" fontWeight='bold'>
-              #59 Dharga Road, Zamin pallavaram, Chennai-600043 
+              #59 Dharga Road, Zamin pallavaram, Chennai-600043
             </Typography>
             <Typography variant="body2" fontWeight='bold' color='gray' sx={{ mt: 3 }}>
               Dubai office:
@@ -196,7 +196,7 @@ const Footer2 = () => {
               Group Of Companies
             </Typography>
             <Link href="#" color="inherit" underline="hover" variant="body2" display="block" sx={{ mt: 3 }}>
-              <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />LIP Properties pvt ltd 
+              <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />LIP Properties pvt ltd
             </Link>
             <Link href="#" color="inherit" underline="hover" variant="body2" display="block">
               <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />Modern Tourism Network
@@ -259,6 +259,40 @@ const Footer2 = () => {
                 borderRadius: '50%',
                 padding: 1,
                 '&:hover': {
+                  backgroundColor: '#e4405f',
+                  '& svg': {
+                    color: 'white',
+                  },
+                },
+              }}
+            >
+              <FaInstagram sx={{ fontSize: '20px', color: '#e4405f' }} />
+            </IconButton>
+
+            <IconButton
+              color="inherit"
+              sx={{
+                border: '1px solid gray',
+                borderRadius: '50%',
+                padding: 1,
+                '&:hover': {
+                  backgroundColor: '#0077b5',
+                  '& svg': {
+                    color: 'white',
+                  },
+                },
+              }}
+            >
+              <FaYoutube sx={{ fontSize: '20px', color: '#0077b5' }} />
+            </IconButton>
+
+            <IconButton
+              color="inherit"
+              sx={{
+                border: '1px solid gray',
+                borderRadius: '50%',
+                padding: 1,
+                '&:hover': {
                   backgroundColor: '#0077b5',
                   '& svg': {
                     color: 'white',
@@ -269,22 +303,7 @@ const Footer2 = () => {
               <FaLinkedinIn sx={{ fontSize: '20px', color: '#0077b5' }} />
             </IconButton>
 
-            <IconButton
-              color="inherit"
-              sx={{
-                border: '1px solid gray',
-                borderRadius: '50%',
-                padding: 1,
-                '&:hover': {
-                  backgroundColor: '#e4405f',
-                  '& svg': {
-                    color: 'white',
-                  },
-                },
-              }}
-            >
-              <FaInstagram sx={{ fontSize: '20px', color: '#e4405f' }} />
-            </IconButton>
+
           </Box>
 
         </Box>

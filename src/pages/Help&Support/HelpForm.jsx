@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { Divider } from '@mui/material';
-import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 import { toast } from 'react-toastify';
 import { SubmitEnquiry } from '@/apiCalls';
 
@@ -226,7 +226,7 @@ const HelpForm = () => {
                                         justifyContent: "center",
                                     }}
                                 >
-                                    <FaLinkedinIn />
+                                    <FaYoutube />
                                 </Button>
                             </Col>
                             <Col xs="auto">
@@ -241,7 +241,7 @@ const HelpForm = () => {
                                         justifyContent: "center",
                                     }}
                                 >
-                                    <FaTwitter />  {/* Replaced FaInstagram with FaTwitter */}
+                                    <FaLinkedinIn />  {/* Replaced FaInstagram with FaTwitter */}
                                 </Button>
                             </Col>
                         </Row>

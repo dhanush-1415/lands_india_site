@@ -143,6 +143,7 @@ export default function Carousel() {
                     zIndex: 10,
                     color: "#000",
                 }}
+                className="eastIconMediaSpace"
             >
                 <EastIcon />
             </IconButton>
@@ -154,7 +155,7 @@ export default function Carousel() {
         return (
             <IconButton
                 onClick={onClick}
-                className="icon-btn-right"
+                className="icon-btn-right mediaTabSpace"
                 style={{
                     position: "absolute",
                     top: "-8%",
@@ -206,7 +207,33 @@ export default function Carousel() {
                         font-weight: bold;
                         margin-bottom: 7px;
                     }
+                    @media (max-width: 428px){
+                    .mediabtnGroupTabSpace{
+                        display: flex;
+                        justify-content: center;
+                        }
+                        .mediaGroupEnguiryBtn{
+                        display: flex;
+                        width: fit-content;
+                        justify-content: center;
+                        font-size: 14px !important;
+                        padding: 5px;
+                        }
+                        .mediaCallBtnGroup{
+                        display: none;
+                        }
+                        .callMediaBtnSpacebreak{
+                        padding: 0px !important;
+                        }
+                        .call-btn{
+                         display: flex;
+                        }
+                    }
                     @media (max-width: 768px) {
+                    .property-carousel {
+                        padding: 30px 0;
+                        background-color: #f9f9f9;
+                    }
                         .carousel-title {
                             font-size: 1.5rem; /* Smaller font size on tablets and below */
                         }
@@ -215,7 +242,14 @@ export default function Carousel() {
                             min-height: 100%;
                             max-height: 100%;
                         }
-
+                        .mediaTabSpace{
+                        padding-right: 5%;
+                        margin-top: 5%;
+                        }
+                        .eastIconMediaSpace{
+                        margin-top: 5%;
+                        }
+                        
                     }
 
                     @media (max-width: 480px) {
@@ -498,21 +532,21 @@ export default function Carousel() {
                                                 .toLocaleString('en-IN')
                                         }
                                     </h5>
-                                    <div className="button-group">
-                                        <Button onClick={handleClickOpen} variant="primary" className="me-2" style={{ borderRadius: '0px', fontWeight: 'bold', fontSize: '1rem', background: '#ffffff', color: '#161e2d' }}>
+                                    <div className="button-group mediabtnGroupTabSpace">
+                                        <Button onClick={handleClickOpen} variant="primary" className="me-2 mediaGroupEnguiryBtn" style={{ borderRadius: '0px', fontWeight: 'bold', fontSize: '1rem', background: '#ffffff', color: '#161e2d' }}>
                                             <DraftsIcon sx={{ marginRight: '2px' }} />
                                             Enquiry now
                                         </Button>
-                                        <Button variant="outline-secondary" className="me-2 call-btn" style={{ background: 'white', color: '#161e2d', borderRadius: '0px' }}>
+                                        <Button variant="outline-secondary" className="me-2 call-btn mediaCallBtnGroupGrid" style={{ background: 'white', color: '#161e2d', borderRadius: '0px' }}>
                                             <Grid container direction="row" alignItems='center' justifyContent='center' spacing={1}>
-                                                <Grid item md={3}>
+                                                <Grid item md={3} className="callMediaBtnSpacebreak">
                                                     <CallIcon sx={{ marginRight: '2px' }} />
                                                 </Grid>
-                                                <Grid item md={9}>
+                                                <Grid item md={9} >
                                                     <Grid>
                                                         <Grid container direction='column' alignItems='flex-start'>
                                                             <Grid item sx={{ lineHeight: '14px', textAlign: 'left' }} onClick={() => window.location.href = 'tel:+919363828393'} >
-                                                                <p style={{ fontSize: 'smaller', width: 'max-content', marginBottom: '0px' }}><strong>  Call Us</strong> <br />  <strong>+91 936 382 8393</strong></p>
+                                                                <p style={{ fontSize: 'smaller', width: 'max-content', marginBottom: '0px' }}><strong>  Call </strong><strong className="mediaCallBtnGroup">Us</strong> <br />  <strong className="mediaCallBtnGroup">+91 936 382 8393</strong></p>
                                                             </Grid>
                                                         </Grid>
                                                     </Grid>

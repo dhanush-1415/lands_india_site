@@ -10,6 +10,20 @@ export default function Hero() {
 
   return (
     <>
+    <style>{`
+    @media (max-width: 550px){
+      .mediaSizing{
+      font-size: 9.5px !important;
+      }
+      .wrap-search-link a{
+      padding: 0px 5px !important;
+      }
+      .wrap-search-link .categories-list{
+      gap: 6px !important;
+      }
+    }
+    `}
+    </style>
       <section className="flat-slider home-2 bg-primary-new">
         <div className="container relative">
           <div className="row">
@@ -20,17 +34,17 @@ export default function Hero() {
                   <div className="categories-list">
                     <a href="#" style={{background:'#008ff7',lineHeight:'30px',boxShadow:'0px 1px 5px #00000054',color:'#ffffff !important'}}>
                       {/* <i className="icon icon-house-fill" />  */}
-                      <span style={{fontSize:'20px',color:'#ffffff'}}>100%</span>
+                      <span style={{fontSize:'20px',color:'#ffffff'}} className="mediaSizing">100%</span>
                     </a>
-                    <a href="#">
+                    <a href="#" className="mediaSizing">
                       {/* <i className="icon icon-villa-fill" />  */}
                       Verified Properties
                     </a>
-                    <a href="#">
+                    <a href="#" className="mediaSizing">
                       {/* <i className="icon icon-office-fill" /> */}
                       Verified Buyers
                     </a>
-                    <a href="#">
+                    <a href="#" className="mediaSizing">
                       {/* <i className="icon icon-apartment" />  */}
                       100YRS Legal Properties
                     </a>

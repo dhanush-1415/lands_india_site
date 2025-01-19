@@ -107,11 +107,18 @@ export default function BoxCategory() {
             .learn-more-button {
               margin-top: 0.5rem; /* Adjust space above the button */
             }
+          
+          @media (max-width: 425px){
+          .mediaSpaceTabservice{
+              border-top: none !important;
+              }
+          }
 
           @media (max-width: 768px) {
             .list-header-custom {
                 flex-direction: column;
                 align-items: flex-start;
+                padding-bottom: 0 !important;
             }
             .filter-list{
               width:100%;
@@ -128,6 +135,7 @@ export default function BoxCategory() {
             .custom-two > p {
               width: max-content;
             }
+              
           }
         `}
       </style>
@@ -169,7 +177,7 @@ export default function BoxCategory() {
             {services.map((service, index) => (
               <div
                 key={index}
-                className="service-card col-md-3 d-flex flex-column text-center"
+                className="service-card col-md-3 d-flex flex-column text-center mediaSpaceTabservice"
                 style={{
                   border: "2px solid #ddd",
                   borderTop: index < 4 ? "none" : "1px solid #ddd",

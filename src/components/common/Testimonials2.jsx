@@ -72,7 +72,7 @@ export default function Testimonials2({ parentClass = "flat-section" }) {
                     </div>
                     <div className="info">
                       <h6>{name}</h6>
-                      <p className="caption-2 text-variant-1 mt-4">
+                      <p className="caption-2 text-variant-1">
                         {position}
                       </p>
                       <ul className="list-star">

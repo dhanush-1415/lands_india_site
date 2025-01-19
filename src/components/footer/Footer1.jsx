@@ -336,7 +336,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 
 
 const Footer1 = () => {
@@ -581,6 +581,41 @@ const Footer1 = () => {
               <FaFacebookF sx={{ fontSize: '20px', color: '#3b5998' }} />
             </IconButton>
 
+            
+            <IconButton
+              color="inherit"
+              sx={{
+                border: '1px solid gray',
+                borderRadius: '50%',
+                padding: 1,
+                '&:hover': {
+                  backgroundColor: '#e4405f',
+                  '& svg': {
+                    color: 'white',
+                  },
+                },
+              }}
+            >
+              <FaInstagram sx={{ fontSize: '20px', color: '#e4405f' }} />
+            </IconButton>
+
+            <IconButton
+              color="inherit"
+              sx={{
+                border: '1px solid gray',
+                borderRadius: '50%',
+                padding: 1,
+                '&:hover': {
+                  backgroundColor: '#0077b5',
+                  '& svg': {
+                    color: 'white',
+                  },
+                },
+              }}
+            >
+              <FaYoutube sx={{ fontSize: '20px', color: '#0077b5' }} />
+            </IconButton>
+
             <IconButton
               color="inherit"
               sx={{
@@ -598,22 +633,8 @@ const Footer1 = () => {
               <FaLinkedinIn sx={{ fontSize: '20px', color: '#0077b5' }} />
             </IconButton>
 
-            <IconButton
-              color="inherit"
-              sx={{
-                border: '1px solid gray',
-                borderRadius: '50%',
-                padding: 1,
-                '&:hover': {
-                  backgroundColor: '#e4405f',
-                  '& svg': {
-                    color: 'white',
-                  },
-                },
-              }}
-            >
-              <FaInstagram sx={{ fontSize: '20px', color: '#e4405f' }} />
-            </IconButton>
+            
+
           </Box>
 
         </Box>

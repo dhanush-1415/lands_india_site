@@ -152,6 +152,18 @@ export default function FilterTab({
             padding-right: 0;
           }
         }
+        @media (max-width: 768px){
+        .mediatabSpacing{
+        padding: 10px 0;
+        }
+        .inner-group .form-style .nice-select{
+        border-radius: 0px !important;
+        padding-top: 10px !important;
+        }
+        .searchBtnMedia{
+        border-radius: 0px !important;
+        }
+        }
       `}</style>
 
       <ul className={tabClass} role="tablist" style={{ paddingLeft: '0' }}>
@@ -380,7 +392,7 @@ export default function FilterTab({
               <div className={`wd-find-select`}>
                 <div className="inner-group" style={{ gap: '0px', paddingRight: '0px' }}>
                   <div className="form-group-1 search-form form-style custom-search-field">
-                    <div className="group-select">
+                    <div className="group-select mediatabSpacing">
                       <input
                         type="text"
                         style={{ fontWeight: "400", minWidth: "250px" }}
@@ -394,7 +406,7 @@ export default function FilterTab({
                       />
                     </div>
                   </div>
-                  <div className="form-group-2 form-style custom-search-field">
+                  <div className="form-group-2 form-style custom-search-field mediatabSpacing">
                     <DropdownSelect
                       style={{ paddingTop: '0px' }}
                       options={["Location", ...(AllLocation?.map((item) => item.name) || [])]} // Prepend "All" to the options
@@ -404,7 +416,7 @@ export default function FilterTab({
                       }}
                     />
                   </div>
-                  <div className="form-group-3 form-style custom-search-field">
+                  <div className="form-group-3 form-style custom-search-field mediatabSpacing">
                     {/* <DropdownSelect
                       options={["Budget", "1000-2000", "2000-3000", "3000-4000", "4000-5000"]}
                       value={budget}
@@ -433,7 +445,7 @@ export default function FilterTab({
                       color: "#ffffff",
                     }}
                     type="submit"
-                    className="tf-btn btn-search primary custom-search-btn"
+                    className="tf-btn btn-search primary custom-search-btn searchBtnMedia"
                   >
                     Search <i className="icon icon-search" />
                   </button>
