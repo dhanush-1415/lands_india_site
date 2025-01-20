@@ -815,8 +815,8 @@ export default function Header1({
                                   InputProps={{
                                     endAdornment: (
                                       <InputAdornment position="end">
-                                        <IconButton onClick={() => togglePasswordVisibility('newPassword')}>
-                                          {showNewPassword ? <FaEyeSlash sx={{ marginRight: '3px' }} /> : <FaEye sx={{ marginRight: '3px' }} />}
+                                        <IconButton>
+                                          {showNewPassword ? <FaEyeSlash onClick={() => togglePasswordVisibility('newPassword')} sx={{ marginRight: '3px' }} /> : <FaEye onClick={() => togglePasswordVisibility('newPassword')} sx={{ marginRight: '3px' }} />}
                                           <Tooltip title={errors.password} placement="left-start">
                                             <InfoIcon />
                                           </Tooltip>
