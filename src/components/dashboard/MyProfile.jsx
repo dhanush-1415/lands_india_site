@@ -26,6 +26,7 @@ export default function MyProfile() {
 
   const [isNewB2B, setIsNewB2B] = useState(false);
 
+  console.log(isAgent, isB2B, isNew, isNewB2B)
 
   const [B2BData, setB2BData] = useState({
     id: '',
@@ -42,6 +43,22 @@ export default function MyProfile() {
     agentService: "",
     agentLocation: "",
   });
+
+  const AllServices = [
+    { id: 1, name: "Advocate & Auditor" },
+    { id: 2, name: "Investor (Project Invest)" },
+    { id: 3, name: "Reseller (Short Term Invest)" },
+    { id: 4, name: "Bankers/Loan Provider" },
+    { id: 5, name: "Builder/Construction" },
+    { id: 6, name: "Interior" },
+    { id: 7, name: "Civil Engineer/Architect" },
+    { id: 8, name: "Plumbing & Electrical" },
+    { id: 9, name: "Flooring" },
+    { id: 10, name: "Approval Services" },
+    { id: 11, name: "Building Valuation" },
+    { id: 12, name: "Digital Security System" },
+    { id: 13, name: "Landscaping" }
+  ];
 
 
   useEffect(() => {
@@ -84,11 +101,13 @@ export default function MyProfile() {
             if (data.data.length) {
               setIsNewB2B(false);
               setB2BData({
-                id: data.data[0].adviser_id,
-                agentAge: data.data[0].age,
-                agentGender: data.data[0].gender,
-                agentService: data.data[0].service,
+                id: data.data[0].id,
+                B2BAge: data.data[0].age,
+                B2BGender: data.data[0].gender,
+                B2BService: data.data[0].professional,
+                B2Blocation: data.data[0].location,
               })
+              setimgUrl(data.data[0].image)
             } else {
               setIsNewB2B(true)
             }
@@ -458,8 +477,6 @@ export default function MyProfile() {
           const payload = createPayload();
 
 
-          console.log(payload, "pppppppppppppppppppppppppppppppppppppp")
-
           if (isAgent === true) {
 
             if (isNew) {
@@ -539,7 +556,7 @@ export default function MyProfile() {
             mobileNumber: data.user.phone_number,
             email: data.user.email,
           });
-          setimgUrl(data.user.imageUrl || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=")
+          setimgUrl(data.user.image || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=")
         } else {
           toast.error(data.message || data.error || "Something Went Wrong")
         }
@@ -758,7 +775,7 @@ export default function MyProfile() {
                 )}
               </div>
             )}
-            {isNewB2B && (
+            {isB2B && (
               <div className="box-fieldset">
                 <label htmlFor="agentAge">
                   Age:
@@ -776,7 +793,7 @@ export default function MyProfile() {
               </div>
             )}
           </div>
-          {isNewB2B && (
+          {isB2B && (
             <div className="box grid-2 gap-30">
               <div className="box-fieldset">
                 <label htmlFor="B2BGender">
@@ -784,6 +801,7 @@ export default function MyProfile() {
                 </label>
                 <DropdownSelect
                   options={["Select", "Male", "Female", "Other"]}
+                  defaultOption={B2BData.B2BGender}
                   onChange={(value) => updateB2BDropdownValue("B2BGender", value)}
                 />
                 {validationErrors.B2BGender && (
@@ -793,17 +811,14 @@ export default function MyProfile() {
 
               <div className="box-fieldset">
                 <label htmlFor="B2BService">
-                  Service:
+                  Professional:
                 </label>
                 <DropdownSelect
-                  options={[
-                    "Select",
-                    "RealEstate Broker",
-                    "RealEstate Promoter",
-                    "RealEstate Marketer",
-                  ]}
+                  options={["Select", ...AllServices.map(service => service.name)]}
+                  defaultOption={B2BData.B2BService}
                   onChange={(value) => updateB2BDropdownValue("B2BService", value)}
                 />
+
                 {validationErrors.B2BService && (
                   <span className="error-message">{validationErrors.B2BService}</span>
                 )}

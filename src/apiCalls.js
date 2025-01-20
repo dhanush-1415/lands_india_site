@@ -71,10 +71,35 @@ export const getUserDetails = async (id) => {
 };
 
 
+export const getAllLocation = async () => {
+
+  const url = `${baseUrl}/property/get-properties-location`;
+
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error('Failed to fetch data');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+};
+
+
 export const UpdateUser = async (data) => {
   const url = `${baseUrl}/registration/update-user`;
 
   const formData = new FormData();
+  formData.append('id', data.id);
   formData.append('fullName', data.fullName);
   formData.append('email', data.email);
   formData.append('phone', data.phone);
