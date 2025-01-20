@@ -168,7 +168,7 @@ export default function FilterTab({
 
       <ul className={tabClass} role="tablist" style={{ paddingLeft: '0' }}>
         <li className="nav-tab-item" role="presentation">
-          <a onClick={() => { handlSelect("Residential Properties") }} className="custom-home-icon">
+          <a onClick={() => { handlSelect("Residential") }} className="custom-home-icon">
             <div className="icon-box">
               <svg
                 color="#000000"
@@ -200,11 +200,11 @@ export default function FilterTab({
                 </defs>
               </svg>
             </div>
-            <p className="content text-center fw-7" style={{ fontSize: '14px', color: selectedCat === 'Residential Properties' ? "#008FF7" : "#000000" }}>Residential Properties</p>
+            <p className="content text-center fw-7" style={{ fontSize: '14px', color: selectedCat === 'Residential' ? "#008FF7" : "#000000" }}>Residential Properties</p>
           </a>
         </li>
         <li className="nav-tab-item" role="presentation">
-          <a onClick={() => { handlSelect("Commercial Properties") }} className="custom-home-icon">
+          <a onClick={() => { handlSelect("Commercial") }} className="custom-home-icon">
             <div className="icon-box">
               <svg
                 width={41}
@@ -239,11 +239,11 @@ export default function FilterTab({
                 </defs>
               </svg>
             </div>
-            <p className="content text-center fw-7" style={{ fontSize: '14px', color: selectedCat === 'Commercial Properties' ? "#008FF7" : "#000000" }}>Commercial Properties</p>
+            <p className="content text-center fw-7" style={{ fontSize: '14px', color: selectedCat === 'Commercial' ? "#008FF7" : "#000000" }}>Commercial Properties</p>
           </a>
         </li>
         <li className="nav-tab-item" role="presentation">
-          <a onClick={() => { handlSelect("Industrial Properties") }} className="custom-home-icon">
+          <a onClick={() => { handlSelect("Industrial") }} className="custom-home-icon">
             <div className="icon-box">
               <svg
                 width={41}
@@ -274,11 +274,11 @@ export default function FilterTab({
                 />
               </svg>
             </div>
-            <p className="content text-center fw-7" style={{ fontSize: '14px', color: selectedCat === 'Industrial Properties' ? "#008FF7" : "#000000" }}>Industrial Properties</p>
+            <p className="content text-center fw-7" style={{ fontSize: '14px', color: selectedCat === 'Industrial' ? "#008FF7" : "#000000" }}>Industrial Properties</p>
           </a>
         </li>
         <li className="nav-tab-item" role="presentation">
-          <a onClick={() => { handlSelect("Lands and Plots") }} className="custom-home-icon" style={{ marginLeft: '-20px' }}>
+          <a onClick={() => { handlSelect("Lands/Plots") }} className="custom-home-icon" style={{ marginLeft: '-20px' }}>
             <div className="icon-box">
               <svg
                 width={41}
@@ -319,7 +319,7 @@ export default function FilterTab({
                 </defs>
               </svg>
             </div>
-            <p className="content text-center fw-7" style={{ fontSize: '14px', color: selectedCat === 'Lands and Plots' ? "#008FF7" : "#000000" }}>Land <br /> & Plots</p>
+            <p className="content text-center fw-7" style={{ fontSize: '14px', color: selectedCat === 'Lands/Plots' ? "#008FF7" : "#000000" }}>Land <br /> & Plots</p>
           </a>
         </li>
         <li className="nav-tab-item" role="presentation">

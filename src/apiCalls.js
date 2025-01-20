@@ -604,6 +604,7 @@ export const updateAgent = async (data) => {
   formData.append('gender', data.gender);
   formData.append('email', data.email);
   formData.append('phone_number', data.phone);
+  formData.append('location', data.location);
   formData.append('age', data.age);
   formData.append('service', data.service); // Changed from 'name' to 'service'
 
@@ -639,6 +640,7 @@ export const createAgent = async (data) => {
   formData.append('email', data.email);
   formData.append('phone_number', data.phone);
   formData.append('age', data.age);
+  formData.append('location', data.location);
   formData.append('service', data.service); // Changed from 'name' to 'service'
 
   if (data.image && data.image.file) {
@@ -673,7 +675,8 @@ export const createB2B = async (data) => {
   formData.append('email', data.email);
   formData.append('phone_number', data.phone);
   formData.append('age', data.age);
-  formData.append('service', data.service); // Changed from 'name' to 'service'
+  formData.append('location', data.location);
+  formData.append('professional', data.professional); 
 
   if (data.image && data.image.file) {
     formData.append('image', data.image.file);
@@ -696,6 +699,40 @@ export const createB2B = async (data) => {
   }
 };
 
+export const updateB2B = async (data) => {
+  const url = `${baseUrl}/value-added-service/update-value-added-service`;
+
+  const formData = new FormData();
+
+  formData.append('id', data.id);
+  formData.append('name', data.fullName);
+  formData.append('gender', data.gender);
+  formData.append('email', data.email);
+  formData.append('phone_number', data.phone);
+  formData.append('location', data.location);
+  formData.append('age', data.age);
+  formData.append('professional', data.professional); 
+
+  if (data.image && data.image.file) {
+    formData.append('image', data.image.file);
+  }
+
+  const options = {
+    method: 'PUT',
+    body: formData, // Removed the Content-Type header
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error('Failed to Register');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Registration Failed:', error);
+    throw error;
+  }
+};
 
 export const getUserWishList = async (id) => {
 

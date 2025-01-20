@@ -15,8 +15,6 @@ export default function AddProperty() {
 
   const [images, setImages] = useState([]);
 
-  console.log(images , "kkkkkkkkkkkkkkkkk")
-
   const [location, setLocation] = useState('')
   const [price, setPrice] = useState('')
 
@@ -49,7 +47,6 @@ export default function AddProperty() {
     }));
 
 
-    console.log(properties , "ppppppppppppppppppppppppppppppp")
     // Extract the inputs and create the "propertyInputs" array
     const propertyInputs = updatedData.flatMap(item => item.inputs.map(input => ({
       properties_postId: input.properties_postId,
@@ -266,7 +263,7 @@ export default function AddProperty() {
   };
 
   const handleChange = (id, value, name) => {
-    name == "location" && setLocation(value)
+    name == "city" && setLocation(value)
     name == "price" && setPrice(value)
 
     setFormData((prev) => ({
