@@ -119,8 +119,11 @@ export default function MyFavorite() {
         <div className="button-show-hide show-mb">
           <span className="body-1">Show Menu</span>
         </div>
+        <div className="button-show-hide" style={{marginTop:'0px',display:'flex'}}>
+          <h3 className="body-1" style={{color:'#000',padding:'20px 0',fontWeight:'600'}}>My Favourites</h3>
+        </div>
         <div className="widget-box-2 wd-listing">
-          <h5 className="title">My Favorites</h5>
+          {/* <h5 className="title">My Favorites</h5> */}
           <div className="wrap-table">
             {!isEmpty ? (
               <>
@@ -133,7 +136,7 @@ export default function MyFavorite() {
               <div className="table-responsive">
                 <table>
                   <thead >
-                    <tr >
+                    <tr style={{background:'#008FF7'}} >
                       <th style={{ padding: '20px' }}>Listing</th>
                       <th style={{ padding: '20px' }}>Status</th>
                       <th style={{ padding: '20px' }}>Action</th>

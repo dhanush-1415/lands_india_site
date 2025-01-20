@@ -21,7 +21,6 @@ export default function Dashboard() {
           const data = await getUserCount(landsUser.id);
   
           if (data.success) {
-            console.log(data , "ccccccccccccccccccccccccccccccccccccccc")
             setData(data);
           } else {
             toast.error(data.message || data.error || "Something Went Wrong")
@@ -48,7 +47,12 @@ export default function Dashboard() {
         <div className="button-show-hide show-mb">
           <span className="body-1">Show Menu</span>
         </div>
+        
+        <div className="button-show-hide" style={{marginTop:'0px',display:'flex'}}>
+          <h3 className="body-1" style={{color:'#000',padding:'20px 0',fontWeight:'600'}}>My Dashboard</h3>
+        </div>
         <div className="flat-counter-v2 tf-counter">
+          
           <div className="counter-box">
             <div className="box-icon">
               <span className="icon icon-listing" />

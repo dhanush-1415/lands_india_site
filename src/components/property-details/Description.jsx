@@ -15,7 +15,7 @@ export default function Description({ data }) {
       <h5 className="mt-8 fw-6 title">Description</h5>
       <p className="text-variant-1 mb-8 ">
         {
-          data[0].inputs.find(item => item.input_name === "description")?.input_value || ""
+          data[0].inputs.find(item => item.input_name === "Description")?.input_value || ""
         }
       </p>
       {/* {propertyDetails?.descriptions?.length &&

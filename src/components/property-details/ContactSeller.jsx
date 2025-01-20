@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import AttachEmailSharpIcon from '@mui/icons-material/AttachEmailSharp';
 import CallIcon from '@mui/icons-material/Call';
 import PermPhoneMsgIcon from '@mui/icons-material/PermPhoneMsg';
@@ -10,21 +10,27 @@ import EnquiryForm from "../common/Enquiry";
 export default function ContactSeller() {
 
 
-  
-    const [open, setOpen] = useState(false);
-  
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = () => {
-      setOpen(false);
-    };
+
+  const [open, setOpen] = useState(false);
+
+  const [propertyId, setPropertyId] = useState(null);
+
+  const handleClickOpen = (id) => {
+    setOpen(true);
+    setPropertyId(id);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setPropertyId(null);
+  };
+
+
   return (
 
     <>
       {" "}
-      <EnquiryForm open={open} handleClose={handleClose} />
+      <EnquiryForm open={open} handleClose={handleClose} id={propertyId} />
       {/* <h5 className="title fw-6">Contact Sellers</h5> */}
       <h5 className="fw-6">Posted By: Owner</h5>
       {/* <div className="box-avatar">
@@ -87,7 +93,7 @@ export default function ContactSeller() {
               borderRadius: '0px',
               textAlign: 'center',
             }}
-            onClick={handleClickOpen}
+            onClick={() => { handleClickOpen(elm.id) }}
           >
             <DraftsTwoToneIcon sx={{ marginRight: '5px' }} />
             <span>Enquiry Now</span>
@@ -100,11 +106,13 @@ export default function ContactSeller() {
               cursor: 'pointer',
               background: '#ffffff',
             }}
+            onClick={() => window.location.href = 'tel:+919363828393'}
           >
             <CallIcon sx={{ color: '#018df7' }} />
 
           </div>
           <div
+            onClick={() => window.open('https://wa.me/919363828393?text=Hi, I would like to know more.', '_blank')}
             className="d-flex justify-content-center align-items-center rounded-circle border shadow-sm"
             style={{
               width: '50px',

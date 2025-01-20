@@ -1188,7 +1188,11 @@
           border: 1px solid $outline;
           border-radius: 99px;
           font-weight: 400;
-        }
+          -webkit-border-radius: 99px;
+          -moz-border-radius: 99px;
+          -ms-border-radius: 99px;
+          -o-border-radius: 99px;
+}
       }
 
       .box-filter {

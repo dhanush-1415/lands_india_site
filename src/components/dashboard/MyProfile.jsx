@@ -670,6 +670,9 @@ export default function MyProfile() {
         <div className="button-show-hide show-mb">
           <span className="body-1">Show Menu</span>
         </div>
+        <div className="button-show-hide" style={{marginTop:'0px',display:'flex'}}>
+          <h3 className="body-1" style={{color:'#000',padding:'20px 0',fontWeight:'600'}}>My Profile</h3>
+        </div>
         <div className="widget-box-2">
           {/* <div className="box">
             <h5 className="title">Account Settings</h5>

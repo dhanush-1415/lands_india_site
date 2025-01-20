@@ -101,6 +101,9 @@ export default function MyProperty() {
         <div className="button-show-hide show-mb">
           <span className="body-1">Show Menu</span>
         </div>
+        <div className="button-show-hide" style={{marginTop:'0px',display:'flex'}}>
+          <h3 className="body-1" style={{color:'#000',padding:'20px 0',fontWeight:'600'}}>My Properties</h3>
+        </div>
         {/* <div className="row">
           <div className="col-md-3">
             <fieldset className="box-fieldset">
@@ -129,12 +132,12 @@ export default function MyProperty() {
           </div>
         </div> */}
         <div className="widget-box-2 wd-listing">
-          <h5 className="title">My Properties</h5>
+          {/* <h5 className="title">My Properties</h5> */}
           <div className="wrap-table">
             <div className="table-responsive">
               <table>
                 <thead>
-                  <tr>
+                  <tr style={{background:'#008FF7'}}>
                     <th style={{ padding: '20px' }}>Listing</th>
                     <th style={{ padding: '20px' }}>Status</th>
                     <th style={{ padding: '20px' }}>Action</th>
@@ -161,7 +164,7 @@ export default function MyProperty() {
                                 className="link"
                               >
                                 {
-                                  elm.inputs.find(item => item.input_name === "title")?.input_value || ""
+                                  elm.inputs.find(item => item.input_name === "Title")?.input_value || ""
                                 }
 
                               </Link>
@@ -171,13 +174,13 @@ export default function MyProperty() {
                             </div>
                             <div className="text-btn text-primary">
                               ₹{
-                                elm.inputs.find(item => item.input_name === "price")?.input_value || ""
+                                elm.inputs.find(item => item.input_name === "Price")?.input_value || ""
                               }
 
                             </div>
                             <div className="text-btn text-secondary">
                               {
-                                elm.inputs.find(item => item.input_name === "location")?.input_value || ""
+                                elm.inputs.find(item => item.input_name === "City")?.input_value || ""
                               }
 
                             </div>
@@ -189,7 +192,10 @@ export default function MyProperty() {
                           <a
                             href="#"
                             className={`btn-status ${elm.status == "Pending" ? "pending" : ""
-                              }  ${elm.status == "Sold" ? "sold" : ""}`}
+                              }  ${elm.status == "Onhold" ? "onhold" : ""}  
+                              ${elm.status == "Verified" ? "verified" : ""}
+                               ${elm.status == "Sold" ? "Sold" : ""}
+                                ${elm.status == "Rejected" ? "rejected" : ""}`}
                           >
                             {" "}
                             {elm.status}
