@@ -54,10 +54,11 @@ export default function Header1({
   parentClass = "main-header header-fixed fixed-header",
 }) {
 
-
-
   const [anchorTwoEl, setTwoAnchorEl] = useState(null);
 
+  const [userDetails, setUserDetails] = useState(null);
+
+  console.log(userDetails, "ppppppppppppppppppppppppppppppppp")
 
   const open = (anchorTwoEl);
 
@@ -101,6 +102,7 @@ export default function Header1({
 
   useEffect(() => {
     const user = localStorage.getItem("LandsUser");
+    setUserDetails(JSON.parse(user))
     if (user) {
       setIsLogin(true);
     }
@@ -284,8 +286,8 @@ export default function Header1({
     }
   }
 
-
   const handleSignup = async () => {
+    console.log("Signup function triggered");  // Debugging
     const { name, phone, password, email, role } = registerData;
 
     if (!name || !phone || !password || !email || !role) {
@@ -299,10 +301,10 @@ export default function Header1({
       password: password,
       email: email,
       type: role
-    }
+    };
 
     const response = await RegisterUser(data);
-    if (response.success === true) {
+    if (response.success) {
       setLoginActive(true);
       setRegisterData({
         name: '',
@@ -312,13 +314,49 @@ export default function Header1({
         confirmPassword: '',
         role: ''
       });
-      toast.success('Registred Successfully');
+      toast.success('Registered Successfully');
     } else {
-      toast.error('Failed to Register');
+      toast.error(response.message);
     }
 
     console.log(data);
   }
+
+
+  // const handleSignup = async () => {
+  //   const { name, phone, password, email, role } = registerData;
+
+  //   if (!name || !phone || !password || !email || !role) {
+  //     toast.error('All fields are required.');
+  //     return;
+  //   }
+
+  //   const data = {
+  //     fullName: name,
+  //     phone: phone,
+  //     password: password,
+  //     email: email,
+  //     type: role
+  //   }
+
+  //   const response = await RegisterUser(data);
+  //   if (response.success) {
+  //     setLoginActive(true);
+  //     setRegisterData({
+  //       name: '',
+  //       phone: '',
+  //       email: '',
+  //       password: '',
+  //       confirmPassword: '',
+  //       role: ''
+  //     });
+  //     toast.success('Registred Successfully');
+  //   } else {
+  //     toast.error(response.message);
+  //   }
+
+  //   console.log(data);
+  // }
 
   const handleLogin = async () => {
     const { phone, password } = loginData;
@@ -1021,7 +1059,7 @@ export default function Header1({
 
                               >
                                 <AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#161e2d', marginRight: '5px' }} />
-                                My Profile
+                                {userDetails?.fullName}
                               </a>
                               <Menu
                                 anchorEl={anchorTwoEl}

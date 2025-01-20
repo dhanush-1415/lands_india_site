@@ -510,6 +510,7 @@ const fetchProperty = async () => {
           isWishlist: wishListList.includes(property.id), // Add isWishlist
         };
       });
+      
 
       setProperties(combined);
     } else {

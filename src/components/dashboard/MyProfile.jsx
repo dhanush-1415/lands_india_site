@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { UpdateUser, getUserDetails, UpdateUserPassword, createAgent, getAgentDetails, createB2B, updateAgent, getB2BDetails } from "@/apiCalls";
+import { UpdateUser, getUserDetails, UpdateUserPassword, createAgent, getAgentDetails, createB2B, updateB2B, updateAgent, getB2BDetails } from "@/apiCalls";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import DropdownSelect from "../common/DropdownSelect";
 
 export default function MyProfile() {
 
+  const [avatar, setAvatar] = useState({
+    file: null,
+    preview: null,
+  });
+
+  const [imgUrl, setimgUrl] = useState("");
 
   const [userData, setUserData] = useState();
   const [showOldPassword, setShowOldPassword] = useState(false);
@@ -26,17 +32,15 @@ export default function MyProfile() {
     B2BAge: "",
     B2BGender: "",
     B2BService: "",
-    location: "",
+    B2Blocation: "",
   });
 
-  console.log(isAgent,B2BData ,  isNew, isB2B, isNewB2B, "ooooooooooooooooooooooooooooo")
-
-  
   const [agentData, setAgentData] = useState({
     id: '',
     agentAge: "",
     agentGender: "",
     agentService: "",
+    agentLocation: "",
   });
 
 
@@ -50,15 +54,16 @@ export default function MyProfile() {
         try {
           const data = await getAgentDetails(landsUser.phoneNumber);
           if (data.success) {
-            console.log(data.data);
-            if (data.data) {
+            if (data?.data?.length) {
               setIsNew(false);
               setAgentData({
-                id: data.data[0].adviser_id,
+                id: data.data[0].id,
                 agentAge: data.data[0].age,
                 agentGender: data.data[0].gender,
                 agentService: data.data[0].service,
+                agentLocation: data.data[0].location,
               })
+              setimgUrl(data.data[0].image)
             } else {
               setIsNew(true)
             }
@@ -101,13 +106,6 @@ export default function MyProfile() {
   }, []);
 
 
-  const [avatar, setAvatar] = useState({
-    file: null,
-    preview: null,
-  });
-
-  const [imgUrl, setimgUrl] = useState("");
-
   const handleImageUpload = (event) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -131,6 +129,7 @@ export default function MyProfile() {
   };
 
   const [formData, setFormData] = useState({
+    id: 0,
     name: '',
     mobileNumber: '',
     email: '',
@@ -241,6 +240,96 @@ export default function MyProfile() {
     setValidationAgentErrors({ ...validationAgentErrors, [field]: error });
   };
 
+  // const handleProfileUpdate = async () => {
+  //   const validateForm = () => {
+  //     let valid = true;
+  //     const newErrors = {};
+
+  //     if (!formData.name.trim()) {
+  //       newErrors.name = "Full name is required.";
+  //       valid = false;
+  //     }
+
+  //     if (!/^\d{10}$/.test(formData.mobileNumber)) {
+  //       newErrors.mobileNumber = "Mobile number must be 10 digits.";
+  //       valid = false;
+  //     }
+
+  //     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //     if (!emailRegex.test(formData.email)) {
+  //       newErrors.email = "Please enter a valid email address.";
+  //       valid = false;
+  //     }
+
+  //     setErrors(newErrors);
+  //     return valid;
+  //   };
+
+  //   if (!validateForm()) return;
+
+  //   const landsUser = JSON.parse(localStorage.getItem("LandsUser"));
+
+  //   if (!landsUser) {
+  //     toast.error("Seller Not Found");
+  //     setTimeout(() => (window.location.href = "/"), 4000);
+  //     return;
+  //   }
+
+  //   const createPayload = () => {
+  //     const basePayload = {
+  //       ...(avatar?.file ? { image: avatar } : {}),
+  //       id: formData.id,
+  //       fullName: formData.name,
+  //       email: formData.email,
+  //       phone: formData.mobileNumber,
+  //     };
+
+  //     if (isNew) {
+  //       return {
+  //         ...basePayload,
+  //         gender: agentData.agentGender,
+  //         age: agentData.agentAge,
+  //         service: agentData.agentService,
+  //       };
+  //     }
+
+  //     if (isNewB2B) {
+  //       return {
+  //         ...basePayload,
+  //         gender: B2BData.B2BGender,
+  //         age: B2BData.B2BAge,
+  //         professional: B2BData.B2BService,
+  //       };
+  //     }
+
+  //     return basePayload;
+  //   };
+
+  //   const payload = createPayload();
+
+  //   console.log(payload , "pppppppppppppppppppppppppppppp")
+
+  //   try {
+  //     let data;
+  //     if (isAgent) {
+  //       data = isNew ? await createAgent(payload) : await updateAgent(payload);
+  //     } else if (isB2B) {
+  //       data = isNewB2B ? await createB2B(payload) : await updateAgent(payload);
+  //     } else {
+  //       data = await UpdateUser(payload);
+  //     }
+
+  //     if (data.success) {
+  //       console.log(data);
+  //       toast.success("User updated successfully");
+  //     } else {
+  //       throw new Error(data.message || data.error || "Something Went Wrong");
+  //     }
+  //   } catch (err) {
+  //     console.error("Error updating user:", err);
+  //     toast.error(err.message || "Something Went Wrong");
+  //   }
+  // };
 
 
   const handleProfileUpdate = async () => {
@@ -275,37 +364,106 @@ export default function MyProfile() {
 
       if (landsUser) {
         try {
-          const payload = {
-            ...(avatar?.file ? { image: avatar } : {}),
-            fullName: formData.name,
-            email: formData.email,
-            phone: formData.mobileNumber,
+          // const payload = {
+          //   ...(avatar?.file ? { image: avatar } : {}),
+          //   id: formData.id,
+          //   fullName: formData.name,
+          //   email: formData.email,
+          //   phone: formData.mobileNumber,
+          // };
+
+          // const payload2 = {
+          //   ...(avatar?.file ? { image: avatar } : {}),
+          //   ...(!isAgent ? { id: agentData.id } : {}),
+          //   ...(!isNewB2B ? { id: B2BData.id } : {}),
+          //   fullName: formData.name,
+          //   email: formData.email,
+          //   phone: formData.mobileNumber,
+          //   ...(isNew ? {
+          //     gender: agentData.agentGender,
+          //     age: agentData.agentAge,
+          //     service: agentData.agentService,
+          //   } : {}),
+          //   ...(isNewB2B ? {
+          //     gender: B2BData.B2BGender,
+          //     age: B2BData.B2BAge,
+          //     professional: B2BData.B2BService,
+          //   } : {}),
+          // };
+
+          const createPayload = () => {
+            const basePayload = {
+              ...(avatar?.file ? { image: avatar } : {}),
+              fullName: formData.name,
+              email: formData.email,
+              phone: formData.mobileNumber,
+            };
+
+            if (isNew || isNewB2B) {
+              if (isNew) {
+                return {
+                  ...basePayload,
+                  gender: agentData.agentGender,
+                  age: agentData.agentAge,
+                  service: agentData.agentService,
+                  service: agentData.agentService,
+                  location: agentData.agentLocation,
+                };
+              }
+
+              if (isNewB2B) {
+                return {
+                  ...basePayload,
+                  gender: B2BData.B2BGender,
+                  age: B2BData.B2BAge,
+                  professional: B2BData.B2BService,
+                  professional: B2BData.B2BService,
+                  location: B2BData.B2Blocation,
+                };
+              }
+            }
+
+            if (isAgent || isB2B) {
+              // Include respective ids for isAgent or isB2B
+              if (isAgent) {
+                return {
+                  ...basePayload,
+                  id: agentData.id,
+                  gender: agentData.agentGender,
+                  age: agentData.agentAge,
+                  service: agentData.agentService,
+                  location: agentData.agentLocation,
+                };
+              }
+
+              if (isB2B) {
+                return {
+                  ...basePayload,
+                  id: B2BData.id,
+                  gender: B2BData.B2BGender,
+                  age: B2BData.B2BAge,
+                  professional: B2BData.B2BService,
+                  location: B2BData.B2Blocation,
+                };
+              }
+            }
+
+            return {
+              ...basePayload,
+              id: formData.id,
+            };
           };
 
-          const payload2 = {
-            ...(avatar?.file ? { image: avatar } : {}),
-            ...(!isNew ? { id: agentData.id } : {}),
-            ...(!isNewB2B ? { id: B2BData.id } : {}),
-            fullName: formData.name,
-            email: formData.email,
-            phone: formData.mobileNumber,
-            ...(isNew ? {
-              gender: agentData.agentGender,
-              age: agentData.agentAge,
-              service: agentData.agentService,
-            } : {}),
-            ...(isNewB2B ? {
-              gender: B2BData.B2BGender,
-              age: B2BData.B2BAge,
-              professional: B2BData.B2BService,
-            } : {}),
-          };
 
+          const payload = createPayload();
+
+
+          console.log(payload, "pppppppppppppppppppppppppppppppppppppp")
 
           if (isAgent === true) {
 
             if (isNew) {
-              const data = await createAgent(payload2);
+              const data = await createAgent(payload);
               if (data.success) {
                 console.log(data);
                 toast.success("User updated successfully");
@@ -313,7 +471,7 @@ export default function MyProfile() {
                 toast.error(data.message || data.error || "Something Went Wrong");
               }
             } else {
-              const data = await updateAgent(payload2);
+              const data = await updateAgent(payload);
               if (data.success) {
                 console.log(data);
                 toast.success("User updated successfully");
@@ -325,7 +483,7 @@ export default function MyProfile() {
 
             if (isB2B) {
               if (isNewB2B) {
-                const data = await createB2B(payload2);
+                const data = await createB2B(payload);
                 if (data.success) {
                   console.log(data);
                   toast.success("User updated successfully");
@@ -333,7 +491,7 @@ export default function MyProfile() {
                   toast.error(data.message || data.error || "Something Went Wrong");
                 }
               } else {
-                const data = await updateAgent(payload2);
+                const data = await updateB2B(payload);
                 if (data.success) {
                   console.log(data);
                   toast.success("User updated successfully");
@@ -376,6 +534,7 @@ export default function MyProfile() {
         if (data.success) {
           setUserData(data.user);
           setFormData({
+            id: data.user.id,
             name: data.user.full_name,
             mobileNumber: data.user.phone_number,
             email: data.user.email,
@@ -649,6 +808,21 @@ export default function MyProfile() {
                   <span className="error-message">{validationErrors.B2BService}</span>
                 )}
               </div>
+              <div className="box-fieldset">
+                <label htmlFor="B2Blocation">
+                  City/Location:
+                </label>
+                <input
+                  type="text"
+                  name="B2Blocation"
+                  value={B2BData.B2Blocation}
+                  onChange={updateB2BField}
+                  className="form-control style-1"
+                />
+                {validationErrors.B2Blocation && (
+                  <span className="error-message">{validationErrors.B2Blocation}</span>
+                )}
+              </div>
             </div>
           )}
           {isAgent && (
@@ -659,6 +833,7 @@ export default function MyProfile() {
                 </label>
                 <DropdownSelect
                   options={["Select", "Male", "Female", "Other"]}
+                  defaultOption={agentData.agentGender}
                   onChange={(value) => updateDropdownValue("agentGender", value)}
                 />
                 {validationErrors.agentGender && (
@@ -677,10 +852,26 @@ export default function MyProfile() {
                     "RealEstate Promoter",
                     "RealEstate Marketer",
                   ]}
+                  defaultOption={agentData.agentService}
                   onChange={(value) => updateDropdownValue("agentService", value)}
                 />
                 {validationErrors.agentService && (
                   <span className="error-message">{validationErrors.agentService}</span>
+                )}
+              </div>
+              <div className="box-fieldset">
+                <label htmlFor="agentLocation">
+                  City/Location:
+                </label>
+                <input
+                  type="text"
+                  name="agentLocation"
+                  value={agentData.agentLocation}
+                  onChange={updateAgentField}
+                  className="form-control style-1"
+                />
+                {validationErrors.agentLocation && (
+                  <span className="error-message">{validationErrors.agentLocation}</span>
                 )}
               </div>
             </div>
