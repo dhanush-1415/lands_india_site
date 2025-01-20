@@ -9,6 +9,7 @@ import Pagination from "./Pagination";
 import DropdownSelect from "./DropdownSelect";
 import Footer2 from "../footer/Footer2";
 import CreateAgent from "./CreateAgent";
+import { BorderBottom } from "@mui/icons-material";
 
 export default function Agents() {
 
@@ -18,9 +19,19 @@ export default function Agents() {
   const [sorted, setSorted] = useState();
   const [itemPerPage, setItemPerPage] = useState(9);
   const [location, setLocation] = useState("Location");
-  const [service , setService ] = useState("Service")
+  const [service , setService ] = useState("Service");
+  const [isLogged , setIsLogged ] = useState(false);
 
   console.log(data, "ppppppppppppppppppp")
+
+  useEffect(()=>{
+    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+    if(landsUser){
+      setIsLogged(true)
+    }else{
+      setIsLogged(false)
+    }
+  },[])
 
   const fetchAgents = async () => {
     try {
@@ -141,6 +152,7 @@ export default function Agents() {
             <h4>Our Agents</h4>
           </div>
         </div>
+        {!isLogged && (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div className="d-flex custom-aligner align-items-center justify-content-between" style={{ background: '#ffffff', padding: '10px 20px', marginTop: '-40px', boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}>
             <div>
@@ -151,6 +163,7 @@ export default function Agents() {
             </div>
           </div>
         </div>
+        )}
 
         <div className="d-flex align-items-center justify-content-end container custom-container-header">
           <div style={{ width: '17%', marginTop: '2rem', marginRight: '2rem' }}>
@@ -160,16 +173,18 @@ export default function Agents() {
                 const item = AllLocation.find((cat) => cat.name === location);
                 setLocation(item);
               }}
+              style={{border:'none',borderBottom:'1px solid gray', borderRadius:'0'}}
             />
 
           </div>
-          <div style={{ width: '17%', marginTop: '2rem', marginRight: '6px' }}>
+          <div style={{ width: '22%', marginTop: '2rem', marginRight: '6px' }}>
             <DropdownSelect
               options={["Service", ...(realEstateServices?.map((item) => item.name) || [])]} // Prepend "All" to the options
               onChange={(service) => {
                 const item = realEstateServices.find((cat) => cat.name === service);
                 setService(item);
               }}
+              style={{border:'none',borderBottom:'1px solid gray', borderRadius:'0'}}
             />
 
           </div>
@@ -192,9 +207,9 @@ export default function Agents() {
                     <a className="box-img img-style" style={{ borderRadius: '0px' }}>
                       <img
                         className="lazyload image-style"
-                        data-src={agent.imageURLs[0]}
+                        data-src={agent?.image[0] || ""}
                         alt={`image-agent-${agent.name}`}
-                        src={agent.imageURLs[0]}
+                        src={agent?.image[0]}
                       />
 
                     </a>

@@ -1058,7 +1058,8 @@ export default function Header1({
                                 }}
 
                               >
-                                <AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#161e2d', marginRight: '5px' }} />
+                                {/* <AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#161e2d', marginRight: '5px' }} /> */}
+                                <img src={userDetails?.image || ""} alt='profile' width="30px"  style={{borderRadius:'50%'}} />
                                 {userDetails?.fullName}
                               </a>
                               <Menu

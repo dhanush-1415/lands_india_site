@@ -665,7 +665,11 @@
         padding-right: 48px;
         font-size: 14px;
         line-height: 19.6px;
-      }
+        -webkit-border-radius: 999px;
+        -moz-border-radius: 999px;
+        -ms-border-radius: 999px;
+        -o-border-radius: 999px;
+}
     }
     .search-form {
       position: relative;

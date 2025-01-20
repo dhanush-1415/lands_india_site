@@ -21,11 +21,11 @@ export default function DetailsTitle1({ data }) {
         <div className="header-property-detail">
           <div className="content-top d-flex justify-content-between align-items-center">
             <h3 className="title link fw-8">{
-              data[0]?.inputs?.find(item => item.input_name === "title")?.input_value || ""
+              data[0]?.inputs?.find(item => item.input_name === "Title")?.input_value || ""
             }</h3>
             <div className="box-price d-flex align-items-end">
               <h3 className="fw-8">₹{
-                data[0]?.inputs?.find(item => item.input_name === "price")?.input_value || ""
+                data[0]?.inputs?.find(item => item.input_name === "Price")?.input_value || ""
               }</h3>
               {/* <span className="body-1 text-variant-1">/month</span> */}
             </div>
@@ -38,7 +38,7 @@ export default function DetailsTitle1({ data }) {
                   <span className="icon icon-mapPin" />
                   <span className="text-variant-1">
                     {
-                      data[0].inputs.find(item => item.input_name === "location")?.input_value || ""
+                      data[0].inputs.find(item => item.input_name === "City")?.input_value || ""
                     }
                   </span>
                 </p>
@@ -82,7 +82,7 @@ export default function DetailsTitle1({ data }) {
                   <span className="icon icon-sqft" />
                   <span className="text-variant-1">
                     {
-                      data[0].inputs.find(item => item.input_name === "sqft")?.input_value || ""
+                      data[0].inputs.find(item => item.input_name === "Total Sqft")?.input_value || ""
                     }Sqft
                   </span>
                 </p>

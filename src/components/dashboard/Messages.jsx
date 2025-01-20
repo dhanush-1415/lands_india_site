@@ -34,8 +34,11 @@ export default function Messages() {
         <div className="button-show-hide show-mb">
           <span className="body-1">Show Menu</span>
         </div>
+        <div className="button-show-hide" style={{marginTop:'0px',display:'flex'}}>
+          <h3 className="body-1" style={{color:'#000',padding:'20px 0',fontWeight:'600'}}>Property Enquires</h3>
+        </div>
         <div className="widget-box-2 mess-box">
-          <h5 className="title">Enquires</h5>
+          {/* <h5 className="title">Enquires</h5> */}
           <ul className="list-mess">
             {quries.length && quries.map((msg, index) => (
               <li className="mess-item" key={index}>

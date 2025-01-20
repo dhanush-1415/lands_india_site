@@ -29,7 +29,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function EnquiryForm({ open, handleClose }) {
+export default function EnquiryForm({ open, handleClose, id }) {
     const [formData, setFormData] = useState({
         name: '',
         phone: '',
@@ -37,6 +37,8 @@ export default function EnquiryForm({ open, handleClose }) {
         message: '',
         userType: '',
         status: 'active',
+        isProperty:true,
+        propertyId:id,
     });
 
     const handleChange = (e) => {
@@ -51,14 +53,16 @@ export default function EnquiryForm({ open, handleClose }) {
     useEffect(() => {
         const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
-        console.log(landsUser, "pppppppppppppp")
-
         if (landsUser) {
             setFormData({
                 name: landsUser.fullName,
                 phone: landsUser.phone || '',
                 email: landsUser.email || '',
                 userType: landsUser.type,
+                message: "",
+                status: 'active',
+                isProperty:true,
+                propertyId:id,
             })
         }
     }, [])
@@ -74,14 +78,16 @@ export default function EnquiryForm({ open, handleClose }) {
             const data = await SubmitEnquiry(formData);
             if (data.success) {
                 toast.success("Submitted Successfully");
-                setFormData({
-                    name: '',
-                    phone: '',
-                    email: '',
-                    message: '',
-                    userType: '',
-                    status: 'active',
-                })
+                // setFormData({
+                //     name: '',
+                //     phone: '',
+                //     email: '',
+                //     message: '',
+                //     userType: '',
+                //     status: 'active',
+                //     isProperty:true,
+                //     propertyId:null,
+                // })
                 handleClose();
             } else {
                 toast.error(data.message || data.error || "Something Went Wrong")

@@ -341,6 +341,7 @@ export const createNewProperty = async (data) => {
   formData.append('location', data.propertiesPost.location);
   formData.append('subMenuId', data.propertiesPost.subMenuId);
   formData.append('PropertyInput', JSON.stringify(data.PropertiesInput));
+  formData.append('status', "Pending");
 
   
   if (data.PropertiesInput?.length > 0) {
@@ -835,7 +836,7 @@ export const getValueAddedServiceList = async () => {
 
 export const getUserQueries = async (id) => {
 
-  const url = `${baseUrl}/query/list/${id}`;
+  const url = `${baseUrl}/query/list/${id}?isProperty=1`;
 
 
   const options = {

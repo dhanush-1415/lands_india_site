@@ -50,8 +50,6 @@ export default function Properties4() {
   const [loading, setLoading] = useState(false);
   const [locationFilter, setLocationFilter] = useState("");
 
-  console.log(properties, "llllllllllllllllllllllllllllllllllllllllllllll")
-
   const loaderRef = useRef(null);
 
   const clearFilter = () => {
@@ -167,30 +165,30 @@ export default function Properties4() {
   const [AllLocation, setAllLocations] = useState([]);
 
   const fetchLocation = async () => {
-      try {
-        const data = await getAllLocation();
+    try {
+      const data = await getAllLocation();
 
-        if (data.success) {
-          const formattedLocations = data.locations
+      if (data.success) {
+        const formattedLocations = data.locations
           .filter(location => location)
           .map((location, index) => ({
-            id: index + 1, 
+            id: index + 1,
             name: location.trim(),
           }));
-  
-          setAllLocations(formattedLocations);
-        console.log(formattedLocations); 
-        } else {
-          // toast.error(data.message);
-        }
-      } catch (err) {
-        console.error('Error fetching Location:', err);
+
+        setAllLocations(formattedLocations);
+        console.log(formattedLocations);
+      } else {
+        // toast.error(data.message);
       }
+    } catch (err) {
+      console.error('Error fetching Location:', err);
+    }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchLocation()
-  },[])
+  }, [])
 
   const fetchProperties = async () => {
     const location = searchParams.get("location");
@@ -329,12 +327,16 @@ export default function Properties4() {
 
   const [open, setOpen] = useState(false);
 
-  const handleClickOpen = () => {
+  const [propertyId, setPropertyId] = useState(null);
+
+  const handleClickOpen = (id) => {
     setOpen(true);
+    setPropertyId(id);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setPropertyId(null);
   };
 
   const handleScroll = (event) => {
@@ -453,7 +455,7 @@ export default function Properties4() {
       </style>
 
 
-      <EnquiryForm open={open} handleClose={handleClose} />
+      <EnquiryForm open={open} handleClose={handleClose} id={propertyId} />
       <div className="box-title-listing" style={{ background: '#f0f3f4', padding: '40px 8%' }}>
 
         <div >
@@ -729,7 +731,7 @@ export default function Properties4() {
                                   />
                                 </svg>
                                 {
-                                  elm.inputs.find(item => item.input_name === "location")?.input_value || ""
+                                  elm.inputs.find(item => item.input_name === "City")?.input_value || ""
                                 }
                               </div>
                               {elm.isWishlist ? (
@@ -775,7 +777,7 @@ export default function Properties4() {
                                   className="link"
                                 >
                                   {
-                                    elm.inputs.find(item => item.input_name === "title")?.input_value || ""
+                                    elm.inputs.find(item => item.input_name === "Title")?.input_value || ""
                                   }
                                 </Link>
                               </h6>
@@ -798,7 +800,7 @@ export default function Properties4() {
                                   <i className="icon icon-sqft" style={{ fontSize: '20px' }} />
                                   <span className="text-variant-1">Sqft:</span>
                                   <span className="fw-6">{
-                                    elm.inputs.find(item => item.input_name === "sqft")?.input_value || ""
+                                    elm.inputs.find(item => item.input_name === "Total Sqft")?.input_value || ""
                                   }</span>
                                 </li>
                               </ul>
@@ -806,7 +808,7 @@ export default function Properties4() {
                             <div className="content-bottom">
                               <h6 className="price">
                                 ₹{
-                                  elm.inputs.find(item => item.input_name === "price")?.input_value || ""
+                                  elm.inputs.find(item => item.input_name === "Price")?.input_value || ""
                                 }
                               </h6>
                               <div className="d-flex gap-8 align-items-center">
@@ -821,7 +823,7 @@ export default function Properties4() {
                             </div>
                             <div className="content-bottom mt-3">
                               <div
-                                onClick={handleClickOpen}
+                                onClick={() => { handleClickOpen(elm.id) }}
                                 className="d-flex justify-content-center align-items-center shadow-sm mt-1"
                                 style={{
                                   cursor: 'pointer',
@@ -848,10 +850,12 @@ export default function Properties4() {
                                     cursor: 'pointer',
                                     background: '#ffffff',
                                   }}
+                                  onClick={() => window.location.href = 'tel:+919363828393'}
                                 >
                                   <CallIcon sx={{ color: '#018df7' }} />
                                 </div>
                                 <div
+                                  onClick={() => window.open('https://wa.me/919363828393?text=Hi, I would like to know more.', '_blank')}
                                   className="d-flex justify-content-center align-items-center rounded-circle border shadow-sm"
                                   style={{
                                     width: '44px',

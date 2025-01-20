@@ -18,6 +18,8 @@ export default function AddProperty() {
   const [location, setLocation] = useState('')
   const [price, setPrice] = useState('')
 
+  console.log(location, price, "ooooooooooooooooooooooooooooo")
+
   const handlePrevChange = (inputId, value, input_name) => {
 
     setUpdatedData(prevState => {
@@ -71,7 +73,13 @@ export default function AddProperty() {
   };
 
   const handlePrevSubmit = async () => {
-    const structuredData = transformData(updatedData , images);
+
+    if(!images.length){
+      toast.error("Please add Properties Images")
+      return
+    }
+
+    const structuredData = transformData(updatedData, images);
 
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
@@ -127,8 +135,8 @@ export default function AddProperty() {
 
               if (combined.length > 0) {
                 const filePathsArray = combined[0].file_path.split(",").map((url, index) => ({
-                  id: index + 1, 
-                  preview: url, 
+                  id: index + 1,
+                  preview: url,
                 }));
 
                 if (filePathsArray.length > 0) {
@@ -263,8 +271,8 @@ export default function AddProperty() {
   };
 
   const handleChange = (id, value, name) => {
-    name == "city" && setLocation(value)
-    name == "price" && setPrice(value)
+    name == "City" && setLocation(value)
+    name == "Price" && setPrice(value)
 
     setFormData((prev) => ({
       ...prev,
@@ -275,6 +283,11 @@ export default function AddProperty() {
 
   const handleSubmit = async () => {
 
+    if(!images.length){
+      toast.error("Please add Properties Images")
+      return
+    }
+    
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
     if (landsUser) {
@@ -323,72 +336,10 @@ export default function AddProperty() {
         <div className="button-show-hide show-mb">
           <span className="body-1">Show Menu</span>
         </div>
-        <div className="widget-box-2 mb-20">
-          <h5 className="title">Upload Media</h5>
-          <div className="box-uploadfile text-center">
-            <div
-              className="uploadfile"
-              style={
-                isDragging
-                  ? { borderStyle: "solid", backgroundColor: "#f2f3f4" }
-                  : {}
-              }
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-            >
-              <a href="#" className="btn-upload tf-btn primary">
-                <svg
-                  width={21}
-                  height={20}
-                  viewBox="0 0 21 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M13.625 14.375V17.1875C13.625 17.705 13.205 18.125 12.6875 18.125H4.5625C4.31386 18.125 4.0754 18.0262 3.89959 17.8504C3.72377 17.6746 3.625 17.4361 3.625 17.1875V6.5625C3.625 6.045 4.045 5.625 4.5625 5.625H6.125C6.54381 5.62472 6.96192 5.65928 7.375 5.72834M13.625 14.375H16.4375C16.955 14.375 17.375 13.955 17.375 13.4375V9.375C17.375 5.65834 14.6725 2.57417 11.125 1.97834C10.7119 1.90928 10.2938 1.87472 9.875 1.875H8.3125C7.795 1.875 7.375 2.295 7.375 2.8125V5.72834M13.625 14.375H8.3125C8.06386 14.375 7.8254 14.2762 7.64959 14.1004C7.47377 13.9246 7.375 13.6861 7.375 13.4375V5.72834M17.375 11.25V9.6875C17.375 8.94158 17.0787 8.22621 16.5512 7.69876C16.0238 7.17132 15.3084 6.875 14.5625 6.875H13.3125C13.0639 6.875 12.8254 6.77623 12.6496 6.60041C12.4738 6.4246 12.375 6.18614 12.375 5.9375V4.6875C12.375 4.31816 12.3023 3.95243 12.1609 3.6112C12.0196 3.26998 11.8124 2.95993 11.5512 2.69876C11.2901 2.4376 10.98 2.23043 10.6388 2.08909C10.2976 1.94775 9.93184 1.875 9.5625 1.875H8.625"
-                    stroke="white"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                Select photos
-                {/* <input
-                  type="file"
-                  className="ip-file"
-                  accept="image/*"
-                  multiple
-                  onChange={(e) => handleImageChange(e, images.length)}
-                /> */}
-                <input
-                  type="file"
-                  className="ip-file"
-                  accept="image/*"
-                  multiple
-                  max={10 - images.length}
-                  disabled={images.length >= 10}
-                  onChange={(e) => handleImageChange(e)}
-                />
-              </a>
-              <p className="file-name fw-5">
-                or drag photos here <br />
-                <span>(Up to {10 - images.length} photos)</span>
-              </p>
-            </div>
-          </div>
-          <div className="box-img-upload">
-            {images.map((img, index) => (
-              <div key={index} className="item-upload file-delete">
-                <img alt={`Uploaded preview ${index + 1}`} src={img.preview} width={615} height={405} />
-                <span
-                  className="icon icon-trash remove-file"
-                  onClick={() => handleDelete(index)}
-                />
-              </div>
-            ))}
-          </div>
+        <div className="button-show-hide" style={{marginTop:'0px',display:'flex'}}>
+          <h3 className="body-1" style={{color:'#000',padding:'20px 0',fontWeight:'600'}}>Add Property</h3>
         </div>
+     
         {!editData?.length > 0 && (
           <div className="widget-box-2 mb-20">
             <div className="box-price-property">
@@ -866,6 +817,72 @@ export default function AddProperty() {
 
             </div>
           )}
+        </div>
+        <div className="widget-box-2 mb-20">
+          <h5 className="title">Upload Media</h5>
+          <div className="box-uploadfile text-center">
+            <div
+              className="uploadfile"
+              style={
+                isDragging
+                  ? { borderStyle: "solid", backgroundColor: "#f2f3f4" }
+                  : {}
+              }
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+            >
+              <a href="#" className="btn-upload tf-btn primary">
+                <svg
+                  width={21}
+                  height={20}
+                  viewBox="0 0 21 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13.625 14.375V17.1875C13.625 17.705 13.205 18.125 12.6875 18.125H4.5625C4.31386 18.125 4.0754 18.0262 3.89959 17.8504C3.72377 17.6746 3.625 17.4361 3.625 17.1875V6.5625C3.625 6.045 4.045 5.625 4.5625 5.625H6.125C6.54381 5.62472 6.96192 5.65928 7.375 5.72834M13.625 14.375H16.4375C16.955 14.375 17.375 13.955 17.375 13.4375V9.375C17.375 5.65834 14.6725 2.57417 11.125 1.97834C10.7119 1.90928 10.2938 1.87472 9.875 1.875H8.3125C7.795 1.875 7.375 2.295 7.375 2.8125V5.72834M13.625 14.375H8.3125C8.06386 14.375 7.8254 14.2762 7.64959 14.1004C7.47377 13.9246 7.375 13.6861 7.375 13.4375V5.72834M17.375 11.25V9.6875C17.375 8.94158 17.0787 8.22621 16.5512 7.69876C16.0238 7.17132 15.3084 6.875 14.5625 6.875H13.3125C13.0639 6.875 12.8254 6.77623 12.6496 6.60041C12.4738 6.4246 12.375 6.18614 12.375 5.9375V4.6875C12.375 4.31816 12.3023 3.95243 12.1609 3.6112C12.0196 3.26998 11.8124 2.95993 11.5512 2.69876C11.2901 2.4376 10.98 2.23043 10.6388 2.08909C10.2976 1.94775 9.93184 1.875 9.5625 1.875H8.625"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                Select photos
+                {/* <input
+                  type="file"
+                  className="ip-file"
+                  accept="image/*"
+                  multiple
+                  onChange={(e) => handleImageChange(e, images.length)}
+                /> */}
+                <input
+                  type="file"
+                  className="ip-file"
+                  accept="image/*"
+                  multiple
+                  max={10 - images.length}
+                  disabled={images.length >= 10}
+                  onChange={(e) => handleImageChange(e)}
+                />
+              </a>
+              <p className="file-name fw-5">
+                or drag photos here <br />
+                <span>(Up to {10 - images.length} photos)</span>
+              </p>
+            </div>
+          </div>
+          <div className="box-img-upload">
+            {images?.map((img, index) => (
+              <div key={index} className="item-upload file-delete">
+                <img alt={`Uploaded preview ${index + 1}`} src={img.preview} width={615} height={405} />
+                <span
+                  className="icon icon-trash remove-file"
+                  onClick={() => handleDelete(index)}
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* <div className="widget-box-2 mb-20">

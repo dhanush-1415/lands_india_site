@@ -18,7 +18,6 @@ export default function PropertyDetailsPageV1() {
 
   const [propertyData, setPropertyData] = useState([]);
 
-  console.log(propertyData, "ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp")
 
   useEffect(() => {
     const fetchData = async () => {

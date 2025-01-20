@@ -464,141 +464,145 @@ export default function Properties() {
 
 
   const [wishListList, setWishListList] = useState([]);
-const [properties, setProperties] = useState([]);
-const [selectedCategory, setSelectedCategory] = useState();
-const [wishlistLoaded, setWishlistLoaded] = useState(false); // Track if wishlist has been loaded
+  const [properties, setProperties] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState();
+  const [wishlistLoaded, setWishlistLoaded] = useState(false); // Track if wishlist has been loaded
 
-const displayedProperties = (() => {
-  const maxCount = 8;
-  const slicedProperties = properties.slice(0, maxCount);
+  const displayedProperties = (() => {
+    const maxCount = 8;
+    const slicedProperties = properties.slice(0, maxCount);
 
-  if (slicedProperties.length < maxCount && slicedProperties.length % 2 === 0) {
-    slicedProperties.pop();
-  }
+    if (slicedProperties.length < maxCount && slicedProperties.length % 2 === 0) {
+      slicedProperties.pop();
+    }
 
-  return slicedProperties;
-})();
+    return slicedProperties;
+  })();
 
-const fetchProperty = async () => {
-  try {
-    const filter = {
-      location: "",
-      minPrice: 0,
-      maxPrice: 0,
-      keyword: "",
-      category: selectedCategory || "",
-      subCategory: "",
-    };
-    const data = await getProperties(filter);
-    if (data.success) {
-      const combined = data.properties.map((property) => {
-        const propertyInputs = data.propertyInputs.filter(input => input.properties_postId === property.id);
+  const fetchProperty = async () => {
+    try {
+      const filter = {
+        location: "",
+        minPrice: 0,
+        maxPrice: 0,
+        keyword: "",
+        category: selectedCategory || "",
+        subCategory: "",
+      };
+      const data = await getProperties(filter);
+      if (data.success) {
+        const combined = data.properties.map((property) => {
+          const propertyInputs = data.propertyInputs.filter(input => input.properties_postId === property.id);
 
-        const inputsWithNames = propertyInputs.map((input) => {
-          const inputData = data.inputs.find(i => i.id === input.input_id);
+          const inputsWithNames = propertyInputs.map((input) => {
+            const inputData = data.inputs.find(i => i.id === input.input_id);
+            return {
+              ...input,
+              input_name: inputData ? inputData.input_name : '',
+              input_type: inputData ? inputData.input_type : '',
+              options: inputData ? inputData.options : [],
+            };
+          });
+
           return {
-            ...input,
-            input_name: inputData ? inputData.input_name : '',
-            input_type: inputData ? inputData.input_type : '',
-            options: inputData ? inputData.options : [],
+            ...property,
+            inputs: inputsWithNames,
+            isWishlist: wishListList.includes(property.id), // Add isWishlist
           };
         });
 
-        return {
-          ...property,
-          inputs: inputsWithNames,
-          isWishlist: wishListList.includes(property.id), // Add isWishlist
-        };
-      });
-      
 
-      setProperties(combined);
-    } else {
-      toast.error(data.message);
-    }
-  } catch (err) {
-    console.error('Error fetching properties:', err);
-  }
-};
-
-const fetchWishlist = async () => {
-  const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
-
-  if (landsUser) {
-    try {
-      const data = await getUserWishList(landsUser.id);
-
-      if (data.success) {
-        setWishListList(data.wishList);
-        setWishlistLoaded(true); // Mark wishlist as loaded
+        setProperties(combined);
       } else {
         toast.error(data.message);
       }
     } catch (err) {
-      console.error('Error fetching wishlist:', err);
+      console.error('Error fetching properties:', err);
     }
-  }
-};
+  };
 
-useEffect(() => {
-  fetchWishlist();
-}, []);
+  const fetchWishlist = async () => {
+    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
-useEffect(() => {
-  if (wishlistLoaded) {
-    fetchProperty(); // Fetch properties only after wishlist has been loaded
-  }
-}, [wishlistLoaded, selectedCategory]);
+    if (landsUser) {
+      try {
+        const data = await getUserWishList(landsUser.id);
 
-const handleWishlist = async (elm, act) => {
-  const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
-
-  if (landsUser) {
-    const payLoad = {
-      userId: landsUser.id,
-      propertyId: elm.id,
-      action: act, // Adjust the action based on your requirements
-    };
-
-    try {
-      const data = await updateWishlist(payLoad);
-      if (data.success) {
-        toast.success(data.message);
-
-        const updatedWishList = await getUserWishList(landsUser.id);
-        if (updatedWishList.success) {
-          setWishListList(updatedWishList.wishList);
+        if (data.success) {
+          setWishListList(data.wishList);
+          setWishlistLoaded(true); // Mark wishlist as loaded
+        } else {
+          toast.error(data.message);
         }
-      } else {
-        toast.error(data.message);
+      } catch (err) {
+        console.error('Error fetching wishlist:', err);
       }
-    } catch (err) {
-      console.error('Error updating wishlist:', err);
     }
-  } else {
-    toast.error("Please Login to Continue");
-  }
-};
+  };
+
+  useEffect(() => {
+    fetchWishlist();
+  }, []);
+
+  useEffect(() => {
+    if (wishlistLoaded) {
+      fetchProperty(); // Fetch properties only after wishlist has been loaded
+    }
+  }, [wishlistLoaded, selectedCategory]);
+
+  const handleWishlist = async (elm, act) => {
+    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+    if (landsUser) {
+      const payLoad = {
+        userId: landsUser.id,
+        propertyId: elm.id,
+        action: act, // Adjust the action based on your requirements
+      };
+
+      try {
+        const data = await updateWishlist(payLoad);
+        if (data.success) {
+          toast.success(data.message);
+
+          const updatedWishList = await getUserWishList(landsUser.id);
+          if (updatedWishList.success) {
+            setWishListList(updatedWishList.wishList);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      } catch (err) {
+        console.error('Error updating wishlist:', err);
+      }
+    } else {
+      toast.error("Please Login to Continue");
+    }
+  };
 
   const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const [propertyId, setPropertyId] = useState(null);
 
+  const handleClickOpen = (id) => {
+    setOpen(true);
+    setPropertyId(id);
+  };
 
   const handleClose = () => {
     setOpen(false);
+    setPropertyId(null);
   };
 
-const handleNavigation = (category) => {
-  setSelectedCategory(category);
-};
+
+  const handleNavigation = (category) => {
+    setSelectedCategory(category);
+  };
 
 
   return (
     <>
-      <EnquiryForm open={open} handleClose={handleClose} />
+      <EnquiryForm open={open} handleClose={handleClose} id={propertyId} />
       <style>
         {`
           .list-header-custom {
@@ -731,7 +735,7 @@ const handleNavigation = (category) => {
                                 />
                               </svg>
                               {
-                                elm.inputs.find(item => item.input_name === "location")?.input_value || ""
+                                elm.inputs.find(item => item.input_name === "City")?.input_value || ""
                               }
                             </div>
                             {elm.isWishlist ? (
@@ -777,7 +781,7 @@ const handleNavigation = (category) => {
                                 className="link"
                               >
                                 {
-                                  elm.inputs.find(item => item.input_name === "title")?.input_value || ""
+                                  elm.inputs.find(item => item.input_name === "Title")?.input_value || ""
                                 }
                               </Link>
                             </h6>
@@ -800,7 +804,7 @@ const handleNavigation = (category) => {
                                 <i className="icon icon-sqft" style={{ fontSize: '20px' }} />
                                 <span className="text-variant-1">Sqft:</span>
                                 <span className="fw-6">{
-                                  elm.inputs.find(item => item.input_name === "sqft")?.input_value || ""
+                                  elm.inputs.find(item => item.input_name === "Total Sqft")?.input_value || ""
                                 }</span>
                               </li>
                             </ul>
@@ -808,7 +812,7 @@ const handleNavigation = (category) => {
                           <div className="content-bottom">
                             <h6 className="price">
                               ₹{
-                                elm.inputs.find(item => item.input_name === "price")?.input_value || ""
+                                elm.inputs.find(item => item.input_name === "Price")?.input_value || ""
                               }
                             </h6>
                             <div className="d-flex gap-8 align-items-center">
@@ -823,7 +827,7 @@ const handleNavigation = (category) => {
                           </div>
                           <div className="content-bottom mt-3">
                             <div
-                              onClick={handleClickOpen}
+                              onClick={() => { handleClickOpen(elm.id) }}
                               className="d-flex justify-content-center align-items-center shadow-sm mt-1"
                               style={{
                                 cursor: 'pointer',
