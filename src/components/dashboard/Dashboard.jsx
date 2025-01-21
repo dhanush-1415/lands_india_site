@@ -10,49 +10,62 @@ import { getUserCount } from "@/apiCalls";
 
 export default function Dashboard() {
 
-  const [data , setData ] = useState()
+  const [data, setData] = useState()
 
-    const fetchDashboard = async () => {
-      const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
-  
-      if (landsUser) {
-        try {
+  const fetchDashboard = async () => {
+    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
-          const data = await getUserCount(landsUser.id);
-  
-          if (data.success) {
-            setData(data);
-          } else {
-            toast.error(data.message || data.error || "Something Went Wrong")
-          }
-        } catch (err) {
-          console.error('Error fetching categories:', err);
+    if (landsUser) {
+      try {
+
+        const data = await getUserCount(landsUser.id);
+
+        if (data.success) {
+          setData(data);
+        } else {
+          toast.error(data.message || data.error || "Something Went Wrong")
         }
-      } else {
-        toast.error("Seller Not Found")
-        setTimeout(() => {
-          window.location.href = "/"
-        }, 4000);
+      } catch (err) {
+        console.error('Error fetching categories:', err);
       }
+    } else {
+      toast.error("Seller Not Found")
+      setTimeout(() => {
+        window.location.href = "/"
+      }, 4000);
     }
+  }
 
-    useEffect(()=>{
-      fetchDashboard();
-    },[])
-  
+  useEffect(() => {
+    fetchDashboard();
+  }, [])
+
 
   return (
-    <div className="main-content" style={{width:'100%'}}>
+    <div className="main-content" style={{ width: '100%' }}>
+      <style>{`
+        @media (min-width: 800px) {
+          .custom-header-text {
+            display: none;
+          }
+        }
+        @media (max-width: 798px) {
+      
+          .main-content{
+            width: 100%
+          }
+        }
+      `}</style>
       <div className="main-content-inner">
-        <div className="button-show-hide show-mb">
-          <span className="body-1">Show Menu</span>
+        <div className="button-show-hide show-mb custom-header-text">
+          <span>Show Menu</span>
         </div>
-        
-        <div className="button-show-hide" style={{marginTop:'0px',display:'flex'}}>
-          <h3 className="body-1" style={{color:'#000',padding:'20px 0',fontWeight:'600'}}>My Dashboard</h3>
+
+        <div className="button-show-hide" style={{ marginTop: '0px', display: 'flex' }}>
+          <h3 className="body-1" style={{ color: '#000', padding: '20px 0', fontWeight: '600' }}>My Dashboard</h3>
         </div>
         <div className="flat-counter-v2 tf-counter">
-          
+
           <div className="counter-box">
             <div className="box-icon">
               <span className="icon icon-listing" />

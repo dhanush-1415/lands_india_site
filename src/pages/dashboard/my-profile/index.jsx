@@ -97,6 +97,10 @@ const MyProfilePage = () => {
 
         .main-content {
           overflow-y: auto;
+                    background:#f0f3f4;
+        }
+                     .custom-side{
+          background:#ffffff;
         }
 
         .menu-item:hover span {
@@ -126,7 +130,26 @@ const MyProfilePage = () => {
       <div className="layout-wrap custom-mobile-class">
         {/* <Header1 /> */}
         <SidebarMenu />
-        <Dashboard />
+        {activePage === "Dashboard" ? (
+          <Dashboard />
+        ) : activePage === "add-property" ? (
+          <AddProperty />
+        ) : activePage === "my-profile" ? (
+          <MyProfile />
+        ) : activePage === "my-property" ? (
+          <MyProperty />
+        ) : activePage === "my-favourites" ? (
+          <MyFavorite />
+        ) : activePage === "my-requests" ? (
+          <Messages />
+        ) : (
+          <>
+            <h2>{activePage}</h2>
+            <p>
+              This is the {activePage} page content. Update this section dynamically based on the selected menu item.
+            </p>
+          </>
+        )}
         <div className="overlay-dashboard" />
       </div>
       <div className="d-flex vh-100 custom-desktop-class">
@@ -136,11 +159,10 @@ const MyProfilePage = () => {
           style={{
             width: isCollapsed ? "80px" : "250px",
             transition: "width 0.3s",
-            boxShadow: "2px 0 5px rgba(0, 0, 0, 0.1)",
             position: 'sticky'
           }}
         >
-          <div className="d-flex flex-column align-items-center py-3 h-100">
+          <div className="d-flex flex-column align-items-center py-3 h-100 custom-side">
 
             <div className="flex-grow-1 w-100">
               {finalMenuItems.map((item) => (
@@ -173,6 +195,7 @@ const MyProfilePage = () => {
             borderRadius: "8px",
             margin: "16px",
             scrollbarWidth: 'none',
+            background:'#f0f3f4',
           }}
         >
           <div className="layout-wrap">

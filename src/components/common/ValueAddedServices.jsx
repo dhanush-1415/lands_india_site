@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Divider } from "@mui/material";
 import { Button } from "react-bootstrap";
-import { getValueAddedServiceList } from "@/apiCalls";
+import { getValueAddedServiceList, getAllLocation } from "@/apiCalls";
 import DropdownSelect from "./DropdownSelect";
 
 import Pagination from "./Pagination";
@@ -16,10 +16,55 @@ export default function ValueAddedServices() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sorted, setSorted] = useState();
   const [itemPerPage, setItemPerPage] = useState(9);
+  const [isLogged, setIsLogged] = useState(false);
+  const [location, setLocation] = useState(null);
+  const [service, setService] = useState(null);
+  const [page, setPage] = useState(1)
+
+  const [AllLocation, setAllLocations] = useState([]);
+
+  const fetchLocation = async () => {
+    try {
+      const data = await getAllLocation();
+
+      if (data.success) {
+        const formattedLocations = data.locations
+          .filter(location => location)
+          .map((location, index) => ({
+            id: index + 1,
+            name: location.trim(),
+          }));
+
+        setAllLocations(formattedLocations);
+        console.log(formattedLocations);
+      } else {
+        // toast.error(data.message);
+      }
+    } catch (err) {
+      console.error('Error fetching Location:', err);
+    }
+  };
+
+  useEffect(() => {
+    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+    if (landsUser) {
+      setIsLogged(true)
+    } else {
+      setIsLogged(false)
+    }
+  }, [])
 
   const fetchServices = async () => {
     try {
-      const data = await getValueAddedServiceList();
+
+      const filter = {
+        page: page || 1,
+        location: location || "",
+        service: service || ""
+      };
+
+
+      const data = await getValueAddedServiceList(filter);
       if (data.success) {
         setData(data.data)
       } else {
@@ -32,7 +77,28 @@ export default function ValueAddedServices() {
 
   useEffect(() => {
     fetchServices();
-  }, []);
+  }, [page, location, service]);
+
+  useEffect(() => {
+    fetchLocation()
+  }, [])
+
+  const realEstateServices = [
+    { id: 1, name: "Advocate & Auditor" },
+    { id: 2, name: "Investor (Project Invest)" },
+    { id: 3, name: "Reseller (Short Term Invest)" },
+    { id: 4, name: "Bankers/Loan Provider" },
+    { id: 5, name: "Builder/Construction" },
+    { id: 6, name: "Interior" },
+    { id: 7, name: "Civil Engineer/Architect" },
+    { id: 8, name: "Plumbing & Electrical" },
+    { id: 9, name: "Flooring" },
+    { id: 10, name: "Approval Services" },
+    { id: 11, name: "Building Valuation" },
+    { id: 12, name: "Digital Security System" },
+    { id: 13, name: "Landscaping" }
+  ];
+
 
   return (
     <>
@@ -56,42 +122,41 @@ export default function ValueAddedServices() {
             <h4>Value Added Services</h4>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div className="d-flex custom-aligner align-items-center justify-content-between" style={{ background: '#ffffff', padding: '10px 20px', marginTop: '-40px', boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", width: '70%' }}>
-            <div>
-              <h5>Enhance Effeciency and Achieve More With Our Extra Services.</h5>
-            </div>
-            <div>
-              <button style={{ backgroundColor: "rgb(0, 143, 247)", border: 'none', padding: '15px', color: '#ffffff', fontWeight: 'bold' }} >Register Now</button>
+        {!isLogged && (
+
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="d-flex custom-aligner align-items-center justify-content-between" style={{ background: '#ffffff', padding: '10px 20px', marginTop: '-40px', boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", width: '70%' }}>
+              <div>
+                <h5>Enhance Effeciency and Achieve More With Our Extra Services.</h5>
+              </div>
+              <div>
+                <button style={{ backgroundColor: "rgb(0, 143, 247)", border: 'none', padding: '15px', color: '#ffffff', fontWeight: 'bold' }} >Register Now</button>
+              </div>
             </div>
           </div>
-        </div>
-
+        )}
 
 
         <div className="d-flex align-items-center justify-content-end container custom-container-header">
           <div style={{ width: '17%', marginTop: '2rem', marginRight: '2rem' }}>
             <DropdownSelect
-              style={{ borderRadius: '0', fontWeight: '700', border: 'none', borderBottom: '1px solid #e4e4e4' }}
-              // onChange={setSortingOption}
-              addtionalParentClass="list-sort"
-              options={[
-                "Location",
-                "Chennai",
-                "Trichy",
-              ]}
+              options={["Location", ...(AllLocation?.map((item) => item.name) || [])]} // Prepend "All" to the options
+              onChange={(location) => {
+                const item = AllLocation.find((cat) => cat.name === location);
+                setLocation(item.name);
+              }}
+              style={{ border: 'none', borderBottom: '1px solid gray', borderRadius: '0' }}
             />
 
           </div>
-          <div style={{ width: '17%', marginTop: '2rem', marginRight: '6px' }}>
+          <div style={{ width: '25%', marginTop: '2rem', marginRight: '6px' }}>
             <DropdownSelect
-              style={{ borderRadius: '0', fontWeight: '700', border: 'none', borderBottom: '1px solid #e4e4e4' }}
-              // onChange={setSortingOption}
-              addtionalParentClass="list-sort"
-              options={[
-                "Professional",
-                "Realestate broker"
-              ]}
+              options={["professional", ...(realEstateServices?.map((item) => item.name) || [])]} // Prepend "All" to the options
+              onChange={(service) => {
+                const item = realEstateServices.find((cat) => cat.name === service);
+                setService(item.name);
+              }}
+              style={{ border: 'none', borderBottom: '1px solid gray', borderRadius: '0' }}
             />
 
           </div>
@@ -105,20 +170,20 @@ export default function ValueAddedServices() {
         </div> */}
           <div className="swiper tf-sw-mobile-1 non-swiper-on-575" style={{ overflow: 'visible', padding: '0px 20px' }}>
             <div className="tf-layout-mobile-sm xl-col-4 sm-col-2 swiper-wrapper">
-              {data?.length && data.map((agent) => (
+              {data?.length ? data.map((agent) => (
                 <SwiperSlide key={agent.id} className="swiper-slide">
                   <div
                     className="box-agent hover-img wow fadeInUp"
-                    style={{  padding: '20px', boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", gap: '10px', borderRadius: '3px' }} // WOW.js animation delay
+                    style={{ padding: '20px', boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", gap: '10px', borderRadius: '3px' }} // WOW.js animation delay
                   >
                     <a href="#" className="box-img img-style" style={{ borderRadius: '0px' }}>
                       <img
                         className="lazyload mh-100"
-                        data-src={agent.imgSrc}
+                        data-src={agent.image}
                         alt={`image-agent-${agent.name}`}
-                        src={agent.imageURL}
+                        src={agent.image}
                         // width={450}
-                        style={{ maxHeight: '350px !importent',minHeight:'350px !important', borderRadius: '3px' }}
+                        style={{ maxHeight: '350px !importent', minHeight: '350px !important', borderRadius: '3px' }}
                       />
                     </a>
                     <div className="content justify-content-center">
@@ -146,7 +211,9 @@ export default function ValueAddedServices() {
                     </div>
                   </div>
                 </SwiperSlide>
-              ))}
+              )):(
+                <></>
+              )}
             </div>
             <div className="sw-pagination spb3 sw-pagination-mb-1 text-center d-sm-none d-block" />
           </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import AppBar from '@mui/material/AppBar';
@@ -30,16 +30,22 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function EnquiryForm({ open, handleClose, id }) {
-    const [formData, setFormData] = useState({
+    const initialFormData = useMemo(() => ({
         name: '',
         phone: '',
         email: '',
         message: '',
+        userId: '',
         userType: '',
         status: 'active',
-        isProperty:true,
-        propertyId:id,
-    });
+        isProperty: true,
+        propertyId: id,
+    }), [id]);
+
+    const [formData, setFormData] = useState(initialFormData);
+
+
+    console.log(formData, id, "pppppppppppppppppppppppppppppppppppp")
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -51,21 +57,23 @@ export default function EnquiryForm({ open, handleClose, id }) {
 
 
     useEffect(() => {
-        const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+        const landsUser = JSON.parse(localStorage.getItem('LandsUser') || '{}');
 
         if (landsUser) {
             setFormData({
-                name: landsUser.fullName,
+                name: landsUser.fullName || '',
                 phone: landsUser.phone || '',
                 email: landsUser.email || '',
-                userType: landsUser.type,
-                message: "",
+                userType: landsUser.type || '',
+                userId: landsUser.id || '',
+                message: '',
                 status: 'active',
-                isProperty:true,
-                propertyId:id,
-            })
+                isProperty: true,
+                propertyId: id, // Always use the latest id
+            });
         }
-    }, [])
+    }, [id]);
+
 
     const handleSubmit = async () => {
         // Perform form validation if needed
@@ -96,7 +104,7 @@ export default function EnquiryForm({ open, handleClose, id }) {
             console.error('Error fetching categories:', err);
         }
 
-    
+
     };
 
     return (
@@ -110,18 +118,28 @@ export default function EnquiryForm({ open, handleClose, id }) {
                 <AppBar
                     sx={{
                         position: 'sticky',
-                        background: '#f5f5f5',
+                        background: '#ffffff',
                         boxShadow: 'none',
-                        borderBottom: '1px solid #ddd',
+                        borderBottom: 'none',
+                        padding: '50px 0px 0px'
                     }}
                 >
                     <Toolbar>
-                        <Typography
-                            variant="h6"
-                            sx={{ flexGrow: 1, color: '#333', textAlign: 'center', fontWeight: 'bold' }}
-                        >
-                            Enquiry Form
-                        </Typography>
+                        <Grid sx={{ flexGrow: 1, color: '#333', textAlign: 'center', fontWeight: 'bold' }}>
+                            <Typography
+                                variant="h6"
+                                sx={{ flexGrow: 1, color: '#333', textAlign: 'center', fontWeight: 'bold' }}
+                            >
+                                Property Enquiry
+                            </Typography>
+                            <Typography
+                                variant="caption"
+                                sx={{ flexGrow: 1, color: '#333', textAlign: 'center', fontWeight: 'bold' }}
+                            >
+                                Fill out the form below, and our support team will contact you shortly.
+                            </Typography>
+                        </Grid>
+
                         <IconButton
                             edge="end"
                             onClick={handleClose}
@@ -138,8 +156,9 @@ export default function EnquiryForm({ open, handleClose, id }) {
                         justifyContent: 'center',
                         alignItems: 'center',
                         height: '100%',
-                        backgroundColor: '#fafafa',
-                        padding: '20px',
+                        backgroundColor: '#ffffff',
+                        marginTop: '-10px',
+                        padding: '0px 20px 20px ',
                     }}
                 >
                     <Grid

@@ -3,7 +3,7 @@ import CollectionsIcon from '@mui/icons-material/Collections';
 
 export default function Slider1({ data }) {
   // Split the file_path string into an array of image URLs
-  const filePaths = data[0]?.file_path || "";
+  const filePaths = data && data[0]?.file_path || "";
   const imageItems = filePaths.split(',');
 
   return (

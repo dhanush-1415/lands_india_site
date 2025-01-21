@@ -136,9 +136,9 @@ const Franchise = () => {
                       <a href="#" className="box-img img-style" style={{ borderRadius: '0px' }}>
                         <img
                           className="lazyload mh-100"
-                          data-src={agent.imageURLs[0]} // Access the first image URL
+                          data-src={agent.image} // Access the first image URL
                           alt={`image-agent-${agent.name}`}
-                          src={agent.imageURLs[0] || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8d4F3Lf3kbFIFSGu6BSqqThC9vsueKd7a_w&s"}
+                          src={agent.image || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8d4F3Lf3kbFIFSGu6BSqqThC9vsueKd7a_w&s"}
                           style={{ minHeight: '140px', maxHeight: '140px' }}
                         />
 
@@ -167,7 +167,7 @@ const Franchise = () => {
                           <p style={{ marginBottom: '7px' }} className="text-variant-1">{agent.gender}</p>
                           <div style={{ marginBottom: '7px', alignItems: 'flex-end' }} className='d-flex'>
                             <WifiCalling3Icon />
-                            <span style={{ fontWeight: 'bold' }}>+91 {agent.phone_number}</span>
+                            <span style={{ fontWeight: 'bold' }}>+91 9363828393</span>
                           </div>
                           <div style={{ marginBottom: '7px', alignItems: 'flex-end' }} className='d-flex'>
                             <PinDropIcon />
@@ -277,13 +277,14 @@ const Franchise = () => {
                   </Form.Group>
 
                   <Form.Group className="mb-3" controlId="formFiles">
-                    <Form.Label>Upload File</Form.Label>
+                    <Form.Label>Upload Profile Image</Form.Label>
                     <Form.Control
                       type="file"
                       name="files"
                       onChange={handleFileChange}
                       style={{ borderRadius: '0px' }}
                     />
+                    <Form.Label style={{color:'gray'}}>Size (100 x 100)</Form.Label>
                     {errors.files && <div className="text-danger">{errors.files}</div>}
                   </Form.Group>
 

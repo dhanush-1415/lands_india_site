@@ -327,6 +327,7 @@
 // }
 
 
+
 import React from 'react';
 import { Box, Grid, Typography, Button, Link, IconButton, Divider } from '@mui/material';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -360,6 +361,11 @@ const Footer1 = () => {
 
   return (
     <Grid sx={{ backgroundColor: '#1c1c1e', color: '#fff' }}>
+      <style>{`
+        .custom-icon-btn{
+          border-radius: 50% !important 
+        }
+      `}</style>
       <Box sx={{ py: 5, width: { xs: '85%', sm: '85%', md: '90%' }, margin: '0px auto' }}>
         <Grid container sx={{ justifyContent: { xs: 'space-between' } }}>
           <Grid container sx={{ justifyContent: { xs: 'space-between' }, margin: '50px 0' }}>
@@ -387,7 +393,7 @@ const Footer1 = () => {
                     </Typography>
                   </Box>
                 </Grid>
-                <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center',cursor:'pointer' }}>
+                <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' }}>
                   <Grid>
                     <Grid onClick={() => { handleNavigation('support') }} container justifyContent='space-between' flexDirection="row" sx={{ backgroundColor: '#343434', borderRadius: '5px', boxShadow: " rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", marginBottom: '-20px', padding: '10px 20px' }} >
                       <Grid>
@@ -428,7 +434,7 @@ const Footer1 = () => {
 
                   </Box>
                 </Grid>
-                <Grid onClick={() => { handleNavigation('add-property') }} container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', cursor:'pointer'  }}>
+                <Grid onClick={() => { handleNavigation('add-property') }} container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' }}>
                   <Grid>
                     <Grid container justifyContent='space-between' flexDirection="row" sx={{ backgroundColor: '#343434', borderRadius: '5px', boxShadow: " rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", marginBottom: '-20px', padding: '10px 20px' }} >
                       <Grid>
@@ -451,7 +457,7 @@ const Footer1 = () => {
           </Grid>
 
           {/* Bottom Section */}
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={4} style={{ paddingRight: '3%' }}>
             <Typography variant="h6" gutterBottom color='#ffffff' fontWeight='bold'>
               Office Address
             </Typography>
@@ -459,7 +465,7 @@ const Footer1 = () => {
               Corporate office:
             </Typography>
             <Typography variant="body2" fontWeight='bold'>
-              #59 Dharga Road, Zamin pallavaram, Chennai-600043 
+              #59 Dharga Road, Zamin pallavaram, Chennai-600043
             </Typography>
             <Typography variant="body2" fontWeight='bold' color='gray' sx={{ mt: 3 }}>
               Dubai office:
@@ -525,7 +531,7 @@ const Footer1 = () => {
               Group Of Companies
             </Typography>
             <Link href="#" color="inherit" underline="hover" variant="body2" display="block" sx={{ mt: 3 }}>
-              <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />LIP Properties pvt ltd 
+              <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />LIP Properties pvt ltd
             </Link>
             <Link href="#" color="inherit" underline="hover" variant="body2" display="block">
               <KeyboardArrowRightIcon sx={{ fontSize: '20px' }} />Modern Tourism Network
@@ -563,9 +569,11 @@ const Footer1 = () => {
               Privacy Policy
             </Link>
           </Box>
-          <Box sx={{ display: 'flex', gap: 2 }}>
+          <Box sx={{ display: 'flex', gap: 2 }} >
             <IconButton
+            onClick={() => window.open("https://www.facebook.com/Propertystoretamilnadu", "_blank")}
               color="inherit"
+              className="custom-icon-btn"
               sx={{
                 border: '1px solid gray',
                 borderRadius: '50%',
@@ -581,9 +589,10 @@ const Footer1 = () => {
               <FaFacebookF sx={{ fontSize: '20px', color: '#3b5998' }} />
             </IconButton>
 
-            
             <IconButton
+            onClick={() => window.open("https://www.instagram.com/propertystores.inn?igsh=MWJ6dGpyYjdkeW85MQ==", "_blank")}
               color="inherit"
+              className="custom-icon-btn"
               sx={{
                 border: '1px solid gray',
                 borderRadius: '50%',
@@ -600,13 +609,15 @@ const Footer1 = () => {
             </IconButton>
 
             <IconButton
+            onClick={() => window.open("https://youtube.com/@propertystores?si=MTo4RyhPr92IeOrF", "_blank")}
+            className="custom-icon-btn"
               color="inherit"
               sx={{
                 border: '1px solid gray',
                 borderRadius: '50%',
                 padding: 1,
                 '&:hover': {
-                  backgroundColor: '#0077b5',
+                  backgroundColor: '#ff0033',
                   '& svg': {
                     color: 'white',
                   },
@@ -617,7 +628,9 @@ const Footer1 = () => {
             </IconButton>
 
             <IconButton
+            onClick={() => window.open("https://www.linkedin.com/company/propertystores-in/", "_blank")}
               color="inherit"
+              className="custom-icon-btn"
               sx={{
                 border: '1px solid gray',
                 borderRadius: '50%',
@@ -633,7 +646,6 @@ const Footer1 = () => {
               <FaLinkedinIn sx={{ fontSize: '20px', color: '#0077b5' }} />
             </IconButton>
 
-            
 
           </Box>
 

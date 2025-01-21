@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Divider } from "@mui/material";
 import { Button } from "react-bootstrap";
-import { getAgents } from "@/apiCalls";
+import { getAgents, getAllLocation } from "@/apiCalls";
 
 import Pagination from "./Pagination";
 import DropdownSelect from "./DropdownSelect";
@@ -18,24 +18,56 @@ export default function Agents() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sorted, setSorted] = useState();
   const [itemPerPage, setItemPerPage] = useState(9);
-  const [location, setLocation] = useState("Location");
-  const [service , setService ] = useState("Service");
-  const [isLogged , setIsLogged ] = useState(false);
+  const [location, setLocation] = useState(null);
+  const [service, setService] = useState(null);
+  const [isLogged, setIsLogged] = useState(false);
+  const [page, setPage] = useState(1)
 
-  console.log(data, "ppppppppppppppppppp")
+  const [AllLocation, setAllLocations] = useState([]);
 
-  useEffect(()=>{
+  const fetchLocation = async () => {
+    try {
+      const data = await getAllLocation();
+
+      if (data.success) {
+        const formattedLocations = data.locations
+          .filter(location => location)
+          .map((location, index) => ({
+            id: index + 1,
+            name: location.trim(),
+          }));
+
+        setAllLocations(formattedLocations);
+        console.log(formattedLocations);
+      } else {
+        // toast.error(data.message);
+      }
+    } catch (err) {
+      console.error('Error fetching Location:', err);
+    }
+  };
+
+
+  useEffect(() => {
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
-    if(landsUser){
+    if (landsUser) {
       setIsLogged(true)
-    }else{
+    } else {
       setIsLogged(false)
     }
-  },[])
+  }, [])
 
   const fetchAgents = async () => {
     try {
-      const data = await getAgents({ location, });
+
+      const filter = {
+        page: page || 1,
+        location: location || "",
+        service: service || ""
+      };
+
+
+      const data = await getAgents(filter);
       if (data.success) {
         setData(data.data)
       } else {
@@ -46,9 +78,14 @@ export default function Agents() {
     }
   };
 
+
   useEffect(() => {
     fetchAgents();
-  }, []);
+  }, [page, location, service]);
+
+  useEffect(() => {
+    fetchLocation()
+  }, [])
 
 
   const [open, setOpen] = useState(false);
@@ -61,67 +98,11 @@ export default function Agents() {
     setOpen(false);
   };
 
-
-  const AllLocation = [
-    { "id": 1, "name": "Ariyalur" },
-    { "id": 2, "name": "Chengalpattu" },
-    { "id": 3, "name": "Chennai" },
-    { "id": 4, "name": "Coimbatore" },
-    { "id": 5, "name": "Cuddalore" },
-    { "id": 6, "name": "Dharmapuri" },
-    { "id": 7, "name": "Dindigul" },
-    { "id": 8, "name": "Erode" },
-    { "id": 9, "name": "Kallakurichi" },
-    { "id": 10, "name": "Kancheepuram" },
-    { "id": 11, "name": "Karur" },
-    { "id": 12, "name": "Krishnagiri" },
-    { "id": 13, "name": "Madurai" },
-    { "id": 14, "name": "Mayiladuthurai" },
-    { "id": 15, "name": "Nagapattinam" },
-    { "id": 16, "name": "Kanyakumari" },
-    { "id": 17, "name": "Namakkal" },
-    { "id": 18, "name": "Perambalur" },
-    { "id": 19, "name": "Pudukkottai" },
-    { "id": 20, "name": "Ramanathapuram" },
-    { "id": 21, "name": "Ranipet" },
-    { "id": 22, "name": "Salem" },
-    { "id": 23, "name": "Sivaganga" },
-    { "id": 24, "name": "Tenkasi" },
-    { "id": 25, "name": "Thanjavur" },
-    { "id": 26, "name": "Theni" },
-    { "id": 27, "name": "Thiruvallur" },
-    { "id": 28, "name": "Thiruvarur" },
-    { "id": 29, "name": "Thoothukudi" },
-    { "id": 30, "name": "Tiruchirappalli" },
-    { "id": 31, "name": "Tirunelveli" },
-    { "id": 32, "name": "Tirupathur" },
-    { "id": 33, "name": "Tiruppur" },
-    { "id": 34, "name": "Tiruvannamalai" },
-    { "id": 35, "name": "The Nilgiris" },
-    { "id": 36, "name": "Vellore" },
-    { "id": 37, "name": "Viluppuram" },
-    { "id": 38, "name": "Virudhunagar" }
-  ]
-
-
   const realEstateServices = [
-    { id: 1, name: "Property Listing" },
-    { id: 2, name: "Real Estate Brokerage" },
-    { id: 3, name: "Property Management" },
-    { id: 4, name: "Home Inspection" },
-    { id: 5, name: "Real Estate Appraisal" },
-    { id: 6, name: "Mortgage Services" },
-    { id: 7, name: "Legal Assistance" },
-    { id: 8, name: "Interior Design and Staging" },
-    { id: 9, name: "Architectural Services" },
-    { id: 10, name: "Construction and Renovation" },
-    { id: 11, name: "Real Estate Photography" },
-    { id: 12, name: "Virtual Tours and 3D Modeling" },
-    { id: 13, name: "Title and Escrow Services" },
-    { id: 14, name: "Property Marketing" },
-    { id: 15, name: "Relocation Services" },
-  ];
-
+    { id: 1, name: "RealEstate Broker" },
+    { id: 2, name: "RealEstate Promoter" },
+    { id: 3, name: "RealEstate Marketer" }
+  ]
 
 
   return (
@@ -130,8 +111,15 @@ export default function Agents() {
       <section className="flat-section flat-agents" style={{ paddingTop: '0px' }}>
         <style>{`
       .custom-aligner{
-      width:60%;
-      }
+        width:60%;
+        }
+        .custom-drop{
+          width: 17%;
+          margin-right: 2rem;
+        }
+        .custom-img{
+          max-height:230px !important;
+        }
         .image-style {
           min-height: 320px !important;
           max-height: 320px !important;
@@ -144,6 +132,10 @@ export default function Agents() {
             gap:20px;
             width:100%;
           }
+          .custom-drop{
+            width: 107%;
+             margin-right:0;
+          }
         }
         `}
         </style>
@@ -153,38 +145,38 @@ export default function Agents() {
           </div>
         </div>
         {!isLogged && (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div className="d-flex custom-aligner align-items-center justify-content-between" style={{ background: '#ffffff', padding: '10px 20px', marginTop: '-40px', boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}>
-            <div>
-              <h5>Sign Up to Start Your Journey as a Top-Tire Agent</h5>
-            </div>
-            <div>
-              <button style={{ backgroundColor: "rgb(0, 143, 247)", border: 'none', padding: '15px', color: '#ffffff', fontWeight: 'bold' }} >Register As Agent</button>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="d-flex custom-aligner align-items-center justify-content-between" style={{ background: '#ffffff', padding: '10px 20px', marginTop: '-40px', boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}>
+              <div>
+                <h5>Sign Up to Start Your Journey as a Top-Tire Agent</h5>
+              </div>
+              <div>
+                <button style={{ backgroundColor: "rgb(0, 143, 247)", border: 'none', padding: '15px', color: '#ffffff', fontWeight: 'bold' }} >Register As Agent</button>
+              </div>
             </div>
           </div>
-        </div>
         )}
 
-        <div className="d-flex align-items-center justify-content-end container custom-container-header">
-          <div style={{ width: '17%', marginTop: '2rem', marginRight: '2rem' }}>
+        <div className="d-flex align-items-center justify-content-end container custom-container-header mt-5">
+          <div className="custom-drop">
             <DropdownSelect
               options={["Location", ...(AllLocation?.map((item) => item.name) || [])]} // Prepend "All" to the options
               onChange={(location) => {
                 const item = AllLocation.find((cat) => cat.name === location);
-                setLocation(item);
+                setLocation(item.name);
               }}
-              style={{border:'none',borderBottom:'1px solid gray', borderRadius:'0'}}
+              style={{ border: 'none', borderBottom: '1px solid gray', borderRadius: '0' }}
             />
 
           </div>
-          <div style={{ width: '22%', marginTop: '2rem', marginRight: '6px' }}>
+          <div className="custom-drop">
             <DropdownSelect
               options={["Service", ...(realEstateServices?.map((item) => item.name) || [])]} // Prepend "All" to the options
               onChange={(service) => {
                 const item = realEstateServices.find((cat) => cat.name === service);
-                setService(item);
+                setService(item.name);
               }}
-              style={{border:'none',borderBottom:'1px solid gray', borderRadius:'0'}}
+              style={{ border: 'none', borderBottom: '1px solid gray', borderRadius: '0' }}
             />
 
           </div>
@@ -204,12 +196,12 @@ export default function Agents() {
                     className="box-agent hover-img wow fadeInUp"
                     style={{ animationDelay: agent.wowDelay, padding: '20px', boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", gap: '10px', borderRadius: '3px' }} // WOW.js animation delay
                   >
-                    <a className="box-img img-style" style={{ borderRadius: '0px' }}>
+                    <a className="box-img img-style custom-img" style={{ borderRadius: '0px' }}>
                       <img
                         className="lazyload image-style"
-                        data-src={agent?.image[0] || ""}
+                        data-src={JSON.parse(agent?.image) || ""}
                         alt={`image-agent-${agent.name}`}
-                        src={agent?.image[0]}
+                        src={JSON.parse(agent?.image)}
                       />
 
                     </a>

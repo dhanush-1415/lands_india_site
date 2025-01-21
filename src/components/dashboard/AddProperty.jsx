@@ -18,7 +18,6 @@ export default function AddProperty() {
   const [location, setLocation] = useState('')
   const [price, setPrice] = useState('')
 
-  console.log(location, price, "ooooooooooooooooooooooooooooo")
 
   const handlePrevChange = (inputId, value, input_name) => {
 
@@ -74,7 +73,7 @@ export default function AddProperty() {
 
   const handlePrevSubmit = async () => {
 
-    if(!images.length){
+    if (!images.length) {
       toast.error("Please add Properties Images")
       return
     }
@@ -218,6 +217,8 @@ export default function AddProperty() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategoryId, setSelectedSubCategoryId] = useState(null);
   const [menuInputs, setMenuInputs] = useState();
+
+  console.log(menuInputs , "ggggggggggggggggggggg")
   const [formData, setFormData] = useState({});
 
 
@@ -283,11 +284,11 @@ export default function AddProperty() {
 
   const handleSubmit = async () => {
 
-    if(!images.length){
+    if (!images.length) {
       toast.error("Please add Properties Images")
       return
     }
-    
+
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
     if (landsUser) {
@@ -303,6 +304,7 @@ export default function AddProperty() {
           sellerId: landsUser.id,
           location: location,
           price: price,
+          mainMenuId: selectedCategory.id,
           images
         },
         PropertiesInput,
@@ -325,21 +327,37 @@ export default function AddProperty() {
       toast.error("Seller Not Found")
       setTimeout(() => {
         window.location.href = "/"
-      }, 4000);
+      }, 2000);
     }
 
   };
 
   return (
     <div className="main-content">
+      <style>{`
+        @media (min-width: 800px) {
+          .custom-header-text {
+            display: none;
+          }
+          .main-content{
+            width: 100%
+          }
+        }
+        @media (max-width: 798px) {
+      
+          .main-content{
+            width: 100%
+          }
+        }
+      `}</style>
       <div className="main-content-inner">
-        <div className="button-show-hide show-mb">
+        <div className="button-show-hide show-mb custom-header-text">
           <span className="body-1">Show Menu</span>
         </div>
-        <div className="button-show-hide" style={{marginTop:'0px',display:'flex'}}>
-          <h3 className="body-1" style={{color:'#000',padding:'20px 0',fontWeight:'600'}}>Add Property</h3>
+        <div className="button-show-hide" style={{ marginTop: '0px', display: 'flex' }}>
+          <h3 className="body-1" style={{ color: '#000', padding: '20px 0', fontWeight: '600' }}>Post Your Property</h3>
         </div>
-     
+
         {!editData?.length > 0 && (
           <div className="widget-box-2 mb-20">
             <div className="box-price-property">
@@ -595,7 +613,6 @@ export default function AddProperty() {
                 <div className="box grid-2 gap-30">
                   {menuInputs?.length && menuInputs.map((input, index) => {
                     const { id, input_name, input_type, options, required } = input;
-
                     let inputField = null;
                     switch (input_type) {
                       case "text":

@@ -158,7 +158,7 @@ export default function BottomCarousel() {
                             <p onClick={() => setActiveTab('upcoming')} style={{cursor:'pointer'}} >Upcoming Events</p>
                         </div>
                         <div className="custom-last-two">
-                            <p  onClick={() => setActiveTab('past')} style={{cursor:'pointer'}}>Past Events</p>
+                            <p onClick={() => {window.location.href = "/events"}} style={{cursor:'pointer'}}>Past Events</p>
                             < NorthEastIcon sx={{ margin: ' -5px 0px 0px 5px' }} />
                         </div>
                     </div>

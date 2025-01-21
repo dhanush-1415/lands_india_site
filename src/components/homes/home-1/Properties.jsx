@@ -11,6 +11,7 @@ import EnquiryForm from "@/components/common/Enquiry";
 import { getProperties, updateWishlist, getUserWishList } from "@/apiCalls";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import LocalParkingIcon from '@mui/icons-material/LocalParking';
 import { toast } from "react-toastify";
 
 export default function Properties() {
@@ -468,6 +469,16 @@ export default function Properties() {
   const [selectedCategory, setSelectedCategory] = useState();
   const [wishlistLoaded, setWishlistLoaded] = useState(false); // Track if wishlist has been loaded
 
+  useEffect(() => {
+    setProperties((prevProperties) =>
+      prevProperties.map((property) => ({
+        ...property,
+        isWishlist: wishListList.includes(property.id),
+      }))
+    );
+  }, [wishListList]);
+
+
   const displayedProperties = (() => {
     const maxCount = 8;
     const slicedProperties = properties.slice(0, maxCount);
@@ -488,6 +499,7 @@ export default function Properties() {
         keyword: "",
         category: selectedCategory || "",
         subCategory: "",
+        status: "Verified",
       };
       const data = await getProperties(filter);
       if (data.success) {
@@ -546,7 +558,7 @@ export default function Properties() {
 
   useEffect(() => {
     if (wishlistLoaded) {
-      fetchProperty(); // Fetch properties only after wishlist has been loaded
+      fetchProperty();
     }
   }, [wishlistLoaded, selectedCategory]);
 
@@ -563,8 +575,6 @@ export default function Properties() {
       try {
         const data = await updateWishlist(payLoad);
         if (data.success) {
-          toast.success(data.message);
-
           const updatedWishList = await getUserWishList(landsUser.id);
           if (updatedWishList.success) {
             setWishListList(updatedWishList.wishList);
@@ -585,8 +595,15 @@ export default function Properties() {
   const [propertyId, setPropertyId] = useState(null);
 
   const handleClickOpen = (id) => {
-    setOpen(true);
-    setPropertyId(id);
+
+    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+    if (landsUser) {
+      setOpen(true);
+      setPropertyId(id);
+    } else {
+      toast.info('Please Login to continue')
+    }
   };
 
   const handleClose = () => {
@@ -660,16 +677,16 @@ export default function Properties() {
             </div>
             <div className="d-flex gap-3 filter-list" style={{ fontWeight: 'bold', fontSize: '1rem' }}>
               <div className="custom-two">
-                <p style={{ cursor: 'pointer' }} onClick={() => { handleNavigation("residential") }}>Residential</p>
+                <p style={{ cursor: 'pointer' }} onClick={() => { handleNavigation("Residential") }}>Residential</p>
               </div>
               <div className="custom-two">
-                <p style={{ cursor: 'pointer' }} onClick={() => { handleNavigation("commercial") }}>Commercial</p>
+                <p style={{ cursor: 'pointer' }} onClick={() => { handleNavigation("Commercial") }}>Commercial</p>
               </div>
               <div className="custom-two">
                 <p style={{ cursor: 'pointer' }} onClick={() => { handleNavigation("land/plot") }}>Land & Plots</p>
               </div>
               <div className="custom-two">
-                <p style={{ cursor: 'pointer' }} onClick={() => { handleNavigation("projects") }}>Projects</p>
+                <p style={{ cursor: 'pointer' }} onClick={() => { handleNavigation("Projects") }}>Projects</p>
               </div>
               <div className="custom-two custom-last-two">
                 <p style={{ cursor: 'pointer' }} onClick={() => { window.location.href = "/properties/all" }}>See All Properties</p>
@@ -775,7 +792,7 @@ export default function Properties() {
 
                         <div className="archive-bottom" style={{ backgroundColor: '#ffffff' }}>
                           <div className="content-top">
-                            <h6 className="text-capitalize">
+                            {/* <h6 className="text-capitalize">
                               <Link
                                 to={`/property-details/${elm.id}`}
                                 className="link"
@@ -784,22 +801,31 @@ export default function Properties() {
                                   elm.inputs.find(item => item.input_name === "Title")?.input_value || ""
                                 }
                               </Link>
+                            </h6> */}
+                            <h6
+                              className="text-capitalize"
+                              style={{
+                                minHeight: "40px",
+                                maxHeight: "40px",
+                              }}
+                            >
+                              <Link
+                                to={`/property-details/${elm.id}`}
+                                className="link"
+                                style={{
+                                  display: "-webkit-box",
+                                  WebkitLineClamp: 2, // Number of lines to display before truncating
+                                  WebkitBoxOrient: "vertical",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                              >
+                                {elm.inputs.find((item) => item.input_name === "Title")?.input_value || ""}
+                              </Link>
                             </h6>
-                            <ul className="meta-list" style={{ paddingLeft: '0px' }}>
-                              <li className="item">
-                                <i className="icon icon-bed" style={{ fontSize: '20px' }} />
-                                <span className="text-variant-1">Beds:</span>
-                                <span className="fw-6">{
-                                  elm.inputs.find(item => item.input_name === "beds")?.input_value || ""
-                                }</span>
-                              </li>
-                              <li className="item">
-                                <i className="icon icon-bath" style={{ fontSize: '20px' }} />
-                                <span className="text-variant-1">Baths:</span>
-                                <span className="fw-6">{
-                                  elm.inputs.find(item => item.input_name === "baths")?.input_value || ""
-                                }</span>
-                              </li>
+
+
+                            <ul className="meta-list" style={{ paddingLeft: '0px', minHeight: '30px', maxHeight: '30px' }}>
                               <li className="item">
                                 <i className="icon icon-sqft" style={{ fontSize: '20px' }} />
                                 <span className="text-variant-1">Sqft:</span>
@@ -807,6 +833,35 @@ export default function Properties() {
                                   elm.inputs.find(item => item.input_name === "Total Sqft")?.input_value || ""
                                 }</span>
                               </li>
+                              {elm.main_menuId === 8 ? (
+                                <li className="item">
+                                  <LocalParkingIcon style={{ fontSize: '24px' }} />
+                                  <span className="text-variant-1">Parking:</span>
+                                  <span className="fw-6">{
+                                    elm.inputs.find(item => item.input_name === "Car Parking")?.input_value || ""
+                                  }</span>
+                                </li>
+                              ) : elm.main_menuId === 3 ? (
+                                <li className="item">
+                                  <i className="icon icon-sqft" style={{ fontSize: '20px' }} />
+                                  <span className="text-variant-1">Length:</span>
+                                  <span className="fw-6">{
+                                    elm.inputs.find(item => item.input_name === "Length")?.input_value || ""
+                                  }</span>
+                                </li>
+                              ) : elm.main_menuId === 1 ? (
+                                <li className="item">
+                                  <i className="icon icon-bed" style={{ fontSize: '20px' }} />
+                                  <span className="text-variant-1">Beds:</span>
+                                  <span className="fw-6">{
+                                    elm.inputs.find(item => item.input_name === "Bedrooms")?.input_value || ""
+                                  }</span>
+                                </li>
+                              ) : (
+
+
+                                <></>
+                              )}
                             </ul>
                           </div>
                           <div className="content-bottom">
