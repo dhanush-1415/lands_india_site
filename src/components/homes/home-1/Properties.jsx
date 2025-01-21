@@ -550,10 +550,16 @@ export default function Properties() {
         console.error('Error fetching wishlist:', err);
       }
     }
+    else {
+      fetchProperty();
+
+    }
   };
 
   useEffect(() => {
     fetchWishlist();
+    console.log("rrrrrrrrrrrr wissssssssssssss");
+    
   }, []);
 
   useEffect(() => {

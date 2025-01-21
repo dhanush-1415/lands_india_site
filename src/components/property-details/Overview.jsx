@@ -2,6 +2,9 @@ import React from "react";
 import { Grid } from "@mui/material";
 
 export default function Overview({ data }) {
+  
+  console.log("eeeeeeeeeeee", data);
+  
   return (
     <>
       <h5 className="mt-8 fw-6 title">Overview</h5>
@@ -43,17 +46,7 @@ export default function Overview({ data }) {
             </li>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={4}>
-            <li className="item">
-              <a className="box-icon w-52">
-                <i className="icon icon-bathtub" />
-              </a>
-              <div className="content">
-                <span className="label">Bathrooms:</span>
-                <span>2 Rooms</span>
-              </div>
-            </li>
-          </Grid>
+          
 
           <Grid item xs={12} sm={6} md={4}>
             <li className="item">
@@ -91,15 +84,28 @@ export default function Overview({ data }) {
             </li>
           </Grid> */}
 
+          <Grid item xs={12} sm={6} md={4}>
+            <li className="item">
+              <a className="box-icon w-52">
+                <i className="bx bx-bed" style={{fontSize: '26px'}} />
+              </a>
+              <div className="content">
+                <span className="label">BedRooms:</span>
+                  <span>{
+                      data[0].inputs.find(item => item.input_name === "Bedrooms")?.input_value || ""
+                    }</span>
+              </div>
+            </li>
+          </Grid>
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
                 <a className="box-icon w-52">
-                  <i className="bx bx-home"></i>
+                  <i className="bx bx-grid" style={{fontSize: '26px'}}></i>
                 </a>
                 <div className="content">
                   <span className="label">Floors:</span>
                   <span>{
-                      data[0].inputs.find(item => item.input_name === "floors")?.input_value || ""
+                      data[0].inputs.find(item => item.input_name === "Total Floors")?.input_value || ""
                     }</span>
                 </div>
               </li>
@@ -109,34 +115,47 @@ export default function Overview({ data }) {
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
                 <a className="box-icon w-52">
-                  <i className="bx bx-bath"></i>
+                  <i className="bx bx-bath" style={{fontSize: '26px'}}></i>
                 </a>
                 <div className="content">
                   <span className="label">Bathrooms:</span>
                   <span>{
-                      data[0].inputs.find(item => item.input_name === "baths")?.input_value || ""
+                      data[0].inputs.find(item => item.input_name === "Bathrooms")?.input_value || ""
                     }</span>
                 </div>
               </li>
             </Grid>
 
+            <Grid item xs={12} sm={6} md={4}>
+            <li className="item">
+              <a className="box-icon w-52">
+                <i className="bx bx-home" style={{fontSize: '26px'}}/>
+              </a>
+              <div className="content">
+                <span className="label">Builtup area:</span>
+                  <span>{
+                      data[0].inputs.find(item => item.input_name === "Builtup area (ft²)")?.input_value || ""
+                    }</span>
+              </div>
+            </li>
+          </Grid>
             {/* Furnished */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
                 <a className="box-icon w-52">
-                <i class='bx bx-chair' ></i>
+                <i class='bx bx-chair' style={{fontSize: '26px'}} ></i>
                 </a>
                 <div className="content">
                   <span className="label">Furnished:</span>
                   <span>{
-                      data[0].inputs.find(item => item.input_name === "furnished")?.input_value || ""
+                      data[0].inputs.find(item => item.input_name === "Furnishing")?.input_value || ""
                     }</span>
                 </div>
               </li>
             </Grid>
 
             {/* Floor Type */}
-            <Grid item xs={12} sm={6} md={4}>
+            {/* <Grid item xs={12} sm={6} md={4}>
               <li className="item">
                 <a className="box-icon w-52">
                   <i className="bx bx-grid"></i>
@@ -148,18 +167,18 @@ export default function Overview({ data }) {
                     }</span>
                 </div>
               </li>
-            </Grid>
+            </Grid> */}
 
             {/* Property Age */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
                 <a className="box-icon w-52">
-                  <i className="bx bx-time"></i>
+                  <i className="bx bx-time" style={{fontSize: '26px'}}></i>
                 </a>
                 <div className="content">
-                  <span className="label">Property Age:</span>
+                  <span className="label">Maintenance (Month):</span>
                   <span>{
-                      data[0].inputs.find(item => item.input_name === "age")?.input_value || ""
+                      data[0].inputs.find(item => item.input_name === "Maintenance (Month)")?.input_value || ""
                     }</span>
                 </div>
               </li>
@@ -169,19 +188,19 @@ export default function Overview({ data }) {
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
                 <a className="box-icon w-52">
-                  <i className="bx bx-car"></i>
+                  <i className="bx bx-car" style={{fontSize: '26px'}}></i>
                 </a>
                 <div className="content">
                   <span className="label">Car Parking:</span>
                   <span>{
-                      data[0].inputs.find(item => item.input_name === "parking")?.input_value || ""
+                      data[0].inputs.find(item => item.input_name === "Car Parking")?.input_value || ""
                     }</span>
                 </div>
               </li>
             </Grid>
 
             {/* Frontage */}
-            <Grid item xs={12} sm={6} md={4}>
+            {/* <Grid item xs={12} sm={6} md={4}>
               <li className="item">
                 <a className="box-icon w-52">
                   <i className="bx bx-ruler"></i>
@@ -193,25 +212,25 @@ export default function Overview({ data }) {
                     }</span>
                 </div>
               </li>
-            </Grid>
+            </Grid> */}
 
             {/* Facing */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
                 <a className="box-icon w-52">
-                  <i className="bx bx-compass"></i>
+                  <i className="bx bx-compass" style={{fontSize: '26px'}}></i>
                 </a>
                 <div className="content">
                   <span className="label">Facing:</span>
                   <span>{
-                      data[0].inputs.find(item => item.input_name === "facing")?.input_value || ""
+                      data[0].inputs.find(item => item.input_name === "Facing")?.input_value || ""
                     }</span>
                 </div>
               </li>
             </Grid>
 
             {/* EB Connection */}
-            <Grid item xs={12} sm={6} md={4}>
+            {/* <Grid item xs={12} sm={6} md={4}>
               <li className="item">
                 <a className="box-icon w-52">
                   <i class='bx bxs-plug' ></i>
@@ -223,10 +242,10 @@ export default function Overview({ data }) {
                     }</span>
                 </div>
               </li>
-            </Grid>
+            </Grid> */}
 
             {/* Has Solar */}
-            <Grid item xs={12} sm={6} md={4}>
+            {/* <Grid item xs={12} sm={6} md={4}>
               <li className="item">
                 <a className="box-icon w-52">
                   <i className="bx bx-sun"></i>
@@ -238,25 +257,25 @@ export default function Overview({ data }) {
                     }</span>
                 </div>
               </li>
-            </Grid>
+            </Grid> */}
 
             {/* Water */}
             <Grid item xs={12} sm={6} md={4}>
               <li className="item">
                 <a className="box-icon w-52">
-                  <i className="bx bx-water"></i>
+                  <i className="bx bx-water" style={{fontSize: '26px'}}></i>
                 </a>
                 <div className="content">
-                  <span className="label">Water:</span>
+                  <span className="label">Water Supply:</span>
                   <span>{
-                      data[0].inputs.find(item => item.input_name === "water")?.input_value || ""
+                      data[0].inputs.find(item => item.input_name === "Water supply")?.input_value || ""
                     }</span>
                 </div>
               </li>
             </Grid>
 
             {/* Compound */}
-            <Grid item xs={12} sm={6} md={4}>
+            {/* <Grid item xs={12} sm={6} md={4}>
               <li className="item">
                 <a className="box-icon w-52">
                   <i class='bx bx-border-outer'></i>
@@ -268,10 +287,10 @@ export default function Overview({ data }) {
                     }</span>
                 </div>
               </li>
-            </Grid>
+            </Grid> */}
 
             {/* Ceiling */}
-            <Grid item xs={12} sm={6} md={4}>
+            {/* <Grid item xs={12} sm={6} md={4}>
               <li className="item">
                 <a className="box-icon w-52">
                 <i class='bx bx-vertical-top'></i>
@@ -283,10 +302,10 @@ export default function Overview({ data }) {
                     }</span>
                 </div>
               </li>
-            </Grid>
+            </Grid> */}
 
             {/* Rental Income */}
-            <Grid item xs={12} sm={6} md={4}>
+            {/* <Grid item xs={12} sm={6} md={4}>
               <li className="item">
                 <a className="box-icon w-52">
                   <i className="bx bx-rupee"></i>
@@ -298,10 +317,10 @@ export default function Overview({ data }) {
                     }</span>
                 </div>
               </li>
-            </Grid>
+            </Grid> */}
 
             {/* Road Width */}
-            <Grid item xs={12} sm={6} md={4}>
+            {/* <Grid item xs={12} sm={6} md={4}>
               <li className="item">
                 <a className="box-icon w-52">
                 <i class='bx bx-reflect-vertical'></i>
@@ -313,10 +332,10 @@ export default function Overview({ data }) {
                     }</span>
                 </div>
               </li>
-            </Grid>
+            </Grid> */}
 
             {/* Garden */}
-            <Grid item xs={12} sm={6} md={4}>
+            {/* <Grid item xs={12} sm={6} md={4}>
               <li className="item">
                 <a className="box-icon w-52">
                 <i class='bx bxs-tree'></i>
@@ -328,7 +347,7 @@ export default function Overview({ data }) {
                     }</span>
                 </div>
               </li>
-            </Grid>
+            </Grid> */}
           </Grid>
       </ul>
     </>

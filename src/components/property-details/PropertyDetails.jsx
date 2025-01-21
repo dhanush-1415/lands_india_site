@@ -15,6 +15,10 @@ import WidgetBox from "./WidgetBox";
 import WhyChoose from "./WhyChoose";
 import LeatestProperties from "./LeatestProperties";
 export default function PropertyDetails({data}) {
+  console.log("iiiiiiii", data);
+  
+const menuId = data[0]?.main_menuId
+
 
   return (
     <>
@@ -33,14 +37,14 @@ export default function PropertyDetails({data}) {
               <div className="single-property-element single-property-desc">
                 <Description data={data} />
               </div>
-              {data && <div className="single-property-element single-property-overview">
+              {menuId == 1 && <div className="single-property-element single-property-overview">
                 <Overview data={data} />
               </div>}
               {/* <div className="single-property-element single-property-video">
                 <Video />
               </div> */}
               <div className="single-property-element single-property-info">
-                <Details data={data} />
+                <Details data={data} menuId={menuId}/>
               </div>
               {/* <div className="single-property-element single-property-feature">
                 <Features />

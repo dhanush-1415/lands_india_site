@@ -38,7 +38,13 @@ export default function DetailsTitle1({ data }) {
                   <span className="icon icon-mapPin" />
                   <span className="text-variant-1">
                     {
-                      data[0].inputs.find(item => item.input_name === "City")?.input_value || ""
+                      data[0]?.inputs?.find(item => item.input_name === "Area")?.input_value || ""
+                    },{" "}
+                    {
+                      data[0]?.inputs?.find(item => item.input_name === "City")?.input_value || ""
+                    },{" "}
+                    {
+                      data[0]?.inputs?.find(item => item.input_name === "State")?.input_value || ""
                     }
                   </span>
                 </p>

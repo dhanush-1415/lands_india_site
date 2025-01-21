@@ -11,22 +11,41 @@ const items = [
   { label: "Garage", content: "1" },
 ];
 
-export default function Details({data}) {
+export default function Details({data, menuId}) {
 
+  // console.log("xxxxxxxxxxxxx", data);
+  
+  const filterData = data[0]?.inputs?.filter( el => !(el.input_name == "Title" || el.input_name == "Description" || el.input_name == "Total Sqft" || el.input_name == "State" || el.input_name == "City" || el.input_name == "Area" || el.input_name == "Price" || el.input_name == "Bedrooms" || el.input_name == "Bathrooms" || el.input_name == "Water supply" || el.input_name == "Floor No" || el.input_name == "Builtup area (ft²)" || el.input_name == "Car Parking" || el.input_name == "Facing" || el.input_name == "Furnishing" || el.input_name == "Other Amenities" || el.input_name == "Maintenance (Month)") )
+
+  const other = data[0]?.inputs?.filter(el => el.input_name == "Other Amenities")
+
+  console.log("xxxxxxx", menuId);
+  
   return (
     <>
       {" "}
-      <h5 className="title fw-6">Additional Details</h5>
-      <div className="row">
-        {data[0]?.inputs?.length && data[0].inputs.map((item, index) => (
+      <h5 className="title fw-6">Key Features</h5>
+      <div className="row single-property-element single-property-desc">
+        {data[0]?.inputs?.length && filterData.map((item, index) => (
           <div className="col-md-6" key={index}>
             <div className="inner-box">
-              <span className="label text-black-3">{item.input_name}</span>
+              <span className="label text-black-3" style={{minWidth: "220px"}}>{item.input_name}</span>
               <div className="content text-black-3">{item.input_value}</div>
             </div>
           </div>
         ))}
       </div>
+      {" "}
+      {menuId == 1 && 
+      <div>
+      <h5 className="title fw-6">Other Aminities</h5>
+      <div className="row single-property-element single-property-desc">
+        <p name="" id="">
+          {data[0]?.inputs?.filter(el => el.input_name == "Other Amenities")[0]?.input_value}
+        </p>
+      </div>
+      </div>
+      }
     </>
   );
 }
