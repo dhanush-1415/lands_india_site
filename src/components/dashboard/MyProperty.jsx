@@ -7,6 +7,8 @@ import Pagination from "../common/Pagination";
 import Pagination2 from "../common/Pagination2";
 import { getSellerProperties, updatePropertyStatus } from "@/apiCalls";
 import { toast } from "react-toastify";
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+
 
 export default function MyProperty() {
 
@@ -105,8 +107,9 @@ export default function MyProperty() {
         }
       `}</style>
       <div className="main-content-inner wrap-dashboard-content">
-        <div className="button-show-hide show-mb custom-header-text">
-          <span className="body-1">Show Menu</span>
+        <div className="button-show-hide custom-header-text  d-flex justify-content-start align-items-center">
+          < ArrowCircleLeftIcon sx={{ fontSize: '40px' }} />
+          <span className="body-1">Menu</span>
         </div>
         <div className="button-show-hide" style={{ marginTop: '0px', display: 'flex' }}>
           <h3 className="body-1" style={{ color: '#000', padding: '20px 0', fontWeight: '600' }}>My Properties</h3>

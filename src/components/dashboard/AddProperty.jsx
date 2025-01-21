@@ -4,6 +4,8 @@ import { getCategories, getInputs, createNewProperty, getPropertyEdit, updatePro
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { Grid } from "@mui/material";
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+
 
 export default function AddProperty() {
 
@@ -218,7 +220,7 @@ export default function AddProperty() {
   const [selectedSubCategoryId, setSelectedSubCategoryId] = useState(null);
   const [menuInputs, setMenuInputs] = useState();
 
-  console.log(menuInputs , "ggggggggggggggggggggg")
+  console.log(menuInputs, "ggggggggggggggggggggg")
   const [formData, setFormData] = useState({});
 
 
@@ -351,8 +353,9 @@ export default function AddProperty() {
         }
       `}</style>
       <div className="main-content-inner">
-        <div className="button-show-hide show-mb custom-header-text">
-          <span className="body-1">Show Menu</span>
+        <div className="button-show-hide custom-header-text  d-flex justify-content-start align-items-center">
+          < ArrowCircleLeftIcon sx={{ fontSize: '40px' }} />
+          <span className="body-1">Menu</span>
         </div>
         <div className="button-show-hide" style={{ marginTop: '0px', display: 'flex' }}>
           <h3 className="body-1" style={{ color: '#000', padding: '20px 0', fontWeight: '600' }}>Post Your Property</h3>

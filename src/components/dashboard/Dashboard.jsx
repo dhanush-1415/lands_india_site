@@ -7,6 +7,7 @@ import Pagination from "../common/Pagination";
 import { properties2, properties4 } from "@/data/properties";
 import Pagination2 from "../common/Pagination2";
 import { getUserCount } from "@/apiCalls";
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 
 export default function Dashboard() {
 
@@ -57,8 +58,9 @@ export default function Dashboard() {
         }
       `}</style>
       <div className="main-content-inner">
-        <div className="button-show-hide show-mb custom-header-text">
-          <span>Show Menu</span>
+        <div className="button-show-hide custom-header-text  d-flex justify-content-start align-items-center">
+          < ArrowCircleLeftIcon sx={{fontSize:'40px'}} /> 
+          <span className="body-1">Menu</span>
         </div>
 
         <div className="button-show-hide" style={{ marginTop: '0px', display: 'flex' }}>

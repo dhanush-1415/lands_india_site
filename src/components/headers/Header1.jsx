@@ -1047,26 +1047,29 @@ export default function Header1({
                             <>
 
                               <a
-                                aria-controls={open ? 'account-menu' : undefined}
+                                aria-controls={open ? 'account-menu' : 'undefined'}
                                 aria-haspopup="true"
                                 onClick={handleClick}
                                 aria-expanded={open ? 'true' : undefined}
+                                className="custom-desk-bar"
                                 style={{
                                   textAlign: 'center',
                                   fontWeight: 600,
-                                  padding: '27px 20px 27px 0px',
-                                  letterSpacing: '0px',
+                                  padding: '5px 12px 3px',
                                   color: '#161e2d',
                                   fontSize: '15px',
                                   lineHeight: '21.86px',
                                   textTransform: 'capitalize',
+                                  backgroundColor:'#161e2d',
+                                  background:'#161e2d',
+                                  color:'#ffffff'
                                 }}
 
                               >
                                 {/* <AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#161e2d', marginRight: '5px' }} /> */}
-                                {userDetails?.image && (
-                                  <img src={userDetails?.image || ""} alt='profile' width="30px" style={{marginRight:'5px'}} className="custom-image" />
-                                )}
+                                {userDetails?.image ? (
+                                  <img src={userDetails?.image || ""} alt='profile' width="30px" style={{ marginRight: '5px' }} className="custom-image" />
+                                ):(<AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#ffffff', marginRight: '5px' }} />)}
                                 {userDetails?.fullName}
                               </a>
                               <Menu
@@ -1142,20 +1145,23 @@ export default function Header1({
                           ) : (
                             <a
                               onClick={handleDialogOpen}
+                              className="custom-desk-bar"
                               style={{
                                 textAlign: 'center',
                                 fontWeight: 600,
-                                padding: '27px 20px 27px 0px',
-                                letterSpacing: '0px',
+                                padding: '5px 12px 3px',
                                 color: '#161e2d',
                                 fontSize: '15px',
                                 lineHeight: '21.86px',
                                 textTransform: 'capitalize',
+                                backgroundColor:'#161e2d',
+                                background:'#161e2d',
+                                color:'#ffffff'
                               }}
 
                             >
 
-                              <AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#161e2d', marginRight: '5px' }} />
+                              <AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#ffffff', marginRight: '5px' }} />
                               Login/Register
                             </a>
                           )}
@@ -1167,6 +1173,17 @@ export default function Header1({
                   </div>
 
                 </div>
+                {!isLogin ? (
+                  <div className="custom-mob-bar" onClick={handleDialogOpen}>
+                    <h6 style={{ marginBottom: '0' }}><AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#161e2d', marginRight: '5px' }} />Signup</h6>
+                  </div>
+                ) : (
+                  <div className="custom-mob-bar" onClick={()=>{window.location.href = "/dashboard"}}>
+                    <h6 style={{ marginBottom: '0' }}>{userDetails?.image ? (
+                      <img src={userDetails?.image || ""} alt='profile' width="30px" style={{ marginRight: '5px' }} className="custom-image" />
+                    ) : (<AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#ffffff', marginRight: '5px' }} />)}{userDetails?.fullName}</h6>
+                  </div>
+                )}
                 <div
                   className="mobile-nav-toggler mobile-button"
                   onClick={() => {
@@ -1218,7 +1235,7 @@ export default function Header1({
                   id="navbarSupportedContent"
                 >
                   <ul className="navigation clearfix mobile-nav">
-                    {isLogin ? (
+                    {/* {isLogin ? (
 
                       <a
                         href="/dashboard"
@@ -1254,7 +1271,7 @@ export default function Header1({
                         <AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#161e2d', marginRight: '5px' }} />
                         Login/Register
                       </a>
-                    )}
+                    )} */}
                   </ul>
                 </div>
                 <Divider />
@@ -1268,16 +1285,39 @@ export default function Header1({
               <div className="mobi-icon-box">
                 <div className="box d-flex align-items-center">
                   <span className="icon icon-phone2" />
-                  <div>1-333-345-6868</div>
+                  <div>+91 9363828393</div>
                 </div>
                 <div className="box d-flex align-items-center">
                   <span className="icon icon-mail" />
-                  <div>landsindia@gmail.com</div>
+                  <div>admin@propertystores.in</div>
                 </div>
               </div>
             </div>
           </nav>
         </div>
+
+        <style>
+          {`
+            .custom-desk-bar {
+              background: #161e2d;
+              padding: 2px 10px;
+              border-radius: 17px !important;
+            }
+            .custom-mob-bar {
+              position: absolute;
+              right: 50px;
+              background: #161e2d;
+              color:#ffffff;
+              padding: 5px 10px 3px;
+              border-radius: 17px !important;
+            }
+             @media (min-width: 991px) {
+              .custom-mob-bar {
+                display: none;
+              }
+            }
+          `}
+        </style>
         {/* End Mobile Menu */}
       </header>
     </>
