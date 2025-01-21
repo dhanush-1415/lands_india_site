@@ -54,9 +54,9 @@ export default function SidebarMenu() {
   const { pathname } = useLocation();
   return (
     <div className="sidebar-menu-dashboard">
-      <Link to={`/`} className="logo-box">
+      {/* <Link to={`/`} className="logo-box">
         <h3 className="text-white">Lands India</h3>
-      </Link>
+      </Link> */}
       <div className="menu-box">
         <div className="title fw-6">Menu</div>
         <ul className="box-menu-dashboard">

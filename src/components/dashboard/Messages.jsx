@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 
 import { messages } from "@/data/dashboard";
 import { getUserQueries } from "@/apiCalls";
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+
 
 export default function Messages() {
 
@@ -43,8 +45,9 @@ export default function Messages() {
         }
       `}</style>
       <div className="main-content-inner">
-        <div className="button-show-hide show-mb custom-header-text">
-          <span className="body-1">Show Menu</span>
+        <div className="button-show-hide custom-header-text  d-flex justify-content-start align-items-center">
+          < ArrowCircleLeftIcon sx={{ fontSize: '40px' }} />
+          <span className="body-1">Menu</span>
         </div>
         <div className="button-show-hide" style={{ marginTop: '0px', display: 'flex' }}>
           <h3 className="body-1" style={{ color: '#000', padding: '20px 0', fontWeight: '600' }}>Property Enquires</h3>
