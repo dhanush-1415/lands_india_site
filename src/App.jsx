@@ -112,6 +112,8 @@ function App() {
               <Route path="my-favourites" element={<MyFavoritePage />} />
               <Route path="blog-detail/:id" element={<BlogDetailsPage />} />
               <Route path="blogs" element={<BlogGridPage />} />
+              <Route path="my-requests" element={<MessagePage />} />
+              {/* <Route path="about-us" element={<AboutUsPage />} /> */}
 
 
 

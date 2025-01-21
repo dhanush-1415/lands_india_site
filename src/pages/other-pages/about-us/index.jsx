@@ -20,12 +20,12 @@ export default function AboutUsPage() {
       <MetaComponent />
       {/* <Header1 /> */}
       <About />
-      <Slider1 />
+      {/* <Slider1 />
       <Agents />
-      {/* <Brands /> */}
-      {/* <Benefit /> */}
+      <Brands />
+      <Benefit />
       <Testimonials2 />
-      <Banner />
+      <Banner /> */}
       <Footer1 />
     </>
   );

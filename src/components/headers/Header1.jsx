@@ -947,6 +947,11 @@ export default function Header1({
       >
         {/* Header Lower */}
         <div className="header-lower">
+          <style>{`
+            .custom-image{
+              border-radius:50% !important;
+            }
+          `}</style>
           <div className="row">
             <div className="col-lg-12">
               <div className="inner-header">
@@ -1059,7 +1064,9 @@ export default function Header1({
 
                               >
                                 {/* <AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#161e2d', marginRight: '5px' }} /> */}
-                                <img src={userDetails?.image || ""} alt='profile' width="30px"  style={{borderRadius:'50%'}} />
+                                {userDetails?.image && (
+                                  <img src={userDetails?.image || ""} alt='profile' width="30px" style={{marginRight:'5px'}} className="custom-image" />
+                                )}
                                 {userDetails?.fullName}
                               </a>
                               <Menu

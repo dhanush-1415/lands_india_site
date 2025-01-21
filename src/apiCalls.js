@@ -223,13 +223,18 @@ export const getProperties = async (data) => {
 
   let url = `${baseUrl}/property/get-properties?`;
 
+  const status = 'Verified';
+
   const searchParArr = [];
 
   if (data.page) {
     searchParArr.push(`page=${data.page}`);
   }
+  if (status) {
+    searchParArr.push(`status=${status}`);
+  }
   if (data.location) {
-    searchParArr.push(`location=${data.location}`);
+    searchParArr.push(`city=${data.location}`);
   }
   if (data.minPrice) {
     searchParArr.push(`minPrice=${data.minPrice}`);
@@ -293,7 +298,7 @@ export const createNewPropertyq = async (data) => {
       }
     });
   }
-  
+
   if (data.PropertiesInput?.length > 0) {
     data.PropertiesInput.forEach((item, index) => {
       formData.append(`PropertyInput[${index}][inputId]`, item.input_id);
@@ -338,28 +343,43 @@ export const createNewProperty = async (data) => {
 
   formData.append('sellerId', data.propertiesPost.sellerId);
   formData.append('price', data.propertiesPost.price);
-  formData.append('location', data.propertiesPost.location);
+  formData.append('city', data.propertiesPost.location);
   formData.append('subMenuId', data.propertiesPost.subMenuId);
+  formData.append('mainMenuId',data.propertiesPost.mainMenuId)
   formData.append('PropertyInput', JSON.stringify(data.PropertiesInput));
   formData.append('status', "Pending");
 
-  
+
+  // if (data.PropertiesInput?.length > 0) {
+  //   data.PropertiesInput.forEach(item => {
+  //     if (item.input_name === 'City') {
+  //       form.append('city', item.input_value); // Assuming form is a FormData or similar structure
+  //     }
+  //   });
+  // }
+
   if (data.PropertiesInput?.length > 0) {
     data.PropertiesInput.forEach(item => {
-      if (item.input_name === 'location') {
-        form.append('location', item.input_value); // Assuming form is a FormData or similar structure
+      if (item.input_name === 'State') {
+        form.append('state', item.input_value); // Assuming form is a FormData or similar structure
       }
     });
   }
 
   if (data.PropertiesInput?.length > 0) {
     data.PropertiesInput.forEach(item => {
-      if (item.input_name === 'price') {
-        form.append('price', item.input_value); // Assuming form is a FormData or similar structure
+      if (item.input_name === 'Area') {
+        form.append('area', item.input_value); // Assuming form is a FormData or similar structure
       }
     });
   }
-
+  if (data.PropertiesInput?.length > 0) {
+    data.PropertiesInput.forEach(item => {
+      if (item.input_name === 'Country') {
+        form.append('country', 'India'); // Assuming form is a FormData or similar structure
+      }
+    });
+  }
   // if (data.PropertiesInput?.length > 0) {
   //   data.PropertiesInput.forEach((item, index) => {
   //     formData.append(`PropertyInput[${index}][inputId]`, item.input_id);
@@ -406,9 +426,29 @@ export const createNewProperty = async (data) => {
 };
 
 
-export const getAgents = async () => {
+export const getAgents = async (filter) => {
 
-  const url = `${baseUrl}/agent`;
+  let url = `${baseUrl}/agent?`;
+
+  const searchParArr = [];
+
+  const verified = 1;
+
+  if (verified) {
+    searchParArr.push(`isVerifyed=${verified}`);
+  }
+  if (filter.page) {
+    searchParArr.push(`page=${filter.page}`);
+  }
+  if (filter.service) {
+    searchParArr.push(`service=${filter.service}`);
+  }
+  if (filter.location) {
+    searchParArr.push(`location=${filter.location}`);
+  }
+
+  url += searchParArr.join('&');
+
 
   const options = {
     method: 'GET',
@@ -551,7 +591,7 @@ export const getBlogsList = async () => {
 
 export const getFranchiseList = async () => {
 
-  const url = `${baseUrl}/franchaise`;
+  const url = `${baseUrl}/franchaise?isVerifyed=1`;
 
   const options = {
     method: 'GET',
@@ -702,7 +742,7 @@ export const createB2B = async (data) => {
   formData.append('phone_number', data.phone);
   formData.append('age', data.age);
   formData.append('location', data.location);
-  formData.append('professional', data.professional); 
+  formData.append('professional', data.professional);
 
   if (data.image && data.image.file) {
     formData.append('image', data.image.file);
@@ -737,7 +777,7 @@ export const updateB2B = async (data) => {
   formData.append('phone_number', data.phone);
   formData.append('location', data.location);
   formData.append('age', data.age);
-  formData.append('professional', data.professional); 
+  formData.append('professional', data.professional);
 
   if (data.image && data.image.file) {
     formData.append('image', data.image.file);
@@ -810,9 +850,29 @@ export const getWishListProperties = async (ids) => {
 };
 
 
-export const getValueAddedServiceList = async () => {
+export const getValueAddedServiceList = async (filter) => {
 
-  const url = `${baseUrl}/value-added-service`;
+  let url = `${baseUrl}/value-added-service?`;
+
+  const searchParArr = [];
+
+  const verified = 1;
+
+  if (verified) {
+    searchParArr.push(`isVerifyed=${verified}`);
+  }
+
+  if (filter.page) {
+    searchParArr.push(`page=${filter.page}`);
+  }
+  if (filter.service) {
+    searchParArr.push(`service=${filter.service}`);
+  }
+  if (filter.location) {
+    searchParArr.push(`location=${filter.location}`);
+  }
+
+  url += searchParArr.join('&');
 
 
   const options = {
@@ -914,7 +974,7 @@ export const updateProperty = async (data) => {
   const formData = new FormData();
 
   console.log("ddddd", data);
-  
+
   formData.append('properties', JSON.stringify(data.data.properties));
   formData.append('propertyInputs', JSON.stringify(data.data.propertyInputs));
 
@@ -1033,7 +1093,7 @@ export const createFranchise = async (data) => {
 
   // Assuming data.files is the file object
   if (data.files) {
-    formData.append('files', data.files);
+    formData.append('image', data.files);
   }
 
   const options = {

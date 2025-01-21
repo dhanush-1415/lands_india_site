@@ -484,6 +484,8 @@ export default function MyProfile() {
               if (data.success) {
                 console.log(data);
                 toast.success("User updated successfully");
+                localStorage.removeItem('LandsUser');
+                localStorage.setItem('LandsUser', JSON.stringify(data.data));                
               } else {
                 toast.error(data.message || data.error || "Something Went Wrong");
               }
@@ -492,6 +494,8 @@ export default function MyProfile() {
               if (data.success) {
                 console.log(data);
                 toast.success("User updated successfully");
+                localStorage.removeItem('LandsUser');
+                localStorage.setItem('LandsUser', JSON.stringify(data.data));             
               } else {
                 toast.error(data.message || data.error || "Something Went Wrong");
               }
@@ -504,6 +508,8 @@ export default function MyProfile() {
                 if (data.success) {
                   console.log(data);
                   toast.success("User updated successfully");
+                  localStorage.removeItem('LandsUser');
+                  localStorage.setItem('LandsUser', JSON.stringify(data.data));                  
                 } else {
                   toast.error(data.message || data.error || "Something Went Wrong");
                 }
@@ -512,6 +518,8 @@ export default function MyProfile() {
                 if (data.success) {
                   console.log(data);
                   toast.success("User updated successfully");
+                  localStorage.removeItem('LandsUser');
+                  localStorage.setItem('LandsUser', JSON.stringify(data.data));                  
                 } else {
                   toast.error(data.message || data.error || "Something Went Wrong");
                 }
@@ -522,6 +530,8 @@ export default function MyProfile() {
               if (data.success) {
                 console.log(data);
                 toast.success("User updated successfully");
+                localStorage.removeItem('LandsUser');
+                localStorage.setItem('LandsUser', JSON.stringify(data.data));
               } else {
                 toast.error(data.message || data.error || "Something Went Wrong");
               }
@@ -657,6 +667,11 @@ export default function MyProfile() {
             display: flex !important;
           }
         }
+        @media (min-width: 800px) {
+          .custom-header-text {
+            display: none;
+          }
+        }
         @media (max-width: 799px) {
           .custom-desktop-class {
             display: none !important;
@@ -667,11 +682,11 @@ export default function MyProfile() {
         }`}
       </style>
       <div className="main-content-inner wrap-dashboard-content-2">
-        <div className="button-show-hide show-mb">
+        <div className="button-show-hide show-mb custom-header-text">
           <span className="body-1">Show Menu</span>
         </div>
-        <div className="button-show-hide" style={{marginTop:'0px',display:'flex'}}>
-          <h3 className="body-1" style={{color:'#000',padding:'20px 0',fontWeight:'600'}}>My Profile</h3>
+        <div className="button-show-hide" style={{ marginTop: '0px', display: 'flex' }}>
+          <h3 className="body-1" style={{ color: '#000', padding: '20px 0', fontWeight: '600' }}>My Profile</h3>
         </div>
         <div className="widget-box-2">
           {/* <div className="box">
@@ -710,7 +725,7 @@ export default function MyProfile() {
                     onChange={handleImageUpload} // Handle the file selection
                   />
                 </div>
-                <p>JPEG 100x100</p>
+                <p>Image Size 100x100 , format JPEG</p>
               </div>
             </div>
           </div>

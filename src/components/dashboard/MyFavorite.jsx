@@ -115,12 +115,24 @@ export default function MyFavorite() {
 
   return (
     <div className="main-content">
+      <style>{`
+        @media (min-width: 800px) {
+          .custom-header-text {
+            display: none;
+          }
+        }
+        @media (max-width: 798px) {
+          .main-content{
+            width: 100%
+          }
+        }
+      `}</style>
       <div className="main-content-inner">
-        <div className="button-show-hide show-mb">
+        <div className="button-show-hide show-mb custom-header-text">
           <span className="body-1">Show Menu</span>
         </div>
-        <div className="button-show-hide" style={{marginTop:'0px',display:'flex'}}>
-          <h3 className="body-1" style={{color:'#000',padding:'20px 0',fontWeight:'600'}}>My Favourites</h3>
+        <div className="button-show-hide" style={{ marginTop: '0px', display: 'flex' }}>
+          <h3 className="body-1" style={{ color: '#000', padding: '20px 0', fontWeight: '600' }}>My Favourites</h3>
         </div>
         <div className="widget-box-2 wd-listing">
           {/* <h5 className="title">My Favorites</h5> */}
@@ -136,7 +148,7 @@ export default function MyFavorite() {
               <div className="table-responsive">
                 <table>
                   <thead >
-                    <tr style={{background:'#008FF7'}} >
+                    <tr style={{ background: '#008FF7' }} >
                       <th style={{ padding: '20px' }}>Listing</th>
                       <th style={{ padding: '20px' }}>Status</th>
                       <th style={{ padding: '20px' }}>Action</th>
@@ -161,7 +173,9 @@ export default function MyFavorite() {
                                   to={`/property-details/${elm.id}`}
                                   className="link"
                                 >
-                                  {elm.title}
+                                  {
+                                  elm.inputs.find(item => item.input_name === "Title")?.input_value || ""
+                                }
                                 </Link>
                               </div>
                               <div className="text-date">
@@ -169,12 +183,12 @@ export default function MyFavorite() {
                               </div>
                               <div className="text-btn text-primary">
                                 ₹{
-                                  elm.inputs.find(item => item.input_name === "price")?.input_value || ""
+                                  elm.inputs.find(item => item.input_name === "Price")?.input_value || ""
                                 }
                               </div>
                               <div className="text-btn text-secondary">
                                 {
-                                  elm.inputs.find(item => item.input_name === "location")?.input_value || ""
+                                  elm.inputs.find(item => item.input_name === "City")?.input_value || ""
                                 }
 
                               </div>
@@ -203,7 +217,7 @@ export default function MyFavorite() {
                                   width={16}
                                   height={16}
                                   viewBox="0 0 16 16"
-                                  fill="none"
+                                  fill="#000000"
                                   xmlns="http://www.w3.org/2000/svg"
                                 >
                                   <path

@@ -97,12 +97,19 @@ export default function MyProperty() {
 
   return (
     <div className="main-content">
+      <style>{`
+        @media (min-width: 800px) {
+          .custom-header-text {
+            display: none;
+          }
+        }
+      `}</style>
       <div className="main-content-inner wrap-dashboard-content">
-        <div className="button-show-hide show-mb">
+        <div className="button-show-hide show-mb custom-header-text">
           <span className="body-1">Show Menu</span>
         </div>
-        <div className="button-show-hide" style={{marginTop:'0px',display:'flex'}}>
-          <h3 className="body-1" style={{color:'#000',padding:'20px 0',fontWeight:'600'}}>My Properties</h3>
+        <div className="button-show-hide" style={{ marginTop: '0px', display: 'flex' }}>
+          <h3 className="body-1" style={{ color: '#000', padding: '20px 0', fontWeight: '600' }}>My Properties</h3>
         </div>
         {/* <div className="row">
           <div className="col-md-3">
@@ -137,7 +144,7 @@ export default function MyProperty() {
             <div className="table-responsive">
               <table>
                 <thead>
-                  <tr style={{background:'#008FF7'}}>
+                  <tr style={{ background: '#008FF7' }}>
                     <th style={{ padding: '20px' }}>Listing</th>
                     <th style={{ padding: '20px' }}>Status</th>
                     <th style={{ padding: '20px' }}>Action</th>
@@ -210,7 +217,7 @@ export default function MyProperty() {
                                 width={16}
                                 height={16}
                                 viewBox="0 0 16 16"
-                                fill="none"
+                                fill="#000000"
                                 xmlns="http://www.w3.org/2000/svg"
                               >
                                 <path
@@ -229,7 +236,7 @@ export default function MyProperty() {
                                 width={16}
                                 height={16}
                                 viewBox="0 0 16 16"
-                                fill="none"
+                                fill="#000000"
                                 xmlns="http://www.w3.org/2000/svg"
                               >
                                 <path
@@ -248,7 +255,7 @@ export default function MyProperty() {
                                 width={16}
                                 height={16}
                                 viewBox="0 0 16 16"
-                                fill="none"
+                                fill="#000000"
                                 xmlns="http://www.w3.org/2000/svg"
                               >
                                 <path

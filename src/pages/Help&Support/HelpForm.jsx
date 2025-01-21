@@ -196,7 +196,7 @@ const HelpForm = () => {
                                         justifyContent: "center",
                                     }}
                                 >
-                                    <FaFacebookF />
+                                    <FaFacebookF sx={{margin:'0',padding:'0'}}/>
                                 </Button>
                             </Col>
                             <Col xs="auto">

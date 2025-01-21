@@ -39,6 +39,7 @@ export default function Carousel() {
 
     const [properties, setProperties] = useState([]);
 
+    console.log(properties, "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
 
     const fetchPremiumList = async () => {
         try {
@@ -177,7 +178,7 @@ export default function Carousel() {
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
-        autoplaySpeed: 4000000,
+        autoplaySpeed: 5000,
         nextArrow: <CustomNextArrow />,
         prevArrow: <CustomPrevArrow />,
     };
@@ -384,10 +385,10 @@ export default function Carousel() {
                                     className="details-column d-flex flex-column justify-content-center"
                                 >
                                     <h4 className="property-title text-white">{
-                                        elm.inputs.find(item => item.input_name === "title")?.input_value || ""
+                                        elm.inputs.find(item => item.input_name === "Title")?.input_value || ""
                                     }</h4>
                                     <p className="property-location text-white"><span className="icon icon-mapPin" style={{ marginRight: '10px' }} />{
-                                        elm.inputs.find(item => item.input_name === "location")?.input_value || ""
+                                        elm.inputs.find(item => item.input_name === "City")?.input_value || ""
                                     }</p>
                                     <div className="badges-container" style={{ display: 'flex' }}>
                                         <p
@@ -421,7 +422,245 @@ export default function Carousel() {
                                             {property.badges[1]}
                                         </Badge> */}
                                     </div>
-                                    <Row className="property-details">
+                                    {elm.main_menuId === 8 ? (
+                                        <Row className="property-details">
+                                            <Col xs={6} sm={4}>
+                                                <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                    <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                        <i style={{ fontSize: '30px' }} className="icon icon-sqft" />
+                                                    </span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                        <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                            Sqft:
+                                                        </span>
+                                                        <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                            {
+                                                                elm.inputs.find(item => item.input_name === "Total Sqft")?.input_value || ""
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </p>
+                                            </Col>
+
+
+                                            <Col xs={6} sm={4}>
+                                                <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                    <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                        <i style={{ fontSize: '30px' }} className="icon icon-house-fill" />
+                                                    </span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                        <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                            Furnished:
+                                                        </span>
+                                                        <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                            {
+                                                                elm.inputs.find(item => item.input_name === "Furnishing")?.input_value || ""
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </p>
+                                            </Col>
+
+                                            <Col xs={6} sm={4}>
+                                                <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                    <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                        <LocalParkingIcon style={{ fontSize: '35px' }} />
+                                                    </span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                        <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                            Parking:
+                                                        </span>
+                                                        <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                            {
+                                                                elm.inputs.find(item => item.input_name === "Car Parking")?.input_value || ""
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </p>
+                                            </Col>
+                                        </Row>
+                                    ) : elm.main_menuId === 3 ? (
+                                        <Row className="property-details">
+                                            <Col xs={6} sm={4}>
+                                                <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                    <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                        <i style={{ fontSize: '30px' }} className="icon icon-sqft" />
+                                                    </span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                        <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                            Sqft:
+                                                        </span>
+                                                        <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                            {
+                                                                elm.inputs.find(item => item.input_name === "Total Sqft")?.input_value || ""
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </p>
+                                            </Col>
+                                            <Col xs={6} sm={4}>
+                                                <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                    <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                        <i style={{ fontSize: '30px' }} className="icon icon-sqft" />
+                                                    </span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                        <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                            Length:
+                                                        </span>
+                                                        <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                            {
+                                                                elm.inputs.find(item => item.input_name === "Length")?.input_value || ""
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </p>
+                                            </Col>                                      <Col xs={6} sm={4}>
+                                                <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                    <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                        <i style={{ fontSize: '30px' }} className="icon icon-sqft" />
+                                                    </span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                        <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                            Bredth:
+                                                        </span>
+                                                        <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                            {
+                                                                elm.inputs.find(item => item.input_name === "Breadth")?.input_value || ""
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </p>
+                                            </Col>
+
+                                        </Row>
+                                    ) : elm.main_menuId === 1 ? (
+                                        <Row className="property-details">
+                                            <Col xs={6} sm={4}>
+                                                <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                    <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                        <i style={{ fontSize: '30px' }} className="icon icon-sqft" />
+                                                    </span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                        <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                            Sqft:
+                                                        </span>
+                                                        <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                            {
+                                                                elm.inputs.find(item => item.input_name === "Total Sqft")?.input_value || ""
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </p>
+                                            </Col>
+                                            <Col xs={6} sm={4}>
+                                                <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                    <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                        <i style={{ fontSize: '30px' }} className="icon icon-bed" />
+                                                    </span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                        <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                            Bedrooms:
+                                                        </span>
+                                                        <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                            {
+                                                                elm.inputs.find(item => item.input_name === "Bedrooms")?.input_value || ""
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </p>
+                                            </Col>
+                                            <Col xs={6} sm={4}>
+                                                <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                    <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                        <i style={{ fontSize: '30px' }} className="icon icon-bath" />
+                                                    </span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                        <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                            Bathrooms:
+                                                        </span>
+                                                        <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                            {
+                                                                elm.inputs.find(item => item.input_name === "Bathrooms")?.input_value || ""
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </p>
+                                            </Col>
+
+                                            <Col xs={6} sm={4}>
+                                                <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                    <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                        <i style={{ fontSize: '30px' }} className="icon icon-house-fill" />
+                                                    </span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                        <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                            Furnished:
+                                                        </span>
+                                                        <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                            {
+                                                                elm.inputs.find(item => item.input_name === "Furnishing")?.input_value || ""
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </p>
+                                            </Col>
+                                            <Col xs={6} sm={4}>
+                                                <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                    <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                        <StairsIcon style={{ fontSize: '35px' }} />
+                                                    </span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                        <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                            Total Floors:
+                                                        </span>
+                                                        <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                            {
+                                                                elm.inputs.find(item => item.input_name === "Total Floors")?.input_value || ""
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </p>
+                                            </Col>
+                                            <Col xs={6} sm={4}>
+                                                <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                    <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                        <LocalParkingIcon style={{ fontSize: '35px' }} />
+                                                    </span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                        <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                            Parking:
+                                                        </span>
+                                                        <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                            {
+                                                                elm.inputs.find(item => item.input_name === "Car Parking")?.input_value || ""
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </p>
+                                            </Col>
+                                        </Row>
+                                    ) : (
+                                        <Row className="property-details">
+                                            <Col xs={6} sm={4}>
+                                                <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
+                                                    <span className="detail-icon" style={{ color: "#ffffff" }}>
+                                                        <i style={{ fontSize: '30px' }} className="icon icon-sqft" />
+                                                    </span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                        <span className="detail-label text-white" style={{ fontWeight: "bold" }}>
+                                                            Sqft:
+                                                        </span>
+                                                        <span className="detail-value text-white" style={{ marginBottom: '3px' }}>
+                                                            {
+                                                                elm.inputs.find(item => item.input_name === "Total Sqft")?.input_value || ""
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </p>
+                                            </Col>
+                                        </Row>
+                                    )}
+                                    {/* <Row className="property-details">
                                         <Col xs={6} sm={4}>
                                             <p className="detail-item" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: '1.2rem' }}>
                                                 <span className="detail-icon" style={{ color: "#ffffff" }}>
@@ -524,11 +763,11 @@ export default function Carousel() {
                                                 </div>
                                             </p>
                                         </Col>
-                                    </Row>
+                                    </Row> */}
 
                                     <h5 className="property-price text-white">
                                         ₹{
-                                            Number(elm.inputs.find(item => item.input_name === "price")?.input_value || 0)
+                                            Number(elm.inputs.find(item => item.input_name === "Price")?.input_value || 0)
                                                 .toLocaleString('en-IN')
                                         }
                                     </h5>

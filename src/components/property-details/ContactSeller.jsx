@@ -32,7 +32,7 @@ export default function ContactSeller() {
       {" "}
       <EnquiryForm open={open} handleClose={handleClose} id={propertyId} />
       {/* <h5 className="title fw-6">Contact Sellers</h5> */}
-      <h5 className="fw-6">Posted By: Owner</h5>
+      <h5 className="fw-6">Posted By: Property Stores</h5>
       {/* <div className="box-avatar">
         <div className="avatar avt-100 round">
           <img
@@ -75,9 +75,9 @@ export default function ContactSeller() {
           {/* Name and Phone Number */}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}>
-              J*** **e
+              Contact
             </div>
-            <div style={{ fontSize: '14px', color: '#555', marginTop: '6px' }}>+91 91******90</div>
+            <div style={{ fontSize: '14px', color: '#555', marginTop: '6px' }}>+91 9363828393</div>
           </div>
         </div>
 

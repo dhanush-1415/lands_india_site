@@ -19,7 +19,7 @@ const Footer2 = () => {
       if (landsUser) {
         window.location.href = `/${path}`
       } else {
-        toast.error("Please Login to Continue")
+        toast.info("Please Login to Continue")
       }
     } else {
 
@@ -31,6 +31,11 @@ const Footer2 = () => {
 
   return (
     <Grid sx={{ backgroundColor: '#1c1c1e', color: '#fff' }}>
+      <style>{`
+        .custom-icon-btn{
+          border-radius: 50% !important 
+        }
+      `}</style>
       <Box sx={{ py: 5, width: { xs: '85%', sm: '85%', md: '90%' }, margin: '0px auto' }}>
         <Grid container sx={{ justifyContent: { xs: 'space-between' } }}>
           <Grid container sx={{ justifyContent: { xs: 'space-between' }, margin: '50px 0' }}>
@@ -234,9 +239,11 @@ const Footer2 = () => {
               Privacy Policy
             </Link>
           </Box>
-          <Box sx={{ display: 'flex', gap: 2 }}>
+          <Box sx={{ display: 'flex', gap: 2 }} >
             <IconButton
+            onClick={() => window.open("https://www.facebook.com/Propertystoretamilnadu", "_blank")}
               color="inherit"
+              className="custom-icon-btn"
               sx={{
                 border: '1px solid gray',
                 borderRadius: '50%',
@@ -253,7 +260,9 @@ const Footer2 = () => {
             </IconButton>
 
             <IconButton
+            onClick={() => window.open("https://www.instagram.com/propertystores.inn?igsh=MWJ6dGpyYjdkeW85MQ==", "_blank")}
               color="inherit"
+              className="custom-icon-btn"
               sx={{
                 border: '1px solid gray',
                 borderRadius: '50%',
@@ -270,13 +279,15 @@ const Footer2 = () => {
             </IconButton>
 
             <IconButton
+            onClick={() => window.open("https://youtube.com/@propertystores?si=MTo4RyhPr92IeOrF", "_blank")}
+            className="custom-icon-btn"
               color="inherit"
               sx={{
                 border: '1px solid gray',
                 borderRadius: '50%',
                 padding: 1,
                 '&:hover': {
-                  backgroundColor: '#0077b5',
+                  backgroundColor: '#ff0033',
                   '& svg': {
                     color: 'white',
                   },
@@ -287,7 +298,9 @@ const Footer2 = () => {
             </IconButton>
 
             <IconButton
+            onClick={() => window.open("https://www.linkedin.com/company/propertystores-in/", "_blank")}
               color="inherit"
+              className="custom-icon-btn"
               sx={{
                 border: '1px solid gray',
                 borderRadius: '50%',
