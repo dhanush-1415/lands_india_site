@@ -1012,13 +1012,18 @@ export default function Header1({
                               style={{
                                 textAlign: 'center',
                                 fontWeight: 600,
-                                padding: '27px 20px 27px 0px',
-                                letterSpacing: '0px',
+                                padding: '9px 12px',
                                 color: '#161e2d',
                                 fontSize: '15px',
+                                marginRight:'30px',
                                 lineHeight: '21.86px',
                                 textTransform: 'capitalize',
+                                backgroundColor:'#008FF7',
+                                background:'#008FF7',
+                                color:'#ffffff',
                               }}
+                              className="custom-desk-bar"
+
 
                             >
                               Sell Property
@@ -1029,13 +1034,18 @@ export default function Header1({
                               style={{
                                 textAlign: 'center',
                                 fontWeight: 600,
-                                padding: '27px 20px 27px 0px',
-                                letterSpacing: '0px',
+                                padding: '10px 14px',
                                 color: '#161e2d',
                                 fontSize: '15px',
+                                marginRight:'30px',
                                 lineHeight: '21.86px',
                                 textTransform: 'capitalize',
+                                backgroundColor:'#008FF7',
+                                background:'#008FF7',
+                                color:'#ffffff',
                               }}
+
+                              className="custom-desk-bar"
 
                             >
 

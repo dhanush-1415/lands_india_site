@@ -606,7 +606,7 @@ export default function AddProperty() {
                 </div>
               ) : (
                 <div className="box grid-2 gap-30">
-                  <h3>No Inputs</h3>
+                  
                 </div>
               )}
             </div>
@@ -830,7 +830,7 @@ export default function AddProperty() {
                 </div>
               ) : (
                 <div className="box grid-2 gap-30">
-                  <h3>No Inputs</h3>
+                  
                 </div>
               )}
 

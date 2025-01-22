@@ -94,7 +94,7 @@ export default function Blogs() {
           modules={[Pagination]}
           pagination={{ clickable: true }}
         >
-          {blogs.length && blogs.map((post, index) => (
+          {blogs.length >= 1 && blogs.map((post, index) => (
             <SwiperSlide className="swiper-slide" key={index}>
               <Link
                 to={`/blog-detail/${post.id}`}
