@@ -167,7 +167,7 @@ export default function BottomCarousel() {
                     <Slider {...settings}>
                         {events?.length && events.map((elm, index) => (
                             <div style={{ margin: '0 10px' }} key={index}>
-                                <img style={{ width: '90%', borderRadius: '8px', margin: '0px auto', maxHeight:'350px' }} src={elm.images[0] || ""} alt="banner" />
+                                <img style={{ width: '90%', borderRadius: '8px', margin: '0px auto', maxHeight:'350px' , minHeight:'350px' }} src={elm.images[0] || ""} alt="banner" />
                             </div>
                         ))}
                     </Slider>

@@ -74,7 +74,7 @@ const menuId = data[0]?.main_menuId
             <div className="col-xl-4 col-lg-5">
               <div className="single-sidebar fixed-sidebar" style={{background:'#ffffff'}} >
                 <div className="widget-box single-property-contact" style={{borderRadius:'0px'}}>
-                  <ContactSeller />
+                  <ContactSeller data={data} />
                 </div>
                 {/* <div className="flat-tab flat-tab-form widget-filter-search widget-box">
                   <WidgetBox />
