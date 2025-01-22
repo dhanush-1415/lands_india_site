@@ -669,11 +669,17 @@ export default function MyProfile() {
             display: flex !important;
           }
         }
-        @media (min-width: 800px) {
+ 
+             @media (min-width: 800px) {
           .custom-header-text {
-            display: none;
+            display: none !important;
           }
         }
+          .custom-header-text {
+            display: flex ;
+            justify-content:flex-start;
+            align-items: center;
+          }
         @media (max-width: 799px) {
           .custom-desktop-class {
             display: none !important;
@@ -684,7 +690,7 @@ export default function MyProfile() {
         }`}
       </style>
       <div className="main-content-inner wrap-dashboard-content-2">
-      <div className="button-show-hide custom-header-text  d-flex justify-content-start align-items-center">
+      <div className="button-show-hide custom-header-text">
           < ArrowCircleLeftIcon sx={{fontSize:'40px'}} /> 
           <span className="body-1">Menu</span>
         </div>
