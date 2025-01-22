@@ -32,20 +32,26 @@ export default function Messages() {
 
   return (
     <div className="main-content">
-      <style>{`
+            <style>{`
         @media (min-width: 800px) {
           .custom-header-text {
-            display: none;
+            display: none !important;
           }
         }
+          .custom-header-text {
+            display: flex ;
+            justify-content:flex-start;
+            align-items: center;
+          }
         @media (max-width: 798px) {
+      
           .main-content{
             width: 100%
           }
         }
       `}</style>
       <div className="main-content-inner">
-        <div className="button-show-hide custom-header-text  d-flex justify-content-start align-items-center">
+        <div className="button-show-hide custom-header-text">
           < ArrowCircleLeftIcon sx={{ fontSize: '40px' }} />
           <span className="body-1">Menu</span>
         </div>

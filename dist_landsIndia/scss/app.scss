@@ -55,6 +55,7 @@ a , .link{
 
 /* Apply custom scrollbar styles globally */
 body, * {
+  &:not(.active-progress) {
     // For Firefox
     scrollbar-width: thin; // Thin scrollbar
     scrollbar-color: #888 #f0f0f0; // Thumb color and track color
@@ -89,6 +90,7 @@ body, * {
     -moz-border-radius: 0 !important;
     -ms-border-radius: 0 !important;
     -o-border-radius: 0 !important;
+}
 }
   
   .navigation {
