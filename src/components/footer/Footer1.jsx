@@ -477,7 +477,7 @@ const Footer1 = () => {
               Branch office in India:
             </Typography>
             <Typography variant="body2" fontWeight='bold' >
-              Chrompet, Kalpakkam, Thuvakudi, Melmaruvathur, Veppur, Pannadam, Ullundhurpet, Chidambaram, Trichy, Preambalur, Courtallam & More
+              Chrompet, Kalpakkam, Thuvakudi, Melmaruvathur, Veppur, Pannadam, Ullundhurpet, Chidambaram, Trichy, Perambalur, Courtallam & More
             </Typography>
           </Grid>
 

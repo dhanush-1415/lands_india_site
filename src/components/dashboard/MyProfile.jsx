@@ -486,8 +486,8 @@ export default function MyProfile() {
               if (data.success) {
                 console.log(data);
                 toast.success("User updated successfully");
-                localStorage.removeItem('LandsUser');
-                localStorage.setItem('LandsUser', JSON.stringify(data.data));                
+                // localStorage.removeItem('LandsUser');
+                // localStorage.setItem('LandsUser', JSON.stringify(data.data));                
               } else {
                 toast.error(data.message || data.error || "Something Went Wrong");
               }
@@ -496,8 +496,8 @@ export default function MyProfile() {
               if (data.success) {
                 console.log(data);
                 toast.success("User updated successfully");
-                localStorage.removeItem('LandsUser');
-                localStorage.setItem('LandsUser', JSON.stringify(data.data));             
+                // localStorage.removeItem('LandsUser');
+                // localStorage.setItem('LandsUser', JSON.stringify(data.data));             
               } else {
                 toast.error(data.message || data.error || "Something Went Wrong");
               }
@@ -510,8 +510,8 @@ export default function MyProfile() {
                 if (data.success) {
                   console.log(data);
                   toast.success("User updated successfully");
-                  localStorage.removeItem('LandsUser');
-                  localStorage.setItem('LandsUser', JSON.stringify(data.data));                  
+                  // localStorage.removeItem('LandsUser');
+                  // localStorage.setItem('LandsUser', JSON.stringify(data.data));                  
                 } else {
                   toast.error(data.message || data.error || "Something Went Wrong");
                 }
@@ -520,8 +520,8 @@ export default function MyProfile() {
                 if (data.success) {
                   console.log(data);
                   toast.success("User updated successfully");
-                  localStorage.removeItem('LandsUser');
-                  localStorage.setItem('LandsUser', JSON.stringify(data.data));                  
+                  // localStorage.removeItem('LandsUser');
+                  // localStorage.setItem('LandsUser', JSON.stringify(data.data));                  
                 } else {
                   toast.error(data.message || data.error || "Something Went Wrong");
                 }
@@ -532,8 +532,8 @@ export default function MyProfile() {
               if (data.success) {
                 console.log(data);
                 toast.success("User updated successfully");
-                localStorage.removeItem('LandsUser');
-                localStorage.setItem('LandsUser', JSON.stringify(data.data));
+                // localStorage.removeItem('LandsUser');
+                // localStorage.setItem('LandsUser', JSON.stringify(data.data));
               } else {
                 toast.error(data.message || data.error || "Something Went Wrong");
               }

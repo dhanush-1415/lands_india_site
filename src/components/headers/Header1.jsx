@@ -10,9 +10,9 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 // import logo from './logo-light.png';
 import logo from './logo-new.png';
-import addedValue from './added-value.png';
-import individual from './individual.png';
-import projects from './projects.png';
+import addedValue from './added-value-1.png';
+import individual from './individual-1.png';
+import projects from './projects-1.png';
 import CloseIcon from '@mui/icons-material/Close';
 import InputAdornment from '@mui/material/InputAdornment';
 import PersonIcon from '@mui/icons-material/Person';
@@ -1012,13 +1012,17 @@ export default function Header1({
                               style={{
                                 textAlign: 'center',
                                 fontWeight: 600,
-                                padding: '27px 20px 27px 0px',
-                                letterSpacing: '0px',
+                                padding: '9px 12px',
                                 color: '#161e2d',
                                 fontSize: '15px',
+                                marginRight:'30px',
                                 lineHeight: '21.86px',
                                 textTransform: 'capitalize',
+                                backgroundColor:'#008FF7',
+                                background:'#008FF7',
+                                color:'#ffffff',
                               }}
+                              className="custom-desk-bar"
 
                             >
                               Sell Property
