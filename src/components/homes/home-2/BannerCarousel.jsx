@@ -24,7 +24,7 @@ export default function BottomCarousel() {
             if (data.success) {
                 setEvents(data.data)
             } else {
-                toast.error(data.message)
+                // toast.error(data.message)
             }
         } catch (err) {
             console.error('Error fetching categories:', err);

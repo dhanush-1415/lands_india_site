@@ -20,7 +20,7 @@ export default function Blogs() {
         if (data.success) {
           setBlogs(data.data)
         } else {
-          toast.error(data.message)
+          // toast.error(data.message)
         }
       } catch (err) {
         console.error('Error fetching categories:', err);

@@ -526,7 +526,7 @@ export default function Properties() {
 
         setProperties(combined);
       } else {
-        toast.error(data.message);
+        // toast.error(data.message);
       }
     } catch (err) {
       console.error('Error fetching properties:', err);
@@ -544,7 +544,7 @@ export default function Properties() {
           setWishListList(data.wishList);
           setWishlistLoaded(true); // Mark wishlist as loaded
         } else {
-          toast.error(data.message);
+          // toast.error(data.message);
         }
       } catch (err) {
         console.error('Error fetching wishlist:', err);
