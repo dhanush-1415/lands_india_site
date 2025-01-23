@@ -96,7 +96,7 @@ export default function AddProperty() {
       return
     }
 
-    setPrevBtn(<CircularProgress size="30px" />)
+    setPrevBtn("Uploading...")
 
     const structuredData = transformData(updatedData, images);
 
@@ -311,7 +311,7 @@ export default function AddProperty() {
       return
     }
 
-    setSubmitBtn(<CircularProgress size="30px" />)
+    setSubmitBtn("Uploading...")
 
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
