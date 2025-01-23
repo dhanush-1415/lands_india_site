@@ -7,9 +7,10 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import DraftsTwoToneIcon from '@mui/icons-material/DraftsTwoTone';
 import EnquiryForm from "../common/Enquiry";
 
-export default function ContactSeller() {
+export default function ContactSeller({data}) {
 
 
+  console.log(data, "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
 
   const [open, setOpen] = useState(false);
 
@@ -93,7 +94,7 @@ export default function ContactSeller() {
               borderRadius: '0px',
               textAlign: 'center',
             }}
-            onClick={() => { handleClickOpen(elm.id) }}
+            onClick={() => { handleClickOpen(data[0].id) }}
           >
             <DraftsTwoToneIcon sx={{ marginRight: '5px' }} />
             <span>Enquiry Now</span>

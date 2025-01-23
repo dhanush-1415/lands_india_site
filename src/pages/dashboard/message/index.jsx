@@ -174,7 +174,8 @@ const MessagePage = () => {
                     if (item.id === "logout" && item.action) {
                       item.action();
                     } else {
-                      setActivePage(item.id);
+                      window.location.href = `/${item.id}`
+                      // setActivePage(item.id);
                     }
                   }}
                 >

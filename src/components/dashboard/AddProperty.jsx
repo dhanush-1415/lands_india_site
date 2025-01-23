@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { Grid } from "@mui/material";
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 export default function AddProperty() {
@@ -13,12 +14,19 @@ export default function AddProperty() {
 
   const [editData, setEditData] = useState();
 
+  console.log(editData, "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")
+
   const [updatedData, setUpdatedData] = useState();
 
   const [images, setImages] = useState([]);
 
-  const [location, setLocation] = useState('')
-  const [price, setPrice] = useState('')
+  const [location, setLocation] = useState('');
+
+  const [price, setPrice] = useState('');
+
+  const [submitBtn  , setSubmitBtn ] = useState("Add Property")
+
+  const [prevBtn , setPrevBtn ] = useState("Update Property");
 
 
   const handlePrevChange = (inputId, value, input_name) => {
@@ -34,7 +42,15 @@ export default function AddProperty() {
 
   const transformData = (updatedData) => {
 
-    const updatedPaths = images.length && images.map((image) => image.preview).join(",");
+    // const updatedPaths = images.length && images.map((image) => image.preview).join(",");
+
+    const updatedPaths = images.length
+      ? images
+        .filter((image) => !image.file)
+        .map((image) => image.preview)
+        .join(",")
+      : "";
+
 
 
     const properties = updatedData.map(item => ({
@@ -80,6 +96,8 @@ export default function AddProperty() {
       return
     }
 
+    setPrevBtn(<CircularProgress size="30px" />)
+
     const structuredData = transformData(updatedData, images);
 
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
@@ -93,15 +111,19 @@ export default function AddProperty() {
       try {
         const data = await updateProperty(payLoad);
         if (data.success) {
-          toast.success("UpdatedSuccessfully")
+          toast.success("Updated Successfully")
+          setPrevBtn("Update Property")
         } else {
-          toast.error(data.message)
+          toast.error(data.message);
+          setPrevBtn("Update Property")
         }
       } catch (err) {
         console.error('Error fetching categories:', err);
+        setPrevBtn("Update Property")
       }
     } else {
       toast.error('You must be logged in to access this page');
+      setPrevBtn("Update Property")
     }
   };
 
@@ -219,8 +241,6 @@ export default function AddProperty() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategoryId, setSelectedSubCategoryId] = useState(null);
   const [menuInputs, setMenuInputs] = useState();
-
-  console.log(menuInputs, "ggggggggggggggggggggg")
   const [formData, setFormData] = useState({});
 
 
@@ -291,6 +311,8 @@ export default function AddProperty() {
       return
     }
 
+    setSubmitBtn(<CircularProgress size="30px" />)
+
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
     if (landsUser) {
@@ -318,11 +340,14 @@ export default function AddProperty() {
           setMenuInputs(null)
           toast.success("Property Created Successfully");
           setImages([]);
+          setSubmitBtn("Update Property")
         } else {
           toast.error(data.message || data.error || "Something Went Wrong")
+          setSubmitBtn("Update Property")
         }
       } catch (err) {
         console.error('Error fetching categories:', err);
+        setSubmitBtn("Update Property")
       }
 
     } else {
@@ -339,12 +364,17 @@ export default function AddProperty() {
       <style>{`
         @media (min-width: 800px) {
           .custom-header-text {
-            display: none;
+            display: none !important;
           }
-          .main-content{
+            .main-content{
             width: 100%
           }
         }
+          .custom-header-text {
+            display: flex ;
+            justify-content:flex-start;
+            align-items: center;
+          }
         @media (max-width: 798px) {
       
           .main-content{
@@ -353,7 +383,7 @@ export default function AddProperty() {
         }
       `}</style>
       <div className="main-content-inner">
-        <div className="button-show-hide custom-header-text  d-flex justify-content-start align-items-center">
+        <div className="button-show-hide custom-header-text">
           < ArrowCircleLeftIcon sx={{ fontSize: '40px' }} />
           <span className="body-1">Menu</span>
         </div>
@@ -606,7 +636,11 @@ export default function AddProperty() {
                 </div>
               ) : (
                 <div className="box grid-2 gap-30">
+<<<<<<< HEAD
                   
+=======
+                  {/* <h3>No Inputs</h3> */}
+>>>>>>> d2ffd68438f3625676132912d9e5c7ed29ab9d22
                 </div>
               )}
             </div>
@@ -830,7 +864,11 @@ export default function AddProperty() {
                 </div>
               ) : (
                 <div className="box grid-2 gap-30">
+<<<<<<< HEAD
                   
+=======
+                  {/* <h3>No Inputs</h3> */}
+>>>>>>> d2ffd68438f3625676132912d9e5c7ed29ab9d22
                 </div>
               )}
 
@@ -1478,7 +1516,7 @@ export default function AddProperty() {
         {editData?.length ? (
           <div className="box-btn" onClick={handlePrevSubmit}>
             <a className="tf-btn primary">
-              Update Property
+              {prevBtn}
             </a>
             {/* <a href="#" className="tf-btn btn-line">
           Save &amp; Preview
@@ -1487,7 +1525,7 @@ export default function AddProperty() {
         ) : (
           <div className="box-btn" onClick={handleSubmit}>
             <a className="tf-btn primary">
-              Add Property
+              {submitBtn}
             </a>
             {/* <a href="#" className="tf-btn btn-line">
             Save &amp; Preview

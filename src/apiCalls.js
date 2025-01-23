@@ -978,13 +978,13 @@ export const updateProperty = async (data) => {
   formData.append('properties', JSON.stringify(data.data.properties));
   formData.append('propertyInputs', JSON.stringify(data.data.propertyInputs));
 
-  // if (data?.images?.length > 0) {
-  //   data.images.forEach((image) => {
-  //     if (image.file) {
-  //       formData.append(`files`, image.file);
-  //     }
-  //   });
-  // }
+  if (data?.images?.length > 0) {
+    data.images.forEach((image) => {
+      if (image.file) {
+        formData.append(`files`, image.file);
+      }
+    });
+  }
 
   // Fetch options
   const options = {

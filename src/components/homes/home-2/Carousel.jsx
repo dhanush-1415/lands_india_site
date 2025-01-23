@@ -66,7 +66,7 @@ export default function Carousel() {
 
                 setProperties(combined);
             } else {
-                toast.error(data.message)
+                // toast.error(data.message)
             }
         } catch (err) {
             console.error('Error fetching categories:', err);

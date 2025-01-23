@@ -10,9 +10,9 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 // import logo from './logo-light.png';
 import logo from './logo-new.png';
-import addedValue from './added-value.png';
-import individual from './individual.png';
-import projects from './projects.png';
+import addedValue from './added-value-1.png';
+import individual from './individual-1.png';
+import projects from './projects-1.png';
 import CloseIcon from '@mui/icons-material/Close';
 import InputAdornment from '@mui/material/InputAdornment';
 import PersonIcon from '@mui/icons-material/Person';
@@ -1015,6 +1015,7 @@ export default function Header1({
                                 padding: '9px 12px',
                                 color: '#161e2d',
                                 fontSize: '15px',
+<<<<<<< HEAD
                                 marginRight:'30px',
                                 lineHeight: '21.86px',
                                 textTransform: 'capitalize',
@@ -1024,6 +1025,16 @@ export default function Header1({
                               }}
                               className="custom-desk-bar"
 
+=======
+                                marginRight: '30px',
+                                lineHeight: '21.86px',
+                                textTransform: 'capitalize',
+                                backgroundColor: '#008FF7',
+                                background: '#008FF7',
+                                color: '#ffffff',
+                              }}
+                              className="custom-desk-bar"
+>>>>>>> d2ffd68438f3625676132912d9e5c7ed29ab9d22
 
                             >
                               Sell Property
@@ -1034,6 +1045,7 @@ export default function Header1({
                               style={{
                                 textAlign: 'center',
                                 fontWeight: 600,
+<<<<<<< HEAD
                                 padding: '10px 14px',
                                 color: '#161e2d',
                                 fontSize: '15px',
@@ -1043,7 +1055,19 @@ export default function Header1({
                                 backgroundColor:'#008FF7',
                                 background:'#008FF7',
                                 color:'#ffffff',
+=======
+                                padding: '9px 12px',
+                                color: '#161e2d',
+                                fontSize: '15px',
+                                marginRight: '30px',
+                                lineHeight: '21.86px',
+                                textTransform: 'capitalize',
+                                backgroundColor: '#008FF7',
+                                background: '#008FF7',
+                                color: '#ffffff',
+>>>>>>> d2ffd68438f3625676132912d9e5c7ed29ab9d22
                               }}
+                              className="custom-desk-bar"
 
                               className="custom-desk-bar"
 
@@ -1070,16 +1094,16 @@ export default function Header1({
                                   fontSize: '15px',
                                   lineHeight: '21.86px',
                                   textTransform: 'capitalize',
-                                  backgroundColor:'#161e2d',
-                                  background:'#161e2d',
-                                  color:'#ffffff'
+                                  backgroundColor: '#161e2d',
+                                  background: '#161e2d',
+                                  color: '#ffffff'
                                 }}
 
                               >
                                 {/* <AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#161e2d', marginRight: '5px' }} /> */}
                                 {userDetails?.image ? (
                                   <img src={userDetails?.image || ""} alt='profile' width="30px" style={{ marginRight: '5px' }} className="custom-image" />
-                                ):(<AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#ffffff', marginRight: '5px' }} />)}
+                                ) : (<AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#ffffff', marginRight: '5px' }} />)}
                                 {userDetails?.fullName}
                               </a>
                               <Menu
@@ -1164,9 +1188,9 @@ export default function Header1({
                                 fontSize: '15px',
                                 lineHeight: '21.86px',
                                 textTransform: 'capitalize',
-                                backgroundColor:'#161e2d',
-                                background:'#161e2d',
-                                color:'#ffffff'
+                                backgroundColor: '#161e2d',
+                                background: '#161e2d',
+                                color: '#ffffff'
                               }}
 
                             >
@@ -1188,7 +1212,7 @@ export default function Header1({
                     <h6 style={{ marginBottom: '0' }}><AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#161e2d', marginRight: '5px' }} />Signup</h6>
                   </div>
                 ) : (
-                  <div className="custom-mob-bar" onClick={()=>{window.location.href = "/dashboard"}}>
+                  <div className="custom-mob-bar" onClick={() => { window.location.href = "/dashboard" }}>
                     <h6 style={{ marginBottom: '0' }}>{userDetails?.image ? (
                       <img src={userDetails?.image || ""} alt='profile' width="30px" style={{ marginRight: '5px' }} className="custom-image" />
                     ) : (<AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#ffffff', marginRight: '5px' }} />)}{userDetails?.fullName}</h6>
