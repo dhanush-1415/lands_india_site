@@ -29,7 +29,7 @@ export default function Properties4() {
 
   const [sorted, setSorted] = useState();
   const [filtered, setFiltered] = useState([]);
-  const [price, setPrice] = useState([500000, 10000000]);
+  const [price, setPrice] = useState([100, 100000000]);
   const [size, setSize] = useState([800, 2200]);
   const [rooms, setRooms] = useState("All");
   const [bedrooms, setBedrooms] = useState("All");
@@ -263,7 +263,6 @@ export default function Properties4() {
 
 
   useEffect(() => {
-    console.log("innnnnnnnnnnnnnnnnnnnnn")
     setProperties((prevProperties) =>
       prevProperties.map((property) => ({
         ...property,
@@ -462,10 +461,15 @@ export default function Properties4() {
         .custom-col-two {
           width: 75%;
         }
-
+        .custom-sort-bar{
+          width: 17%;
+        }
         @media (max-width: 750px) {
           .custom-col-one, .custom-col-two {
             width: 100%;
+          }
+          .custom-sort-bar{
+            width: 50%;
           }
         }
       `}
@@ -482,7 +486,7 @@ export default function Properties4() {
 
         </div>
 
-        <div className="box-filter-tab" style={{ minWidth: '15%' }} >
+        <div className="box-filter-tab custom-sort-bar" >
 
           <DropdownSelect
             onChange={(option) => {
@@ -610,9 +614,9 @@ export default function Properties4() {
                                 </div>
                                 <Slider
                                   range
-                                  // formatLabel={() => ``}
-                                  max={10000000}
-                                  min={500000}
+                                  max={100000000}
+                                  min={100}
+                                  step={500000}
                                   value={price}
                                   onChange={setPrice}
                                 />

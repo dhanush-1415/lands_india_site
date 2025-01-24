@@ -164,7 +164,7 @@ export default function MyFavorite() {
                     </tr>
                   </thead>
                   <tbody>
-                    {properties?.length && properties.map((elm, i) => (
+                    {properties?.length >= 1 && properties.map((elm, i) => (
                       <tr key={i} className="file-delete">
                         <td>
                           <div className="listing-box">

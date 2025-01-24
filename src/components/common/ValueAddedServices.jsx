@@ -13,13 +13,18 @@ export default function ValueAddedServices() {
 
 
   const [data, setData] = useState();
-  const [currentPage, setCurrentPage] = useState(1);
   const [sorted, setSorted] = useState();
   const [itemPerPage, setItemPerPage] = useState(9);
   const [isLogged, setIsLogged] = useState(false);
   const [location, setLocation] = useState(null);
   const [service, setService] = useState(null);
   const [page, setPage] = useState(1)
+
+  const [totalItems, setTotalItems] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
 
   const [AllLocation, setAllLocations] = useState([]);
 
@@ -58,15 +63,18 @@ export default function ValueAddedServices() {
     try {
 
       const filter = {
-        page: page || 1,
+        page: currentPage || 1,
         location: location || "",
         service: service || ""
       };
 
-
       const data = await getValueAddedServiceList(filter);
       if (data.success) {
-        setData(data.data)
+        setData(data.data);
+        if (data.pagination) {
+          setTotalItems(data.pagination.totalItems)
+          setCurrentPage(data.pagination.currentPage)
+        }
       } else {
         toast.error(data.message)
       }
@@ -77,7 +85,7 @@ export default function ValueAddedServices() {
 
   useEffect(() => {
     fetchServices();
-  }, [page, location, service]);
+  }, [currentPage, location, service]);
 
   useEffect(() => {
     fetchLocation()
@@ -107,7 +115,21 @@ export default function ValueAddedServices() {
       .custom-aligner{
       width:60%;
       }
+      
+        .custom-image-bar{
+            width:100%;
+            min-height:230px;
+            max-height:230px;
+        }
+        .custom-filt-bar{
+          width:20%;
+          margin-top:2rem;
+          margin-rignt:2rem;
+        }
         @media (max-width: 768px) {
+          .custom-filt-bar{
+            width:50%;
+          }
           .custom-aligner{
             flex-direction:column;
             text-align:center;
@@ -138,7 +160,7 @@ export default function ValueAddedServices() {
 
 
         <div className="d-flex align-items-center justify-content-end container custom-container-header">
-          <div style={{ width: '17%', marginTop: '2rem', marginRight: '2rem' }}>
+          <div className="custom-filt-bar" style={{ marginTop: '2rem', marginRight: '2rem' }}>
             <DropdownSelect
               options={["Location", ...(AllLocation?.map((item) => item.name) || [])]} // Prepend "All" to the options
               onChange={(location) => {
@@ -149,7 +171,7 @@ export default function ValueAddedServices() {
             />
 
           </div>
-          <div style={{ width: '25%', marginTop: '2rem', marginRight: '6px' }}>
+          <div className="custom-filt-bar" style={{ marginTop: '2rem', marginRight: '6px' }}>
             <DropdownSelect
               options={["professional", ...(realEstateServices?.map((item) => item.name) || [])]} // Prepend "All" to the options
               onChange={(service) => {
@@ -170,7 +192,7 @@ export default function ValueAddedServices() {
         </div> */}
           <div className="swiper tf-sw-mobile-1 non-swiper-on-575" style={{ overflow: 'visible', padding: '0px 20px' }}>
             <div className="tf-layout-mobile-sm xl-col-4 sm-col-2 swiper-wrapper">
-              {data?.length ? data.map((agent) => (
+              {data?.length >= 1 ? data.map((agent) => (
                 <SwiperSlide key={agent.id} className="swiper-slide">
                   <div
                     className="box-agent hover-img wow fadeInUp"
@@ -178,12 +200,12 @@ export default function ValueAddedServices() {
                   >
                     <a href="#" className="box-img img-style" style={{ borderRadius: '0px' }}>
                       <img
-                        className="lazyload mh-100"
+                        className="custom-image-bar"
                         data-src={agent.image}
                         alt={`image-agent-${agent.name}`}
                         src={agent.image}
                         // width={450}
-                        style={{ maxHeight: '350px !importent', minHeight: '350px !important', borderRadius: '3px' }}
+                        style={{ maxHeight: '230px !importent', minHeight: '230px !important', borderRadius: '3px' }}
                       />
                     </a>
                     <div className="content justify-content-center">
@@ -211,7 +233,7 @@ export default function ValueAddedServices() {
                     </div>
                   </div>
                 </SwiperSlide>
-              )):(
+              )) : (
                 <></>
               )}
             </div>
@@ -285,14 +307,14 @@ export default function ValueAddedServices() {
         </Swiper> */}
         </div>
 
-        {/* <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
+        <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
           <Pagination
             currentPage={currentPage}
             setPage={setCurrentPage}
-            itemLength={sorted?.length}
-            itemPerPage={itemPerPage}
+            itemLength={totalItems}
+            itemPerPage={pageSize}
           />
-        </ul> */}
+        </ul>
       </section>
       <Footer2 />
     </>

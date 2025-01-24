@@ -10,17 +10,25 @@ import { getFranchiseList, createFranchise } from '@/apiCalls';
 import { toast } from "react-toastify";
 
 const Franchise = () => {
-  const [currentPage, setCurrentPage] = useState(1);
   const [sorted, setSorted] = useState();
   const [itemPerPage, setItemPerPage] = useState(9);
 
+
+  const [totalItems, setTotalItems] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
   const [data, setData] = useState();
 
   const fetchFranchise = async () => {
     try {
-      const data = await getFranchiseList();
+      const data = await getFranchiseList(currentPage);
       if (data.success) {
         setData(data.data)
+        if (data.pagination) {
+          setTotalItems(data.pagination.totalItems)
+          setCurrentPage(data.pagination.currentPage)
+        }
       } else {
         toast.error(data.message)
       }
@@ -31,7 +39,7 @@ const Franchise = () => {
 
   useEffect(() => {
     fetchFranchise();
-  }, []);
+  }, [currentPage]);
 
 
 
@@ -118,6 +126,13 @@ const Franchise = () => {
   return (
     <>
       <section className="flat-section" style={{ paddingTop: '0px' }}>
+        <style>{`
+          .custom-franch-img{
+            width:100%;
+            min-height:250px;
+            max-height:250px;
+          }
+        `}</style>
         <div style={{ background: '#f0f3f4', padding: '40px 0' }}>
           <h3 style={{ width: '80%', margin: '0px auto' }} className="mb-4">Franchise</h3>
         </div>
@@ -127,7 +142,7 @@ const Franchise = () => {
             {/* Agents Section */}
             <Col lg={8}>
               <Row>
-                {data?.length && data.map((agent, index) => (
+                {data?.length >= 1 && data.map((agent, index) => (
                   <Col md={6} className="mb-4" key={agent.id}>
                     <div
                       className="box-agent hover-img wow fadeInUp"
@@ -135,11 +150,11 @@ const Franchise = () => {
                     >
                       <a href="#" className="box-img img-style" style={{ borderRadius: '0px' }}>
                         <img
-                          className="lazyload mh-100"
-                          data-src={agent.image} // Access the first image URL
+                          className="custom-franch-img"
+                          data-src={agent.image}
                           alt={`image-agent-${agent.name}`}
                           src={agent.image || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8d4F3Lf3kbFIFSGu6BSqqThC9vsueKd7a_w&s"}
-                          style={{ minHeight: '140px', maxHeight: '140px' }}
+                          style={{ minHeight: '250px', maxHeight: '250px' }}
                         />
 
                         {/* <ul className="agent-social">
@@ -284,7 +299,7 @@ const Franchise = () => {
                       onChange={handleFileChange}
                       style={{ borderRadius: '0px' }}
                     />
-                    <Form.Label style={{color:'gray'}}>Size (100 x 100)</Form.Label>
+                    <Form.Label style={{ color: 'gray' }}>Size (100 x 100)</Form.Label>
                     {errors.files && <div className="text-danger">{errors.files}</div>}
                   </Form.Group>
 
@@ -296,6 +311,16 @@ const Franchise = () => {
             </Col>
           </Row>
         </div>
+        <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
+          <Pagination
+            currentPage={currentPage}
+            setPage={setCurrentPage}
+            itemLength={totalItems}
+            itemPerPage={pageSize}
+          />
+
+
+        </ul>
       </section>
       <Footer2 />
     </>

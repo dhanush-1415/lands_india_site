@@ -15,7 +15,8 @@ export default function Blogs() {
 
     const fetchBlogs = async () => {
       try {
-        const data = await getBlogsList();
+        const currentPage = 1
+        const data = await getBlogsList(currentPage);
         setBlogs(data.data)
         if (data.success) {
           setBlogs(data.data)
@@ -94,7 +95,7 @@ export default function Blogs() {
           modules={[Pagination]}
           pagination={{ clickable: true }}
         >
-          {blogs.length && blogs.map((post, index) => (
+          {blogs.length >= 1 && blogs.map((post, index) => (
             <SwiperSlide className="swiper-slide" key={index}>
               <Link
                 to={`/blog-detail/${post.id}`}

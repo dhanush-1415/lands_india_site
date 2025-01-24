@@ -61,7 +61,7 @@ export default function Messages() {
         <div className="widget-box-2 mess-box">
           {/* <h5 className="title">Enquires</h5> */}
           <ul className="list-mess">
-            {quries.length && quries.map((msg, index) => (
+            {quries.length >= 1 && quries.map((msg, index) => (
               <li className="mess-item" key={index}>
                 <div className="user-box">
 

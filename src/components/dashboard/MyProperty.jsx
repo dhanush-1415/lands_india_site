@@ -46,7 +46,7 @@ export default function MyProperty() {
 
           setProperties(combined);
         } else {
-          toast.error(data.message || data.error || "Something Went Wrong")
+          // toast.error(data.message || data.error || "Something Went Wrong")
         }
       } catch (err) {
         console.error('Error fetching categories:', err);
@@ -99,7 +99,7 @@ export default function MyProperty() {
 
   return (
     <div className="main-content">
-          <style>{`
+      <style>{`
         @media (min-width: 800px) {
           .custom-header-text {
             display: none !important;
@@ -165,8 +165,7 @@ export default function MyProperty() {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* col 2 */}
-                  {properties?.length && properties.map((elm, i) => (
+                  {properties?.length >= 1 && properties.map((elm, i) => (
                     <tr key={i} className="file-delete">
                       <td>
                         <div className="listing-box">
@@ -181,7 +180,9 @@ export default function MyProperty() {
                           <div className="content">
                             <div className="title">
                               <Link
-                                to={`/property-details/${elm.id}`}
+                                to={elm.status === "Verified" ? `/property-details/${elm.id}` : "#"}
+
+                                // to={`/property-details/${elm.id}`}
                                 className="link"
                               >
                                 {

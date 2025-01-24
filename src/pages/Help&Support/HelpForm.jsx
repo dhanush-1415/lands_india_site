@@ -13,7 +13,7 @@ const HelpForm = () => {
         email: '',
         message: '',
         userType: 'common',
-        status: 'active',
+        status: 'Pending',
     });
 
     const handleChange = (e) => {

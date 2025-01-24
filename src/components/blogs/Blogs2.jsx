@@ -6,13 +6,13 @@ import Pagination from "../common/Pagination";
 import Pagination2 from "../common/Pagination2";
 import { getBlogsList } from "@/apiCalls";
 
-export default function Blogs2({blogs}) {
+export default function Blogs2({ blogs, totalItems, currentPage, setCurrentPage, pageSize ,  }) {
 
   return (
     <section className="flat-section">
       <div className="container custom-container-header">
         <div className="row">
-          {blogs.length && blogs.map((post, index) => (
+          {blogs.length >= 1 && blogs.map((post, index) => (
             <div className="col-lg-4 col-md-6" key={index}>
               <Link
                 to={`/blog-detail/${post.id}`}
@@ -40,10 +40,18 @@ export default function Blogs2({blogs}) {
             </div>
           ))}
           <div className="col-12 text-center pt-26 line-t">
-            
+
           </div>
         </div>
       </div>
+      <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
+        <Pagination
+          currentPage={currentPage}
+          setPage={setCurrentPage}
+          itemLength={totalItems}
+          itemPerPage={pageSize}
+        />
+      </ul>
     </section>
   );
 }

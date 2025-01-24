@@ -1183,7 +1183,7 @@ export default function Header1({
                 </div>
                 {!isLogin ? (
                   <div className="custom-mob-bar" onClick={handleDialogOpen}>
-                    <h6 style={{ marginBottom: '0' }}><AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#161e2d', marginRight: '5px' }} />Signup</h6>
+                    <h6 style={{ marginBottom: '0' }}><AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#ffffff', marginRight: '5px' }} />Signup</h6>
                   </div>
                 ) : (
                   <div className="custom-mob-bar" onClick={() => { window.location.href = "/dashboard" }}>

@@ -15,13 +15,16 @@ export default function Agents() {
 
 
   const [data, setData] = useState();
-  const [currentPage, setCurrentPage] = useState(1);
   const [sorted, setSorted] = useState();
   const [itemPerPage, setItemPerPage] = useState(9);
   const [location, setLocation] = useState(null);
   const [service, setService] = useState(null);
   const [isLogged, setIsLogged] = useState(false);
-  const [page, setPage] = useState(1)
+
+  const [totalItems, setTotalItems] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
   const [AllLocation, setAllLocations] = useState([]);
 
@@ -61,7 +64,7 @@ export default function Agents() {
     try {
 
       const filter = {
-        page: page || 1,
+        page: currentPage || 1,
         location: location || "",
         service: service || ""
       };
@@ -69,7 +72,11 @@ export default function Agents() {
 
       const data = await getAgents(filter);
       if (data.success) {
-        setData(data.data)
+        setData(data.data);
+        if (data.pagination) {
+          setTotalItems(data.pagination.totalItems)
+          setCurrentPage(data.pagination.currentPage)
+        }
       } else {
         toast.error(data.message)
       }
@@ -81,7 +88,7 @@ export default function Agents() {
 
   useEffect(() => {
     fetchAgents();
-  }, [page, location, service]);
+  }, [location, service, currentPage]);
 
   useEffect(() => {
     fetchLocation()
@@ -190,7 +197,7 @@ export default function Agents() {
         </div> */}
           <div className="swiper tf-sw-mobile-1 non-swiper-on-575" style={{ overflow: 'visible', padding: '0px 20px' }}>
             <div className="tf-layout-mobile-sm xl-col-4 sm-col-2 swiper-wrapper">
-              {data?.length && data.map((agent) => (
+              {data?.length >= 1 && data.map((agent) => (
                 <SwiperSlide key={agent.id} className="swiper-slide">
                   <div
                     className="box-agent hover-img wow fadeInUp"
@@ -301,15 +308,14 @@ export default function Agents() {
           <div className="sw-pagination spb3 sw-pagination-mb-1 text-center d-sm-none d-block" />
         </Swiper> */}
         </div>
-        {/* 
         <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
           <Pagination
             currentPage={currentPage}
             setPage={setCurrentPage}
-            itemLength={sorted?.length}
-            itemPerPage={itemPerPage}
+            itemLength={totalItems}
+            itemPerPage={pageSize}
           />
-        </ul> */}
+        </ul>
       </section>
       <Footer2 />
     </>

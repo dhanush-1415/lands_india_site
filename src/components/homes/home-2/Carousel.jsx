@@ -183,6 +183,10 @@ export default function Carousel() {
         prevArrow: <CustomPrevArrow />,
     };
 
+    const handleNav = (id) => {
+        window.location.href = `/property-details/${id}`
+    }
+
     return (
         <section className="property-carousel" style={{ background: '#ffffff' }} >
             <EnquiryForm open={open} handleClose={handleClose} />
@@ -384,7 +388,7 @@ export default function Carousel() {
                                     style={{ background: '#008ff7' }}
                                     className="details-column d-flex flex-column justify-content-center"
                                 >
-                                    <h4 className="property-title text-white">{
+                                    <h4 className="property-title text-white" style={{cursor:'pointer'}} onClick={() => {handleNav(elm.id)}}>{
                                         elm.inputs.find(item => item.input_name === "Title")?.input_value || ""
                                     }</h4>
                                     <p className="property-location text-white"><span className="icon icon-mapPin" style={{ marginRight: '10px' }} />{

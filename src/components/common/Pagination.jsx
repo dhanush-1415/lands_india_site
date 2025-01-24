@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
 export default function Pagination({
-  itemLength = 200,
-  itemPerPage = 10,
+  itemLength ,
+  itemPerPage,
   setPage = (num) => {},
   currentPage,
 }) {

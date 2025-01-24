@@ -1,5 +1,7 @@
 const baseUrl = "http://luxcycs.com:4400"
 
+// const baseUrl = "https://api.dev.propertystores.in"
+
 export const verifyMobileOtp = async (data) => {
   const url = `${baseUrl}/registration`;
   const options = {
@@ -470,9 +472,9 @@ export const getAgents = async (filter) => {
 };
 
 
-export const getEventsList = async (flag) => {
+export const getEventsList = async (flag , currentPage) => {
 
-  const url = `${baseUrl}/event/get-event?isUpcoming=${flag}`;
+  const url = `${baseUrl}/event/get-event?isUpcoming=${flag}&page=${currentPage}`;
 
   const options = {
     method: 'GET',
@@ -565,9 +567,9 @@ export const SubmitEnquiry = async (data) => {
 };
 
 
-export const getBlogsList = async () => {
+export const getBlogsList = async (currentPage) => {
 
-  const url = `${baseUrl}/blogs`;
+  const url = `${baseUrl}/blogs?page=${currentPage}`;
 
   const options = {
     method: 'GET',
@@ -589,9 +591,9 @@ export const getBlogsList = async () => {
 };
 
 
-export const getFranchiseList = async () => {
+export const getFranchiseList = async (currentPage) => {
 
-  const url = `${baseUrl}/franchaise?isVerifyed=1`;
+  const url = `${baseUrl}/franchaise?page=${currentPage}&isVerifyed=1`;
 
   const options = {
     method: 'GET',

@@ -44,9 +44,6 @@ export default function EnquiryForm({ open, handleClose, id }) {
 
     const [formData, setFormData] = useState(initialFormData);
 
-
-    console.log(formData, id, "pppppppppppppppppppppppppppppppppppp")
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -67,7 +64,7 @@ export default function EnquiryForm({ open, handleClose, id }) {
                 userType: landsUser.type || '',
                 userId: landsUser.id || '',
                 message: '',
-                status: 'active',
+                status: 'Pending',
                 isProperty: true,
                 propertyId: id, // Always use the latest id
             });
@@ -170,6 +167,7 @@ export default function EnquiryForm({ open, handleClose, id }) {
                             padding: '20px',
                             borderRadius: '8px',
                             boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+                            marginLeft:'0 !important'
                         }}
                     >
                         <Grid item xs={12}>

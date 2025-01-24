@@ -68,7 +68,7 @@ export default function FilterTab({
     { label: "5Lakhs-25Lakhs", minValue: 500000, maxValue: 2500000 },
     { label: "25Lakhs-60Lakhs", minValue: 2500000, maxValue: 6000000 },
     { label: "60Lakhs-1Cr", minValue: 6000000, maxValue: 10000000 },
-    { label: "Above 1Cr", minValue: 10000000, maxValue: 10000000 },  // Assuming "Above 1Cr" has no specific upper limit
+    { label: "Above 1Cr", minValue: 10000000, maxValue: 10000000000 },  // Assuming "Above 1Cr" has no specific upper limit
   ];
 
 

@@ -25,7 +25,10 @@ export default function DetailsTitle1({ data }) {
             }</h3>
             <div className="box-price d-flex align-items-end">
               <h3 className="fw-8">₹{
-                data[0]?.inputs?.find(item => item.input_name === "Price")?.input_value || ""
+
+                Number(data[0]?.inputs?.find(item => item.input_name === "Price")?.input_value || 0)
+                  .toLocaleString('en-IN')
+
               }</h3>
               {/* <span className="body-1 text-variant-1">/month</span> */}
             </div>
@@ -89,7 +92,7 @@ export default function DetailsTitle1({ data }) {
                   <span className="text-variant-1">
                     {
                       data[0].inputs.find(item => item.input_name === "Total Sqft")?.input_value || ""
-                    }Sqft
+                    }  Sqft
                   </span>
                 </p>
               </div>

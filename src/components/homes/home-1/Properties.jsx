@@ -522,10 +522,10 @@ export default function Properties() {
             isWishlist: wishListList.includes(property.id), // Add isWishlist
           };
         });
-
-
         setProperties(combined);
+
       } else {
+        setProperties([])
         // toast.error(data.message);
       }
     } catch (err) {
@@ -557,9 +557,7 @@ export default function Properties() {
   };
 
   useEffect(() => {
-    fetchWishlist();
-    console.log("rrrrrrrrrrrr wissssssssssssss");
-    
+    fetchWishlist();    
   }, []);
 
   useEffect(() => {
@@ -575,7 +573,7 @@ export default function Properties() {
       const payLoad = {
         userId: landsUser.id,
         propertyId: elm.id,
-        action: act, // Adjust the action based on your requirements
+        action: act,
       };
 
       try {

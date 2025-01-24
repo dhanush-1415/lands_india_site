@@ -19,8 +19,8 @@ export default function BottomCarousel() {
     const fetchEvents = async () => {
         try {
             const flag = activeTab === 'upcoming' ? true : false;
-
-            const data = await getEventsList(flag);
+            const currentPage = 1;
+            const data = await getEventsList(flag , currentPage);
             if (data.success) {
                 setEvents(data.data)
             } else {
@@ -107,7 +107,7 @@ export default function BottomCarousel() {
     };
 
     return (
-        <section className="property-carousel custom-container" style={{ background: '#ffffff', marginBottom:'50px' }}>
+        <section className="property-carousel custom-container" style={{ background: '#ffffff', marginBottom: '50px' }}>
             <style>
                 {`
                 .list-header-custom {
@@ -155,10 +155,10 @@ export default function BottomCarousel() {
                     </div>
                     <div className="d-flex gap-3 filter-list" style={{ fontWeight: 'bold', fontSize: '1rem' }}>
                         <div className="custom-two">
-                            <p onClick={() => setActiveTab('upcoming')} style={{cursor:'pointer'}} >Upcoming Events</p>
+                            <p onClick={() => setActiveTab('upcoming')} style={{ cursor: 'pointer' }} >Upcoming Events</p>
                         </div>
                         <div className="custom-last-two">
-                            <p onClick={() => {window.location.href = "/events"}} style={{cursor:'pointer'}}>Past Events</p>
+                            <p onClick={() => { window.location.href = "/events" }} style={{ cursor: 'pointer' }}>Past Events</p>
                             < NorthEastIcon sx={{ margin: ' -5px 0px 0px 5px' }} />
                         </div>
                     </div>
@@ -167,7 +167,7 @@ export default function BottomCarousel() {
                     <Slider {...settings}>
                         {events?.length && events.map((elm, index) => (
                             <div style={{ margin: '0 10px' }} key={index}>
-                                <img style={{ width: '90%', borderRadius: '8px', margin: '0px auto', maxHeight:'350px' , minHeight:'350px' }} src={elm.images[0] || ""} alt="banner" />
+                                <img style={{ width: '90%', borderRadius: '8px', margin: '0px auto', maxHeight: '350px', minHeight: '350px' }} src={elm.image[0] || ""} alt="banner" />
                             </div>
                         ))}
                     </Slider>
