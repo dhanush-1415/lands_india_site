@@ -35,7 +35,7 @@ export default function Home() {
       {/* <Services /> */}
       {/* <Benefit /> */}
       {/* <Properties2 /> */}
-      <Testimonials />
+      {/* <Testimonials /> */}
       <BottomBanner />
       {/* <Agents /> */}
       {/* <Brands /> */}

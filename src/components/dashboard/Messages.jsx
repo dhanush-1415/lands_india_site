@@ -30,6 +30,11 @@ export default function Messages() {
     fetchEnquires();
   }, []);
 
+  
+  const handleNav =  () => {
+    window.location.href = "/add-property"
+  }
+
   return (
     <div className="main-content">
             <style>{`
@@ -48,12 +53,25 @@ export default function Messages() {
           .main-content{
             width: 100%
           }
+              .custom-bg-dark{
+            font-weight:bold;
+            background: #008FF7;
+            color:#ffffff !important;
+            padding: 7px 12px;
+            border-radius: 10%;
+            border:none;
+          }
         }
       `}</style>
       <div className="main-content-inner">
-        <div className="button-show-hide custom-header-text">
-          < ArrowCircleLeftIcon sx={{ fontSize: '40px' }} />
-          <span className="body-1">Menu</span>
+      <div className="d-flex justify-content-between">
+          <div className="button-show-hide custom-header-text">
+            < ArrowCircleLeftIcon sx={{ fontSize: '40px' }} />
+            <span className="body-1">Menu</span>
+          </div>
+          <div className="custom-header-text" onClick={handleNav}>
+            <span className="custom-bg-dark">Sell Property</span>
+          </div>
         </div>
         <div className="button-show-hide" style={{ marginTop: '0px', display: 'flex' }}>
           <h3 className="body-1" style={{ color: '#000', padding: '20px 0', fontWeight: '600' }}>Property Enquires</h3>

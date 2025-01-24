@@ -1,6 +1,6 @@
-const baseUrl = "http://luxcycs.com:4400"
+// const baseUrl = "http://luxcycs.com:4400"
 
-// const baseUrl = "https://api.dev.propertystores.in"
+const baseUrl = "https://api.dev.propertystores.in"
 
 export const verifyMobileOtp = async (data) => {
   const url = `${baseUrl}/registration`;
@@ -943,6 +943,27 @@ export const updatePropertyStatus = async (data) => {
   }
 };
 
+export const deleteProperty = async (id) => {
+
+  const url = `${baseUrl}/property/delete-property/${id}`;
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error('Failed to Register');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Registration Failed:', error);
+    throw error;
+  }
+};
 
 export const getPropertyEdit = async (id) => {
 

@@ -15,7 +15,6 @@ import WidgetBox from "./WidgetBox";
 import WhyChoose from "./WhyChoose";
 import LeatestProperties from "./LeatestProperties";
 export default function PropertyDetails({data}) {
-  console.log("iiiiiiii", data);
   
 const menuId = data[0]?.main_menuId
 
