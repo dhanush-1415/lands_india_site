@@ -82,7 +82,8 @@ export default function MyProfile() {
                 agentService: data.data[0].service,
                 agentLocation: data.data[0].location,
               })
-              setimgUrl(data.data[0].image)
+              // console.log(data.data[0].image , data.data[0] , "pppppppppppppppppppppppppppppppppppppppppppppppppp")
+              setimgUrl(JSON.parse(data?.data[0]?.image))
             } else {
               setIsNew(true)
             }

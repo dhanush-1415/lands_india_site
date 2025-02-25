@@ -15,6 +15,7 @@ export default function MyProperty() {
 
   const [properties, setProperties] = useState();
 
+  const [page, setPage] = useState(1);
 
   const getProperties = async () => {
 
@@ -22,7 +23,7 @@ export default function MyProperty() {
 
     if (landsUser) {
       try {
-        const data = await getSellerProperties(landsUser.id);
+        const data = await getSellerProperties(landsUser.id, page);
 
         if (data.success) {
           const combined = data.properties.map((property) => {
@@ -44,7 +45,14 @@ export default function MyProperty() {
             };
           });
 
-          setProperties(combined);
+
+          if (combined.length > 1) {
+            setProperties((prev) => [...(prev || []), ...combined]);
+          } else {
+            setProperties(combined);
+          }
+
+          setPage(page + 1);
         } else {
           // toast.error(data.message || data.error || "Something Went Wrong")
         }
@@ -128,9 +136,27 @@ export default function MyProperty() {
     window.location.href = "/add-property"
   }
 
+  const handleScroll = (event) => {
+    // fetchProperties();
+    const bottom = event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight;
+    console.log(bottom, "Scroll Position");
+
+    // Allow a small tolerance, e.g., 5px, to trigger loading when close to the bottom
+    if (bottom || event.target.scrollHeight - event.target.scrollTop <= event.target.clientHeight + 5) {
+      // if (!loading) {
+        getProperties();
+      // }
+    }
+  };
+
   return (
     <div className="main-content">
       <style>{`
+        .custom-table-body{
+          max-height:600px !important;
+          overflow:scroll;
+          scrollbar-width: none;
+        }
         @media (min-width: 800px) {
           .custom-header-text {
             display: none !important;
@@ -199,7 +225,8 @@ export default function MyProperty() {
         <div className="widget-box-2 wd-listing">
           {/* <h5 className="title">My Properties</h5> */}
           <div className="wrap-table">
-            <div className="table-responsive">
+            <div className="table-responsive custom-table-body" 
+              onScroll={handleScroll}>
               <table>
                 <thead>
                   <tr style={{ background: '#008FF7' }}>
@@ -208,9 +235,10 @@ export default function MyProperty() {
                     <th style={{ padding: '20px' }}>Action</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody >
                   {properties?.length >= 1 && properties.map((elm, i) => (
-                    <tr key={i} className="file-delete">
+                    <tr key={i} className="file-delete"
+                    >
                       <td>
                         <div className="listing-box">
                           <div className="images">
@@ -290,7 +318,7 @@ export default function MyProperty() {
                             </a>
                           </li>
                           <li>
-                            <a className="item"  onClick={() => { handleDelete(elm.id, 'Sold') }} >
+                            <a className="item" onClick={() => { handleDelete(elm.id, 'Sold') }} >
                               <svg
                                 width={16}
                                 height={16}

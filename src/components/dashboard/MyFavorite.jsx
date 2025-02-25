@@ -15,6 +15,8 @@ export default function MyFavorite() {
   const [wishListList, setWishListList] = useState([]);
   const [properties, setProperties] = useState([]);
   const [isEmpty, setEmpty] = useState(false);
+  const [page, setPage] = useState(1);
+
 
   const fetchWishlist = async () => {
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
@@ -40,7 +42,7 @@ export default function MyFavorite() {
 
     if (landsUser) {
       try {
-        const data = await getWishListProperties(wishListList);
+        const data = await getWishListProperties(wishListList, page);
         if (data.success) {
           const combined = data.properties.map((property) => {
             const propertyInputs = data.propertyInputs.filter(input => input.properties_postId === property.id);
@@ -61,9 +63,16 @@ export default function MyFavorite() {
             };
           });
 
-          setProperties(combined);
+          if (combined.length > 1) {
+            setProperties((prev) => [...(prev || []), ...combined]);
+          } else {
+            setProperties(combined);
+          }
+
+          setPage(page + 1);
+
         } else {
-          toast.error(data.message);
+          // toast.error(data.message);
         }
       } catch (err) {
         console.error('Error fetching wishlist:', err);
@@ -114,14 +123,33 @@ export default function MyFavorite() {
     }
   };
 
-  
-  const handleNav =  () => {
+
+  const handleNav = () => {
     window.location.href = "/add-property"
   }
 
+  const handleScroll = (event) => {
+    // fetchProperties();
+    const bottom = event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight;
+    console.log(bottom, "Scroll Position");
+
+    // Allow a small tolerance, e.g., 5px, to trigger loading when close to the bottom
+    if (bottom || event.target.scrollHeight - event.target.scrollTop <= event.target.clientHeight + 5) {
+      // if (!loading) {
+      fetchWishlistProperties(wishListList)
+
+      // }
+    }
+  };
+
   return (
     <div className="main-content">
-          <style>{`
+      <style>{`
+        .custom-table-body{
+          max-height:600px !important;
+          overflow:scroll;
+          scrollbar-width: none;
+        }
         @media (min-width: 800px) {
           .custom-header-text {
             display: none !important;
@@ -148,7 +176,7 @@ export default function MyFavorite() {
         }
       `}</style>
       <div className="main-content-inner">
-      <div className="d-flex justify-content-between">
+        <div className="d-flex justify-content-between">
           <div className="button-show-hide custom-header-text">
             < ArrowCircleLeftIcon sx={{ fontSize: '40px' }} />
             <span className="body-1">Menu</span>
@@ -171,7 +199,8 @@ export default function MyFavorite() {
 
               </>
             ) : (
-              <div className="table-responsive">
+              <div className="table-responsive custom-table-body"
+                onScroll={handleScroll}>
                 <table>
                   <thead >
                     <tr style={{ background: '#008FF7' }} >
@@ -200,8 +229,8 @@ export default function MyFavorite() {
                                   className="link"
                                 >
                                   {
-                                  elm.inputs.find(item => item.input_name === "Title")?.input_value || ""
-                                }
+                                    elm.inputs.find(item => item.input_name === "Title")?.input_value || ""
+                                  }
                                 </Link>
                               </div>
                               <div className="text-date">
