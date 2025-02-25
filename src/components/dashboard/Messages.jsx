@@ -36,7 +36,8 @@ export default function Messages() {
 
   // Fetch initial data when component mounts
   useEffect(() => {
-    fetchEnquires(1);
+
+    fetchEnquires(page);
   }, []);
 
   // Infinite Scroll

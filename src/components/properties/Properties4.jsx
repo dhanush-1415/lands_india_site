@@ -29,7 +29,7 @@ export default function Properties4() {
 
   const [sorted, setSorted] = useState();
   const [filtered, setFiltered] = useState([]);
-  const [price, setPrice] = useState([100, 100000000]);
+  const [price, setPrice] = useState([0, 100000000]);
   const [size, setSize] = useState([800, 2200]);
   const [rooms, setRooms] = useState("All");
   const [bedrooms, setBedrooms] = useState("All");
@@ -615,7 +615,7 @@ export default function Properties4() {
                                 <Slider
                                   range
                                   max={100000000}
-                                  min={100}
+                                  min={0}
                                   step={500000}
                                   value={price}
                                   onChange={setPrice}
