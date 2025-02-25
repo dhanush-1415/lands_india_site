@@ -28,6 +28,8 @@ export default function Messages() {
 
   useEffect(() => {
     fetchEnquires();
+    console.log("wwwwwwwwwwww",quries);
+    
   }, []);
 
   return (

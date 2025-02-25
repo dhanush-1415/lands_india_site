@@ -64,7 +64,7 @@ export default function FilterTab({
   }, [])
 
   const budgetOptions = [
-    { label: "Below 5Lakhs", minValue: 50000, maxValue: 500000 },
+    { label: "Below 5Lakhs", minValue: 0, maxValue: 500000 },
     { label: "5Lakhs-25Lakhs", minValue: 500000, maxValue: 2500000 },
     { label: "25Lakhs-60Lakhs", minValue: 2500000, maxValue: 6000000 },
     { label: "60Lakhs-1Cr", minValue: 6000000, maxValue: 10000000 },
