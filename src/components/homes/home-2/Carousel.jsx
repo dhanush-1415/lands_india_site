@@ -39,8 +39,6 @@ export default function Carousel() {
 
     const [properties, setProperties] = useState([]);
 
-    console.log(properties, "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
-
     const fetchPremiumList = async () => {
         try {
             const data = await getPremiumList();
@@ -178,7 +176,7 @@ export default function Carousel() {
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
-        autoplaySpeed: 5000,
+        autoplaySpeed: 5000000,
         nextArrow: <CustomNextArrow />,
         prevArrow: <CustomPrevArrow />,
     };
@@ -234,7 +232,26 @@ export default function Carousel() {
                          display: flex;
                         }
                     }
+                    .custom-resp-bar{
+                        display: flex;
+                        flex-direction: row;
+                    }
+                    .custom-resp-bar-mob{
+                        display:none;
+                    }
                     @media (max-width: 768px) {
+                    .custom-resp-bar{
+                        display:none;
+                    }
+                    .custom-resp-bar-mob{
+                        display:flex;
+                        justify-content:space-between;
+                    }
+                    .custom-inner-cont{
+                        display:flex;
+                        flex-direction:row;
+                        justify-content:space-around;
+                    }
                     .property-carousel {
                         padding: 30px 0;
                         background-color: #f9f9f9;
@@ -255,6 +272,14 @@ export default function Carousel() {
                         margin-top: 5%;
                         }
                         
+                         .property-image {
+                        max-height:250px;
+                        min-height:250px;
+                        width: 100%;
+                        height: auto;
+                        object-fit: cover;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    }
                     }
 
                     @media (max-width: 480px) {
@@ -388,7 +413,7 @@ export default function Carousel() {
                                     style={{ background: '#008ff7' }}
                                     className="details-column d-flex flex-column justify-content-center"
                                 >
-                                    <h4 className="property-title text-white" style={{cursor:'pointer'}} onClick={() => {handleNav(elm.id)}}>{
+                                    <h4 className="property-title text-white" style={{ cursor: 'pointer' }} onClick={() => { handleNav(elm.id) }}>{
                                         elm.inputs.find(item => item.input_name === "Title")?.input_value || ""
                                     }</h4>
                                     <p className="property-location text-white"><span className="icon icon-mapPin" style={{ marginRight: '10px' }} />{
@@ -775,7 +800,7 @@ export default function Carousel() {
                                                 .toLocaleString('en-IN')
                                         }
                                     </h5>
-                                    <div className="button-group mediabtnGroupTabSpace">
+                                    <div className="button-group mediabtnGroupTabSpace custom-resp-bar">
                                         <Button onClick={handleClickOpen} variant="primary" className="me-2 mediaGroupEnguiryBtn" style={{ borderRadius: '0px', fontWeight: 'bold', fontSize: '1rem', background: '#ffffff', color: '#161e2d' }}>
                                             <DraftsIcon sx={{ marginRight: '2px' }} />
                                             Enquiry now
@@ -800,7 +825,53 @@ export default function Carousel() {
                                             <WhatsAppIcon sx={{ fontSize: '25px' }} onClick={() => window.open('https://wa.me/919363828393?text=Hi, I would like to know more.', '_blank')} />
                                         </Button>
                                     </div>
-
+                                    <div className="content-bottom mt-3  custom-resp-bar-mob">
+                                        <div
+                                            onClick={() => { handleClickOpen(elm.id) }}
+                                            className="d-flex justify-content-center align-items-center shadow-sm mt-1"
+                                            style={{
+                                                cursor: 'pointer',
+                                                fontWeight: 'bold',
+                                                background: '#ffffff',
+                                                color: '#018df7',
+                                                padding: '10px 10px',
+                                                borderRadius: '0px',
+                                                textAlign: 'center',
+                                            }}
+                                        >
+                                            <DraftsTwoToneIcon sx={{ marginRight: '5px', fontSize: '20px' }} />
+                                            <span style={{ fontSize: '14px' }}>Enquiry Now</span>
+                                        </div>
+                                        <div
+                                            className="d-flex justify-content-around mt-1 custom-inner-cont"
+                                            style={{ gap: '15px' }}
+                                        >
+                                            <div
+                                                className="d-flex justify-content-center align-items-center rounded-circle border shadow-sm"
+                                                style={{
+                                                    width: '44px',
+                                                    height: '44px',
+                                                    cursor: 'pointer',
+                                                    background: '#ffffff',
+                                                }}
+                                                onClick={() => window.location.href = 'tel:+919363828393'}
+                                            >
+                                                <CallIcon sx={{ color: '#018df7' }} />
+                                            </div>
+                                            <div
+                                                onClick={() => window.open('https://wa.me/919363828393?text=Hi, I would like to know more.', '_blank')}
+                                                className="d-flex justify-content-center align-items-center rounded-circle border shadow-sm"
+                                                style={{
+                                                    width: '44px',
+                                                    height: '44px',
+                                                    cursor: 'pointer',
+                                                    background: '#ffffff',
+                                                }}
+                                            >
+                                                <WhatsAppIcon sx={{ color: '#25D366' }} />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </Col>
                             </div>
                         </div>

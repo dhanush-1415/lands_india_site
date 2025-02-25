@@ -501,7 +501,7 @@ const DashboardPage = () => {
         <div
           className="flex-grow-1 bg-white p-4 main-content"
           style={{
-            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+            
             borderRadius: "8px",
             margin: "16px",
             scrollbarWidth: 'none',

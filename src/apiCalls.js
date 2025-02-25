@@ -1,6 +1,6 @@
-const baseUrl = "http://luxcycs.com:4400"
+// const baseUrl = "http://luxcycs.com:4400"
 
-// const baseUrl = "https://api.dev.propertystores.in"
+const baseUrl = "https://api.dev.propertystores.in"
 
 export const verifyMobileOtp = async (data) => {
   const url = `${baseUrl}/registration`;
@@ -520,9 +520,9 @@ export const getLegalAdvisersList = async () => {
 
 
 
-export const getSellerProperties = async (id) => {
+export const getSellerProperties = async (id, page) => {
 
-  const url = `${baseUrl}/property/${id}`;
+  const url = `${baseUrl}/property/${id}?page=${page}`;
 
   const options = {
     method: 'GET',
@@ -825,11 +825,11 @@ export const getUserWishList = async (id) => {
   }
 };
 
-export const getWishListProperties = async (ids) => {
+export const getWishListProperties = async (ids , page) => {
 
   const propertyIds = ids.join(',');
 
-  const url = `${baseUrl}/property/get-properties?propertyId=${propertyIds}`;
+  const url = `${baseUrl}/property/get-properties?propertyId=${propertyIds}&page=${page}`;
 
 
   const options = {
@@ -896,9 +896,9 @@ export const getValueAddedServiceList = async (filter) => {
   }
 };
 
-export const getUserQueries = async (id) => {
+export const getUserQueries = async (id , page) => {
 
-  const url = `${baseUrl}/query/list/${id}?isProperty=1`;
+  const url = `${baseUrl}/query/list/${id}?isProperty=1&page=${page}`;
 
 
   const options = {
@@ -920,6 +920,28 @@ export const getUserQueries = async (id) => {
   }
 };
 
+export const getReviews = async () => {
+
+  const url = `${baseUrl}/testimonial?page=1`;
+
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error('Failed to fetch data');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+};
 
 export const updatePropertyStatus = async (data) => {
   const url = `${baseUrl}/property/update-status`;
@@ -943,6 +965,27 @@ export const updatePropertyStatus = async (data) => {
   }
 };
 
+export const deleteProperty = async (id) => {
+
+  const url = `${baseUrl}/property/delete-property/${id}`;
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error('Failed to Register');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Registration Failed:', error);
+    throw error;
+  }
+};
 
 export const getPropertyEdit = async (id) => {
 

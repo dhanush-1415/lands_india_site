@@ -769,7 +769,15 @@ export default function Properties4() {
                                   }}
                                 // Replace with your wishlist handling function
                                 >
-                                  <FavoriteIcon onClick={() => handleWishlist(elm, "remove")} />{/* You can use Font Awesome for the heart icon */}
+                                  <FavoriteIcon sx={{
+                                    backgroundColor: '#fff',
+                                    position: 'absolute',
+                                    top: '0px',
+                                    left: '0px',
+                                    padding: '3px',
+                                    borderRadius: '2px',
+                                    fontSize: '30px !important',
+                                  }} onClick={() => handleWishlist(elm, "remove")} />{/* You can use Font Awesome for the heart icon */}
                                 </div>
                               ) : (
                                 <div
@@ -784,7 +792,15 @@ export default function Properties4() {
                                     background: "linear-gradient(to bottom, rgba(0, 0, 0, 0.), rgba(0, 0, 0, 0))",
                                   }}
                                 >
-                                  <FavoriteBorderIcon onClick={() => handleWishlist(elm, 'add')} />{/* You can use Font Awesome for the heart icon */}
+                                  <FavoriteBorderIcon sx={{
+                                    backgroundColor: '#fff',
+                                    position: 'absolute',
+                                    top: '0px',
+                                    left: '0px',
+                                    padding: '3px',
+                                    borderRadius: '2px',
+                                    fontSize: '30px !important',
+                                  }} onClick={() => handleWishlist(elm, 'add')} />{/* You can use Font Awesome for the heart icon */}
                                 </div>
                               )}
                             </Link>

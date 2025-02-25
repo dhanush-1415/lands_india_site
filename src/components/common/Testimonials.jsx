@@ -1,9 +1,40 @@
 import { testimonialData } from "@/data/testimonials";
-import React from "react";
+import React, { useState , useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-
+import { getReviews } from "@/apiCalls";
 import { Pagination } from "swiper/modules";
 export default function Testimonials() {
+
+
+  const [data , setData ] = useState();
+  
+    const fetchData = async () => {
+      try {
+
+        const data = await getReviews();
+        if (data.success) {
+          setData(data.data);
+          // if (data.pagination) {
+          //   setTotalItems(data.pagination.totalItems)
+          //   setCurrentPage(data.pagination.currentPage)
+          // }
+        } else {
+          // toast.error(data.message)
+        }
+      } catch (err) {
+        console.error('Error fetching categories:', err);
+      }
+    };
+  
+  
+    useEffect(() => {
+      fetchData();
+    }, []);
+
+
+    console.log(data , 'lllllllllllllllllllllllllllllllllll')
+
+
   return (
     <section className="flat-section bg-primary-new flat-testimonial" style={{background:'#f0f3f4'}}>
       <div className="box-title px-15 wow fadeInUp">
@@ -48,7 +79,7 @@ export default function Testimonials() {
         modules={[Pagination]}
         pagination={{ clickable: true, el: ".spb5" }}
       >
-        {testimonialData.map(
+        {data?.length > 1 && data.map(
           ({
             id,
             quote,
@@ -64,14 +95,6 @@ export default function Testimonials() {
                 <span className="icon icon-quote" style={{color:'#008FF7'}} />
                 <p className="note body-2">"{quote}"</p>
                 <div className="box-avt d-flex align-items-center gap-12">
-                  {/* <div className={`avatar avt-${avatarSize} round`}>
-                    <img
-                      alt={avatarAlt}
-                      src={avatarSrc}
-                      width={avatarSize}
-                      height={avatarSize}
-                    />
-                  </div> */}
                   <div className="info">
                     <h6>{name}</h6>
                     <p className="caption-2 text-variant-1">{position}</p>

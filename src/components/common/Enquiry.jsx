@@ -170,7 +170,7 @@ export default function EnquiryForm({ open, handleClose, id }) {
                             marginLeft:'0 !important'
                         }}
                     >
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sx={{paddingLeft:'0 !important'}}>
                             <TextField
                                 fullWidth
                                 label="Name"
@@ -188,7 +188,7 @@ export default function EnquiryForm({ open, handleClose, id }) {
                             />
                         </Grid>
 
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sx={{paddingLeft:'0 !important'}}>
                             <TextField
                                 fullWidth
                                 label="Phone"
@@ -207,7 +207,7 @@ export default function EnquiryForm({ open, handleClose, id }) {
                             />
                         </Grid>
 
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sx={{paddingLeft:'0 !important'}}>
                             <TextField
                                 fullWidth
                                 label="Email"
@@ -226,7 +226,7 @@ export default function EnquiryForm({ open, handleClose, id }) {
                             />
                         </Grid>
 
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sx={{paddingLeft:'0 !important'}}>
                             <TextField
                                 fullWidth
                                 label="Message"
@@ -240,7 +240,7 @@ export default function EnquiryForm({ open, handleClose, id }) {
                             />
                         </Grid>
 
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sx={{paddingLeft:'0 !important'}}>
                             <Button
                                 sx={buttonStyle}
                                 variant="contained"
