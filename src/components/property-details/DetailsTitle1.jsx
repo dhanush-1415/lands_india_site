@@ -3,10 +3,6 @@ import React from "react";
 
 export default function DetailsTitle1({ data }) {
 
-
-  console.log(data, "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
-
-
   return (
     <div className="flat-section-v43" style={{ padding: '30px 0' }}>
       <style>
