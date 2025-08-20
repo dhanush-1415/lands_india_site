@@ -64,7 +64,7 @@ export default function Blogs() {
             <p>Read our latest articles on real estate.</p>
           </div>
           <div className="d-flex gap-3 filter-list" style={{ fontWeight: 'bold', fontSize: '1rem' }}>
-            <div className="custom-two custom-last-two">
+            <div className="custom-two custom-last-two" style={{cursor:'pointer'}} onClick={() => window.location.href = '/blogs'}>
               <p>See All Our Blogs</p>
               <NorthEastIcon sx={{ margin: ' -5px 0px 0px 5px' }} />
             </div>

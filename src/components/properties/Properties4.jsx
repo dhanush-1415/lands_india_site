@@ -109,6 +109,10 @@ export default function Properties4() {
     params.append("minPrice", price[0].toString());
     params.append("maxPrice", price[1].toString());
 
+    // Clear current properties data before navigating
+    setProperties([]);
+    setPage(1);
+
     navigate(`/properties/all?${params.toString()}`);
   };
 
@@ -193,7 +197,7 @@ export default function Properties4() {
     fetchLocation()
   }, [])
 
-  const fetchProperties = async () => {
+  const fetchProperties = async (isNewSearch = false) => {
     const location = searchParams.get("location");
     const minPrice = searchParams.get("minPrice");
     const maxPrice = searchParams.get("maxPrice");
@@ -209,7 +213,7 @@ export default function Properties4() {
       category: category || "",
       subCategory: subCategory || "",
       staus: "Verified",
-      page
+      page: isNewSearch ? 1 : page
     };
 
     try {
@@ -235,17 +239,22 @@ export default function Properties4() {
           };
         });
 
-        setProperties((prevProperties) => {
-          const uniqueProperties = [
-            ...new Map(
-              [...prevProperties, ...combined].map((property) => [property.id, property])
-            ).values(),
-          ];
-          return uniqueProperties;
-        });
-
-        // setProperties((prevProperties) => [...prevProperties, ...combined]);
-        setPage(page + 1);
+        if (isNewSearch) {
+          // Replace properties for new search
+          setProperties(combined);
+          setPage(2); // Reset page to 2 for next load
+        } else {
+          // Append properties for pagination
+          setProperties((prevProperties) => {
+            const uniqueProperties = [
+              ...new Map(
+                [...prevProperties, ...combined].map((property) => [property.id, property])
+              ).values(),
+            ];
+            return uniqueProperties;
+          });
+          setPage(page + 1);
+        }
       } else {
         // toast.error(data.message);
       }
@@ -257,7 +266,7 @@ export default function Properties4() {
 
   useEffect(() => {
     if (wishlistLoaded) {
-      fetchProperties();
+      fetchProperties(true); // Pass true for new search
     }
   }, [wishlistLoaded])
 
@@ -273,7 +282,10 @@ export default function Properties4() {
 
   useEffect(() => {
     fetchWishlist();
-    fetchProperties();
+    // Clear properties and reset page when search params change
+    setProperties([]);
+    setPage(1);
+    fetchProperties(true); // Pass true for new search
   }, [searchParams]);
 
   const handleWishlist = async (elm, act) => {
@@ -356,14 +368,13 @@ export default function Properties4() {
   };
 
   const handleScroll = (event) => {
-    // fetchProperties();
     const bottom = event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight;
     console.log(bottom, loading, "Scroll Position");
 
     // Allow a small tolerance, e.g., 5px, to trigger loading when close to the bottom
     if (bottom || event.target.scrollHeight - event.target.scrollTop <= event.target.clientHeight + 5) {
       if (!loading) {
-        fetchProperties();
+        fetchProperties(false); // Pass false for pagination
       }
     }
   };
@@ -372,7 +383,7 @@ export default function Properties4() {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          handleScroll(); // Call the function when loader is visible
+          fetchProperties(false); // Pass false for pagination
         }
       },
       {
@@ -391,7 +402,7 @@ export default function Properties4() {
         observer.unobserve(loaderRef.current);
       }
     };
-  }, [handleScroll]);
+  }, []);
 
 
   const sortProperties = (option) => {
@@ -705,7 +716,7 @@ export default function Properties4() {
                       <div key={index} className="col-xl-4 col-lg-6 col-md-6">
                         <div className="homelengo-box">
                           <div className="archive-top">
-                            <Link className="images-group">
+                            <Link className="images-group" to={`/property-details/${elm.id}`}>
                               <div className="images-style" style={{ position: "relative" }}>
                                 <img
                                   className="lazyload"
@@ -777,7 +788,7 @@ export default function Properties4() {
                                     padding: '3px',
                                     borderRadius: '2px',
                                     fontSize: '30px !important',
-                                  }} onClick={() => handleWishlist(elm, "remove")} />{/* You can use Font Awesome for the heart icon */}
+                                  }} onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleWishlist(elm, "remove"); }} />{/* You can use Font Awesome for the heart icon */}
                                 </div>
                               ) : (
                                 <div
@@ -800,7 +811,7 @@ export default function Properties4() {
                                     padding: '3px',
                                     borderRadius: '2px',
                                     fontSize: '30px !important',
-                                  }} onClick={() => handleWishlist(elm, 'add')} />{/* You can use Font Awesome for the heart icon */}
+                                  }} onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleWishlist(elm, 'add'); }} />{/* You can use Font Awesome for the heart icon */}
                                 </div>
                               )}
                             </Link>

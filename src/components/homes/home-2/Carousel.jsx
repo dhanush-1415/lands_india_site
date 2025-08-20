@@ -400,7 +400,7 @@ export default function Carousel() {
                     {properties.length && properties.map((elm, index) => (
                         <div key={index} className="property-slide">
                             <div className="custom-cont">
-                                <Col lg={7} md={12} className="image-column" style={{ background: '#f8f9fa', display: 'flex', justifyContent: 'center', aligntems: 'center' }}>
+                                <Col onClick={() => { handleNav(elm.id) }} lg={7} md={12} className="image-column" style={{ cursor: 'pointer', background: '#f8f9fa', display: 'flex', justifyContent: 'center', aligntems: 'center' }}>
                                     <img
                                         src={elm.file_path ? elm.file_path.split(',')[0] : ""}
                                         alt={elm.id}

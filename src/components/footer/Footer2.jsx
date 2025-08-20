@@ -8,6 +8,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 
 const Footer2 = () => {
@@ -19,7 +20,7 @@ const Footer2 = () => {
       if (landsUser) {
         window.location.href = `/${path}`
       } else {
-        toast.info("Please Login to Continue")
+        toast.error("Please Login to Continue")
       }
     } else {
 

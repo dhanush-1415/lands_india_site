@@ -16,457 +16,13 @@ import { toast } from "react-toastify";
 
 export default function Properties() {
 
-  //   const [wishListList, setWishListList] = useState([]);
-
-  //   // sample wishListList [32 , 33 ]
-
-  //   const fetchWishlist = async () => {
-
-  //     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
-
-  //     if (landsUser) {
-
-  //       try {
-  //         const data = await getUserWishList(landsUser.id);
-
-  //         if (data.success) {
-  //           setWishListList(data.wishList)
-  //         } else {
-  //           toast.error(data.message)
-  //         }
-  //       } catch (err) {
-  //         console.error('Error fetching categories:', err);
-  //       }
-  //     }
-  //   }
-
-  //   useEffect(() => {
-  //     fetchWishlist()
-  //   }, [])
-
-
-
-  //   const [properties, setProperties] = useState([]);
-
-  //   sampleProperties
-  //  [
-  //     {
-  //       "id": 32,
-  //       "sub_menuId": 1,
-  //       "sellerId": 1,
-  //       "location": "chennai",
-  //       "price": "200000000",
-  //       "status": "Available",
-  //       "file_path": "http://luxcycs.com:4400/lands-india-api/uploads/1736842210277-profile-new.jpg",
-  //       "isPremium": true,
-  //       "createdAt": "2025-01-14T08:10:10.000Z",
-  //       "updatedAt": "2025-01-14T08:10:10.000Z",
-  //       "inputs": [
-  //           {
-  //               "id": 31,
-  //               "properties_postId": 32,
-  //               "input_id": 1,
-  //               "input_value": "chk",
-  //               "createdAt": "2025-01-14T08:10:10.000Z",
-  //               "updatedAt": "2025-01-14T08:10:10.000Z",
-  //               "input_name": "title",
-  //               "input_type": "text",
-  //               "options": null
-  //           },
-  //           {
-  //               "id": 32,
-  //               "properties_postId": 32,
-  //               "input_id": 2,
-  //               "input_value": "chk desc",
-  //               "createdAt": "2025-01-14T08:10:10.000Z",
-  //               "updatedAt": "2025-01-14T08:10:10.000Z",
-  //               "input_name": "description",
-  //               "input_type": "textarea",
-  //               "options": null
-  //           },
-  //           {
-  //               "id": 33,
-  //               "properties_postId": 32,
-  //               "input_id": 3,
-  //               "input_value": "200000000",
-  //               "createdAt": "2025-01-14T08:10:10.000Z",
-  //               "updatedAt": "2025-01-14T08:10:10.000Z",
-  //               "input_name": "price",
-  //               "input_type": "text",
-  //               "options": null
-  //           },
-  //           {
-  //               "id": 34,
-  //               "properties_postId": 32,
-  //               "input_id": 4,
-  //               "input_value": "Chennai",
-  //               "createdAt": "2025-01-14T08:10:10.000Z",
-  //               "updatedAt": "2025-01-14T08:10:10.000Z",
-  //               "input_name": "location",
-  //               "input_type": "text",
-  //               "options": null
-  //           },
-  //           {
-  //               "id": 35,
-  //               "properties_postId": 32,
-  //               "input_id": 9,
-  //               "input_value": "45678",
-  //               "createdAt": "2025-01-14T08:10:10.000Z",
-  //               "updatedAt": "2025-01-14T08:10:10.000Z",
-  //               "input_name": "check ",
-  //               "input_type": "number",
-  //               "options": [
-  //                   ""
-  //               ]
-  //           },
-  //           {
-  //               "id": 36,
-  //               "properties_postId": 32,
-  //               "input_id": 10,
-  //               "input_value": "no,true",
-  //               "createdAt": "2025-01-14T08:10:10.000Z",
-  //               "updatedAt": "2025-01-14T08:10:10.000Z",
-  //               "input_name": "Propert Name",
-  //               "input_type": "checkbox",
-  //               "options": [
-  //                   "yes",
-  //                   "no",
-  //                   "true",
-  //                   "false"
-  //               ]
-  //           }
-  //       ]
-  //   },
-  //   {
-  //       "id": 36,
-  //       "sub_menuId": 1,
-  //       "sellerId": 1,
-  //       "location": "hyderabad",
-  //       "price": "5000000",
-  //       "status": "Available",
-  //       "file_path": "uploads/1736845533690-Default.jpg",
-  //       "isPremium": true,
-  //       "createdAt": "2025-01-14T09:05:41.000Z",
-  //       "updatedAt": "2025-01-14T09:05:41.000Z",
-  //       "inputs": [
-  //           {
-  //               "id": 51,
-  //               "properties_postId": 36,
-  //               "input_id": 1,
-  //               "input_value": "villa",
-  //               "createdAt": "2025-01-14T09:05:41.000Z",
-  //               "updatedAt": "2025-01-14T09:05:41.000Z",
-  //               "input_name": "title",
-  //               "input_type": "text",
-  //               "options": null
-  //           },
-  //           {
-  //               "id": 52,
-  //               "properties_postId": 36,
-  //               "input_id": 2,
-  //               "input_value": "Dreams",
-  //               "createdAt": "2025-01-14T09:05:41.000Z",
-  //               "updatedAt": "2025-01-14T09:05:41.000Z",
-  //               "input_name": "description",
-  //               "input_type": "textarea",
-  //               "options": null
-  //           },
-  //           {
-  //               "id": 53,
-  //               "properties_postId": 36,
-  //               "input_id": 3,
-  //               "input_value": "5000000",
-  //               "createdAt": "2025-01-14T09:05:41.000Z",
-  //               "updatedAt": "2025-01-14T09:05:41.000Z",
-  //               "input_name": "price",
-  //               "input_type": "text",
-  //               "options": null
-  //           },
-  //           {
-  //               "id": 54,
-  //               "properties_postId": 36,
-  //               "input_id": 4,
-  //               "input_value": "chennai",
-  //               "createdAt": "2025-01-14T09:05:41.000Z",
-  //               "updatedAt": "2025-01-14T09:05:41.000Z",
-  //               "input_name": "location",
-  //               "input_type": "text",
-  //               "options": null
-  //           },
-  //           {
-  //               "id": 55,
-  //               "properties_postId": 36,
-  //               "input_id": 10,
-  //               "input_value": "on",
-  //               "createdAt": "2025-01-14T09:05:41.000Z",
-  //               "updatedAt": "2025-01-14T09:05:41.000Z",
-  //               "input_name": "Propert Name",
-  //               "input_type": "checkbox",
-  //               "options": [
-  //                   "yes",
-  //                   "no",
-  //                   "true",
-  //                   "false"
-  //               ]
-  //           },
-  //           {
-  //               "id": 56,
-  //               "properties_postId": 36,
-  //               "input_id": 9,
-  //               "input_value": "-5",
-  //               "createdAt": "2025-01-14T09:05:41.000Z",
-  //               "updatedAt": "2025-01-14T09:05:41.000Z",
-  //               "input_name": "check ",
-  //               "input_type": "number",
-  //               "options": [
-  //                   ""
-  //               ]
-  //           }
-  //       ]
-  //   }
-  // ]
-
-  //   const fetchProperty = async () => {
-  //     try {
-  //       const filter = {
-  //         location: "",
-  //         minPrice: 0,
-  //         maxPrice: 0,
-  //         keyword: "",
-  //         category: "",
-  //         subCategory: "",
-  //       };
-  //       const data = await getProperties(filter);
-  //       if (data.success) {
-  //         const combined = data.properties.map((property) => {
-  //           const propertyInputs = data.propertyInputs.filter(input => input.properties_postId === property.id);
-
-  //           const inputsWithNames = propertyInputs.map((input) => {
-  //             const inputData = data.inputs.find(i => i.id === input.input_id);
-  //             return {
-  //               ...input,
-  //               input_name: inputData ? inputData.input_name : '',
-  //               input_type: inputData ? inputData.input_type : '',
-  //               options: inputData ? inputData.options : [],
-  //             };
-  //           });
-
-  //           return {
-  //             ...property,
-  //             inputs: inputsWithNames,
-  //           };
-  //         });
-
-  //         setProperties(combined);
-  //       } else {
-  //         toast.error(data.message)
-  //       }
-  //     } catch (err) {
-  //       console.error('Error fetching categories:', err);
-  //     }
-  //   };
-
-  //   useEffect(() => {
-  //     fetchProperty();
-  //   }, []);
-
-
-  //   const handleWishlist = async (elm) => {
-
-  //     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
-
-  //     if (landsUser) {
-
-  //       const payLoad = {
-  //         userId: landsUser.id,
-  //         propertyId: elm.id,
-  //         action: 'add',
-  //       }
-
-  //       try {
-
-  //         const data = await updateWishlist(payLoad);
-  //         if (data.success) {
-  //           toast.success(data.message)
-  //         } else {
-  //           toast.error(data.message)
-  //         }
-  //       } catch (err) {
-  //         console.error('Error fetching categories:', err);
-  //       }
-
-  //     } else {
-  //       toast.error("Please Login to Continue")
-  //     }
-
-
-  //     console.log(elm)
-  //   }
-
-
-  // // const combineData = (e) => {
-  // //
-  // const combined = data.properties.map((property) => {
-  //   const propertyInputs = data.propertyInputs.filter(input => input.properties_postId === property.id);
-
-  //   const inputsWithNames = propertyInputs.map((input) => {
-  //     const inputData = data.inputs.find(i => i.id === input.input_id);
-  //     return {
-  //       ...input,
-  //       input_name: inputData ? inputData.input_name : '',
-  //       input_type: inputData ? inputData.input_type : '',
-  //       options: inputData ? inputData.options : [],
-  //     };
-  //   });
-
-  //   return {
-  //     ...property,
-  //     inputs: inputsWithNames,
-  //   };
-  // });
-
-  // setProperties(combined);
-  // // };
-
-
-  // const [wishListList, setWishListList] = useState([]);
-  // const [properties, setProperties] = useState([]);
-  // const [selectedCategory , setSelectedCategory ] = useState()
-
-  // const displayedProperties = (() => {
-  //   const maxCount = 8;
-  //   const slicedProperties = properties.slice(0, maxCount);
-
-  //   if (slicedProperties.length < maxCount && slicedProperties.length % 2 === 0) {
-  //     slicedProperties.pop();
-  //   }
-
-  //   return slicedProperties;
-  // })();
-
-  // const fetchProperty = async () => {
-  //   try {
-  //     const filter = {
-  //       location: "",
-  //       minPrice: 0,
-  //       maxPrice: 0,
-  //       keyword: "",
-  //       category: selectedCategory || "",
-  //       subCategory: "",
-  //     };
-  //     const data = await getProperties(filter);
-  //     if (data.success) {
-  //       const combined = data.properties.map((property) => {
-  //         const propertyInputs = data.propertyInputs.filter(input => input.properties_postId === property.id);
-
-  //         const inputsWithNames = propertyInputs.map((input) => {
-  //           const inputData = data.inputs.find(i => i.id === input.input_id);
-  //           return {
-  //             ...input,
-  //             input_name: inputData ? inputData.input_name : '',
-  //             input_type: inputData ? inputData.input_type : '',
-  //             options: inputData ? inputData.options : [],
-  //           };
-  //         });
-
-  //         return {
-  //           ...property,
-  //           inputs: inputsWithNames,
-  //           isWishlist: wishListList.includes(property.id), // Add isWishlist
-  //         };
-  //       });
-
-  //       setProperties(combined);
-  //     } else {
-  //       toast.error(data.message);
-  //     }
-  //   } catch (err) {
-  //     console.error('Error fetching properties:', err);
-  //   }
-  // };
-
-  // const fetchWishlist = async () => {
-  //   const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
-
-  //   if (landsUser) {
-  //     try {
-  //       const data = await getUserWishList(landsUser.id);
-
-  //       if (data.success) {
-  //         setWishListList(data.wishList);
-  //         fetchProperty();
-  //       } else {
-  //         toast.error(data.message);
-  //       }
-  //     } catch (err) {
-  //       console.error('Error fetching wishlist:', err);
-  //     }
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   setProperties((prevProperties) =>
-  //     prevProperties.map((property) => ({
-  //       ...property,
-  //       isWishlist: wishListList?.includes(property.id),
-  //     }))
-  //   );
-  // }, [wishListList]);
-
-  // useEffect(() => {
-  //   fetchWishlist();
-  //   fetchProperty();
-  // }, [selectedCategory]);
-
-  // const handleWishlist = async (elm, act) => {
-  //   const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
-
-  //   if (landsUser) {
-  //     const payLoad = {
-  //       userId: landsUser.id,
-  //       propertyId: elm.id,
-  //       action: act, // Adjust the action based on your requirements
-  //     };
-
-  //     try {
-  //       const data = await updateWishlist(payLoad);
-  //       if (data.success) {
-  //         toast.success(data.message);
-
-  //         const updatedWishList = await getUserWishList(landsUser.id);
-  //         if (updatedWishList.success) {
-  //           setWishListList(updatedWishList.wishList);
-  //         }
-  //       } else {
-  //         toast.error(data.message);
-  //       }
-  //     } catch (err) {
-  //       console.error('Error updating wishlist:', err);
-  //     }
-  //   } else {
-  //     toast.error("Please Login to Continue");
-  //   }
-  // };
-
-
-  // const [open, setOpen] = React.useState(false);
-
-  // const handleClickOpen = () => {
-  //   setOpen(true);
-  // };
-
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
-
-  // const handleNavigation = (category) => {
-  //   setSelectedCategory(category);
-  // }
-
-
   const [wishListList, setWishListList] = useState([]);
   const [properties, setProperties] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState();
+  const [selectedCategory, setSelectedCategory] = useState(() => {
+    // Check localStorage for saved category on component mount
+    const savedCategory = localStorage.getItem('selectedPropertyCategory');
+    return savedCategory || undefined;
+  });
   const [wishlistLoaded, setWishlistLoaded] = useState(false); // Track if wishlist has been loaded
 
   useEffect(() => {
@@ -564,7 +120,11 @@ export default function Properties() {
     if (wishlistLoaded) {
       fetchProperty();
     }
-  }, [wishlistLoaded, selectedCategory]);
+  }, [wishlistLoaded]);
+
+  useEffect(() => {
+    fetchProperty();
+  }, [selectedCategory]);
 
   const handleWishlist = async (elm, act) => {
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
@@ -616,8 +176,17 @@ export default function Properties() {
   };
 
 
+  // const handleNavigation = (category) => {
+  //   const slug = category.trim().toLowerCase().replace(/\s+/g, '_');
+  //   window.location.href = `/properties/all?category=${encodeURIComponent(slug)}`;
+  // };
+
+
+  
   const handleNavigation = (category) => {
     setSelectedCategory(category);
+    // Save the selected category to localStorage
+    localStorage.setItem('selectedPropertyCategory', category);
   };
 
 
@@ -681,23 +250,59 @@ export default function Properties() {
             </div>
             <div className="d-flex gap-3 filter-list" style={{ fontWeight: 'bold', fontSize: '1rem' }}>
               <div className="custom-two">
-                <p style={{ cursor: 'pointer' }} onClick={() => { handleNavigation("Residential") }}>Residential</p>
+                <p 
+                  style={{ 
+                    cursor: 'pointer',
+                    color: selectedCategory === "Residential" ? '#018df7' : 'inherit',
+                    fontWeight: selectedCategory === "Residential" ? 'bold' : 'normal'
+                  }} 
+                  onClick={() => { handleNavigation("Residential") }}
+                >
+                  Residential
+                </p>
               </div>
               <div className="custom-two">
-                <p style={{ cursor: 'pointer' }} onClick={() => { handleNavigation("Commercial") }}>Commercial</p>
+                <p 
+                  style={{ 
+                    cursor: 'pointer',
+                    color: selectedCategory === "Commercial" ? '#018df7' : 'inherit',
+                    fontWeight: selectedCategory === "Commercial" ? 'bold' : 'normal'
+                  }} 
+                  onClick={() => { handleNavigation("Commercial") }}
+                >
+                  Commercial
+                </p>
               </div>
               <div className="custom-two">
-                <p style={{ cursor: 'pointer' }} onClick={() => { handleNavigation("land/plot") }}>Land & Plots</p>
+                <p 
+                  style={{ 
+                    cursor: 'pointer',
+                    color: selectedCategory === "land/plot" ? '#018df7' : 'inherit',
+                    fontWeight: selectedCategory === "land/plot" ? 'bold' : 'normal'
+                  }} 
+                  onClick={() => { handleNavigation("land/plot") }}
+                >
+                  Land & Plots
+                </p>
               </div>
               <div className="custom-two">
-                <p style={{ cursor: 'pointer' }} onClick={() => { handleNavigation("Projects") }}>Projects</p>
+                <p 
+                  style={{ 
+                    cursor: 'pointer',
+                    color: selectedCategory === "Projects" ? '#018df7' : 'inherit',
+                    fontWeight: selectedCategory === "Projects" ? 'bold' : 'normal'
+                  }} 
+                  onClick={() => { handleNavigation("Projects") }}
+                >
+                  Projects
+                </p>
               </div>
               <div className="custom-two custom-last-two">
                 <p style={{ cursor: 'pointer' }} onClick={() => { window.location.href = "/properties/all" }}>See All Properties</p>
                 < NorthEastIcon sx={{ margin: ' -5px 0px 0px 5px' }} />
               </div>
             </div>
-          </div>
+          </div>          
           <div
             className="flat-tab-recommended flat-animate-tab wow fadeInUp"
             data-wow-delay=".2s"
@@ -707,7 +312,9 @@ export default function Properties() {
                 <div className="row">
                   {displayedProperties.length > 0 && displayedProperties.map((elm, index) => (
                     <div key={index} className="col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                      <div className="homelengo-box">
+                      <div className="homelengo-box" 
+                           style={{ cursor: 'pointer' }}
+                           onClick={() => window.location.href = `/property-details/${elm.id}`}>
                         <div className="archive-top">
                           <Link className="images-group">
                             <div className="images-style" style={{ position: "relative" }}>
@@ -774,7 +381,10 @@ export default function Properties() {
                               // Replace with your wishlist handling function
                               >
                                 <FavoriteIcon
-                                  onClick={() => handleWishlist(elm, "remove")}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleWishlist(elm, "remove");
+                                  }}
                                   sx={{
                                     backgroundColor: '#fff',
                                     position: 'absolute',
@@ -810,7 +420,10 @@ export default function Properties() {
                                     borderRadius: '2px',
                                     fontSize:'30px !important',
                                   }}
-                                  onClick={() => handleWishlist(elm, 'add')} />
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleWishlist(elm, 'add');
+                                  }} />
                               </div>
                             )}
                           </Link>
@@ -900,6 +513,7 @@ export default function Properties() {
                               <Link
                                 to={`/property-details/${elm.id}`}
                                 className="link"
+                                onClick={(e) => e.stopPropagation()}
                               >
                                 <span style={{ cursor: 'pointer', fontWeight: 'bold', border: '1.5px dotted black', padding: '5px 10px' }} >View Details</span>
                               </Link>
@@ -908,7 +522,10 @@ export default function Properties() {
                           </div>
                           <div className="content-bottom mt-3">
                             <div
-                              onClick={() => { handleClickOpen(elm.id) }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleClickOpen(elm.id);
+                              }}
                               className="d-flex justify-content-center align-items-center shadow-sm mt-1"
                               style={{
                                 cursor: 'pointer',
@@ -935,12 +552,18 @@ export default function Properties() {
                                   cursor: 'pointer',
                                   background: '#ffffff',
                                 }}
-                                onClick={() => window.location.href = 'tel:+919363828393'}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.location.href = 'tel:+919363828393';
+                                }}
                               >
                                 <CallIcon sx={{ color: '#018df7' }} />
                               </div>
                               <div
-                                onClick={() => window.open('https://wa.me/919363828393?text=Hi, I would like to know more.', '_blank')}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.open('https://wa.me/919363828393?text=Hi, I would like to know more.', '_blank');
+                                }}
                                 className="d-flex justify-content-center align-items-center rounded-circle border shadow-sm"
                                 style={{
                                   width: '44px',
@@ -959,21 +582,48 @@ export default function Properties() {
                     </div>
                   ))}
                 </div>
-                {/* <div className="text-center">
-                  <Link
-                    to={`/properties`}
-                    className="tf-btn btn-view primary size-1 hover-btn-view"
-                  >
-                    View All Properties
-                    <span className="icon icon-arrow-right2" />
-                  </Link>
-                </div> */}
               </div>
             </div>
           </div>
-        </div >
-
-      </section >
+          
+          {/* View More Button - Always Visible */}
+          <div className="text-center" style={{ 
+            marginTop: '30px', 
+            marginBottom: '30px',
+            display: 'block',
+            visibility: 'visible',
+            position: 'relative',
+            zIndex: 1000
+          }}>
+            <button
+              onClick={() => {
+                console.log('View More clicked, selectedCategory:', selectedCategory);
+                if (selectedCategory) {
+                  const slug = selectedCategory.trim().toLowerCase().replace(/\s+/g, '_');
+                  window.location.href = `/properties/all?category=${encodeURIComponent(slug)}`;
+                } else {
+                  window.location.href = `/properties/all`;
+                }
+              }}
+              className="tf-btn btn-view primary size-1 hover-btn-view"
+              style={{
+                cursor: 'pointer',
+                border: 'none',
+                background: '#018df7',
+                color: '#ffffff',
+                padding: '12px 24px',
+                borderRadius: '5px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                display: 'inline-block',
+                visibility: 'visible'
+              }}
+            >
+              View More
+            </button>
+          </div>
+        </div>
+      </section>
     </>
   );
 }

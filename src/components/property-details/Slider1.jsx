@@ -39,19 +39,19 @@ export default function Slider1({ data }) {
               {imageItems.length === 3 ? (
                 <div className="mosaic-grid-3">
                   <Item original={imageItems[0]} thumbnail={imageItems[0]} width={1600} height={900} key={`${imageItems[0]}-0`}>
-                    {({ ref, open }) => (
+              {({ ref, open }) => (
                       <div className="mosaic-left" onClick={open} ref={ref}>
                         <img src={imageItems[0]} alt="Image 1" />
                       </div>
-                    )}
-                  </Item>
+              )}
+            </Item>
                   <div className="mosaic-right-1">
                     {imageItems.slice(1, 3).map((src, index) => (
                       <Item original={src} thumbnail={src} width={1600} height={900} key={`${src}-${index + 1}`}>
                         {({ ref, open }) => (
                           <div className="mosaic-cell" onClick={open} ref={ref}>
                             <img src={src} alt={`Image ${index + 2}`} />
-                          </div>
+          </div>
                         )}
                       </Item>
                     ))}
@@ -60,16 +60,16 @@ export default function Slider1({ data }) {
               ) : imageItems.length === 4 ? (
                 <div className="mosaic-grid-4">
                   <Item original={imageItems[0]} thumbnail={imageItems[0]} width={1600} height={900} key={`${imageItems[0]}-0`}>
-                    {({ ref, open }) => (
+                {({ ref, open }) => (
                       <div className="mosaic-left" onClick={open} ref={ref}>
                         <img src={imageItems[0]} alt="Image 1" />
-                      </div>
-                    )}
-                  </Item>
+                  </div>
+                )}
+              </Item>
                   <div className="mosaic-right-4">
                     {imageItems.slice(1, 4).map((src, index) => (
                       <Item original={src} thumbnail={src} width={1600} height={900} key={`${src}-${index + 1}`}>
-                        {({ ref, open }) => (
+                {({ ref, open }) => (
                           <div className="mosaic-cell" onClick={open} ref={ref}>
                             <img src={src} alt={`Image ${index + 2}`} />
                           </div>
@@ -84,9 +84,9 @@ export default function Slider1({ data }) {
                     {({ ref, open }) => (
                       <div className="mosaic-left" onClick={open} ref={ref}>
                         <img src={imageItems[0]} alt="Image 1" />
-                      </div>
-                    )}
-                  </Item>
+                  </div>
+                )}
+              </Item>
                   <div className="mosaic-right">
                     {imageItems.slice(1, 5).map((src, index) => {
                       const isLastVisible = index === 3 && imageItems.length > 5;
@@ -99,7 +99,7 @@ export default function Slider1({ data }) {
                               {isLastVisible && (
                                 <div className="more-overlay">+{remainingCount}</div>
                               )}
-                            </div>
+            </div>
                           )}
                         </Item>
                       );
@@ -111,8 +111,8 @@ export default function Slider1({ data }) {
                        <Item original={src} thumbnail={src} width={1600} height={900} key={`${src}-hidden-${index}`}>
                          {({ ref }) => (
                            <img ref={ref} src={src} alt={`Image hidden ${index + 6}`} />
-                         )}
-                       </Item>
+                )}
+              </Item>
                      ))}
                    </div>
                  )}
@@ -125,12 +125,12 @@ export default function Slider1({ data }) {
                       const remainingCount = Math.max(imageItems.length - 5, 0);
                       return (
                         <Item original={src} thumbnail={src} width={1600} height={900} key={`${src}-${index}`}>
-                          {({ ref, open }) => (
+                {({ ref, open }) => (
                             <div className="image-card" onClick={open} ref={ref}>
                               <img
                                 src={src}
                                 alt={`Image ${index + 1}`}
-                              />
+                    />
                               {isFifthWithMore && (
                                 <div className="more-overlay">+{remainingCount}</div>
                               )}
@@ -146,8 +146,8 @@ export default function Slider1({ data }) {
                         <Item original={src} thumbnail={src} width={1600} height={900} key={`${src}-hidden-${index}`}>
                           {({ ref }) => (
                             <img ref={ref} src={src} alt={`Image hidden ${index + 6}`} />
-                          )}
-                        </Item>
+                )}
+              </Item>
                       ))}
                     </div>
                   )}

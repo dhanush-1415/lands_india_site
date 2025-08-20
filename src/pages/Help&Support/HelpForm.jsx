@@ -87,7 +87,7 @@ const HelpForm = () => {
                 <div className="custom-row">
                     <div className="col-lg-8" style={{ background: '#ffffff', padding: '40px' }}>
                         <h3 style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>
-                            Let's Make Your Dream Property a Reality
+                            
                         </h3>
                         <p style={{ marginBottom: '1.5rem', color: '#6c757d' }}>
                             Reach out to us for all your real estate needs – we're here to help!
@@ -186,6 +186,9 @@ const HelpForm = () => {
                         <Row>
                             <Col xs="auto">
                                 <Button
+                                    href="https://www.facebook.com/Propertystoretamilnadu"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     variant="light"
                                     className="rounded-circle shadow-sm"
                                     style={{
@@ -201,6 +204,9 @@ const HelpForm = () => {
                             </Col>
                             <Col xs="auto">
                                 <Button
+                                    href="https://www.instagram.com/propertystores.inn/#"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     variant="light"
                                     className="rounded-circle shadow-sm"
                                     style={{
@@ -216,6 +222,9 @@ const HelpForm = () => {
                             </Col>
                             <Col xs="auto">
                                 <Button
+                                    href="https://www.youtube.com/@propertystores"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     variant="light"
                                     className="rounded-circle shadow-sm"
                                     style={{
@@ -231,6 +240,9 @@ const HelpForm = () => {
                             </Col>
                             <Col xs="auto">
                                 <Button
+                                    href="https://www.linkedin.com/company/propertystores-in/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     variant="light"
                                     className="rounded-circle shadow-sm"
                                     style={{

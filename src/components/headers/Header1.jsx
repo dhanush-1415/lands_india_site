@@ -23,7 +23,7 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import Carousel from 'react-multi-carousel';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import 'react-multi-carousel/lib/styles.css';
-import { UserLogin, RegisterUser, verifyMobileOtp } from "@/apiCalls";
+import { UserLogin, RegisterUser, verifyMobileOtp, UpdateUserPassword } from "@/apiCalls";
 import { toast } from "react-toastify";
 import InfoIcon from '@mui/icons-material/Info';
 import Avatar from '@mui/material/Avatar';
@@ -170,6 +170,23 @@ export default function Header1({
     confirmPassword: '',
   });
 
+  // Forgot password state
+  const [forgotActive, setForgotActive] = useState(false);
+  const [forgotData, setForgotData] = useState({
+    phone: '',
+    otp: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+  const [forgotErrors, setForgotErrors] = useState({
+    phone: '',
+    otp: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+  const [otpSending, setOtpSending] = useState(false);
+  const [submittingForgot, setSubmittingForgot] = useState(false);
+
   // Validate phone number
   useEffect(() => {
     if (!loginActive && registerData.phone !== '') {
@@ -271,6 +288,71 @@ export default function Header1({
       ...prevData,
       [id]: value
     }));
+  };
+
+  // Forgot password handlers
+  const handleForgotChange = (event) => {
+    const { id, value } = event.target;
+    setForgotData(prev => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
+  const sendForgotOtp = async () => {
+    if (!forgotData.phone || !/^\d{10}$/.test(forgotData.phone)) {
+      setForgotErrors(prev => ({ ...prev, phone: 'Enter a valid 10-digit phone number' }));
+      toast.error('Enter a valid 10-digit phone number');
+      return;
+    }
+    setOtpSending(true);
+    try {
+      const res = await verifyMobileOtp({ phone: forgotData.phone });
+      if (res?.success) {
+        toast.success('OTP sent successfully');
+      } else {
+        toast.error(res?.message || 'Failed to send OTP');
+      }
+    } catch (e) {
+      toast.error('Failed to send OTP');
+    } finally {
+      setOtpSending(false);
+    }
+  };
+
+  const handleForgotSubmit = async () => {
+    const errs = { phone: '', otp: '', newPassword: '', confirmPassword: '' };
+    let valid = true;
+    if (!/^\d{10}$/.test(forgotData.phone)) { errs.phone = 'Enter a valid phone'; valid = false; }
+    if (!forgotData.otp) { errs.otp = 'OTP is required'; valid = false; }
+    if (forgotData.newPassword.length < 8) { errs.newPassword = 'Min 8 characters'; valid = false; }
+    if (forgotData.newPassword !== forgotData.confirmPassword) { errs.confirmPassword = 'Passwords do not match'; valid = false; }
+    setForgotErrors(errs);
+    if (!valid) return;
+
+    setSubmittingForgot(true);
+    try {
+      // Backend should accept phone-based reset. If it requires id, this will need adjustment server-side.
+      const payload = {
+        phone: forgotData.phone,
+        otp: forgotData.otp,
+        newPassword: forgotData.newPassword,
+      };
+      const res = await UpdateUserPassword(payload);
+      if (res?.success) {
+        toast.success('Password reset successfully');
+        setForgotData({ phone: '', otp: '', newPassword: '', confirmPassword: '' });
+        setForgotErrors({ phone: '', otp: '', newPassword: '', confirmPassword: '' });
+        setForgotActive(false);
+        setLoginActive(true);
+      } else {
+        toast.error(res?.message || res?.error || 'Unable to reset password');
+      }
+    } catch (e) {
+      toast.error('Unable to reset password');
+    } finally {
+      setSubmittingForgot(false);
+    }
   };
 
 
@@ -597,7 +679,7 @@ export default function Header1({
                 <Card sx={{ borderRadius: '20px', width: { xs: '100%', sm: '100%', md: '85%', margin: '0px auto' }, boxShadow: ' rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px' }} >
                   <CardContent>
                     <Grid>
-                      {loginActive ? (
+                      {loginActive && !forgotActive ? (
                         <>
                           <Grid item md={12}>
                             <Grid container justifyContent='space-between' direction='column' spacing={1.7} sx={{ padding: { xs: 'none', sm: 'none', md: '35px' } }} >
@@ -664,13 +746,14 @@ export default function Header1({
                               <Grid item xs={12} sm={12} md={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                                 <Button sx={buttonStyle} variant='contained' size="large" fullWidth onClick={handleLogin} >Login</Button>
                               </Grid>
-                              <Grid item md={12} sx={{ display: 'flex', justifyContent: 'center' }}>
-                                <Typography variant='subtitle1'>Create new account? <span onClick={() => { setLoginActive(false) }} style={{ cursor: 'pointer', color: '#0d7ae3' }} >Create</span></Typography>
+                              <Grid item md={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Typography variant='subtitle1'>Create new account? <span onClick={() => { setLoginActive(false); setForgotActive(false); }} style={{ cursor: 'pointer', color: '#0d7ae3' }} >Create</span></Typography>
+                                <Typography variant='subtitle1'>Forgot password? <span onClick={() => { setForgotActive(true); setLoginActive(false); }} style={{ cursor: 'pointer', color: '#0d7ae3' }} >Click here</span></Typography>
                               </Grid>
                             </Grid>
                           </Grid>
                         </>
-                      ) : (
+                      ) : !loginActive && !forgotActive ? (
                         <>
                           <Grid item md={12} sx={{ margin: '20px 0', overflow: 'auto' }}>
                             <Grid container justifyContent='space-between' direction='column' gap={1.7} sx={{ padding: { xs: 'none', sm: 'none', md: ' 0px 20px' } }} >
@@ -927,12 +1010,171 @@ export default function Header1({
                                 </Button>
                               </Grid>
                               <Grid item md={12} sx={{ display: 'flex', justifyContent: 'center' }}>
-                                <Typography variant='subtitle1'>Already have an account? <span onClick={() => { setLoginActive(true) }} style={{ cursor: 'pointer', color: '#0d7ae3' }} >Login</span></Typography>
+                                <Typography variant='subtitle1'>Already have an account? <span onClick={() => { setLoginActive(true); setForgotActive(false); }} style={{ cursor: 'pointer', color: '#0d7ae3' }} >Login</span></Typography>
                               </Grid>
                             </Grid>
                           </Grid>
                         </>
-                      )}
+                      ) : forgotActive ? (
+                        <>
+                          <Grid item md={12}>
+                            <Grid container justifyContent='space-between' direction='column' spacing={1.7} sx={{ padding: { xs: 'none', sm: 'none', md: '35px' } }} >
+                              <Grid item xs={12} sm={12} md={12}>
+                                <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Reset Password</Typography>
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={12}>
+                                <TextField
+                                  id="phone"
+                                  label="Phone"
+                                  variant="outlined"
+                                  fullWidth
+                                  value={forgotData.phone}
+                                  error={!!forgotErrors.phone}
+                                  helperText={forgotErrors.phone}
+                                  onChange={handleForgotChange}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton>
+                                          <LocalPhoneIcon />
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                      "& input": {
+                                        border: "none", // Removes the border
+                                      },
+                                    },
+                                  }}
+                                />
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={12}>
+                                <Grid container alignItems='center' spacing={1}>
+                                  <Grid item xs={8}>
+                                    <TextField
+                                      id="otp"
+                                      label="OTP"
+                                      size="small"
+                                      variant="outlined"
+                                      fullWidth
+                                      value={forgotData.otp}
+                                      error={!!forgotErrors.otp}
+                                      helperText={forgotErrors.otp}
+                                      onChange={handleForgotChange}
+                                      sx={{
+                                        "& .MuiOutlinedInput-root": {
+                                          "& input": {
+                                            border: "none", // Removes the border
+                                          },
+                                        },
+                                      }}
+                                    />
+                                  </Grid>
+                                  <Grid item xs={4}>
+                                    <Button 
+                                      size="medium"
+                                      variant='contained' 
+                                      fullWidth 
+                                      disabled={otpSending} 
+                                      onClick={sendForgotOtp}
+                                      sx={{
+                                        background: '#008FF7',
+                                        color: '#ffffff',
+                                        '&:hover': {
+                                          background: '#0078d4',
+                                        },
+                                        '&:disabled': {
+                                          background: '#cccccc',
+                                          color: '#666666',
+                                        }
+                                      }}
+                                    >
+                                      {otpSending ? 'Sending...' : 'Send OTP'}
+                                    </Button>
+                                  </Grid>
+                                </Grid>
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={12}>
+                                <TextField
+                                  id="newPassword"
+                                  label="New Password"
+                                  variant="outlined"
+                                  fullWidth
+                                  type={showNewPassword ? 'text' : 'password'}
+                                  value={forgotData.newPassword}
+                                  error={!!forgotErrors.newPassword}
+                                  helperText={forgotErrors.newPassword}
+                                  onChange={handleForgotChange}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton onClick={() => togglePasswordVisibility('newPassword')}>
+                                          {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                      "& input": {
+                                        border: "none", // Removes the border
+                                      },
+                                    },
+                                  }}
+                                />
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={12}>
+                                <TextField
+                                  id="confirmPassword"
+                                  label="Confirm Password"
+                                  variant="outlined"
+                                  fullWidth
+                                  type={showConfirmPassword ? 'text' : 'password'}
+                                  value={forgotData.confirmPassword}
+                                  error={!!forgotErrors.confirmPassword}
+                                  helperText={forgotErrors.confirmPassword}
+                                  onChange={handleForgotChange}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton onClick={() => togglePasswordVisibility('confirmPassword')}>
+                                          {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                      "& input": {
+                                        border: "none", // Removes the border
+                                      },
+                                    },
+                                  }}
+                                />
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                <Button 
+                                  variant='contained' 
+                                  size="large" 
+                                  fullWidth 
+                                  disabled={submittingForgot} 
+                                  onClick={handleForgotSubmit} 
+                                  sx={buttonStyle}
+                                >
+                                  {submittingForgot ? 'Submitting...' : 'Reset Password'}
+                                </Button>
+                              </Grid>
+                              <Grid item md={12} sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <Typography variant='subtitle1'>
+                                  Remember your password? <span onClick={() => { setForgotActive(false); setLoginActive(true); }} style={{ cursor: 'pointer', color: '#0d7ae3' }} >Back to Login</span>
+                                </Typography>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        </>
+                      ) : null}
                     </Grid>
                   </CardContent>
                 </Card>
