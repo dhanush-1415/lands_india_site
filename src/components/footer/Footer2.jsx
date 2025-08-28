@@ -323,7 +323,7 @@ const Footer2 = () => {
         </Box>
 
         <Typography variant="body2" sx={{ textAlign: 'center', mt: 2 }}>
-          Copyright © 2025 Property Store. All Rights Reserved. Developed by
+          Copyright © 2025 Property Stores. All Rights Reserved. Developed by
         </Typography>
       </Box>
     </Grid>

@@ -59,7 +59,7 @@ export default function Details({ data, menuId }) {
       {" "}
       {menuId == 1 &&
         <div>
-          <h5 className="title fw-6">Other Aminities</h5>
+          <h5 className="title fw-6">Other Amenities</h5>
           <div className="row single-property-element single-property-desc">
             <p name="" id="">
               {data[0]?.inputs?.filter(el => el.input_name == "Other Amenities")[0]?.input_value}

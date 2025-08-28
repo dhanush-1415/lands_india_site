@@ -52,7 +52,7 @@ export default function Hero() {
                 </div>
                 <div className="heading">
                   <h3 className="fw-8 title animationtext clip head-header">
-                    Find Real Properties at the <br /> Best Prices on PropertyStore
+                    Find Real Properties at the <br /> Best Prices on PropertyStores
 
                     {/* <TyperComponent
                     strings={["Fits Perfectly", "Fits Dream Home"]}

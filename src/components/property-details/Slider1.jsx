@@ -294,6 +294,10 @@ export default function Slider1({ data }) {
               .flat-slider-detail-v1 {
                 height: auto;
               }
+              .flat-slider-detail-v1 .images-container {
+                width: 100%;
+                padding: 0 10px;
+              }
               .flat-slider-detail-v1 .image-grid {
                 grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
                 gap: 8px;
@@ -311,11 +315,10 @@ export default function Slider1({ data }) {
                 grid-template-rows: auto;
                 height: auto;
               }
-              .flat-slider-detail-v1 .mosaic-left {
-                height: auto;
-              }
+              .flat-slider-detail-v1 .mosaic-left,
               .flat-slider-detail-v1 .mosaic-cell {
                 height: auto;
+                aspect-ratio: 16 / 9; /* ensure visible height on mobile */
               }
               .flat-slider-detail-v1 .mosaic-right-1 {
                 grid-row: auto;

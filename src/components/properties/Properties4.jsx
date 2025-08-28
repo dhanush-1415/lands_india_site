@@ -475,6 +475,26 @@ export default function Properties4() {
         .custom-sort-bar{
           width: 17%;
         }
+        .infinite-scroll-container{
+          scrollbar-width: thin;
+          scrollbar-color: #c1c1c1 transparent;
+          overscroll-behavior: contain;
+        }
+        .infinite-scroll-container::-webkit-scrollbar{
+          width: 10px;
+        }
+        .infinite-scroll-container::-webkit-scrollbar-track{
+          background: transparent;
+        }
+        .infinite-scroll-container::-webkit-scrollbar-thumb{
+          background-color: #c1c1c1;
+          border-radius: 8px;
+          border: 2px solid transparent;
+          background-clip: padding-box;
+        }
+        .infinite-scroll-container::-webkit-scrollbar-thumb:hover{
+          background-color: #a8a8a8;
+        }
         @media (max-width: 750px) {
           .custom-col-one, .custom-col-two {
             width: 100%;
@@ -704,10 +724,9 @@ export default function Properties4() {
                 role="tabpanel"
               >
 
-                <div className="row"
+                <div className="row infinite-scroll-container"
                   style={{
-                    maxHeight: '700px', overflow: 'auto', scrollbarWidth: 'none', /* For Firefox */
-                    msOverflowStyle: 'none',
+                    maxHeight: '700px', overflow: 'auto',
                   }} // Set height and enable scrolling - 
                   onScroll={handleScroll} // Listen for scroll events
                 >
