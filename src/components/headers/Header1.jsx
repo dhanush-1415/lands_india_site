@@ -108,6 +108,21 @@ export default function Header1({
     }
   }, [isLogin]);
 
+  // Listen for custom event to open login popup
+  useEffect(() => {
+    const handleOpenLoginPopup = () => {
+      setDialogOpen(true);
+      setLoginActive(true); // Switch to register tab
+      setForgotActive(false);
+    };
+
+    window.addEventListener('openLoginPopup', handleOpenLoginPopup);
+    
+    return () => {
+      window.removeEventListener('openLoginPopup', handleOpenLoginPopup);
+    };
+  }, []);
+
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);

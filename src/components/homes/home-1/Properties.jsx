@@ -18,11 +18,7 @@ export default function Properties() {
 
   const [wishListList, setWishListList] = useState([]);
   const [properties, setProperties] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(() => {
-    // Check localStorage for saved category on component mount
-    const savedCategory = localStorage.getItem('selectedPropertyCategory');
-    return savedCategory || undefined;
-  });
+  const [selectedCategory, setSelectedCategory] = useState(undefined);
   const [wishlistLoaded, setWishlistLoaded] = useState(false); // Track if wishlist has been loaded
 
   useEffect(() => {
@@ -176,18 +172,15 @@ export default function Properties() {
   };
 
 
-  // const handleNavigation = (category) => {
-  //   const slug = category.trim().toLowerCase().replace(/\s+/g, '_');
-  //   window.location.href = `/properties/all?category=${encodeURIComponent(slug)}`;
-  // };
+  const handleNavigation = (category) => {
+    setSelectedCategory(category);
+    const slug = category.trim().toLowerCase().replace(/\s+/g, '_');
+    window.location.href = `/properties/all?category=${encodeURIComponent(slug)}`;
+  };
 
 
   
-  const handleNavigation = (category) => {
-    setSelectedCategory(category);
-    // Save the selected category to localStorage
-    localStorage.setItem('selectedPropertyCategory', category);
-  };
+
 
 
   return (
@@ -329,43 +322,9 @@ export default function Properties() {
                                   objectFit: "cover",
                                 }}
                               />
-                              <div
-                                style={{
-                                  position: "absolute",
-                                  bottom: 0,
-                                  left: 0,
-                                  right: 0,
-                                  height: "50%",
-                                  background: "linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0))",
-                                }}
-                              />
+
                             </div>
-                            <div className="bottom" style={{ fontSize: "14px", position: "absolute", bottom: "10px", left: "10px", color: "white" }}>
-                              <svg
-                                width={16}
-                                height={16}
-                                viewBox="0 0 16 16"
-                                fill="none"
-                              >
-                                <path
-                                  d="M10 7C10 7.53043 9.78929 8.03914 9.41421 8.41421C9.03914 8.78929 8.53043 9 8 9C7.46957 9 6.96086 8.78929 6.58579 8.41421C6.21071 8.03914 6 7.53043 6 7C6 6.46957 6.21071 5.96086 6.58579 5.58579C6.96086 5.21071 7.46957 5 8 5C8.53043 5 9.03914 5.21071 9.41421 5.58579C9.78929 5.96086 10 6.46957 10 7Z"
-                                  stroke="white"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                />
-                                <path
-                                  d="M13 7C13 11.7613 8 14.5 8 14.5C8 14.5 3 11.7613 3 7C3 5.67392 3.52678 4.40215 4.46447 3.46447C5.40215 2.52678 6.67392 2 8 2C9.32608 2 10.5979 2.52678 11.5355 3.46447C12.4732 4.40215 13 5.67392 13 7Z"
-                                  stroke="white"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-                              {
-                                elm.inputs.find(item => item.input_name === "City")?.input_value || ""
-                              }
-                            </div>
+
                             {elm.isWishlist ? (
                               <div
                                 style={{
@@ -431,16 +390,39 @@ export default function Properties() {
 
                         <div className="archive-bottom" style={{ backgroundColor: '#ffffff' }}>
                           <div className="content-top">
-                            {/* <h6 className="text-capitalize">
-                              <Link
-                                to={`/property-details/${elm.id}`}
-                                className="link"
+                            {/* Location above the title */}
+                            <div style={{ 
+                              fontSize: "14px", 
+                              color: "#666", 
+                              marginBottom: "8px",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "4px"
+                            }}>
+                              <svg
+                                width={14}
+                                height={14}
+                                viewBox="0 0 16 16"
+                                fill="none"
                               >
-                                {
-                                  elm.inputs.find(item => item.input_name === "Title")?.input_value || ""
-                                }
-                              </Link>
-                            </h6> */}
+                                <path
+                                  d="M10 7C10 7.53043 9.78929 8.03914 9.41421 8.41421C9.03914 8.78929 8.53043 9 8 9C7.46957 9 6.96086 8.78929 6.58579 8.41421C6.21071 8.03914 6 7.53043 6 7C6 6.46957 6.21071 5.96086 6.58579 5.58579C6.96086 5.21071 7.46957 5 8 5C8.53043 5 9.03914 5.21071 9.41421 5.58579C9.78929 5.96086 10 6.46957 10 7Z"
+                                  stroke="#666"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                                <path
+                                  d="M13 7C13 11.7613 8 14.5 8 14.5C8 14.5 3 11.7613 3 7C3 5.67392 3.52678 4.40215 4.46447 3.46447C5.40215 2.52678 6.67392 2 8 2C9.32608 2 10.5979 2.52678 11.5355 3.46447C12.4732 4.40215 13 5.67392 13 7Z"
+                                  stroke="#666"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                              {elm.inputs.find(item => item.input_name === "City")?.input_value || ""}
+                            </div>
+                            
                             <h6
                               className="text-capitalize"
                               style={{
