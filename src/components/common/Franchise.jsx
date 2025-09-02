@@ -60,6 +60,8 @@ const Franchise = () => {
     district: '',
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -93,10 +95,12 @@ const Franchise = () => {
       return;
     }
 
+    setIsSubmitting(true); // Start loader
+
     try {
       const data = await createFranchise(formData);
       if (data.success) {
-        toast.success(data.message);
+        toast.success(data.message || 'Franchise application submitted successfully!');
         setFormData({
           fullName: '',
           gender: '',
@@ -104,19 +108,22 @@ const Franchise = () => {
           email: '',
           district: '',
           files: null,
-        })
+        });
         setErrors({
           fullName: '',
           gender: '',
           phoneNumber: '',
           email: '',
           district: '',
-        })
+        });
       } else {
-        toast.error(data.message);
+        toast.error(data.message || 'Failed to submit franchise application');
       }
     } catch (err) {
-      console.error('Error fetching categories:', err);
+      console.error('Error submitting franchise:', err);
+      toast.error('An error occurred while submitting your application. Please try again.');
+    } finally {
+      setIsSubmitting(false); // Stop loader
     }
   };
 
@@ -132,83 +139,75 @@ const Franchise = () => {
             min-height:250px;
             max-height:250px;
           }
+          .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+          }
+          .me-2 {
+            margin-right: 0.5rem !important;
+          }
+          .franchise-image-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+          }
+          .franchise-image {
+            max-width: 100%;
+            height: auto;
+            max-height: 400px;
+            filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.1));
+            transition: transform 0.3s ease;
+          }
+          .franchise-image:hover {
+            transform: scale(1.05);
+          }
+          @media (max-width: 991px) {
+            .franchise-image-container {
+              min-height: 300px;
+              margin-bottom: 30px;
+            }
+            .franchise-image {
+              max-height: 300px;
+            }
+          }
+          @media (max-width: 768px) {
+            .franchise-image-container {
+              min-height: 250px;
+              margin-bottom: 20px;
+            }
+            .franchise-image {
+              max-height: 250px;
+            }
+          }
         `}</style>
         <div style={{ background: '#f0f3f4', padding: '40px 0' }}>
           <h3 style={{ width: '80%', margin: '0px auto' }} className="mb-4">Franchise</h3>
         </div>
         <div className="container custom-container-header py-5" style={{ background: '#ffffff' }}>
-
-          <Row>
-            {/* Agents Section */}
-            <Col lg={8}>
-              <Row>
-                {data?.length >= 1 && data.map((agent, index) => (
-                  <Col md={6} className="mb-4" key={agent.id}>
-                    <div
-                      className="box-agent hover-img wow fadeInUp"
-                      style={{ padding: '20px', boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px", }} // WOW.js animation delay
-                    >
-                      <a href="#" className="box-img img-style" style={{ borderRadius: '0px' }}>
-                        <img
-                          className="custom-franch-img"
-                          data-src={agent.image}
-                          alt={`image-agent-${agent.name}`}
-                          src={agent.image || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8d4F3Lf3kbFIFSGu6BSqqThC9vsueKd7a_w&s"}
-                          style={{ minHeight: '250px', maxHeight: '250px' }}
-                        />
-
-                        {/* <ul className="agent-social">
-                        <li>
-                          <span className="icon icon-facebook" />
-                        </li>
-                        <li>
-                          <span className="icon icon-x" />
-                        </li>
-                        <li>
-                          <span className="icon icon-linkedin" />
-                        </li>
-                        <li>
-                          <span className="icon icon-instargram" />
-                        </li>
-                      </ul> */}
-                      </a>
-                      <div className="content justify-content-start">
-                        <div className="info" style={{ textAlign: 'left' }}>
-                          <h5 style={{ marginBottom: '7px' }}>
-                            <a className="link" href="#">
-                              {agent.name}
-                            </a>
-                          </h5>
-                          <p style={{ marginBottom: '7px' }} className="text-variant-1">{agent.gender}</p>
-                          <div style={{ marginBottom: '7px', alignItems: 'flex-end' }} className='d-flex'>
-                            <WifiCalling3Icon />
-                            <span style={{ fontWeight: 'bold' }}>+91 9363828393</span>
-                          </div>
-                          <div style={{ marginBottom: '7px', alignItems: 'flex-end' }} className='d-flex'>
-                            <PinDropIcon />
-                            <span style={{ fontWeight: 'bold' }}>{agent?.district}</span>
-                          </div>
-                        </div>
-
-                      </div>
-                    </div>
-                  </Col>
-                ))}
-              </Row>
-
-
-              {/* <ul className="wd-navigation mt-20" style={{ justifyContent: 'center' }} >
-                <Pagination
-                  currentPage={currentPage}
-                  setPage={setCurrentPage}
-                  itemLength={sorted?.length}
-                  itemPerPage={itemPerPage}
-                />
-              </ul> */}
+          {/* Image and Form Row */}
+          <Row className="mb-5">
+            {/* Franchise Image Section */}
+            <Col lg={6}>
+              <div className="franchise-image-container">
+                <div className="text-center">
+                  <img 
+                    src="https://png.pngtree.com/png-vector/20220723/ourmid/pngtree-franchise-shop-business-brand-businessman-png-image_6043839.png" 
+                    alt="Franchise Business" 
+                    className="franchise-image"
+                  />
+                  <h4 className="mt-3" style={{ color: '#333', fontWeight: '600' }}>
+                    Start Your Franchise Journey
+                  </h4>
+                  <p style={{ color: '#666', fontSize: '16px', lineHeight: '1.6', maxWidth: '400px', margin: '0 auto' }}>
+                    Join our network of successful franchise partners and build your business empire with proven models and comprehensive support.
+                  </p>
+                </div>
+              </div>
             </Col>
 
             {/* Form Section */}
-            <Col lg={4}>
+            <Col lg={6}>
               <div
                 style={{
                   background: '#ffffff',
@@ -303,8 +302,25 @@ const Franchise = () => {
                     {errors.files && <div className="text-danger">{errors.files}</div>}
                   </Form.Group>
 
-                  <Button variant="primary" type="submit" className="w-100">
-                    Start Your Journey
+                  <Button 
+                    variant="primary" 
+                    type="submit" 
+                    className="w-100" 
+                    disabled={isSubmitting}
+                    style={{ 
+                      borderRadius: '0px',
+                      position: 'relative',
+                      minHeight: '48px'
+                    }}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Submitting...
+                      </>
+                    ) : (
+                      'Start Your Journey'
+                    )}
                   </Button>
                 </Form>
               </div>
