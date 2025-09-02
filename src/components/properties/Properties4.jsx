@@ -219,7 +219,7 @@ export default function Properties4() {
     try {
       const data = await getProperties(filter);
       if (data.success) {
-        const combined = data.properties.map((property) => {
+        let combined = data.properties.map((property) => {
           const propertyInputs = data.propertyInputs.filter(input => input.properties_postId === property.id);
 
           const inputsWithNames = propertyInputs.map((input) => {
@@ -238,6 +238,19 @@ export default function Properties4() {
             isWishlist: wishListList.includes(property.id), // Add isWishlist
           };
         });
+
+        // Filter by location if location filter is applied
+        if (location && location.trim() !== "") {
+          combined = combined.filter((property) => {
+            // Find the City input value for this property
+            const cityInput = property.inputs.find(input => input.input_name === "City");
+            if (cityInput && cityInput.input_value) {
+              // Case-insensitive comparison
+              return cityInput.input_value.toLowerCase().includes(location.toLowerCase());
+            }
+            return false; // Exclude properties without city information
+          });
+        }
 
         if (isNewSearch) {
           // Replace properties for new search

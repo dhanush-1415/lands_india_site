@@ -14,8 +14,6 @@ export default function AddProperty() {
 
   const [editData, setEditData] = useState();
 
-  console.log(editData, "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")
-
   const [updatedData, setUpdatedData] = useState();
 
   const [images, setImages] = useState([]);
@@ -27,8 +25,8 @@ export default function AddProperty() {
   const [price, setPrice] = useState('');
 
   const [submitBtn, setSubmitBtn] = useState("Add Property")
-
   const [prevBtn, setPrevBtn] = useState("Update Property");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
 
   const handlePrevChange = (inputId, value, input_name) => {
@@ -92,6 +90,10 @@ export default function AddProperty() {
   };
 
   const handlePrevSubmit = async () => {
+    // Prevent multiple submissions
+    if (isSubmitting) {
+      return;
+    }
 
     if (!images.length) {
       toast.error("Please fill in all required fields before submitting the form")
@@ -108,6 +110,7 @@ export default function AddProperty() {
       return;
     }
 
+    setIsSubmitting(true); // Start loader
     setPrevBtn("Uploading...")
 
     const structuredData = transformData(updatedData, images);
@@ -124,18 +127,20 @@ export default function AddProperty() {
         const data = await updateProperty(payLoad);
         if (data.success) {
           toast.success("Updated Successfully")
-          setPrevBtn("Update Property")
         } else {
           toast.error(data.message);
-          setPrevBtn("Update Property")
         }
       } catch (err) {
-        console.error('Error fetching categories:', err);
-        setPrevBtn("Update Property")
+        console.error('Error updating property:', err);
+        toast.error("An error occurred while updating the property. Please try again.");
+      } finally {
+        setIsSubmitting(false); // Stop loader
+        setPrevBtn("Update Property") // Reset button text
       }
     } else {
       toast.error('You must be logged in to access this page');
-      setPrevBtn("Update Property")
+      setIsSubmitting(false); // Stop loader
+      setPrevBtn("Update Property") // Reset button text
     }
   };
 
@@ -371,6 +376,10 @@ export default function AddProperty() {
   };
 
   const handleSubmit = async () => {
+    // Prevent multiple submissions
+    if (isSubmitting) {
+      return;
+    }
 
     if (!images.length) {
       toast.error("Please fill in all required fields before submitting the form")
@@ -387,6 +396,7 @@ export default function AddProperty() {
       return;
     }
 
+    setIsSubmitting(true); // Start loader
     setSubmitBtn("Uploading...")
 
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
@@ -416,14 +426,17 @@ export default function AddProperty() {
           setMenuInputs(null)
           toast.success("Property Created Successfully");
           setImages([]);
-          setSubmitBtn("Update Property")
+          setFormData({}); // Reset form data
+          setSubmitBtn("Add Property") // Reset button text
         } else {
           toast.error(data.message || data.error || "Something Went Wrong")
-          setSubmitBtn("Update Property")
         }
       } catch (err) {
-        console.error('Error fetching categories:', err);
-        setSubmitBtn("Update Property")
+        console.error('Error creating property:', err);
+        toast.error("An error occurred while creating the property. Please try again.");
+      } finally {
+        setIsSubmitting(false); // Stop loader
+        setSubmitBtn("Add Property") // Reset button text
       }
 
     } else {
@@ -474,6 +487,23 @@ export default function AddProperty() {
         }
         .invalid-control:focus {
           box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+        }
+        .tf-btn:disabled {
+          background-color: #6c757d !important;
+          color: #ffffff !important;
+        }
+        .tf-btn button {
+          background: none;
+          border: none;
+          color: inherit;
+          font: inherit;
+          cursor: pointer;
+          padding: 0;
+          margin: 0;
+        }
+        .tf-btn button:disabled {
+          background: none !important;
+          border: none !important;
         }
       `}</style>
       <div className="main-content-inner">
@@ -1611,21 +1641,59 @@ export default function AddProperty() {
         </div> */}
         {editData?.length ? (
           <div className="box-btn">
-            <a className="tf-btn primary"  onClick={handlePrevSubmit}>
-              {prevBtn}
-            </a>
-            {/* <a href="#" className="tf-btn btn-line">
-          Save &amp; Preview
-        </a> */}
+            <button 
+              className="tf-btn primary" 
+              onClick={handlePrevSubmit}
+              disabled={isSubmitting}
+              style={{ 
+                cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                opacity: isSubmitting ? 0.7 : 1,
+                position: 'relative',
+                minHeight: '48px',
+                border: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
+              }}
+            >
+              {isSubmitting ? (
+                <>
+                  <CircularProgress size={20} color="inherit" />
+                  Updating...
+                </>
+              ) : (
+                prevBtn
+              )}
+            </button>
           </div>
         ) : (
           <div className="box-btn">
-            <a className="tf-btn primary"  onClick={handleSubmit}>
-              {submitBtn}
-            </a>
-            {/* <a href="#" className="tf-btn btn-line">
-            Save &amp; Preview
-          </a> */}
+            <button 
+              className="tf-btn primary" 
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+              style={{ 
+                cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                opacity: isSubmitting ? 0.7 : 1,
+                position: 'relative',
+                minHeight: '48px',
+                border: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
+              }}
+            >
+              {isSubmitting ? (
+                <>
+                  <CircularProgress size={20} color="inherit" />
+                  Creating...
+                </>
+              ) : (
+                submitBtn
+              )}
+            </button>
           </div>
         )}
 
