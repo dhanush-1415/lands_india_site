@@ -13,19 +13,23 @@ import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 export default function MyProperty() {
 
 
-  const [properties, setProperties] = useState();
+  const [properties, setProperties] = useState([]);
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmExiting, setConfirmExiting] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState(null);
 
   const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const getProperties = async () => {
+  const getProperties = async (isLoadMore = false) => {
+    if (loading || (!isLoadMore && !hasMore)) return;
 
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
     if (landsUser) {
       try {
+        setLoading(true);
         const data = await getSellerProperties(landsUser.id, page);
 
         if (data.success) {
@@ -48,19 +52,25 @@ export default function MyProperty() {
             };
           });
 
-
-          if (combined.length > 1) {
-            setProperties((prev) => [...(prev || []), ...combined]);
+          if (isLoadMore) {
+            // Append for load more
+            setProperties(prev => [...prev, ...combined]);
           } else {
+            // Replace for initial load or refresh
             setProperties(combined);
           }
 
-          setPage(page + 1);
+          // Check if there are more properties
+          setHasMore(combined.length > 0);
+          setPage(prev => prev + 1);
         } else {
-          // toast.error(data.message || data.error || "Something Went Wrong")
+          setHasMore(false);
         }
       } catch (err) {
-        console.error('Error fetching categories:', err);
+        console.error('Error fetching properties:', err);
+        setHasMore(false);
+      } finally {
+        setLoading(false);
       }
     } else {
       toast.error("Seller Not Found")
@@ -68,11 +78,10 @@ export default function MyProperty() {
         window.location.href = "/"
       }, 4000);
     }
-
   }
 
   useEffect(() => {
-    getProperties();
+    getProperties(false); // Initial load
   }, [])
 
 
@@ -93,7 +102,11 @@ export default function MyProperty() {
         if (data.success) {
           console.log(data)
           toast.success(data.message)
-          setProperties((prev) => (prev || []).filter((p) => p.id !== id));
+          // Refresh the properties list
+          setPage(1); // Reset to first page
+          setProperties([]); // Clear current properties
+          setHasMore(true); // Reset hasMore flag
+          getProperties(false); // Fetch fresh data
         } else {
           toast.error(data.message || data.error || "Something Went Wrong")
         }
@@ -120,7 +133,11 @@ export default function MyProperty() {
         if (data.success) {
           console.log(data)
           toast.success(data.message)
-          getProperties();
+          // Refresh the properties list
+          setPage(1); // Reset to first page
+          setProperties([]); // Clear current properties
+          setHasMore(true); // Reset hasMore flag
+          getProperties(false); // Fetch fresh data
         } else {
           toast.error(data.message || data.error || "Something Went Wrong")
         }
@@ -162,15 +179,11 @@ export default function MyProperty() {
   }
 
   const handleScroll = (event) => {
-    // fetchProperties();
     const bottom = event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight;
-    console.log(bottom, "Scroll Position");
 
     // Allow a small tolerance, e.g., 5px, to trigger loading when close to the bottom
-    if (bottom || event.target.scrollHeight - event.target.scrollTop <= event.target.clientHeight + 5) {
-      // if (!loading) {
-        getProperties();
-      // }
+    if ((bottom || event.target.scrollHeight - event.target.scrollTop <= event.target.clientHeight + 5) && hasMore && !loading) {
+      getProperties(true); // Load more
     }
   };
 
