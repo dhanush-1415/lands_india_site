@@ -33,7 +33,7 @@ export default function AddProperty() {
 
     setUpdatedData(prevState => {
       const updatedInputs = prevState[0]?.inputs?.map(input =>
-        input.id === inputId ? { ...input, input_value: value } : input
+        input.id === inputId ? { ...input, input_value: value || "" } : input
       );
       return [{ ...prevState[0], inputs: updatedInputs }];
     });
@@ -358,7 +358,7 @@ export default function AddProperty() {
 
     setFormData((prev) => ({
       ...prev,
-      [id]: value,
+      [id]: value || "", // Ensure empty string for empty values
     }));
 
     // Clear create invalid state when user fills value
@@ -403,9 +403,10 @@ export default function AddProperty() {
 
     if (landsUser) {
 
-      const PropertiesInput = Object.entries(formData).map(([inputId, value]) => ({
-        inputId: Number(inputId),
-        value: value,
+      // Ensure all inputs (both mandatory and non-mandatory) are included
+      const PropertiesInput = (menuInputs || []).map((input) => ({
+        inputId: Number(input.id),
+        value: formData[input.id] || "", // Use empty string if not filled
       }));
 
       const payload = {
