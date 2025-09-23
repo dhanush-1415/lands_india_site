@@ -1182,3 +1182,25 @@ export const getBlogDetail = async (id) => {
     throw error;
   }
 };
+
+export const GoogleAuth = async (data) => {
+  const url = `${baseUrl}/auth/google`;
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error('Failed to authenticate with Google');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Google Auth Failed:', error);
+    throw error;
+  }
+};

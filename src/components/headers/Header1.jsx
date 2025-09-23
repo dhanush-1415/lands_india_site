@@ -23,12 +23,13 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import Carousel from 'react-multi-carousel';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import 'react-multi-carousel/lib/styles.css';
-import { UserLogin, RegisterUser, verifyMobileOtp, UpdateUserPassword } from "@/apiCalls";
+import { UserLogin, RegisterUser, verifyMobileOtp, UpdateUserPassword, GoogleAuth } from "@/apiCalls";
 import { toast } from "react-toastify";
 import InfoIcon from '@mui/icons-material/Info';
 import Avatar from '@mui/material/Avatar';
 import { Home, Person, PostAdd, Favorite, AddCircle, RequestPage } from '@mui/icons-material';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { GoogleLogin } from '@react-oauth/google';
 
 
 const buttonStyle = {
@@ -543,6 +544,55 @@ export default function Header1({
     setProfileOpen(false)
   }
 
+  // Google OAuth states
+  const [selectedRole, setSelectedRole] = useState('');
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+
+
+  // Handle Google OAuth success
+  const handleGoogleSuccess = async (credentialResponse) => {
+    // For registration, check if role is selected
+
+    console.log(loginActive, registerData.role , "lllllllllllllllllllllllllllllllllllll");
+    if (!loginActive && !registerData.role) {
+      toast.error('Please select a role before continuing with Google');
+      return;
+    }
+
+    setIsGoogleLoading(true);
+    try {
+      const data = {
+        credential: credentialResponse.credential,
+        role: loginActive ? null : registerData.role // For login, role is null; for registration, use selected role
+      };
+
+      const response = await GoogleAuth(data);
+      
+      if (response.success) {
+        setDialogOpen(false);
+        if (response.user) {
+          localStorage.setItem("LandsUser", JSON.stringify(response.user));
+        }
+        setIsLogin(true);
+        setSelectedRole('');
+        toast.success('Google authentication successful');
+      } else {
+        toast.error(response.message || 'Google authentication failed');
+      }
+    } catch (error) {
+      console.error('Google Auth Error:', error);
+      toast.error('An error occurred during Google authentication');
+    } finally {
+      setIsGoogleLoading(false);
+    }
+  };
+
+  // Handle Google OAuth error
+  const handleGoogleError = () => {
+    toast.error('Google authentication failed');
+    setIsGoogleLoading(false);
+  };
+
 
 
   const responsive = {
@@ -760,6 +810,22 @@ export default function Header1({
                               </Grid>
                               <Grid item xs={12} sm={12} md={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                                 <Button sx={buttonStyle} variant='contained' size="large" fullWidth onClick={handleLogin} >Login</Button>
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={12} sx={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
+                                <Typography variant='body2' sx={{ color: '#666' }}>OR</Typography>
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={12} sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <GoogleLogin
+                                  onSuccess={handleGoogleSuccess}
+                                  onError={handleGoogleError}
+                                  useOneTap={false}
+                                  width="100%"
+                                  text="continue_with"
+                                  shape="rectangular"
+                                  theme="outline"
+                                  size="large"
+                                  logo_alignment="left"
+                                />
                               </Grid>
                               <Grid item md={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography variant='subtitle1'>Create new account? <span onClick={() => { setLoginActive(false); setForgotActive(false); }} style={{ cursor: 'pointer', color: '#0d7ae3' }} >Create</span></Typography>
@@ -1023,6 +1089,22 @@ export default function Header1({
                                 >
                                   Submit
                                 </Button>
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={12} sx={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
+                                <Typography variant='body2' sx={{ color: '#666' }}>OR</Typography>
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={12} sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <GoogleLogin
+                                  onSuccess={handleGoogleSuccess}
+                                  onError={handleGoogleError}
+                                  useOneTap={false}
+                                  width="100%"
+                                  text="continue_with"
+                                  shape="rectangular"
+                                  theme="outline"
+                                  size="large"
+                                  logo_alignment="left"
+                                />
                               </Grid>
                               <Grid item md={12} sx={{ display: 'flex', justifyContent: 'center' }}>
                                 <Typography variant='subtitle1'>Already have an account? <span onClick={() => { setLoginActive(true); setForgotActive(false); }} style={{ cursor: 'pointer', color: '#0d7ae3' }} >Login</span></Typography>
@@ -1585,6 +1667,7 @@ export default function Header1({
         </style>
         {/* End Mobile Menu */}
       </header>
+      
     </>
   );
 }
