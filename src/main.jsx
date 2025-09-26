@@ -4,9 +4,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
-
-// Replace with your actual Google OAuth Client ID
-const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID_HERE";
+import { GOOGLE_CLIENT_ID } from "./config/googleAuth.js";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

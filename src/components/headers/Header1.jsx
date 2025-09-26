@@ -23,13 +23,13 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import Carousel from 'react-multi-carousel';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import 'react-multi-carousel/lib/styles.css';
-import { UserLogin, RegisterUser, verifyMobileOtp, UpdateUserPassword, GoogleAuth } from "@/apiCalls";
+import { UserLogin, RegisterUser, verifyMobileOtp, UpdateUserPassword, GoogleAuth, GoogleRegister } from "@/apiCalls";
 import { toast } from "react-toastify";
 import InfoIcon from '@mui/icons-material/Info';
 import Avatar from '@mui/material/Avatar';
 import { Home, Person, PostAdd, Favorite, AddCircle, RequestPage } from '@mui/icons-material';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { GoogleLogin } from '@react-oauth/google';
+import GoogleLoginWithValidation from '../common/GoogleLoginWithValidation';
 
 
 const buttonStyle = {
@@ -551,11 +551,10 @@ export default function Header1({
 
   // Handle Google OAuth success
   const handleGoogleSuccess = async (credentialResponse) => {
-    // For registration, check if role is selected
+    console.log(loginActive, registerData.role, "Google Auth Debug Info");
 
-    console.log(loginActive, registerData.role , "lllllllllllllllllllllllllllllllllllll");
-    if (!loginActive && !registerData.role) {
-      toast.error('Please select a role before continuing with Google');
+    if (!credentialResponse?.credential) {
+      toast.error('No credential received from Google');
       return;
     }
 
@@ -566,22 +565,40 @@ export default function Header1({
         role: loginActive ? null : registerData.role // For login, role is null; for registration, use selected role
       };
 
-      const response = await GoogleAuth(data);
+      console.log('Sending Google auth data:', data);
       
-      if (response.success) {
+      // Use different API calls based on whether it's login or registration
+      let authResponse;
+      if (loginActive) {
+        // For login, use GoogleAuth (calls /login endpoint)
+        console.log('Calling GoogleAuth for login');
+        authResponse = await GoogleAuth(data);
+      } else {
+        // For registration, use GoogleRegister (calls /registration/google endpoint)
+        console.log('Calling GoogleRegister for registration');
+        authResponse = await GoogleRegister(data);
+      }
+      
+      if (authResponse.success) {
         setDialogOpen(false);
-        if (response.user) {
-          localStorage.setItem("LandsUser", JSON.stringify(response.user));
+        if (authResponse.user) {
+          localStorage.setItem("LandsUser", JSON.stringify(authResponse.user));
         }
         setIsLogin(true);
         setSelectedRole('');
-        toast.success('Google authentication successful');
+        toast.success(loginActive ? 'Google login successful' : 'Google registration successful');
       } else {
-        toast.error(response.message || 'Google authentication failed');
+        toast.error(authResponse.message || (loginActive ? 'Google login failed' : 'Google registration failed'));
       }
     } catch (error) {
       console.error('Google Auth Error:', error);
-      toast.error('An error occurred during Google authentication');
+      if (error.message?.includes('Failed to authenticate with Google') || error.message?.includes('Failed to register with Google')) {
+        toast.error('Backend authentication failed. Please check your server configuration.');
+      } else if (error.message?.includes('Network')) {
+        toast.error('Network error. Please check your internet connection.');
+      } else {
+        toast.error('An error occurred during Google authentication');
+      }
     } finally {
       setIsGoogleLoading(false);
     }
@@ -589,6 +606,7 @@ export default function Header1({
 
   // Handle Google OAuth error
   const handleGoogleError = () => {
+    console.error('Google Auth Error');
     toast.error('Google authentication failed');
     setIsGoogleLoading(false);
   };
@@ -815,9 +833,12 @@ export default function Header1({
                                 <Typography variant='body2' sx={{ color: '#666' }}>OR</Typography>
                               </Grid>
                               <Grid item xs={12} sm={12} md={12} sx={{ display: 'flex', justifyContent: 'center' }}>
-                                <GoogleLogin
+                                <GoogleLoginWithValidation
                                   onSuccess={handleGoogleSuccess}
                                   onError={handleGoogleError}
+                                  isLoginActive={loginActive}
+                                  selectedRole={registerData.role}
+                                  disabled={isGoogleLoading}
                                   useOneTap={false}
                                   width="100%"
                                   text="continue_with"
@@ -1094,9 +1115,12 @@ export default function Header1({
                                 <Typography variant='body2' sx={{ color: '#666' }}>OR</Typography>
                               </Grid>
                               <Grid item xs={12} sm={12} md={12} sx={{ display: 'flex', justifyContent: 'center' }}>
-                                <GoogleLogin
+                                <GoogleLoginWithValidation
                                   onSuccess={handleGoogleSuccess}
                                   onError={handleGoogleError}
+                                  isLoginActive={loginActive}
+                                  selectedRole={registerData.role}
+                                  disabled={isGoogleLoading}
                                   useOneTap={false}
                                   width="100%"
                                   text="continue_with"
