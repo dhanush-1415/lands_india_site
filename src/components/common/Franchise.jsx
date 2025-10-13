@@ -121,7 +121,7 @@ const Franchise = () => {
       }
     } catch (err) {
       console.error('Error submitting franchise:', err);
-      toast.error('An error occurred while submitting your application. Please try again.');
+      toast.error('Email already exists');
     } finally {
       setIsSubmitting(false); // Stop loader
     }

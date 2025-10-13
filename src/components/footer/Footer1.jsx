@@ -323,7 +323,9 @@ const Footer1 = () => {
         </Box>
 
         <Typography variant="body2" sx={{ textAlign: 'center', mt: 2 }}>
-          Copyright © 2025 Property Stores. All Rights Reserved. Developed by
+          Copyright © 2025 i5 Property Stars. All Rights Reserved. Developed by <a href="https://berrybeans.co/" target='_blank'>
+            <img src="/BerryBeans.png" style={{maxWidth: "30px"}} alt="Berrybeans Technologies Pvt Lte" />
+          </a>
         </Typography>
       </Box>
     </Grid>

@@ -77,7 +77,7 @@ export default function BottomCarousel() {
 
     const settings = {
         dots: false,
-        infinite: true,
+        infinite: false,
         slidesToShow: 3,
         slidesToScroll: 1,
         autoplay: true,
@@ -149,7 +149,7 @@ export default function BottomCarousel() {
                 <div className="list-header-custom">
                     <div>
                         <h3 className="carousel-title">
-                            Property Stores <br />
+                            i5 Property Stars <br />
                             Upcoming Events
                         </h3>
                     </div>

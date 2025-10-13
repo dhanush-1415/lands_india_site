@@ -492,7 +492,7 @@ export default function Properties4() {
           scrollbar-width: thin;
           scrollbar-color: #c1c1c1 transparent;
           overscroll-behavior: contain;
-        }
+        } 
         .infinite-scroll-container::-webkit-scrollbar{
           width: 10px;
         }
@@ -781,6 +781,7 @@ export default function Properties4() {
                                   <FavoriteIcon sx={{
                                     backgroundColor: '#fff',
                                     position: 'absolute',
+                                    color: 'red',
                                     top: '0px',
                                     left: '0px',
                                     padding: '3px',
@@ -803,6 +804,7 @@ export default function Properties4() {
                                 >
                                   <FavoriteBorderIcon sx={{
                                     backgroundColor: '#fff',
+                                    color: 'red',
                                     position: 'absolute',
                                     top: '0px',
                                     left: '0px',

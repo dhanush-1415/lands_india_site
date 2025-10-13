@@ -9,7 +9,7 @@ import FormControl from '@mui/material/FormControl'
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 // import logo from './logo-light.png';
-import logo from './logo-new.png';
+import logo from './new-logo.png';
 import addedValue from './added-value-1.png';
 import individual from './individual-1.png';
 import projects from './projects-1.png';
@@ -492,7 +492,7 @@ export default function Header1({
         toast.error(response.message);
       }
     } catch (error) {
-      toast.error('An error occurred during login. Please try again.');
+      toast.error('Invalid Credentials.');
       console.error('Login error:', error); // Optional: Log the error for debugging
     }
   };
@@ -826,6 +826,10 @@ export default function Header1({
                                   }}
                                 />
                               </Grid>
+                              <Grid item xs={12} sm={12} md={12}>
+                              
+                                <Typography variant='subtitle1'>Forgot password? <span onClick={() => { setForgotActive(true); setLoginActive(false); }} style={{ cursor: 'pointer', color: '#0d7ae3' }} >Click here</span></Typography>
+                              </Grid>
                               <Grid item xs={12} sm={12} md={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                                 <Button sx={buttonStyle} variant='contained' size="large" fullWidth onClick={handleLogin} >Login</Button>
                               </Grid>
@@ -848,9 +852,8 @@ export default function Header1({
                                   logo_alignment="left"
                                 />
                               </Grid>
-                              <Grid item md={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                              <Grid item md={12} sx={{ display: 'flex', justifyContent: 'center' }}>
                                 <Typography variant='subtitle1'>Create new account? <span onClick={() => { setLoginActive(false); setForgotActive(false); }} style={{ cursor: 'pointer', color: '#0d7ae3' }} >Create</span></Typography>
-                                <Typography variant='subtitle1'>Forgot password? <span onClick={() => { setForgotActive(true); setLoginActive(false); }} style={{ cursor: 'pointer', color: '#0d7ae3' }} >Click here</span></Typography>
                               </Grid>
                             </Grid>
                           </Grid>

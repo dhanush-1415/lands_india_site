@@ -1,6 +1,6 @@
 // const baseUrl = "http://luxcycs.com:4400"
 
-const baseUrl = "https://api.dev.propertystores.in"
+const baseUrl = "https://api.i5propertystars.com"
 
 export const verifyMobileOtp = async (data) => {
   const url = `${baseUrl}/registration`;

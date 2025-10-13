@@ -33,7 +33,7 @@ export default function ContactSeller({data}) {
       {" "}
       <EnquiryForm open={open} handleClose={handleClose} id={propertyId} />
       {/* <h5 className="title fw-6">Contact Sellers</h5> */}
-      <h5 className="fw-6">Posted By: Property Stores</h5>
+      <h5 className="fw-6">Posted By: i5 Property Stars</h5>
       {/* <div className="box-avatar">
         <div className="avatar avt-100 round">
           <img

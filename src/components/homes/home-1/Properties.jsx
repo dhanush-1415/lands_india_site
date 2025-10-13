@@ -136,6 +136,7 @@ export default function Properties() {
         const data = await updateWishlist(payLoad);
         if (data.success) {
           const updatedWishList = await getUserWishList(landsUser.id);
+          
           if (updatedWishList.success) {
             setWishListList(updatedWishList.wishList);
           }
@@ -237,7 +238,7 @@ export default function Properties() {
           <div className="list-header-custom">
             <div>
               <h3 className="carousel-title">
-                Property Stores <br />
+                i5 Property Stars <br />
                 Recommended For You
               </h3>
             </div>
@@ -341,12 +342,14 @@ export default function Properties() {
                               >
                                 <FavoriteIcon
                                   onClick={(e) => {
+                                    e.preventDefault();
                                     e.stopPropagation();
                                     handleWishlist(elm, "remove");
                                   }}
                                   sx={{
                                     backgroundColor: '#fff',
                                     position: 'absolute',
+                                    color: 'red',
                                     top: '0px',
                                     left: '0px',
                                     padding: '3px',
@@ -373,13 +376,16 @@ export default function Properties() {
                                   sx={{
                                     backgroundColor: '#fff',
                                     position: 'absolute',
+                                    color: 'red',
                                     top: '0px',
                                     left: '0px',
                                     padding: '3px',
                                     borderRadius: '2px',
                                     fontSize:'30px !important',
+
                                   }}
                                   onClick={(e) => {
+                                    e.preventDefault();
                                     e.stopPropagation();
                                     handleWishlist(elm, 'add');
                                   }} />
@@ -575,7 +581,7 @@ export default function Properties() {
             display: 'block',
             visibility: 'visible',
             position: 'relative',
-            zIndex: 1000
+            // zIndex: 1000
           }}>
             <button
               onClick={() => {
