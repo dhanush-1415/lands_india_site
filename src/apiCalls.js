@@ -14,13 +14,18 @@ export const verifyMobileOtp = async (data) => {
 
   try {
     const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error('Failed to verify OTP');
+    // Always attempt to parse JSON body and return it so callers can show server messages
+    const text = await response.text();
+    try {
+      const json = JSON.parse(text || '{}');
+      return json;
+    } catch (e) {
+      return { success: response.ok, message: text };
     }
-    return response.json();
   } catch (error) {
     console.error('Error Verifying OTP:', error);
-    throw error;
+    // Return a consistent error shape for callers to toast
+    return { success: false, message: error.message || 'Network error' };
   }
 };
 
@@ -37,13 +42,16 @@ export const RegisterUser = async (data) => {
 
   try {
     const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error('Failed to Register');
+    const text = await response.text();
+    try {
+      const json = JSON.parse(text || '{}');
+      return json;
+    } catch (e) {
+      return { success: response.ok, message: text };
     }
-    return response.json();
   } catch (error) {
     console.error('Registration Failed:', error);
-    throw error;
+    return { success: false, message: error.message || 'Network error' };
   }
 };
 
@@ -142,13 +150,16 @@ export const UpdateUserPassword = async (data) => {
 
   try {
     const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error('Failed to Register');
+    const text = await response.text();
+    try {
+      const json = JSON.parse(text || '{}');
+      return json;
+    } catch (e) {
+      return { success: response.ok, message: text };
     }
-    return response.json();
   } catch (error) {
     console.error('Registration Failed:', error);
-    throw error;
+    return { success: false, message: error.message || 'Network error' };
   }
 };
 
@@ -164,13 +175,16 @@ export const UserLogin = async (data) => {
 
   try {
     const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error('Failed to Login');
+    const text = await response.text();
+    try {
+      const json = JSON.parse(text || '{}');
+      return json;
+    } catch (e) {
+      return { success: response.ok, message: text };
     }
-    return response.json();
   } catch (error) {
     console.error('Login Failed:', error);
-    throw error;
+    return { success: false, message: error.message || 'Network error' };
   }
 };
 
