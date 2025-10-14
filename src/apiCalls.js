@@ -188,6 +188,90 @@ export const UserLogin = async (data) => {
   }
 };
 
+// Send OTP for login using email and name (name is optional on some backends)
+export const loginSendOtp = async (email, name = '') => {
+  const url = `${baseUrl}/login/send-otp`;
+  const payload = { email, name };
+
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const text = await response.text();
+    try {
+      const json = JSON.parse(text || '{}');
+      return json;
+    } catch (e) {
+      return { success: response.ok, message: text };
+    }
+  } catch (error) {
+    console.error('Send OTP Failed:', error);
+    return { success: false, message: error.message || 'Network error' };
+  }
+};
+
+// Verify OTP for login using email and otp
+export const loginVerifyOtp = async (email, otp) => {
+  const url = `${baseUrl}/login/verify-otp`;
+  const payload = { email, otp };
+
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const text = await response.text();
+    try {
+      const json = JSON.parse(text || '{}');
+      return json;
+    } catch (e) {
+      return { success: response.ok, message: text };
+    }
+  } catch (error) {
+    console.error('Verify OTP Failed:', error);
+    return { success: false, message: error.message || 'Network error' };
+  }
+};
+
+// Reset password using token and new password
+export const loginResetPassword = async (token, newPassword) => {
+  const url = `${baseUrl}/login/reset-password`;
+  const payload = { token, newPassword };
+
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const text = await response.text();
+    try {
+      const json = JSON.parse(text || '{}');
+      return json;
+    } catch (e) {
+      return { success: response.ok, message: text };
+    }
+  } catch (error) {
+    console.error('Reset Password Failed:', error);
+    return { success: false, message: error.message || 'Network error' };
+  }
+};
+
 export const getCategories = async () => {
 
   const url = `${baseUrl}/dashboard/menus`;

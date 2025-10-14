@@ -23,7 +23,7 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import Carousel from 'react-multi-carousel';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import 'react-multi-carousel/lib/styles.css';
-import { UserLogin, RegisterUser, verifyMobileOtp, UpdateUserPassword, GoogleAuth, GoogleRegister } from "@/apiCalls";
+import { UserLogin, RegisterUser, verifyMobileOtp, UpdateUserPassword, GoogleAuth, GoogleRegister, loginSendOtp, loginVerifyOtp, loginResetPassword } from "@/apiCalls";
 import { toast } from "react-toastify";
 import InfoIcon from '@mui/icons-material/Info';
 import Avatar from '@mui/material/Avatar';
@@ -59,8 +59,6 @@ export default function Header1({
 
   const [userDetails, setUserDetails] = useState(null);
 
-  console.log(userDetails, "ppppppppppppppppppppppppppppppppp")
-
   const open = (anchorTwoEl);
 
   const handleClick = (event) => {
@@ -77,7 +75,6 @@ export default function Header1({
 
 
   const handleLogout = () => {
-    console.log("logout")
     localStorage.removeItem("LandsUser");
     setTimeout(() => {
       window.location.href = "/";
@@ -189,19 +186,23 @@ export default function Header1({
   // Forgot password state
   const [forgotActive, setForgotActive] = useState(false);
   const [forgotData, setForgotData] = useState({
-    phone: '',
+    email: '',
     otp: '',
     newPassword: '',
     confirmPassword: '',
   });
   const [forgotErrors, setForgotErrors] = useState({
-    phone: '',
+    email: '',
     otp: '',
     newPassword: '',
     confirmPassword: '',
   });
   const [otpSending, setOtpSending] = useState(false);
   const [submittingForgot, setSubmittingForgot] = useState(false);
+  const [forgotOtpSent, setForgotOtpSent] = useState(false);
+  const [forgotOtpVerified, setForgotOtpVerified] = useState(false);
+  const [forgotResetToken, setForgotResetToken] = useState(null);
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
 
   // Validate phone number
   useEffect(() => {
@@ -262,13 +263,13 @@ export default function Header1({
       }
 
       const response = await verifyMobileOtp(data);
-      if (response.success === true) {
+      if (response?.success === true) {
         setVerifyBar(true);
         setResOtp(response.otp);
         setInputDisable(true);
-        toast.success('OTP sent successfully');
+        toast.success(response.message || 'OTP sent successfully');
       } else {
-        toast.error('Failed to Verify OTP');
+        toast.error(response?.message || 'Failed to Verify OTP');
       }
     }
   };
@@ -316,56 +317,106 @@ export default function Header1({
   };
 
   const sendForgotOtp = async () => {
-    if (!forgotData.phone || !/^\d{10}$/.test(forgotData.phone)) {
-      setForgotErrors(prev => ({ ...prev, phone: 'Enter a valid 10-digit phone number' }));
-      toast.error('Enter a valid 10-digit phone number');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!forgotData.email || !emailRegex.test(forgotData.email)) {
+      setForgotErrors(prev => ({ ...prev, email: 'Enter a valid email address' }));
+      toast.error('Enter a valid email address');
       return;
     }
     setOtpSending(true);
     try {
-      const res = await verifyMobileOtp({ phone: forgotData.phone });
+      const res = await loginSendOtp(forgotData.email);
       if (res?.success) {
-        toast.success('OTP sent successfully');
+        toast.success(res?.message || 'OTP sent successfully');
+        setForgotOtpSent(true);
+        // If backend returns a token directly, keep it for reset flow
+        if (res?.token || res?.data?.token) {
+          setForgotResetToken(res?.token || res?.data?.token);
+        }
       } else {
         toast.error(res?.message || 'Failed to send OTP');
       }
     } catch (e) {
-      toast.error('Failed to send OTP');
+      toast.error(e?.message || 'Failed to send OTP');
     } finally {
       setOtpSending(false);
     }
   };
 
+  const verifyForgotOtp = async () => {
+    if (!forgotData.otp) {
+      setForgotErrors(prev => ({ ...prev, otp: 'OTP is required' }));
+      toast.error('OTP is required');
+      return;
+    }
+    setVerifyingOtp(true);
+    try {
+      const res = await loginVerifyOtp(forgotData.email, forgotData.otp);
+      if (res?.success) {
+        toast.success(res?.message || 'OTP verified');
+        setForgotOtpVerified(true);
+        // store token if returned
+        if (res?.token || res?.data?.token) {
+          setForgotResetToken(res?.token || res?.data?.token);
+        }
+      } else {
+        toast.error(res?.message || 'OTP verification failed');
+      }
+    } catch (e) {
+      toast.error(e?.message || 'OTP verification failed');
+    } finally {
+      setVerifyingOtp(false);
+    }
+  };
+
   const handleForgotSubmit = async () => {
-    const errs = { phone: '', otp: '', newPassword: '', confirmPassword: '' };
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const errs = { email: '', otp: '', newPassword: '', confirmPassword: '' };
     let valid = true;
-    if (!/^\d{10}$/.test(forgotData.phone)) { errs.phone = 'Enter a valid phone'; valid = false; }
+    if (!emailRegex.test(forgotData.email)) { errs.email = 'Enter a valid email'; valid = false; }
     if (!forgotData.otp) { errs.otp = 'OTP is required'; valid = false; }
     if (forgotData.newPassword.length < 8) { errs.newPassword = 'Min 8 characters'; valid = false; }
     if (forgotData.newPassword !== forgotData.confirmPassword) { errs.confirmPassword = 'Passwords do not match'; valid = false; }
     setForgotErrors(errs);
     if (!valid) return;
 
+    // ensure OTP is verified before allowing password reset
+    if (!forgotOtpVerified) {
+      toast.error('Please verify OTP before resetting password');
+      return;
+    }
+
     setSubmittingForgot(true);
     try {
-      // Backend should accept phone-based reset. If it requires id, this will need adjustment server-side.
-      const payload = {
-        phone: forgotData.phone,
-        otp: forgotData.otp,
-        newPassword: forgotData.newPassword,
-      };
-      const res = await UpdateUserPassword(payload);
-      if (res?.success) {
-        toast.success('Password reset successfully');
-        setForgotData({ phone: '', otp: '', newPassword: '', confirmPassword: '' });
-        setForgotErrors({ phone: '', otp: '', newPassword: '', confirmPassword: '' });
+      let resetRes;
+      const token = forgotResetToken || null;
+      if (token) {
+        resetRes = await loginResetPassword(token, forgotData.newPassword);
+      } else {
+        // fallback: call UpdateUserPassword with email/otp/newPassword
+        const payload = {
+          email: forgotData.email,
+          otp: forgotData.otp,
+          newPassword: forgotData.newPassword,
+        };
+        resetRes = await UpdateUserPassword(payload);
+      }
+
+      if (resetRes?.success) {
+        toast.success(resetRes?.message || 'Password reset successfully');
+        setForgotData({ email: '', otp: '', newPassword: '', confirmPassword: '' });
+        setForgotErrors({ email: '', otp: '', newPassword: '', confirmPassword: '' });
         setForgotActive(false);
         setLoginActive(true);
+        // reset OTP flow state
+        setForgotOtpSent(false);
+        setForgotOtpVerified(false);
+        setForgotResetToken(null);
       } else {
-        toast.error(res?.message || res?.error || 'Unable to reset password');
+        toast.error(resetRes?.message || resetRes?.error || 'Unable to reset password');
       }
     } catch (e) {
-      toast.error('Unable to reset password');
+      toast.error(e?.message || 'Unable to reset password');
     } finally {
       setSubmittingForgot(false);
     }
@@ -385,7 +436,6 @@ export default function Header1({
   }
 
   const handleSignup = async () => {
-    console.log("Signup function triggered");  // Debugging
     const { name, phone, password, email, role } = registerData;
 
     if (!name || !phone || !password || !email || !role) {
@@ -402,7 +452,7 @@ export default function Header1({
     };
 
     const response = await RegisterUser(data);
-    if (response.success) {
+    if (response?.success) {
       setLoginActive(true);
       setRegisterData({
         name: '',
@@ -412,9 +462,9 @@ export default function Header1({
         confirmPassword: '',
         role: ''
       });
-      toast.success('Registered Successfully');
+      toast.success(response.message || 'Registered Successfully');
     } else {
-      toast.error(response.message);
+      toast.error(response?.message || 'Registration failed');
     }
 
     console.log(data);
@@ -472,7 +522,7 @@ export default function Header1({
     try {
       const response = await UserLogin(data);
 
-      if (response.success) {
+      if (response?.success) {
         setLoginData({
           phone: '',
           password: '',
@@ -487,12 +537,12 @@ export default function Header1({
         // localStorage.setItem("type", response.type);
         // localStorage.setItem("is_login", true);
         setLoginActive(true);
-        toast.success('Login Successful');
+        toast.success(response.message || 'Login Successful');
       } else {
-        toast.error(response.message);
+        toast.error(response?.message || 'Invalid Credentials.');
       }
     } catch (error) {
-      toast.error('Invalid Credentials.');
+      toast.error(error?.message || 'Invalid Credentials.');
       console.error('Login error:', error); // Optional: Log the error for debugging
     }
   };
@@ -586,7 +636,7 @@ export default function Header1({
         }
         setIsLogin(true);
         setSelectedRole('');
-        toast.success(loginActive ? 'Google login successful' : 'Google registration successful');
+        toast.success(authResponse.message || (loginActive ? 'Google login successful' : 'Google registration successful'));
       } else {
         toast.error(authResponse.message || (loginActive ? 'Google login failed' : 'Google registration failed'));
       }
@@ -1148,19 +1198,19 @@ export default function Header1({
                               </Grid>
                               <Grid item xs={12} sm={12} md={12}>
                                 <TextField
-                                  id="phone"
-                                  label="Phone"
+                                  id="email"
+                                  label="Email"
                                   variant="outlined"
                                   fullWidth
-                                  value={forgotData.phone}
-                                  error={!!forgotErrors.phone}
-                                  helperText={forgotErrors.phone}
+                                  value={forgotData.email}
+                                  error={!!forgotErrors.email}
+                                  helperText={forgotErrors.email}
                                   onChange={handleForgotChange}
                                   InputProps={{
                                     endAdornment: (
                                       <InputAdornment position="end">
                                         <IconButton>
-                                          <LocalPhoneIcon />
+                                          <EmailIcon />
                                         </IconButton>
                                       </InputAdornment>
                                     ),
@@ -1197,26 +1247,49 @@ export default function Header1({
                                     />
                                   </Grid>
                                   <Grid item xs={4}>
-                                    <Button 
-                                      size="medium"
-                                      variant='contained' 
-                                      fullWidth 
-                                      disabled={otpSending} 
-                                      onClick={sendForgotOtp}
-                                      sx={{
-                                        background: '#008FF7',
-                                        color: '#ffffff',
-                                        '&:hover': {
-                                          background: '#0078d4',
-                                        },
-                                        '&:disabled': {
-                                          background: '#cccccc',
-                                          color: '#666666',
-                                        }
-                                      }}
-                                    >
-                                      {otpSending ? 'Sending...' : 'Send OTP'}
-                                    </Button>
+                                    {!forgotOtpSent ? (
+                                      <Button
+                                        size="medium"
+                                        variant='contained'
+                                        fullWidth
+                                        disabled={otpSending}
+                                        onClick={sendForgotOtp}
+                                        sx={{
+                                          background: '#008FF7',
+                                          color: '#ffffff',
+                                          '&:hover': {
+                                            background: '#0078d4',
+                                          },
+                                          '&:disabled': {
+                                            background: '#cccccc',
+                                            color: '#666666',
+                                          }
+                                        }}
+                                      >
+                                        {otpSending ? 'Sending...' : 'Send OTP'}
+                                      </Button>
+                                    ) : (
+                                      <Button
+                                        size="medium"
+                                        variant='contained'
+                                        fullWidth
+                                        disabled={verifyingOtp}
+                                        onClick={verifyForgotOtp}
+                                        sx={{
+                                          background: '#28a745',
+                                          color: '#ffffff',
+                                          '&:hover': {
+                                            background: '#218838',
+                                          },
+                                          '&:disabled': {
+                                            background: '#cccccc',
+                                            color: '#666666',
+                                          }
+                                        }}
+                                      >
+                                        {verifyingOtp ? 'Verifying...' : 'Verify OTP'}
+                                      </Button>
+                                    )}
                                   </Grid>
                                 </Grid>
                               </Grid>
@@ -1240,6 +1313,7 @@ export default function Header1({
                                       </InputAdornment>
                                     ),
                                   }}
+                                  disabled={!forgotOtpVerified}
                                   sx={{
                                     "& .MuiOutlinedInput-root": {
                                       "& input": {
@@ -1269,6 +1343,7 @@ export default function Header1({
                                       </InputAdornment>
                                     ),
                                   }}
+                                  disabled={!forgotOtpVerified}
                                   sx={{
                                     "& .MuiOutlinedInput-root": {
                                       "& input": {

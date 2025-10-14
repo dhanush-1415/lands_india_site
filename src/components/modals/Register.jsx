@@ -94,6 +94,7 @@ export default function Register() {
                     </svg>
                     <input
                       type="password"
+                      autoComplete="new-password"
                       className="form-control"
                       placeholder="Your password"
                     />
@@ -119,6 +120,7 @@ export default function Register() {
                     </svg>
                     <input
                       type="password"
+                      autoComplete="new-password"
                       className="form-control"
                       placeholder="Confirm password"
                     />
