@@ -32,8 +32,11 @@ export default function Testimonials() {
     }, []);
 
 
-    console.log(data , 'lllllllllllllllllllllllllllllllllll')
+  // data fetched for testimonials is stored in state; no debug logs in production
 
+
+  // Use API data when available, otherwise fallback to local demo data
+  const slides = data && data.length > 0 ? data : testimonialData;
 
   return (
     <section className="flat-section bg-primary-new flat-testimonial" style={{background:'#f0f3f4'}}>
@@ -56,7 +59,8 @@ export default function Testimonials() {
         data-wow-delay=".2s"
         slidesPerView={4.5} // Default for larger screens
         centeredSlides={true}
-        loop={true}
+        // Enable loop only when there are more slides than the largest slidesPerView
+        loop={slides.length > 4}
         spaceBetween={30}
         breakpoints={{
           0: {
@@ -79,7 +83,7 @@ export default function Testimonials() {
         modules={[Pagination]}
         pagination={{ clickable: true, el: ".spb5" }}
       >
-        {data?.length > 1 && data.map(
+        {slides.map(
           ({
             id,
             quote,
