@@ -31,30 +31,30 @@ export default function Hero() {
               <div className="slider-content">
                 <div className="wrap-search-link">
                   {/* <p className="body-2">What are you looking for:</p> */}
-                  {/* <a href="#" style={{background:'#008ff7',lineHeight:'30px',boxShadow:'0px 1px 5px #00000054',color:'#ffffff !important'}}>
-                      <i className="icon icon-house-fill" /> 
+                  <div className="categories-list">
+                    
+                  <a href="#" style={{background:'#008ff7',lineHeight:'30px',boxShadow:'0px 1px 5px #00000054',color:'#ffffff !important'}}>
+                      {/* <i className="icon icon-house-fill" />  */}
                       <span style={{fontSize:'20px',color:'#ffffff'}} className="mediaSizing">100%</span>
                     </a>
                     <a href="#" className="mediaSizing">
-                      <i className="icon icon-villa-fill" /> 
+                      {/* <i className="icon icon-villa-fill" />  */}
                       Verified Properties
                     </a>
                     <a href="#" className="mediaSizing">
-                      <i className="icon icon-office-fill" />
+                      {/* <i className="icon icon-office-fill" /> */}
                       Verified Buyers
                     </a>
                     <a href="#" className="mediaSizing">
-                      <i className="icon icon-apartment" /> 
+                      {/* <i className="icon icon-apartment" />  */}
                       100YRS Legal Properties
-                    </a> */}
-                  <div className="categories-list">
-                    
-          <img
+                    </a>
+          {/* <img
             alt="img"
             src="/images/home/tag.png"
             width={412}
             height={187}
-          />
+          /> */}
                   </div>
                 </div>
                 <div className="heading">
