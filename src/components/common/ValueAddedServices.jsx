@@ -158,7 +158,7 @@ export default function ValueAddedServices() {
                     const event = new CustomEvent('openLoginPopup');
                     window.dispatchEvent(event);
                   }}
-                  style={{ backgroundColor: "rgb(0, 247)", border: 'none', padding: '15px', color: '#ffffff', fontWeight: 'bold', cursor: 'pointer' }} 
+                  style={{ border: 'none', padding: '15px', color: '#ffffff', fontWeight: 'bold', backgroundColor: "#008FF7", cursor: 'pointer' }} 
                 >
                   Register Now
                 </button>
