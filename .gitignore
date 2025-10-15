@@ -7,6 +7,9 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+GOOGLE_AUTH_SETUP.md
+GOOGLE_OAUTH_FIX_GUIDE.md
+
 node_modules
 dist
 dist-ssr

@@ -643,11 +643,11 @@ export default function Header1({
     } catch (error) {
       console.error('Google Auth Error:', error);
       if (error.message?.includes('Failed to authenticate with Google') || error.message?.includes('Failed to register with Google')) {
-        toast.error('Backend authentication failed. Please check your server configuration.');
+        toast.error(error.message);
       } else if (error.message?.includes('Network')) {
         toast.error('Network error. Please check your internet connection.');
       } else {
-        toast.error('An error occurred during Google authentication');
+        toast.error('user with this mail or phone already exist');
       }
     } finally {
       setIsGoogleLoading(false);
