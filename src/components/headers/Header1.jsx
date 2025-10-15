@@ -643,7 +643,7 @@ export default function Header1({
     } catch (error) {
       console.error('Google Auth Error:', error);
       if (error.message?.includes('Failed to authenticate with Google') || error.message?.includes('Failed to register with Google')) {
-        toast.error(error.message);
+        toast.error("user with this mail or phone already exist");
       } else if (error.message?.includes('Network')) {
         toast.error('Network error. Please check your internet connection.');
       } else {
