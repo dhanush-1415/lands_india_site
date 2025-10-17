@@ -156,15 +156,8 @@ export default function Properties() {
   const [propertyId, setPropertyId] = useState(null);
 
   const handleClickOpen = (id) => {
-
-    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
-
-    if (landsUser) {
-      setOpen(true);
-      setPropertyId(id);
-    } else {
-      toast.info('Please Login to continue')
-    }
+    setOpen(true);
+    setPropertyId(id);
   };
 
   const handleClose = () => {
