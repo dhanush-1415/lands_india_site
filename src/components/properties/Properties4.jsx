@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import DropdownSelect from "../common/DropdownSelect";
 import { Link } from "react-router-dom";
 import AttachEmailSharpIcon from '@mui/icons-material/AttachEmailSharp';
@@ -49,10 +49,6 @@ export default function Properties4() {
   const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(false);
   const [locationFilter, setLocationFilter] = useState("");
-  const [wishlistLoaded, setWishlistLoaded] = useState(false); // Track if wishlist has been loaded
-
-
-  const loaderRef = useRef(null);
 
   const clearFilter = () => {
     setPrice([1800, 5500]);
@@ -159,7 +155,6 @@ export default function Properties4() {
 
         if (data.success) {
           setWishListList(data.wishList);
-          setWishlistLoaded(true);
         } else {
           // toast.error(data.message);
         }
@@ -197,7 +192,8 @@ export default function Properties4() {
     fetchLocation()
   }, [])
 
-  const fetchProperties = async (isNewSearch = false) => {
+  const fetchAllProperties = async () => {
+    setLoading(true);
     const location = searchParams.get("location");
     const minPrice = searchParams.get("minPrice");
     const maxPrice = searchParams.get("maxPrice");
@@ -205,83 +201,72 @@ export default function Properties4() {
     const category = searchParams.get("category");
     const subCategory = searchParams.get("subcategory");
 
-    const filter = {
-      location: location || "",
-      minPrice: minPrice ? parseInt(minPrice) : 0,
-      maxPrice: maxPrice ? parseInt(maxPrice) : 0,
-      keyword: keyword || "",
-      category: category || "",
-      subCategory: subCategory || "",
-      staus: "Verified",
-      page: isNewSearch ? 1 : page
-    };
+    let allProperties = [];
+    let currentPage = 1;
+    let hasMore = true;
 
-    try {
-      const data = await getProperties(filter);
-      if (data.success) {
-        let combined = data.properties.map((property) => {
-          const propertyInputs = data.propertyInputs.filter(input => input.properties_postId === property.id);
+    while (hasMore) {
+      const filter = {
+        location: location || "",
+        minPrice: minPrice ? parseInt(minPrice) : 0,
+        maxPrice: maxPrice ? parseInt(maxPrice) : 0,
+        keyword: keyword || "",
+        category: category || "",
+        subCategory: subCategory || "",
+        staus: "Verified",
+        page: currentPage
+      };
 
-          const inputsWithNames = propertyInputs.map((input) => {
-            const inputData = data.inputs.find(i => i.id === input.input_id);
+      try {
+        const data = await getProperties(filter);
+        if (data.success && data.properties && data.properties.length > 0) {
+          let combined = data.properties.map((property) => {
+            const propertyInputs = data.propertyInputs.filter(input => input.properties_postId === property.id);
+
+            const inputsWithNames = propertyInputs.map((input) => {
+              const inputData = data.inputs.find(i => i.id === input.input_id);
+              return {
+                ...input,
+                input_name: inputData ? inputData.input_name : '',
+                input_type: inputData ? inputData.input_type : '',
+                options: inputData ? inputData.options : [],
+              };
+            });
+
             return {
-              ...input,
-              input_name: inputData ? inputData.input_name : '',
-              input_type: inputData ? inputData.input_type : '',
-              options: inputData ? inputData.options : [],
+              ...property,
+              inputs: inputsWithNames,
+              isWishlist: wishListList.includes(property.id), // Add isWishlist
             };
           });
 
-          return {
-            ...property,
-            inputs: inputsWithNames,
-            isWishlist: wishListList.includes(property.id), // Add isWishlist
-          };
-        });
+          // Filter by location if location filter is applied
+          if (location && location.trim() !== "") {
+            combined = combined.filter((property) => {
+              // Find the City input value for this property
+              const cityInput = property.inputs.find(input => input.input_name === "City");
+              if (cityInput && cityInput.input_value) {
+                // Case-insensitive comparison
+                return cityInput.input_value.toLowerCase().includes(location.toLowerCase());
+              }
+              return false; // Exclude properties without city information
+            });
+          }
 
-        // Filter by location if location filter is applied
-        if (location && location.trim() !== "") {
-          combined = combined.filter((property) => {
-            // Find the City input value for this property
-            const cityInput = property.inputs.find(input => input.input_name === "City");
-            if (cityInput && cityInput.input_value) {
-              // Case-insensitive comparison
-              return cityInput.input_value.toLowerCase().includes(location.toLowerCase());
-            }
-            return false; // Exclude properties without city information
-          });
-        }
-
-        if (isNewSearch) {
-          // Replace properties for new search
-          setProperties(combined);
-          setPage(2); // Reset page to 2 for next load
+          allProperties = [...allProperties, ...combined];
+          currentPage++;
         } else {
-          // Append properties for pagination
-          setProperties((prevProperties) => {
-            const uniqueProperties = [
-              ...new Map(
-                [...prevProperties, ...combined].map((property) => [property.id, property])
-              ).values(),
-            ];
-            return uniqueProperties;
-          });
-          setPage(page + 1);
+          hasMore = false;
         }
-      } else {
-        // toast.error(data.message);
+      } catch (err) {
+        console.error('Error fetching properties:', err);
+        hasMore = false;
       }
-    } catch (err) {
-      console.error('Error fetching properties:', err);
     }
+
+    setProperties(allProperties);
+    setLoading(false);
   };
-
-
-  useEffect(() => {
-    if (wishlistLoaded) {
-      fetchProperties(true); // Pass true for new search
-    }
-  }, [wishlistLoaded])
 
 
   useEffect(() => {
@@ -298,7 +283,7 @@ export default function Properties4() {
     // Clear properties and reset page when search params change
     setProperties([]);
     setPage(1);
-    fetchProperties(true); // Pass true for new search
+    fetchAllProperties(); // Fetch properties independently, wishlist flag will update later
   }, [searchParams]);
 
   const handleWishlist = async (elm, act) => {
@@ -380,44 +365,6 @@ export default function Properties4() {
     setPropertyId(null);
   };
 
-  const handleScroll = (event) => {
-    const bottom = event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight;
-    console.log(bottom, loading, "Scroll Position");
-
-    // Allow a small tolerance, e.g., 5px, to trigger loading when close to the bottom
-    if (bottom || event.target.scrollHeight - event.target.scrollTop <= event.target.clientHeight + 5) {
-      if (!loading) {
-        fetchProperties(false); // Pass false for pagination
-      }
-    }
-  };
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          fetchProperties(false); // Pass false for pagination
-        }
-      },
-      {
-        root: null, // Default is viewport
-        rootMargin: "0px", // Trigger as soon as it's in the viewport
-        threshold: 1.0, // Fully visible
-      }
-    );
-
-    if (loaderRef.current) {
-      observer.observe(loaderRef.current);
-    }
-
-    return () => {
-      if (loaderRef.current) {
-        observer.unobserve(loaderRef.current);
-      }
-    };
-  }, []);
-
-
   const sortProperties = (option) => {
     let sortedProperties;
 
@@ -438,11 +385,19 @@ export default function Properties4() {
 
       case "Price low to high":
         // Sort by price (ascending)
-        sortedProperties = [...properties].sort((a, b) => a.price - b.price);
+        sortedProperties = [...properties].sort((a, b) => {
+          const priceA = parseInt(a.inputs.find(item => item.input_name === "Price")?.input_value || 0);
+          const priceB = parseInt(b.inputs.find(item => item.input_name === "Price")?.input_value || 0);
+          return priceA - priceB;
+        });
         break;
 
       case "Price high to low":
-        sortedProperties = [...properties].sort((a, b) => b.price - a.price);
+        sortedProperties = [...properties].sort((a, b) => {
+          const priceA = parseInt(a.inputs.find(item => item.input_name === "Price")?.input_value || 0);
+          const priceB = parseInt(b.inputs.find(item => item.input_name === "Price")?.input_value || 0);
+          return priceB - priceA;
+        });
         break;
 
       default:
@@ -489,24 +444,16 @@ export default function Properties4() {
           width: 17%;
         }
         .infinite-scroll-container{
-          scrollbar-width: thin;
-          scrollbar-color: #c1c1c1 transparent;
           overscroll-behavior: contain;
         } 
-        .infinite-scroll-container::-webkit-scrollbar{
-          width: 10px;
-        }
-        .infinite-scroll-container::-webkit-scrollbar-track{
-          background: transparent;
-        }
-        .infinite-scroll-container::-webkit-scrollbar-thumb{
-          background-color: #c1c1c1;
-          border-radius: 8px;
-          border: 2px solid transparent;
-          background-clip: padding-box;
-        }
-        .infinite-scroll-container::-webkit-scrollbar-thumb:hover{
-          background-color: #a8a8a8;
+        .loader {
+          width: 100%;
+          height: 50px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 14px;
+          color: #666;
         }
         @media (max-width: 750px) {
           .custom-col-one, .custom-col-two {
@@ -737,15 +684,14 @@ export default function Properties4() {
                 role="tabpanel"
               >
 
-                <div className="row infinite-scroll-container"
-                  style={{
-                    maxHeight: '700px', overflow: 'auto',
-                  }} // Set height and enable scrolling - 
-                  onScroll={handleScroll} // Listen for scroll events
-                >
-                  {properties.length ? (
+                <div className="row infinite-scroll-container">
+                  {loading ? (
+                    <div className="col-12 loader">
+                      Loading properties...
+                    </div>
+                  ) : properties.length ? (
                     properties.map((elm, index) => (
-                      <div key={index} className="col-xl-4 col-lg-6 col-md-6">
+                      <div key={index} className="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                         <div className="homelengo-box">
                           <div className="archive-top">
                             <Link className="images-group" to={`/property-details/${elm.id}`}>
@@ -756,7 +702,7 @@ export default function Properties4() {
                                   alt=""
                                   src={elm.file_path ? elm.file_path.split(',')[0] : ""}
                                   style={{
-                                    width: "615px",
+                                    width: "100%",
                                     height: "250px",
                                     objectFit: "cover",
                                   }}
@@ -980,15 +926,13 @@ export default function Properties4() {
 
                           </div>
                         </div>
-                        {loading && <div ref={loaderRef} className="loader"></div>}
                       </div>
                     ))
                   ) : (
-                    <div className="col-xl-4 col-lg-6 col-md-6">
+                    <div className="col-12">
                       <h5>No Properties Found</h5>
                     </div>
                   )}
-                  {loading && <div>Loading...</div>} {/* Show loading indicator when fetching */}
                 </div>
 
 

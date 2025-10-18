@@ -1,6 +1,6 @@
 import { filterOptions, properties, props } from "@/data/properties";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CallIcon from '@mui/icons-material/Call';
 import AttachEmailSharpIcon from '@mui/icons-material/AttachEmailSharp';
 import PermPhoneMsgIcon from '@mui/icons-material/PermPhoneMsg';
@@ -15,6 +15,7 @@ import LocalParkingIcon from '@mui/icons-material/LocalParking';
 import { toast } from "react-toastify";
 
 export default function Properties() {
+  const navigate = useNavigate();
 
   const [wishListList, setWishListList] = useState([]);
   const [properties, setProperties] = useState([]);
@@ -166,10 +167,30 @@ export default function Properties() {
   };
 
 
+  // Map display category to API slug
+  const getCategorySlug = (category) => {
+    switch (category.trim().toLowerCase()) {
+      case 'land & plots':
+      case 'lands/plots':
+      case 'land/plot':
+      case 'land_plots':
+      case 'land plots':
+        return 'land/plot';
+      case 'projects':
+        return 'projects';
+      case 'residential':
+        return 'residential';
+      case 'commercial':
+        return 'commercial';
+      default:
+        return category.trim().toLowerCase().replace(/\s+/g, '_');
+    }
+  };
+
   const handleNavigation = (category) => {
     setSelectedCategory(category);
-    const slug = category.trim().toLowerCase().replace(/\s+/g, '_');
-    window.location.href = `/properties/all?category=${encodeURIComponent(slug)}`;
+    const slug = getCategorySlug(category);
+    navigate(`/properties/all?category=${encodeURIComponent(slug)}`);
   };
 
 
@@ -264,10 +285,10 @@ export default function Properties() {
                 <p 
                   style={{ 
                     cursor: 'pointer',
-                    color: selectedCategory === "land/plot" ? '#018df7' : 'inherit',
-                    fontWeight: selectedCategory === "land/plot" ? 'bold' : 'normal'
+                    color: selectedCategory === "land/plot" || selectedCategory === "Land & Plots" ? '#018df7' : 'inherit',
+                    fontWeight: selectedCategory === "land/plot" || selectedCategory === "Land & Plots" ? 'bold' : 'normal'
                   }} 
-                  onClick={() => { handleNavigation("land/plot") }}
+                  onClick={() => { handleNavigation("Land & Plots") }}
                 >
                   Land & Plots
                 </p>
@@ -578,12 +599,11 @@ export default function Properties() {
           }}>
             <button
               onClick={() => {
-                console.log('View More clicked, selectedCategory:', selectedCategory);
                 if (selectedCategory) {
-                  const slug = selectedCategory.trim().toLowerCase().replace(/\s+/g, '_');
-                  window.location.href = `/properties/all?category=${encodeURIComponent(slug)}`;
+                  const slug = getCategorySlug(selectedCategory);
+                  navigate(`/properties/all?category=${encodeURIComponent(slug)}`);
                 } else {
-                  window.location.href = `/properties/all`;
+                  navigate(`/properties/all`);
                 }
               }}
               className="tf-btn btn-view primary size-1 hover-btn-view"

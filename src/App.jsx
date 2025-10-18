@@ -122,7 +122,7 @@ function App() {
 
 
 
-              {/* <Route
+              <Route
                 path="property-halfmap-grid"
                 element={<PropertyHalfmapGridPage />}
               />
@@ -152,12 +152,12 @@ function App() {
                 element={<PropertyDetailsPageV4 />}
               />
 
-              <Route path="about-us" element={<AboutUsPage />} />
-              <Route path="our-service" element={<OurServicePage />} />
-              <Route path="pricing" element={<PricingPage />} />
-              <Route path="contact" element={<ContactPage />} />
-              <Route path="faq" element={<FaqPage />} />
-              <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="/about-us" element={<AboutUsPage />} />
+              <Route path="/our-service" element={<OurServicePage />} />
+              <Route path="/pricing" element={<PricingPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/faq" element={<FaqPage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
 
               <Route path="blog" element={<BlogPage />} />
               <Route path="blog-detail/:id" element={<BlogDetailsPage />} />
@@ -168,7 +168,7 @@ function App() {
               <Route path="my-favorites" element={<MyFavoritePage />} />
               <Route path="reviews" element={<ReviewPage />} />
               <Route path="my-profile" element={<MyProfilePage />} />
-              <Route path="add-property" element={<AddPropertyPage />} /> */}
+              <Route path="add-property" element={<AddPropertyPage />} />
             </Route>
           </Routes>
         </div>

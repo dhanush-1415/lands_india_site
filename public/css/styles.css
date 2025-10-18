@@ -1,3 +1,11 @@
+/* Force About section to be visible */
+.flat-section, .flat-section .container {
+  background: #fff !important;
+  color: #161e2d !important;
+  z-index: 1 !important;
+  position: relative !important;
+  min-height: 300px;
+}
 /* ---------------------------------------------------------
     * Name: Homelengo
     * Version: 1.0.1

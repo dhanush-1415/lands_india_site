@@ -21,6 +21,10 @@ export const menuItems = [
     title: "Franchises",
     link:'/franchise',
   },
+  {   title: "Blog",
+  link:'/blogs',
+  },
+
   // {
   //   title: "Sell Property",
   //   link:'/',

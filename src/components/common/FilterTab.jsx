@@ -127,8 +127,31 @@ export default function FilterTab({
   };
 
 
+  // Map display category to correct API slug
+  const getCategorySlug = (name) => {
+    switch (name.trim().toLowerCase()) {
+      case 'land & plots':
+      case 'lands/plots':
+      case 'land/plot':
+      case 'land plots':
+      case 'lands plots':
+        return 'land/plot';
+      case 'new projects':
+      case 'projects':
+        return 'projects';
+      case 'residential':
+        return 'residential';
+      case 'commercial':
+        return 'commercial';
+      case 'industrial':
+        return 'industrial';
+      default:
+        return name.trim().toLowerCase().replace(/\s+/g, '_');
+    }
+  };
+
   const handlSelect = (name) => {
-    const slug = name.trim().toLowerCase().replace(/\s+/g, '_');
+    const slug = getCategorySlug(name);
     const url = `/properties/all?category=${encodeURIComponent(slug)}`;
     window.location.href = url;
   }
