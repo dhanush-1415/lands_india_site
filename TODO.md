@@ -1,0 +1,4 @@
+- [x] Modify createAgent function to store returned id in localStorage under 'agentId' on successful creation
+- [x] Modify updateAgent function to retrieve id from localStorage if not provided in data
+- [x] Modify createB2B function to store returned id in localStorage under 'b2bId' on successful creation
+- [x] Modify updateB2B function to retrieve id from localStorage if not provided in data

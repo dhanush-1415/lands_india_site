@@ -386,7 +386,7 @@ export const createNewPropertyq = async (data) => {
   if (data.PropertiesInput?.length > 0) {
     data.PropertiesInput.forEach(item => {
       if (item.input_name === 'location') {
-        form.append('location', item.input_value); // Assuming form is a FormData or similar structure
+        formData.append('location', item.input_value);
       }
     });
   }
@@ -394,7 +394,7 @@ export const createNewPropertyq = async (data) => {
   if (data.PropertiesInput?.length > 0) {
     data.PropertiesInput.forEach(item => {
       if (item.input_name === 'price') {
-        form.append('price', item.input_value); // Assuming form is a FormData or similar structure
+        formData.append('price', item.input_value);
       }
     });
   }
@@ -417,7 +417,7 @@ export const createNewPropertyq = async (data) => {
 
   // Fetch options
   const options = {
-    method: 'POST',
+    method: 'PUT',
     body: formData,
   };
 
@@ -461,7 +461,7 @@ export const createNewProperty = async (data) => {
   if (data.PropertiesInput?.length > 0) {
     data.PropertiesInput.forEach(item => {
       if (item.input_name === 'State') {
-        form.append('state', item.input_value); // Assuming form is a FormData or similar structure
+        formData.append('state', item.input_value);
       }
     });
   }
@@ -469,14 +469,14 @@ export const createNewProperty = async (data) => {
   if (data.PropertiesInput?.length > 0) {
     data.PropertiesInput.forEach(item => {
       if (item.input_name === 'Area') {
-        form.append('area', item.input_value); // Assuming form is a FormData or similar structure
+        formData.append('area', item.input_value);
       }
     });
   }
   if (data.PropertiesInput?.length > 0) {
     data.PropertiesInput.forEach(item => {
       if (item.input_name === 'Country') {
-        form.append('country', 'India'); // Assuming form is a FormData or similar structure
+        formData.append('country', 'India');
       }
     });
   }
@@ -506,7 +506,7 @@ export const createNewProperty = async (data) => {
 
   // Fetch options
   const options = {
-    method: 'POST',
+    method: 'PUT',
     body: formData,
   };
 
@@ -760,145 +760,252 @@ export const updateWishlist = async (data) => {
 };
 
 
-export const updateAgent = async (data) => {
-  const url = `${baseUrl}/agent/update-agent`;
-
-  const formData = new FormData();
-
-  formData.append('id', data.id);
-  formData.append('name', data.fullName);
-  formData.append('gender', data.gender);
-  formData.append('email', data.email);
-  formData.append('phone_number', data.phone);
-  formData.append('location', data.location);
-  formData.append('age', data.age);
-  formData.append('service', data.service); // Changed from 'name' to 'service'
-
-  if (data.image && data.image.file) {
-    formData.append('image', data.image.file);
-  }
-
-  const options = {
-    method: 'PUT',
-    body: formData, // Removed the Content-Type header
-  };
-
-  try {
-    const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error('Failed to Register');
-    }
-    return response.json();
-  } catch (error) {
-    console.error('Registration Failed:', error);
-    throw error;
-  }
-};
-
-
 export const createAgent = async (data) => {
   const url = `${baseUrl}/agent/create-agent`;
 
   const formData = new FormData();
 
-  formData.append('name', data.fullName);
-  formData.append('gender', data.gender);
+  // Required fields for agent creation
+  formData.append('name', data.name);
   formData.append('email', data.email);
-  formData.append('phone_number', data.phone);
-  formData.append('age', data.age);
+  formData.append('gender', data.gender);
+  formData.append('phone_number', data.phone_number);
+  formData.append('age', data.age.toString());
+  formData.append('service', data.service);
   formData.append('location', data.location);
-  formData.append('service', data.service); // Changed from 'name' to 'service'
+  formData.append('note', data.note || '');
+  formData.append('isActive', (data.isActive || 1).toString());
 
+  // Optional: Profile image (max 1 file)
   if (data.image && data.image.file) {
     formData.append('image', data.image.file);
   }
 
-  const options = {
-    method: 'POST',
-    body: formData, // Removed the Content-Type header
-  };
-
-  try {
-    const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error('Failed to Register');
-    }
-    return response.json();
-  } catch (error) {
-    console.error('Registration Failed:', error);
-    throw error;
-  }
-};
-
-
-export const createB2B = async (data) => {
-  const url = `${baseUrl}/value-added-service/create-value-added-service`;
-
-  const formData = new FormData();
-
-  formData.append('name', data.fullName);
-  formData.append('gender', data.gender);
-  formData.append('email', data.email);
-  formData.append('phone_number', data.phone);
-  formData.append('age', data.age);
-  formData.append('location', data.location);
-  formData.append('professional', data.professional);
-
-  if (data.image && data.image.file) {
-    formData.append('image', data.image.file);
+  // Optional: Multiple files (max 10 files)
+  if (data.files && data.files.length > 0) {
+    data.files.forEach((file, index) => {
+      if (index < 10 && file instanceof File) {
+        formData.append('files', file);
+      }
+    });
   }
 
   const options = {
     method: 'POST',
-    body: formData, // Removed the Content-Type header
+    body: formData,
   };
 
   try {
     const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error('Failed to Register');
+    const text = await response.text();
+    
+    try {
+      const json = JSON.parse(text || '{}');
+      return { 
+        success: response.ok && (json.success === true || json.success === undefined), 
+        ...json 
+      };
+    } catch (e) {
+      return { 
+        success: response.ok, 
+        message: text || 'Invalid response format' 
+      };
     }
-    return response.json();
   } catch (error) {
-    console.error('Registration Failed:', error);
-    throw error;
+    console.error('Create Agent Failed:', error);
+    return { 
+      success: false, 
+      message: error.message || 'Network error' 
+    };
   }
 };
 
-export const updateB2B = async (data) => {
-  const url = `${baseUrl}/value-added-service/update-value-added-service`;
+export const updateAgent = async (data) => {
+  const url = `${baseUrl}/agent/update-agent`;
 
   const formData = new FormData();
 
+  // Required fields for agent update
   formData.append('id', data.id);
-  formData.append('name', data.fullName);
-  formData.append('gender', data.gender);
+  formData.append('name', data.name);
   formData.append('email', data.email);
-  formData.append('phone_number', data.phone);
+  formData.append('gender', data.gender);
+  formData.append('phone_number', data.phone_number);
+  formData.append('age', data.age.toString());
+  formData.append('service', data.service);
   formData.append('location', data.location);
-  formData.append('age', data.age);
-  formData.append('professional', data.professional);
+  formData.append('note', data.note || '');
+  formData.append('isActive', (data.isActive || 1).toString());
+  formData.append('isVerified', (data.isVerified || 0).toString());
+  formData.append('updatedFiles', JSON.stringify(data.updatedFiles || []));
 
+  // Optional: Profile image (max 1 file)
   if (data.image && data.image.file) {
     formData.append('image', data.image.file);
+  }
+
+  // Optional: Multiple files (max 10 files)
+  if (data.files && data.files.length > 0) {
+    data.files.forEach((file, index) => {
+      if (index < 10 && file instanceof File) {
+        formData.append('files', file);
+      }
+    });
   }
 
   const options = {
     method: 'PUT',
-    body: formData, // Removed the Content-Type header
+    body: formData,
   };
 
   try {
     const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error('Failed to Register');
+    const text = await response.text();
+    
+    try {
+      const json = JSON.parse(text || '{}');
+      return { 
+        success: response.ok && (json.success === true || json.success === undefined), 
+        ...json 
+      };
+    } catch (e) {
+      return { 
+        success: response.ok, 
+        message: text || 'Invalid response format' 
+      };
     }
-    return response.json();
   } catch (error) {
-    console.error('Registration Failed:', error);
-    throw error;
+    console.error('Update Agent Failed:', error);
+    return { 
+      success: false, 
+      message: error.message || 'Network error' 
+    };
   }
 };
+
+// ==================== B2B (VALUE-ADDED SERVICE) API CALLS ====================
+
+export const createB2B = async (data) => {
+  const url = `${baseUrl}/value-added-service`;
+
+  const formData = new FormData();
+
+  // Required fields for B2B creation
+  formData.append('name', data.name);
+  formData.append('age', data.age.toString());
+  formData.append('gender', data.gender);
+  formData.append('phone_number', data.phone_number);
+  formData.append('email', data.email);
+  formData.append('location', data.location);
+  formData.append('professional', data.professional);
+  formData.append('isActive', (data.isActive || 1).toString());
+
+  // Optional: Profile image (max 1 file)
+  if (data.image && data.image.file) {
+    formData.append('image', data.image.file);
+  }
+
+  // Optional: Multiple files (max 10 files)
+  if (data.files && data.files.length > 0) {
+    data.files.forEach((file, index) => {
+      if (index < 10 && file instanceof File) {
+        formData.append('files', file);
+      }
+    });
+  }
+
+  const options = {
+    method: 'POST',
+    body: formData,
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const text = await response.text();
+    
+    try {
+      const json = JSON.parse(text || '{}');
+      return { 
+        success: response.ok && (json.success === true || json.success === undefined), 
+        ...json 
+      };
+    } catch (e) {
+      return { 
+        success: response.ok, 
+        message: text || 'Invalid response format' 
+      };
+    }
+  } catch (error) {
+    console.error('Create B2B Failed:', error);
+    return { 
+      success: false, 
+      message: error.message || 'Network error' 
+    };
+  }
+};
+
+export const updateB2B = async (data) => {
+  const url = `${baseUrl}/value-added-service`;
+
+  const formData = new FormData();
+
+  // Required fields for B2B update
+  formData.append('id', data.id);
+  formData.append('name', data.name);
+  formData.append('age', data.age.toString());
+  formData.append('gender', data.gender);
+  formData.append('phone_number', data.phone_number);
+  formData.append('email', data.email);
+  formData.append('location', data.location);
+  formData.append('professional', data.professional);
+  formData.append('isActive', (data.isActive || 1).toString());
+  formData.append('isVerifyed', (data.isVerifyed || 0).toString());
+  formData.append('updatedFiles', JSON.stringify(data.updatedFiles || []));
+
+  // Optional: Profile image (max 1 file)
+  if (data.image && data.image.file) {
+    formData.append('image', data.image.file);
+  }
+
+  // Optional: Multiple files (max 10 files)
+  if (data.files && data.files.length > 0) {
+    data.files.forEach((file, index) => {
+      if (index < 10 && file instanceof File) {
+        formData.append('files', file);
+      }
+    });
+  }
+
+  const options = {
+    method: 'PUT',
+    body: formData,
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const text = await response.text();
+
+    try {
+      const json = JSON.parse(text || '{}');
+      return {
+        success: response.ok && (json.success === true || json.success === undefined),
+        ...json
+      };
+    } catch (e) {
+      return {
+        success: response.ok,
+        message: text || 'Invalid response format'
+      };
+    }
+  } catch (error) {
+    console.error('Update B2B Failed:', error);
+    return {
+      success: false,
+      message: error.message || 'Network error'
+    };
+  }
+};
+
 
 export const getUserWishList = async (id) => {
 
@@ -1155,7 +1262,6 @@ export const getAgentDetails = async (phone) => {
 
   const url = `${baseUrl}/agent?phone=${phone}`;
 
-
   const options = {
     method: 'GET',
     headers: {
@@ -1246,13 +1352,33 @@ export const createFranchise = async (data) => {
 
   try {
     const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error('Failed to Register');
+    const text = await response.text();
+
+    try {
+      const json = JSON.parse(text || '{}');
+      const result = {
+        success: response.ok && (json.success === true || json.success === undefined),
+        ...json
+      };
+
+      // Store the franchise ID in localStorage if data.id exists
+      if (json.data && json.data.id) {
+        localStorage.setItem('franchiseId', json.data.id.toString());
+      }
+
+      return result;
+    } catch (e) {
+      return {
+        success: response.ok,
+        message: text || 'Invalid response format'
+      };
     }
-    return response.json();
   } catch (error) {
-    console.error('Registration Failed:', error);
-    throw error;
+    console.error('Create Franchise Failed:', error);
+    return {
+      success: false,
+      message: error.message || 'Network error'
+    };
   }
 };
 
@@ -1302,6 +1428,7 @@ export const GoogleAuth = async (data) => {
     throw error;
   }
 };
+
 
 export const GoogleRegister = async (data) => {
   const url = `${baseUrl}/registration/new-user`;

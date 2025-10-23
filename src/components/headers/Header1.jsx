@@ -23,7 +23,7 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import Carousel from 'react-multi-carousel';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import 'react-multi-carousel/lib/styles.css';
-import { UserLogin, RegisterUser, verifyMobileOtp, UpdateUserPassword, GoogleAuth, GoogleRegister, loginSendOtp, loginVerifyOtp, loginResetPassword } from "@/apiCalls";
+import { UserLogin, RegisterUser, verifyMobileOtp, UpdateUserPassword, GoogleAuth, GoogleRegister, loginSendOtp, loginVerifyOtp, loginResetPassword, createAgent, createB2B } from "@/apiCalls";
 import { toast } from "react-toastify";
 import InfoIcon from '@mui/icons-material/Info';
 import Avatar from '@mui/material/Avatar';
@@ -435,42 +435,158 @@ export default function Header1({
     }
   }
 
-  const handleSignup = async () => {
-    const { name, phone, password, email, role } = registerData;
+// Updated handleSignup - Uses different API endpoints based on role
+const handleSignup = async () => {
+  const { name, phone, password, email, role } = registerData;
 
-    if (!name || !phone || !password || !email || !role) {
-      toast.error('All fields are required.');
-      return;
-    }
-
-    const data = {
-      fullName: name,
-      phone: phone,
-      password: password,
-      email: email,
-      type: role
-    };
-
-    const response = await RegisterUser(data);
-    if (response?.success) {
-      setLoginActive(true);
-      setRegisterData({
-        name: '',
-        phone: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        role: ''
-      });
-      toast.success(response.message || 'Registered Successfully');
-    } else {
-      toast.error(response?.message || 'Registration failed');
-    }
-
-    console.log(data);
+  if (!name || !phone || !password || !email || !role) {
+    toast.error('All fields are required.');
+    return;
   }
 
+  // Validate phone number
+  if (!/^\d{10}$/.test(phone)) {
+    toast.error('Phone number must be exactly 10 digits.');
+    return;
+  }
 
+  try {
+    // For Agent and B2B roles, use their specific endpoints
+    if (role === 'Agent') {
+      console.log('Registering as Agent...');
+      
+      // First create user account
+      const userRegistrationData = {
+        fullName: name,
+        phone: phone,
+        password: password,
+        email: email,
+        type: role
+      };
+      
+      const userResponse = await RegisterUser(userRegistrationData);
+      console.log('User registration response:', userResponse);
+      
+      if (!userResponse?.success) {
+        toast.error(userResponse?.message || 'Registration failed');
+        return;
+      }
+      
+      toast.success('User account created successfully!');
+      
+      // Then create agent profile
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      const agentPayload = {
+        name: name,
+        email: email,
+        gender: 'Male',
+        phone_number: phone,
+        age: 25,
+        service: 'RealEstate Broker',
+        location: 'Chennai',
+        note: 'Registered user',
+        isActive: 1
+      };
+      
+      console.log('Creating agent profile with:', agentPayload);
+      const agentResponse = await createAgent(agentPayload);
+      console.log('Agent creation response:', agentResponse);
+      
+      if (agentResponse?.success) {
+        toast.success('Agent profile created successfully!');
+      } else {
+        console.error('Agent profile creation failed:', agentResponse);
+        toast.warning('Account created! Please complete your agent profile in My Profile section.');
+      }
+      
+    } else if (role === 'value-added-services') {
+      console.log('Registering as value-added-services...');
+
+      // First create user account
+      const userRegistrationData = {
+        fullName: name,
+        phone: phone,
+        password: password,
+        email: email,
+        type: 'B2B'
+      };
+      
+      const userResponse = await RegisterUser(userRegistrationData);
+      console.log('User registration response:', userResponse);
+      
+      if (!userResponse?.success) {
+        toast.error(userResponse?.message || 'Registration failed');
+        return;
+      }
+      
+      toast.success('User account created successfully!');
+      
+      // Then create B2B profile
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      const b2bPayload = {
+        name: name,
+        age: 25,
+        gender: 'Male',
+        phone_number: phone,
+        email: email,
+        location: 'Chennai',
+        professional: 'Advocate & Auditor',
+        isActive: 1
+      };
+      
+      console.log('Creating B2B profile with:', b2bPayload);
+      const b2bResponse = await createB2B(b2bPayload);
+      console.log('B2B creation response:', b2bResponse);
+      
+      if (b2bResponse?.success) {
+        toast.success('B2B profile created successfully!');
+      } else {
+        console.error('B2B profile creation failed:', b2bResponse);
+        toast.warning('Account created! Please complete your B2B profile in My Profile section.');
+      }
+      
+    } else {
+      // For Buyer and Seller, use standard registration
+      console.log('Registering as Buyer/Seller...');
+      
+      const registrationData = {
+        fullName: name,
+        phone: phone,
+        password: password,
+        email: email,
+        type: role
+      };
+      
+      const response = await RegisterUser(registrationData);
+      console.log('Registration response:', response);
+      
+      if (response?.success) {
+        toast.success(response.message || 'Registration successful!');
+      } else {
+        toast.error(response?.message || 'Registration failed');
+        return;
+      }
+    }
+
+    // Reset form and switch to login tab after successful registration
+    setRegisterData({
+      name: '',
+      phone: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      role: ''
+    });
+    
+    setLoginActive(true);
+    
+  } catch (error) {
+    console.error('Registration error:', error);
+    toast.error('Registration failed. Please try again.');
+  }
+};
   // const handleSignup = async () => {
   //   const { name, phone, password, email, role } = registerData;
 
@@ -1142,11 +1258,11 @@ export default function Header1({
                                       <FormControlLabel
                                         control={
                                           <Switch
-                                            checked={registerData.role === 'B2B'}
-                                            onChange={() => handleRoleChange('B2B')}
+                                            checked={registerData.role === 'value-added-services'}
+                                            onChange={() => handleRoleChange('value-added-services')}
                                           />
                                         }
-                                        label="B2B"
+                                        label="value-added-services"
                                       />
                                     </Grid>
                                   </Grid>
