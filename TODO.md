@@ -1,4 +1,8 @@
-- [x] Modify createAgent function to store returned id in localStorage under 'agentId' on successful creation
-- [x] Modify updateAgent function to retrieve id from localStorage if not provided in data
-- [x] Modify createB2B function to store returned id in localStorage under 'b2bId' on successful creation
-- [x] Modify updateB2B function to retrieve id from localStorage if not provided in data
+# TODO: Update API Functions for Agent and Value-Added-Service File Uploads
+
+## Tasks
+- [ ] Update createAgent function: Remove createdBy field append, ensure fields match task specification.
+- [ ] Update updateAgent function: Use localStorage.getItem("agentId") for ID, append "id" with agentId, remove data.id logic, ensure fields match.
+- [ ] Update createB2B function: Remove createdBy field append, ensure fields match task specification.
+- [ ] Update updateB2B function: Use localStorage.getItem("b2bId") for ID, append "id" with b2bId, remove data.id logic, ensure fields match.
+- [ ] Verify all functions use FormData and handle file uploads correctly (image max 1, files max 10).

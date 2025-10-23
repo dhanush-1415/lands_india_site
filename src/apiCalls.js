@@ -595,7 +595,7 @@ export const getEventsList = async (flag , currentPage) => {
 
 export const getLegalAdvisersList = async () => {
 
-  const url = `${baseUrl}/legalAdviser`;
+  const url = `${baseUrl}/legal-adviser`;
 
   const options = {
     method: 'GET',
@@ -760,249 +760,265 @@ export const updateWishlist = async (data) => {
 };
 
 
+
+// ==================== GET AGENT DETAILS ====================
+export const getAgentDetails = async (phone) => {
+  if (!phone) {
+    console.error('❌ Phone number is required');
+    return { success: false, message: 'Phone number is required', data: [] };
+  }
+
+  // ✅ CORRECT ENDPOINT - matches Postman working request
+  const url = `${baseUrl}/agent?phone=${phone}`;
+
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error('Failed to fetch agent details');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching agent details:', error);
+    return { success: false, message: error.message, data: [] };
+  }
+};
+
+// ==================== GET B2B DETAILS ====================
+export const getB2BDetails = async (phone) => {
+  if (!phone) {
+    console.error('❌ Phone number is required');
+    return { success: false, message: 'Phone number is required', data: [] };
+  }
+
+  // ✅ CORRECT ENDPOINT - matches API structure
+  const url = `${baseUrl}/value-added-service?phone=${phone}`;
+
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error('Failed to fetch B2B details');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching B2B details:', error);
+    return { success: false, message: error.message, data: [] };
+  }
+};
+
+// ==================== CREATE AGENT ====================
 export const createAgent = async (data) => {
+  // ✅ CORRECT ENDPOINT
   const url = `${baseUrl}/agent/create-agent`;
 
   const formData = new FormData();
 
-  // Required fields for agent creation
-  formData.append('name', data.name);
-  formData.append('email', data.email);
-  formData.append('gender', data.gender);
-  formData.append('phone_number', data.phone_number);
-  formData.append('age', data.age.toString());
-  formData.append('service', data.service);
-  formData.append('location', data.location);
-  formData.append('note', data.note || '');
-  formData.append('isActive', (data.isActive || 1).toString());
+  // Required fields
+  formData.append("name", data.name || "");
+  formData.append("email", data.email || "");
+  formData.append("gender", data.gender || "");
+  formData.append("phone_number", data.phone_number || "");
+  formData.append("age", data.age?.toString() || "0");
+  formData.append("service", data.service || "");
+  formData.append("location", data.location || "");
+  formData.append("note", data.note || "");
+  formData.append("isActive", (data.isActive || 1).toString());
 
-  // Optional: Profile image (max 1 file)
-  if (data.image && data.image.file) {
-    formData.append('image', data.image.file);
+  // Optional: Profile image
+  if (data.image?.file) {
+    formData.append("image", data.image.file);
   }
 
-  // Optional: Multiple files (max 10 files)
-  if (data.files && data.files.length > 0) {
-    data.files.forEach((file, index) => {
-      if (index < 10 && file instanceof File) {
-        formData.append('files', file);
-      }
+  // Optional: Multiple files (max 10)
+  if (data.files?.length > 0) {
+    data.files.slice(0, 10).forEach((file) => {
+      if (file instanceof File) formData.append("files", file);
     });
   }
 
-  const options = {
-    method: 'POST',
-    body: formData,
-  };
-
   try {
-    const response = await fetch(url, options);
+    const response = await fetch(url, { method: "POST", body: formData });
     const text = await response.text();
-    
+
     try {
-      const json = JSON.parse(text || '{}');
-      return { 
-        success: response.ok && (json.success === true || json.success === undefined), 
-        ...json 
-      };
-    } catch (e) {
-      return { 
-        success: response.ok, 
-        message: text || 'Invalid response format' 
-      };
+      const json = JSON.parse(text || "{}");
+      return { success: response.ok, ...json };
+    } catch {
+      return { success: response.ok, message: text || "Invalid response format" };
     }
   } catch (error) {
-    console.error('Create Agent Failed:', error);
-    return { 
-      success: false, 
-      message: error.message || 'Network error' 
-    };
+    console.error("❌ Create Agent Failed:", error);
+    return { success: false, message: error.message || "Network error" };
   }
 };
 
+// ==================== UPDATE AGENT ====================
 export const updateAgent = async (data) => {
+  // ✅ CORRECT ENDPOINT
   const url = `${baseUrl}/agent/update-agent`;
 
   const formData = new FormData();
 
-  // Required fields for agent update
-  formData.append('id', data.id);
-  formData.append('name', data.name);
-  formData.append('email', data.email);
-  formData.append('gender', data.gender);
-  formData.append('phone_number', data.phone_number);
-  formData.append('age', data.age.toString());
-  formData.append('service', data.service);
-  formData.append('location', data.location);
-  formData.append('note', data.note || '');
-  formData.append('isActive', (data.isActive || 1).toString());
-  formData.append('isVerified', (data.isVerified || 0).toString());
-  formData.append('updatedFiles', JSON.stringify(data.updatedFiles || []));
-
-  // Optional: Profile image (max 1 file)
-  if (data.image && data.image.file) {
-    formData.append('image', data.image.file);
+  // Get ID from data or localStorage
+  const agentId = data.id || localStorage.getItem("agentId");
+  if (agentId) {
+    formData.append("id", agentId);
   }
 
-  // Optional: Multiple files (max 10 files)
-  if (data.files && data.files.length > 0) {
-    data.files.forEach((file, index) => {
-      if (index < 10 && file instanceof File) {
-        formData.append('files', file);
-      }
+  // Required fields
+  formData.append("name", data.name || "");
+  formData.append("email", data.email || "");
+  formData.append("gender", data.gender || "");
+  formData.append("phone_number", data.phone_number || "");
+  formData.append("age", data.age?.toString() || "0");
+  formData.append("service", data.service || "");
+  formData.append("location", data.location || "");
+  formData.append("note", data.note || "");
+  formData.append("isActive", (data.isActive || 1).toString());
+  formData.append("isVerified", (data.isVerified || 0).toString());
+  formData.append("updatedFiles", JSON.stringify(data.updatedFiles || []));
+
+  // Optional: Profile image
+  if (data.image?.file) {
+    formData.append("image", data.image.file);
+  }
+
+  // Optional: Multiple files
+  if (data.files?.length > 0) {
+    data.files.slice(0, 10).forEach((file) => {
+      if (file instanceof File) formData.append("files", file);
     });
   }
 
-  const options = {
-    method: 'PUT',
-    body: formData,
-  };
-
   try {
-    const response = await fetch(url, options);
+    const response = await fetch(url, { method: "PUT", body: formData });
     const text = await response.text();
-    
+
     try {
-      const json = JSON.parse(text || '{}');
-      return { 
-        success: response.ok && (json.success === true || json.success === undefined), 
-        ...json 
-      };
-    } catch (e) {
-      return { 
-        success: response.ok, 
-        message: text || 'Invalid response format' 
-      };
+      const json = JSON.parse(text || "{}");
+      return { success: response.ok, ...json };
+    } catch {
+      return { success: response.ok, message: text || "Invalid response format" };
     }
   } catch (error) {
-    console.error('Update Agent Failed:', error);
-    return { 
-      success: false, 
-      message: error.message || 'Network error' 
-    };
+    console.error("❌ Update Agent Failed:", error);
+    return { success: false, message: error.message || "Network error" };
   }
 };
 
-// ==================== B2B (VALUE-ADDED SERVICE) API CALLS ====================
-
+// ==================== CREATE B2B ====================
 export const createB2B = async (data) => {
-  const url = `${baseUrl}/value-added-service`;
+  const url = `${baseUrl}/value-added-service/create-value-added-service`;
 
   const formData = new FormData();
 
-  // Required fields for B2B creation
-  formData.append('name', data.name);
-  formData.append('age', data.age.toString());
-  formData.append('gender', data.gender);
-  formData.append('phone_number', data.phone_number);
-  formData.append('email', data.email);
-  formData.append('location', data.location);
-  formData.append('professional', data.professional);
-  formData.append('isActive', (data.isActive || 1).toString());
-
-  // Optional: Profile image (max 1 file)
-  if (data.image && data.image.file) {
-    formData.append('image', data.image.file);
+  const userId = localStorage.getItem("userId");
+  if (userId) {
+    formData.append("createdBy", userId);
   }
 
-  // Optional: Multiple files (max 10 files)
-  if (data.files && data.files.length > 0) {
-    data.files.forEach((file, index) => {
-      if (index < 10 && file instanceof File) {
-        formData.append('files', file);
-      }
+  // Required fields
+  formData.append("name", data.name || "");
+  formData.append("age", data.age?.toString() || "0");
+  formData.append("gender", data.gender || "");
+  formData.append("phone_number", data.phone_number || "");
+  formData.append("email", data.email || "");
+  formData.append("location", data.location || "");
+  formData.append("professional", data.professional || "");
+  formData.append("isActive", (data.isActive || 1).toString());
+
+  // Optional: Profile image
+  if (data.image?.file) {
+    formData.append("image", data.image.file);
+  }
+
+  // Optional: Multiple files
+  if (data.files?.length > 0) {
+    data.files.slice(0, 10).forEach((file) => {
+      if (file instanceof File) formData.append("files", file);
     });
   }
 
-  const options = {
-    method: 'POST',
-    body: formData,
-  };
-
   try {
-    const response = await fetch(url, options);
+    const response = await fetch(url, { method: "POST", body: formData });
     const text = await response.text();
-    
+
     try {
-      const json = JSON.parse(text || '{}');
-      return { 
-        success: response.ok && (json.success === true || json.success === undefined), 
-        ...json 
-      };
-    } catch (e) {
-      return { 
-        success: response.ok, 
-        message: text || 'Invalid response format' 
-      };
+      const json = JSON.parse(text || "{}");
+      return { success: response.ok, ...json };
+    } catch {
+      return { success: response.ok, message: text || "Invalid response format" };
     }
   } catch (error) {
-    console.error('Create B2B Failed:', error);
-    return { 
-      success: false, 
-      message: error.message || 'Network error' 
-    };
+    console.error("❌ Create B2B Failed:", error);
+    return { success: false, message: error.message || "Network error" };
   }
 };
 
+// ==================== UPDATE B2B ====================
 export const updateB2B = async (data) => {
-  const url = `${baseUrl}/value-added-service`;
+  const url = `${baseUrl}/value-added-service/update-value-added-service`;
 
   const formData = new FormData();
 
-  // Required fields for B2B update
-  formData.append('id', data.id);
-  formData.append('name', data.name);
-  formData.append('age', data.age.toString());
-  formData.append('gender', data.gender);
-  formData.append('phone_number', data.phone_number);
-  formData.append('email', data.email);
-  formData.append('location', data.location);
-  formData.append('professional', data.professional);
-  formData.append('isActive', (data.isActive || 1).toString());
-  formData.append('isVerifyed', (data.isVerifyed || 0).toString());
-  formData.append('updatedFiles', JSON.stringify(data.updatedFiles || []));
-
-  // Optional: Profile image (max 1 file)
-  if (data.image && data.image.file) {
-    formData.append('image', data.image.file);
+  // Get ID from data or localStorage
+  const b2bId = data.id || localStorage.getItem("b2bId");
+  if (b2bId) {
+    formData.append("id", b2bId);
   }
 
-  // Optional: Multiple files (max 10 files)
-  if (data.files && data.files.length > 0) {
-    data.files.forEach((file, index) => {
-      if (index < 10 && file instanceof File) {
-        formData.append('files', file);
-      }
+  // Required fields
+  formData.append("name", data.name || "");
+  formData.append("age", data.age?.toString() || "0");
+  formData.append("gender", data.gender || "");
+  formData.append("phone_number", data.phone_number || "");
+  formData.append("email", data.email || "");
+  formData.append("location", data.location || "");
+  formData.append("professional", data.professional || "");
+  formData.append("isActive", (data.isActive || 1).toString());
+  formData.append("isVerifyed", (data.isVerifyed || 0).toString());
+  formData.append("updatedFiles", JSON.stringify(data.updatedFiles || []));
+
+  // Optional: Profile image
+  if (data.image?.file) {
+    formData.append("image", data.image.file);
+  }
+
+  // Optional: Multiple files
+  if (data.files?.length > 0) {
+    data.files.slice(0, 10).forEach((file) => {
+      if (file instanceof File) formData.append("files", file);
     });
   }
 
-  const options = {
-    method: 'PUT',
-    body: formData,
-  };
-
   try {
-    const response = await fetch(url, options);
+    const response = await fetch(url, { method: "PUT", body: formData });
     const text = await response.text();
 
     try {
-      const json = JSON.parse(text || '{}');
-      return {
-        success: response.ok && (json.success === true || json.success === undefined),
-        ...json
-      };
-    } catch (e) {
-      return {
-        success: response.ok,
-        message: text || 'Invalid response format'
-      };
+      const json = JSON.parse(text || "{}");
+      return { success: response.ok, ...json };
+    } catch {
+      return { success: response.ok, message: text || "Invalid response format" };
     }
   } catch (error) {
-    console.error('Update B2B Failed:', error);
-    return {
-      success: false,
-      message: error.message || 'Network error'
-    };
+    console.error("❌ Update B2B Failed:", error);
+    return { success: false, message: error.message || "Network error" };
   }
 };
 
@@ -1258,53 +1274,7 @@ export const updateProperty = async (data) => {
 };
 
 
-export const getAgentDetails = async (phone) => {
 
-  const url = `${baseUrl}/agent?phone=${phone}`;
-
-  const options = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-
-  try {
-    const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error('Failed to fetch data');
-    }
-    return response.json();
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    throw error;
-  }
-};
-
-
-export const getB2BDetails = async (phone) => {
-
-  const url = `${baseUrl}/value-added-service?phone=${phone}`;
-
-
-  const options = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-
-  try {
-    const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error('Failed to fetch data');
-    }
-    return response.json();
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    throw error;
-  }
-};
 
 
 export const getUserCount = async (id) => {

@@ -1,19 +1,31 @@
+
+
+// ==================== COMPONENT - MyProfile.jsx ====================
+
 import React, { useState, useEffect } from "react";
-import { UpdateUser, getUserDetails, UpdateUserPassword, createAgent, getAgentDetails, createB2B, updateB2B, updateAgent, getB2BDetails } from "@/apiCalls";
+import { 
+  UpdateUser, 
+  getUserDetails, 
+  UpdateUserPassword, 
+  getAgentDetails, 
+  createAgent,
+  updateAgent, 
+  getB2BDetails, 
+  createB2B,
+  updateB2B 
+} from "@/apiCalls";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash, FaTrash } from 'react-icons/fa';
 import DropdownSelect from "../common/DropdownSelect";
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 
 export default function MyProfile() {
-
   const [avatar, setAvatar] = useState({
     file: null,
     preview: null,
   });
 
   const [imgUrl, setimgUrl] = useState("");
-  
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [existingFiles, setExistingFiles] = useState([]);
   const [deletedFileIds, setDeletedFileIds] = useState([]);
@@ -61,6 +73,44 @@ export default function MyProfile() {
     { id: 13, name: "Landscaping" }
   ];
 
+  const [formData, setFormData] = useState({
+    id: 0,
+    name: '',
+    mobileNumber: '',
+    email: '',
+  });
+
+  const [errors, setErrors] = useState({
+    name: '',
+    mobileNumber: '',
+    email: '',
+  });
+
+  const [passwordFields, setPasswordFields] = useState({
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+
+  const [validationErrors, setValidationErrors] = useState({
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+
+  // Helper function to safely parse JSON
+  const safeJSONParse = (data, fallback = null) => {
+    try {
+      if (typeof data === 'string') {
+        return JSON.parse(data);
+      }
+      return data || fallback;
+    } catch (e) {
+      console.error('JSON parse error:', e);
+      return fallback;
+    }
+  };
+
   // Helper function to check unique constraint errors
   const isUniqueConstraintError = (error) => {
     const errorMessage = error?.response?.data?.error?.errors?.[0]?.message || 
@@ -75,8 +125,40 @@ export default function MyProfile() {
     const fetchAgentDetails = async () => {
       const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
+      console.log('🔍 LandsUser from localStorage:', landsUser);
+
+      if (!landsUser) {
+        console.error('❌ No LandsUser found in localStorage');
+        return;
+      }
+
+      // ==================== AGENT LOGIC ====================
       if (landsUser?.type === 'Agent') {
+        console.log('👤 User is Agent');
         setAgent(true);
+        
+        // Extract phone number from multiple possible sources
+        const phoneNumber = landsUser.phone_number || 
+                           landsUser.phoneNumber || 
+                           landsUser.phone || 
+                           formData.mobileNumber;
+        
+        console.log('📞 Phone Number:', phoneNumber);
+        console.log('📞 All landsUser properties:', Object.keys(landsUser));
+        
+        if (!phoneNumber) {
+          console.error('❌ No phone number found');
+          console.log('Available properties:', landsUser);
+          toast.error('Phone number not found. Please refresh the page.');
+          return;
+        }
+
+        setFormData(prev => ({ 
+          ...prev, 
+          mobileNumber: phoneNumber,
+          name: landsUser.name || landsUser.full_name || prev.name,
+          email: landsUser.email || prev.email
+        }));
 
         const storedId = localStorage.getItem('agentId');
         if (storedId) {
@@ -87,55 +169,74 @@ export default function MyProfile() {
         }
 
         try {
-          const data = await getAgentDetails(landsUser.phoneNumber);
-          if (data.success) {
-            if (data?.data?.length) {
-              const agentId = data.data[0].id;
-              setIsNew(false);
-              setAgentData({
-                id: agentId,
-                agentAge: data.data[0].age,
-                agentGender: data.data[0].gender,
-                agentService: data.data[0].service,
-                agentLocation: data.data[0].location,
-              });
-              localStorage.setItem('agentId', agentId.toString());
-              
-              // Parse and set image
-              try {
-                const imageData = JSON.parse(data?.data[0]?.image);
-                setimgUrl(imageData);
-              } catch (e) {
-                setimgUrl(data?.data[0]?.image);
-              }
-              
-              // Parse and set existing files
-              try {
-                const filesData = data.data[0].files ? JSON.parse(data.data[0].files) : [];
-                setExistingFiles(Array.isArray(filesData) ? filesData : []);
-              } catch (e) {
-                setExistingFiles([]);
-              }
-            } else {
-              setIsNew(true);
-              localStorage.removeItem('agentId');
-            }
+          console.log('🔄 Fetching agent details...');
+          const data = await getAgentDetails(phoneNumber);
+          console.log('✅ Agent data received:', data);
+          
+          if (data.success && data?.data?.length > 0) {
+            const agentInfo = data.data[0];
+            const agentId = agentInfo.id;
+            
+            console.log('✅ Agent found with ID:', agentId);
+            
+            setIsNew(false);
+            setAgentData({
+              id: agentId,
+              agentAge: agentInfo.age || "",
+              agentGender: agentInfo.gender || "",
+              agentService: agentInfo.service || "",
+              agentLocation: agentInfo.location || "",
+            });
+            
+            localStorage.setItem('agentId', agentId.toString());
+            
+            // Set image
+            const imageData = safeJSONParse(agentInfo.image);
+            setimgUrl(imageData || agentInfo.image || "");
+            
+            // Set existing files
+            const filesData = safeJSONParse(agentInfo.files, []);
+            setExistingFiles(Array.isArray(filesData) ? filesData : []);
           } else {
-            console.error('Failed to fetch agent details:', data.message || data.error);
-            if (!storedId) {
-              setIsNew(true);
-            }
+            console.log('ℹ️ No existing agent profile found');
+            setIsNew(true);
+            localStorage.removeItem('agentId');
           }
         } catch (error) {
-          console.error('Error fetching agent details:', error);
+          console.error('❌ Error fetching agent details:', error);
           if (!storedId) {
             setIsNew(true);
           }
         }
       }
 
+      // ==================== B2B LOGIC ====================
       if (landsUser?.type === 'B2B') {
+        console.log('🏢 User is B2B');
         setIsB2B(true);
+        
+        // Extract phone number from multiple possible sources
+        const phoneNumber = landsUser.phone_number || 
+                           landsUser.phoneNumber || 
+                           landsUser.phone || 
+                           formData.mobileNumber;
+        
+        console.log('📞 Phone Number:', phoneNumber);
+        console.log('📞 All landsUser properties:', Object.keys(landsUser));
+        
+        if (!phoneNumber) {
+          console.error('❌ No phone number found');
+          console.log('Available properties:', landsUser);
+          toast.error('Phone number not found. Please refresh the page.');
+          return;
+        }
+
+        setFormData(prev => ({ 
+          ...prev, 
+          mobileNumber: phoneNumber,
+          name: landsUser.name || landsUser.full_name || prev.name,
+          email: landsUser.email || prev.email
+        }));
 
         const storedB2bId = localStorage.getItem('b2bId');
         if (storedB2bId) {
@@ -146,47 +247,41 @@ export default function MyProfile() {
         }
 
         try {
-          const data = await getB2BDetails(landsUser.phoneNumber);
-          if (data.success) {
-            if (data.data.length) {
-              const b2bId = data.data[0].id;
-              setIsNewB2B(false);
-              setB2BData({
-                id: b2bId,
-                B2BAge: data.data[0].age,
-                B2BGender: data.data[0].gender,
-                B2BService: data.data[0].professional,
-                B2Blocation: data.data[0].location,
-              });
-              localStorage.setItem('b2bId', b2bId.toString());
-              
-              // Parse and set image
-              try {
-                const imageData = JSON.parse(data.data[0].image);
-                setimgUrl(imageData);
-              } catch (e) {
-                setimgUrl(data.data[0].image);
-              }
-              
-              // Parse and set existing files
-              try {
-                const filesData = data.data[0].files ? JSON.parse(data.data[0].files) : [];
-                setExistingFiles(Array.isArray(filesData) ? filesData : []);
-              } catch (e) {
-                setExistingFiles([]);
-              }
-            } else {
-              setIsNewB2B(true);
-              localStorage.removeItem('b2bId');
-            }
+          console.log('🔄 Fetching B2B details...');
+          const data = await getB2BDetails(phoneNumber);
+          console.log('✅ B2B data received:', data);
+          
+          if (data.success && data?.data?.length > 0) {
+            const b2bInfo = data.data[0];
+            const b2bId = b2bInfo.id;
+            
+            console.log('✅ B2B found with ID:', b2bId);
+            
+            setIsNewB2B(false);
+            setB2BData({
+              id: b2bId,
+              B2BAge: b2bInfo.age || "",
+              B2BGender: b2bInfo.gender || "",
+              B2BService: b2bInfo.professional || "",
+              B2Blocation: b2bInfo.location || "",
+            });
+            
+            localStorage.setItem('b2bId', b2bId.toString());
+            
+            // Set image
+            const imageData = safeJSONParse(b2bInfo.image);
+            setimgUrl(imageData || b2bInfo.image || "");
+            
+            // Set existing files
+            const filesData = safeJSONParse(b2bInfo.files, []);
+            setExistingFiles(Array.isArray(filesData) ? filesData : []);
           } else {
-            console.error('Failed to fetch B2B details:', data.message || data.error);
-            if (!storedB2bId) {
-              setIsNewB2B(true);
-            }
+            console.log('ℹ️ No existing B2B profile found');
+            setIsNewB2B(true);
+            localStorage.removeItem('b2bId');
           }
         } catch (error) {
-          console.error('Error fetching B2B details:', error);
+          console.error('❌ Error fetching B2B details:', error);
           if (!storedB2bId) {
             setIsNewB2B(true);
           }
@@ -236,24 +331,20 @@ export default function MyProfile() {
 
   const removeFile = (fileId, isExisting = false) => {
     if (isExisting) {
-      // Mark existing file for deletion
       setExistingFiles(existingFiles.filter(f => f.id !== fileId));
       setDeletedFileIds([...deletedFileIds, fileId]);
       toast.info("Existing file marked for removal");
     } else {
-      // Remove newly uploaded file
       setUploadedFiles(uploadedFiles.filter(f => f.id !== fileId));
       toast.info("File removed");
     }
   };
 
   const removeAllFiles = () => {
-    // Mark all existing files for deletion
     if (existingFiles.length > 0) {
       setDeletedFileIds([...deletedFileIds, ...existingFiles.map(f => f.id)]);
       setExistingFiles([]);
     }
-    // Clear new uploads
     setUploadedFiles([]);
     setFileInputKey(prev => prev + 1);
     toast.info("All files removed");
@@ -269,47 +360,20 @@ export default function MyProfile() {
     }
   };
 
-  const [formData, setFormData] = useState({
-    id: 0,
-    name: '',
-    mobileNumber: '',
-    email: '',
-  });
-
-  const [errors, setErrors] = useState({
-    name: '',
-    mobileNumber: '',
-    email: '',
-  });
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
-
     setErrors({
       ...errors,
       [name]: '',
     });
   };
 
-  const [passwordFields, setPasswordFields] = useState({
-    oldPassword: '',
-    newPassword: '',
-    confirmPassword: '',
-  });
-
-  const [validationErrors, setValidationErrors] = useState({
-    oldPassword: '',
-    newPassword: '',
-    confirmPassword: '',
-  });
-
   const updatePasswordField = (e) => {
     const { name, value } = e.target;
-
     setPasswordFields({
       ...passwordFields,
       [name]: value,
@@ -317,18 +381,12 @@ export default function MyProfile() {
 
     let updatedErrors = { ...validationErrors };
 
-    if (name === 'newPassword' || name === 'confirmPassword') {
-      if (name === 'newPassword' && value.length < 8) {
-        updatedErrors.newPassword = 'New password must be at least 8 characters long.';
-      } else if (name === 'newPassword') {
-        updatedErrors.newPassword = '';
-      }
+    if (name === 'newPassword') {
+      updatedErrors.newPassword = value.length < 8 ? 'New password must be at least 8 characters long.' : '';
+    }
 
-      if (name === 'confirmPassword' && value !== passwordFields.newPassword) {
-        updatedErrors.confirmPassword = 'Confirm password does not match the new password.';
-      } else if (name === 'confirmPassword') {
-        updatedErrors.confirmPassword = '';
-      }
+    if (name === 'confirmPassword') {
+      updatedErrors.confirmPassword = value !== passwordFields.newPassword ? 'Confirm password does not match the new password.' : '';
     }
 
     if (name === 'oldPassword') {
@@ -341,296 +399,98 @@ export default function MyProfile() {
   const updateAgentField = (e) => {
     const { name, value } = e.target;
     setAgentData({ ...agentData, [name]: value });
-    validateAgentField(name, value);
   };
 
   const updateB2BField = (e) => {
     const { name, value } = e.target;
     setB2BData({ ...B2BData, [name]: value });
-    validateB2BField(name, value);
   };
 
   const updateDropdownValue = (field, value) => {
     setAgentData({ ...agentData, [field]: value });
-    validateAgentField(field, value);
   };
 
   const updateB2BDropdownValue = (field, value) => {
     setB2BData({ ...B2BData, [field]: value });
-    validateB2BField(field, value);
   };
 
-  const validateAgentField = (field, value) => {
-    let error = "";
-    if (field === 'agentAge') {
-      if (!value || value < 18) {
-        error = 'Age must be 18 or above.';
-      }
-    } else if (!value || value === "Select") {
-      error = `${field.replace(/([A-Z])/g, ' $1').trim()} is required`;
-    }
-    setErrors(prev => ({ ...prev, [field]: error }));
-  };
-
-  const validateB2BField = (field, value) => {
-    let error = "";
-    if (field === 'B2BAge') {
-      if (!value || value < 18) {
-        error = 'Age must be 18 or above.';
-      }
-    } else if (!value || value === "Select") {
-      error = `${field.replace(/([A-Z])/g, ' $1').trim()} is required`;
-    }
-    setErrors(prev => ({ ...prev, [field]: error }));
-  };
-
-  // Improved Agent Profile Handler
   const handleAgentProfileUpdate = async (agentPayload) => {
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
-    
+
     try {
+      let response;
+      
       if (isNew) {
-        // Attempt to create new profile
-        const response = await updateAgent(agentPayload);
-        
-        if (response?.success) {
-          const agentId = response.data?.id || response.id;
-          if (agentId) {
-            localStorage.setItem('agentId', agentId.toString());
-            setIsNew(false);
-            setAgentData(prev => ({ ...prev, id: agentId }));
-            toast.success('Agent profile created successfully!');
-            return { success: true };
-          }
-        }
-        
-        return response;
+        console.log('📤 Creating new agent profile...');
+        response = await createAgent(agentPayload);
       } else {
-        // Update existing profile
-        agentPayload.id = agentData.id || localStorage.getItem('agentId');
+        console.log('📤 Updating existing agent profile...');
+        response = await updateAgent(agentPayload);
+      }
+
+      console.log('📥 Agent response:', response);
+
+      if (response?.success) {
+        const agentId = response.data?.id || response.id || agentData.id;
         
-        if (!agentPayload.id) {
-          throw new Error('MISSING_ID');
+        if (agentId && isNew) {
+          localStorage.setItem('agentId', agentId.toString());
+          setIsNew(false);
+          setAgentData(prev => ({ ...prev, id: agentId }));
         }
         
-        const response = await updateAgent(agentPayload);
-        
-        if (response?.success) {
-          toast.success('Agent profile updated successfully!');
-        }
-        
-        return response;
+        toast.success(isNew ? 'Agent profile created successfully!' : 'Agent profile updated successfully!');
+        return { success: true };
+      } else {
+        toast.error(response?.message || 'Failed to save agent profile');
+        return { success: false };
       }
     } catch (error) {
-      // Handle unique constraint - profile already exists
-      if (isUniqueConstraintError(error) && isNew) {
-        console.log('Profile exists, switching to update mode...');
-        
-        try {
-          const data = await getAgentDetails(landsUser.phoneNumber);
-          
-          if (data.success && data?.data?.length) {
-            const agentId = data.data[0].id;
-            localStorage.setItem('agentId', agentId.toString());
-            setIsNew(false);
-            setAgentData(prev => ({ ...prev, id: agentId }));
-            
-            // Retry as update
-            agentPayload.id = agentId;
-            agentPayload.isVerified = 0;
-            agentPayload.updatedFiles = existingFiles
-              .filter(file => !deletedFileIds.includes(file.id))
-              .map(file => file.id);
-            
-            const updateResponse = await updateAgent(agentPayload);
-            
-            if (updateResponse?.success) {
-              toast.success('Profile updated successfully!');
-              return { success: true };
-            }
-            
-            return updateResponse;
-          } else {
-            toast.error('Unable to retrieve existing profile. Please refresh and try again.');
-            return { success: false, error: 'Profile retrieval failed' };
-          }
-        } catch (fetchError) {
-          console.error('Error fetching existing profile:', fetchError);
-          toast.error('Failed to sync with existing profile. Please refresh the page.');
-          return { success: false, error: fetchError };
-        }
-      } else if (error.message === 'MISSING_ID') {
-        toast.error('Profile ID not found. Please refresh the page and try again.');
-        return { success: false, error: 'Missing ID' };
-      } else {
-        console.error('Profile update error:', error);
-        const errorMsg = error?.response?.data?.message || 
-                         error?.message || 
-                         'Failed to update profile';
-        toast.error(errorMsg);
-        return { success: false, error: errorMsg };
-      }
+      console.error('❌ Agent profile error:', error);
+      toast.error(error?.message || 'Failed to save agent profile');
+      return { success: false, error: error };
     }
   };
 
-  // Improved B2B Profile Handler
   const handleB2BProfileUpdate = async (b2bPayload) => {
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
     
     try {
+      let response;
+      
       if (isNewB2B) {
-        const response = await updateB2B(b2bPayload);
-        
-        if (response?.success) {
-          const b2bId = response.data?.id || response.id;
-          if (b2bId) {
-            localStorage.setItem('b2bId', b2bId.toString());
-            setIsNewB2B(false);
-            setB2BData(prev => ({ ...prev, id: b2bId }));
-            toast.success('B2B profile created successfully!');
-            return { success: true };
-          }
-        }
-        
-        return response;
+        console.log('📤 Creating new B2B profile...');
+        response = await createB2B(b2bPayload);
       } else {
-        b2bPayload.id = B2BData.id || localStorage.getItem('b2bId');
+        console.log('📤 Updating existing B2B profile...');
+        response = await updateB2B(b2bPayload);
+      }
+
+      console.log('📥 B2B response:', response);
+      
+      if (response?.success) {
+        const b2bId = response.data?.id || response.id || B2BData.id;
         
-        if (!b2bPayload.id) {
-          throw new Error('MISSING_ID');
+        if (b2bId && isNewB2B) {
+          localStorage.setItem('b2bId', b2bId.toString());
+          setIsNewB2B(false);
+          setB2BData(prev => ({ ...prev, id: b2bId }));
         }
         
-        const response = await updateB2B(b2bPayload);
-        
-        if (response?.success) {
-          toast.success('B2B profile updated successfully!');
-        }
-        
-        return response;
+        toast.success(isNewB2B ? 'B2B profile created successfully!' : 'B2B profile updated successfully!');
+        return { success: true };
+      } else {
+        toast.error(response?.message || 'Failed to save B2B profile');
+        return { success: false };
       }
     } catch (error) {
-      if (isUniqueConstraintError(error) && isNewB2B) {
-        console.log('B2B profile exists, switching to update mode...');
-        
-        try {
-          const data = await getB2BDetails(landsUser.phoneNumber);
-          
-          if (data.success && data?.data?.length) {
-            const b2bId = data.data[0].id;
-            localStorage.setItem('b2bId', b2bId.toString());
-            setIsNewB2B(false);
-            setB2BData(prev => ({ ...prev, id: b2bId }));
-            
-            b2bPayload.id = b2bId;
-            b2bPayload.isVerifyed = 0;
-            b2bPayload.updatedFiles = existingFiles
-              .filter(file => !deletedFileIds.includes(file.id))
-              .map(file => file.id);
-            
-            const updateResponse = await updateB2B(b2bPayload);
-            
-            if (updateResponse?.success) {
-              toast.success('B2B profile updated successfully!');
-              return { success: true };
-            }
-            
-            return updateResponse;
-          } else {
-            toast.error('Unable to retrieve existing B2B profile. Please refresh and try again.');
-            return { success: false, error: 'Profile retrieval failed' };
-          }
-        } catch (fetchError) {
-          console.error('Error fetching existing B2B profile:', fetchError);
-          toast.error('Failed to sync with existing B2B profile. Please refresh the page.');
-          return { success: false, error: fetchError };
-        }
-      } else if (error.message === 'MISSING_ID') {
-        toast.error('B2B profile ID not found. Please refresh the page and try again.');
-        return { success: false, error: 'Missing ID' };
-      } else {
-        console.error('B2B profile update error:', error);
-        const errorMsg = error?.response?.data?.message || 
-                         error?.message || 
-                         'Failed to update B2B profile';
-        toast.error(errorMsg);
-        return { success: false, error: errorMsg };
-      }
+      console.error('❌ B2B profile error:', error);
+      toast.error(error?.message || 'Failed to save B2B profile');
+      return { success: false, error: error };
     }
   };
 
   const handleProfileUpdate = async () => {
-    let newErrors = { ...errors };
-
-    // Optional validations (no required fields)
-    if (formData.name.trim() === '') {
-      newErrors.name = '';
-    } else {
-      newErrors.name = '';
-    }
-
-    if (formData.mobileNumber && !/^\d{10}$/.test(formData.mobileNumber)) {
-      newErrors.mobileNumber = 'Mobile number must be 10 digits.';
-    } else {
-      newErrors.mobileNumber = '';
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (formData.email && !emailRegex.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address.';
-    } else {
-      newErrors.email = '';
-    }
-
-    // Optional agent-specific validations
-    if (isAgent) {
-      if (agentData.agentAge && agentData.agentAge < 18) {
-        newErrors.agentAge = 'Age must be 18 or above.';
-      } else {
-        newErrors.agentAge = '';
-      }
-      if (agentData.agentGender === 'Select') {
-        newErrors.agentGender = '';
-      } else {
-        newErrors.agentGender = '';
-      }
-      if (agentData.agentService === 'Select') {
-        newErrors.agentService = '';
-      } else {
-        newErrors.agentService = '';
-      }
-      if (agentData.agentLocation.trim() === '') {
-        newErrors.agentLocation = '';
-      } else {
-        newErrors.agentLocation = '';
-      }
-    }
-
-    // Optional B2B-specific validations
-    if (isB2B) {
-      if (B2BData.B2BAge && B2BData.B2BAge < 18) {
-        newErrors.B2BAge = 'Age must be 18 or above.';
-      } else {
-        newErrors.B2BAge = '';
-      }
-      if (B2BData.B2BGender === 'Select') {
-        newErrors.B2BGender = '';
-      } else {
-        newErrors.B2BGender = '';
-      }
-      if (B2BData.B2BService === 'Select') {
-        newErrors.B2BService = '';
-      } else {
-        newErrors.B2BService = '';
-      }
-      if (B2BData.B2Blocation.trim() === '') {
-        newErrors.B2Blocation = '';
-      } else {
-        newErrors.B2Blocation = '';
-      }
-    }
-
-    setErrors(newErrors);
-
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
     if (!landsUser) {
@@ -644,17 +504,36 @@ export default function MyProfile() {
     try {
       // Handle Agent profile
       if (isAgent) {
+        const landsUserPhone = landsUser.phone_number || landsUser.phoneNumber || landsUser.phone;
+        const phoneNumber = landsUserPhone || formData.mobileNumber;
+        
+        if (!phoneNumber) {
+          toast.error('Phone number is required. Please refresh and try again.');
+          return;
+        }
+
+        console.log('📞 Using phone number:', phoneNumber);
+        
         const agentPayload = {
-          name: formData.name,
-          email: formData.email,
-          phone_number: formData.mobileNumber,
-          gender: agentData.agentGender,
-          age: parseInt(agentData.agentAge),
-          service: agentData.agentService,
-          location: agentData.agentLocation,
+          name: formData.name || landsUser.name || landsUser.full_name || "",
+          email: formData.email || landsUser.email || "",
+          phone_number: phoneNumber,
+          gender: agentData.agentGender || "",
+          age: parseInt(agentData.agentAge) || 0,
+          service: agentData.agentService || "",
+          location: agentData.agentLocation || "",
           note: '',
           isActive: 1,
         };
+
+        // Only add ID if updating
+        if (!isNew && agentData.id) {
+          agentPayload.id = agentData.id;
+          agentPayload.isVerified = 0;
+          agentPayload.updatedFiles = existingFiles
+            .filter(file => !deletedFileIds.includes(file.id))
+            .map(file => file.id);
+        }
 
         if (avatar?.file) {
           agentPayload.image = avatar;
@@ -663,13 +542,8 @@ export default function MyProfile() {
         if (uploadedFiles.length > 0) {
           agentPayload.files = uploadedFiles.map(f => f.file);
         }
-        
-        if (!isNew) {
-          agentPayload.isVerified = 0;
-          agentPayload.updatedFiles = existingFiles
-            .filter(file => !deletedFileIds.includes(file.id))
-            .map(file => file.id);
-        }
+
+        console.log('📦 Agent Payload:', agentPayload);
 
         const result = await handleAgentProfileUpdate(agentPayload);
         
@@ -681,30 +555,24 @@ export default function MyProfile() {
           setAvatar({ file: null, preview: null });
           
           // Refresh data
-          const refreshedData = await getAgentDetails(landsUser.phoneNumber);
-          if (refreshedData.success && refreshedData.data.length) {
-            const agentId = refreshedData.data[0].id;
+          const refreshedData = await getAgentDetails(phoneNumber);
+          if (refreshedData.success && refreshedData.data.length > 0) {
+            const agentInfo = refreshedData.data[0];
+            const agentId = agentInfo.id;
+            
             setAgentData({
               id: agentId,
-              agentAge: refreshedData.data[0].age,
-              agentGender: refreshedData.data[0].gender,
-              agentService: refreshedData.data[0].service,
-              agentLocation: refreshedData.data[0].location,
+              agentAge: agentInfo.age || "",
+              agentGender: agentInfo.gender || "",
+              agentService: agentInfo.service || "",
+              agentLocation: agentInfo.location || "",
             });
             
-            try {
-              const imageData = JSON.parse(refreshedData?.data[0]?.image);
-              setimgUrl(imageData);
-            } catch (e) {
-              setimgUrl(refreshedData?.data[0]?.image);
-            }
+            const imageData = safeJSONParse(agentInfo.image);
+            setimgUrl(imageData || agentInfo.image || "");
             
-            try {
-              const filesData = refreshedData.data[0].files ? JSON.parse(refreshedData.data[0].files) : [];
-              setExistingFiles(Array.isArray(filesData) ? filesData : []);
-            } catch (e) {
-              setExistingFiles([]);
-            }
+            const filesData = safeJSONParse(agentInfo.files, []);
+            setExistingFiles(Array.isArray(filesData) ? filesData : []);
           }
         }
         
@@ -713,16 +581,35 @@ export default function MyProfile() {
 
       // Handle B2B profile
       if (isB2B) {
+        const landsUserPhone = landsUser.phone_number || landsUser.phoneNumber || landsUser.phone;
+        const phoneNumber = landsUserPhone || formData.mobileNumber;
+        
+        if (!phoneNumber) {
+          toast.error('Phone number is required. Please refresh and try again.');
+          return;
+        }
+
+        console.log('📞 Using phone number:', phoneNumber);
+        
         const b2bPayload = {
-          name: formData.name,
-          age: parseInt(B2BData.B2BAge),
-          gender: B2BData.B2BGender,
-          phone_number: formData.mobileNumber,
-          email: formData.email,
-          location: B2BData.B2Blocation,
-          professional: B2BData.B2BService,
+          name: formData.name || landsUser.name || landsUser.full_name || "",
+          age: parseInt(B2BData.B2BAge) || 0,
+          gender: B2BData.B2BGender || "",
+          phone_number: phoneNumber,
+          email: formData.email || landsUser.email || "",
+          location: B2BData.B2Blocation || "",
+          professional: B2BData.B2BService || "",
           isActive: 1,
         };
+
+        // Only add ID if updating
+        if (!isNewB2B && B2BData.id) {
+          b2bPayload.id = B2BData.id;
+          b2bPayload.isVerifyed = 0;
+          b2bPayload.updatedFiles = existingFiles
+            .filter(file => !deletedFileIds.includes(file.id))
+            .map(file => file.id);
+        }
 
         if (avatar?.file) {
           b2bPayload.image = avatar;
@@ -731,13 +618,8 @@ export default function MyProfile() {
         if (uploadedFiles.length > 0) {
           b2bPayload.files = uploadedFiles.map(f => f.file);
         }
-        
-        if (!isNewB2B) {
-          b2bPayload.isVerifyed = 0;
-          b2bPayload.updatedFiles = existingFiles
-            .filter(file => !deletedFileIds.includes(file.id))
-            .map(file => file.id);
-        }
+
+        console.log('📦 B2B Payload:', b2bPayload);
 
         const result = await handleB2BProfileUpdate(b2bPayload);
         
@@ -747,31 +629,24 @@ export default function MyProfile() {
           setFileInputKey(prev => prev + 1);
           setAvatar({ file: null, preview: null });
           
-          const refreshedData = await getB2BDetails(landsUser.phoneNumber);
-          if (refreshedData.success && refreshedData.data.length) {
-            const b2bId = refreshedData.data[0].id;
+          const refreshedData = await getB2BDetails(phoneNumber);
+          if (refreshedData.success && refreshedData.data.length > 0) {
+            const b2bInfo = refreshedData.data[0];
+            const b2bId = b2bInfo.id;
+            
             setB2BData({
               id: b2bId,
-              B2BAge: refreshedData.data[0].age,
-              B2BGender: refreshedData.data[0].gender,
-              B2BService: refreshedData.data[0].professional,
-              B2Blocation: refreshedData.data[0].location,
+              B2BAge: b2bInfo.age || "",
+              B2BGender: b2bInfo.gender || "",
+              B2BService: b2bInfo.professional || "",
+              B2Blocation: b2bInfo.location || "",
             });
             
-            // Parse and set image
-            try {
-              const imageData = JSON.parse(refreshedData.data[0].image);
-              setimgUrl(imageData);
-            } catch (e) {
-              setimgUrl(refreshedData.data[0].image);
-            }
+            const imageData = safeJSONParse(b2bInfo.image);
+            setimgUrl(imageData || b2bInfo.image || "");
             
-            try {
-              const filesData = refreshedData.data[0].files ? JSON.parse(refreshedData.data[0].files) : [];
-              setExistingFiles(Array.isArray(filesData) ? filesData : []);
-            } catch (e) {
-              setExistingFiles([]);
-            }
+            const filesData = safeJSONParse(b2bInfo.files, []);
+            setExistingFiles(Array.isArray(filesData) ? filesData : []);
           }
         }
         
@@ -819,8 +694,27 @@ export default function MyProfile() {
   const getUser = async () => {
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
+    console.log('🔍 getUser - LandsUser:', landsUser);
+
     if (landsUser) {
       try {
+        // If this is Agent/B2B and we have phone data but no user ID, skip getUserDetails
+        if ((isAgent || isB2B) && landsUser.phone_number) {
+          console.log('ℹ️ Agent/B2B user - skipping getUserDetails');
+          
+          // Set form data from landsUser
+          const phoneNumber = landsUser.phone_number || landsUser.phoneNumber || landsUser.phone;
+          setFormData({
+            id: landsUser.id || 0,
+            name: landsUser.name || landsUser.full_name || '',
+            mobileNumber: phoneNumber || '',
+            email: landsUser.email || '',
+          });
+          
+          setimgUrl(landsUser.image || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=");
+          return;
+        }
+
         const data = await getUserDetails(landsUser.id);
         if (data.success) {
           setUserData(data.user);
