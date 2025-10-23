@@ -30,6 +30,7 @@ export default function MyProfile() {
   const [existingFiles, setExistingFiles] = useState([]);
   const [deletedFileIds, setDeletedFileIds] = useState([]);
   const [fileInputKey, setFileInputKey] = useState(0);
+  const [savedFileCount, setSavedFileCount] = useState(0);
 
   const [userData, setUserData] = useState();
   const [showOldPassword, setShowOldPassword] = useState(false);
@@ -122,7 +123,7 @@ export default function MyProfile() {
   };
 
   useEffect(() => {
-    const fetchAgentDetails = async () => {
+    const fetchUserDetails = async () => {
       const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
       console.log('🔍 LandsUser from localStorage:', landsUser);
@@ -136,25 +137,24 @@ export default function MyProfile() {
       if (landsUser?.type === 'Agent') {
         console.log('👤 User is Agent');
         setAgent(true);
-        
+
         // Extract phone number from multiple possible sources
-        const phoneNumber = landsUser.phone_number || 
-                           landsUser.phoneNumber || 
-                           landsUser.phone || 
+        const phoneNumber = landsUser.phone_number ||
+                           landsUser.phoneNumber ||
+                           landsUser.phone ||
                            formData.mobileNumber;
-        
+
         console.log('📞 Phone Number:', phoneNumber);
         console.log('📞 All landsUser properties:', Object.keys(landsUser));
-        
+
         if (!phoneNumber) {
           console.error('❌ No phone number found');
           console.log('Available properties:', landsUser);
-          toast.error('Phone number not found. Please refresh the page.');
           return;
         }
 
-        setFormData(prev => ({ 
-          ...prev, 
+        setFormData(prev => ({
+          ...prev,
           mobileNumber: phoneNumber,
           name: landsUser.name || landsUser.full_name || prev.name,
           email: landsUser.email || prev.email
@@ -172,13 +172,13 @@ export default function MyProfile() {
           console.log('🔄 Fetching agent details...');
           const data = await getAgentDetails(phoneNumber);
           console.log('✅ Agent data received:', data);
-          
+
           if (data.success && data?.data?.length > 0) {
             const agentInfo = data.data[0];
             const agentId = agentInfo.id;
-            
+
             console.log('✅ Agent found with ID:', agentId);
-            
+
             setIsNew(false);
             setAgentData({
               id: agentId,
@@ -187,15 +187,25 @@ export default function MyProfile() {
               agentService: agentInfo.service || "",
               agentLocation: agentInfo.location || "",
             });
-            
+
             localStorage.setItem('agentId', agentId.toString());
-            
+
             // Set image
-            const imageData = safeJSONParse(agentInfo.image);
-            setimgUrl(imageData || agentInfo.image || "");
-            
+            setimgUrl(agentInfo.image || "");
+
             // Set existing files
-            const filesData = safeJSONParse(agentInfo.files, []);
+            let filesData = safeJSONParse(agentInfo.files, []);
+            // Handle double stringified files from backend
+            if (Array.isArray(filesData) && filesData.length > 0 && typeof filesData[0] === 'string') {
+              try {
+                const innerData = JSON.parse(filesData[0]);
+                if (Array.isArray(innerData)) {
+                  filesData = innerData;
+                }
+              } catch (e) {
+                // ignore parse error
+              }
+            }
             setExistingFiles(Array.isArray(filesData) ? filesData : []);
           } else {
             console.log('ℹ️ No existing agent profile found');
@@ -211,28 +221,27 @@ export default function MyProfile() {
       }
 
       // ==================== B2B LOGIC ====================
-      if (landsUser?.type === 'B2B') {
+      else if (landsUser?.type === 'B2B') {
         console.log('🏢 User is B2B');
         setIsB2B(true);
-        
+
         // Extract phone number from multiple possible sources
-        const phoneNumber = landsUser.phone_number || 
-                           landsUser.phoneNumber || 
-                           landsUser.phone || 
+        const phoneNumber = landsUser.phone_number ||
+                           landsUser.phoneNumber ||
+                           landsUser.phone ||
                            formData.mobileNumber;
-        
+
         console.log('📞 Phone Number:', phoneNumber);
         console.log('📞 All landsUser properties:', Object.keys(landsUser));
-        
+
         if (!phoneNumber) {
           console.error('❌ No phone number found');
           console.log('Available properties:', landsUser);
-          toast.error('Phone number not found. Please refresh the page.');
           return;
         }
 
-        setFormData(prev => ({ 
-          ...prev, 
+        setFormData(prev => ({
+          ...prev,
           mobileNumber: phoneNumber,
           name: landsUser.name || landsUser.full_name || prev.name,
           email: landsUser.email || prev.email
@@ -250,13 +259,13 @@ export default function MyProfile() {
           console.log('🔄 Fetching B2B details...');
           const data = await getB2BDetails(phoneNumber);
           console.log('✅ B2B data received:', data);
-          
+
           if (data.success && data?.data?.length > 0) {
             const b2bInfo = data.data[0];
             const b2bId = b2bInfo.id;
-            
+
             console.log('✅ B2B found with ID:', b2bId);
-            
+
             setIsNewB2B(false);
             setB2BData({
               id: b2bId,
@@ -265,15 +274,23 @@ export default function MyProfile() {
               B2BService: b2bInfo.professional || "",
               B2Blocation: b2bInfo.location || "",
             });
-            
+
             localStorage.setItem('b2bId', b2bId.toString());
-            
-            // Set image
-            const imageData = safeJSONParse(b2bInfo.image);
-            setimgUrl(imageData || b2bInfo.image || "");
-            
+
+
             // Set existing files
-            const filesData = safeJSONParse(b2bInfo.files, []);
+            let filesData = safeJSONParse(b2bInfo.files, []);
+            // Handle double stringified files from backend
+            if (Array.isArray(filesData) && filesData.length > 0 && typeof filesData[0] === 'string') {
+              try {
+                const innerData = JSON.parse(filesData[0]);
+                if (Array.isArray(innerData)) {
+                  filesData = innerData;
+                }
+              } catch (e) {
+                // ignore parse error
+              }
+            }
             setExistingFiles(Array.isArray(filesData) ? filesData : []);
           } else {
             console.log('ℹ️ No existing B2B profile found');
@@ -287,9 +304,16 @@ export default function MyProfile() {
           }
         }
       }
+
+      // ==================== REGULAR USER LOGIC ====================
+      else {
+        console.log('👤 User is Regular (Buyer/Seller)');
+        // For regular users, we still need to call getUserDetails to get their profile
+        await getUser();
+      }
     };
 
-    fetchAgentDetails();
+    fetchUserDetails();
   }, []);
 
   const handleImageUpload = (event) => {
@@ -325,7 +349,7 @@ export default function MyProfile() {
 
       setUploadedFiles([...uploadedFiles, ...processedFiles]);
       setFileInputKey(prev => prev + 1);
-      toast.success(`${newFiles.length} file(s) added successfully`);
+      // Removed toast here - will show on save success
     }
   };
 
@@ -725,6 +749,12 @@ export default function MyProfile() {
             email: data.user.email,
           });
           setimgUrl(data.user.image || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=")
+
+          // Set existing files for regular users
+          if (data.user.files) {
+            let filesData = safeJSONParse(data.user.files, []);
+            setExistingFiles(Array.isArray(filesData) ? filesData : []);
+          }
         } else {
           toast.error(data.message || data.error || "Something Went Wrong")
         }
