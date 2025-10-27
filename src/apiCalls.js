@@ -32,28 +32,45 @@ export const verifyMobileOtp = async (data) => {
 
 export const RegisterUser = async (data) => {
   const url = `${baseUrl}/registration/new-user`;
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  };
 
   try {
-    const response = await fetch(url, options);
-    const text = await response.text();
-    try {
-      const json = JSON.parse(text || '{}');
-      return json;
-    } catch (e) {
-      return { success: response.ok, message: text };
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json().catch(() => null);
+
+    // If JSON parsed successfully
+    if (result) {
+      return {
+        success: result.success ?? response.ok,
+        message: result.message || "Registration completed",
+        user: result.user || null,
+      };
     }
+
+    // If response isn't JSON
+    const text = await response.text();
+    return {
+      success: response.ok,
+      message: text || "Unknown response from server",
+      user: null,
+    };
+
   } catch (error) {
-    console.error('Registration Failed:', error);
-    return { success: false, message: error.message || 'Network error' };
+    console.error("Registration Failed:", error);
+    return {
+      success: false,
+      message: error.message || "Network error",
+      user: null,
+    };
   }
 };
+
 
 
 
@@ -107,36 +124,57 @@ export const getAllLocation = async () => {
 
 export const UpdateUser = async (data) => {
   const url = `${baseUrl}/registration/update-user`;
-
   const formData = new FormData();
+  
   formData.append('id', data.id);
+  formData.append('phone', data.phone);
   formData.append('fullName', data.fullName);
   formData.append('email', data.email);
-  formData.append('phone', data.phone);
+  formData.append('type', data.type);
+  formData.append('isActive', data.isActive ? 1 : 0);
 
-  // Check if an image is provided and append it
-  if (data.image && data.image.file) {
-    formData.append('image', data.image.file);
+  // Only append password if updating
+  if (data.password && data.password.trim() !== '') {
+    formData.append('password', data.password);
   }
 
-  // Do not set Content-Type manually when sending FormData
-  const options = {
-    method: 'PUT',
-    body: formData, // Send formData directly, it will handle the Content-Type header automatically
-  };
+  // ✅ Single Image Upload
+  if (data.image instanceof File) {
+    formData.append('image', data.image);
+  }
+
+  // ✅ Handle existing files (send as comma-separated string)
+  if (data.existingFiles && data.existingFiles.length > 0) {
+    formData.append('updatedFiles', data.existingFiles.join(','));
+  }
+
+  // ✅ Multiple New Files Upload
+  if (data.files && data.files.length > 0) {
+    data.files.forEach((file) => {
+      if (file instanceof File) {
+        formData.append('files', file);
+      }
+    });
+  }
 
   try {
-    const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error('Failed to update user');
-    }
-    return response.json();
+    const response = await fetch(url, {
+      method: "PUT",
+      body: formData,
+    });
+
+    const result = await response.json();
+    return result;
   } catch (error) {
-    console.error('Update Failed:', error);
+    console.error("Update User Failed:", error);
     throw error;
   }
 };
 
+
+
+// ["https://api.i5propertystars.com/uploads/1761448377219-portfolio image-1.jpeg","https://api.i5propertystars.com/uploads/1761448377219-portfolio image-2.jpeg","https://api.i5propertystars.com/uploads/1761448377219-portfolio image-3.jpeg" ]
+// ["https://api.i5propertystars.com/uploads/1761448377219-portfolio image-2.jpeg","https://api.i5propertystars.com/uploads/1761448377219-portfolio image-3.jpeg" ]
 
 export const UpdateUserPassword = async (data) => {
   const url = `${baseUrl}/registration/reset-password`;
@@ -821,207 +859,6 @@ export const getB2BDetails = async (phone) => {
   }
 };
 
-// ==================== CREATE AGENT ====================
-export const createAgent = async (data) => {
-  // ✅ CORRECT ENDPOINT
-  const url = `${baseUrl}/agent/create-agent`;
-
-  const formData = new FormData();
-
-  // Required fields
-  formData.append("name", data.name || "");
-  formData.append("email", data.email || "");
-  formData.append("gender", data.gender || "");
-  formData.append("phone_number", data.phone_number || "");
-  formData.append("age", data.age?.toString() || "0");
-  formData.append("service", data.service || "");
-  formData.append("location", data.location || "");
-  formData.append("note", data.note || "");
-  formData.append("isActive", (data.isActive || 1).toString());
-
-  // Optional: Profile image
-  if (data.image?.file) {
-    formData.append("image", data.image.file);
-  }
-
-  // Optional: Multiple files (max 10)
-  if (data.files?.length > 0) {
-    data.files.slice(0, 10).forEach((file) => {
-      if (file instanceof File) formData.append("files", file);
-    });
-  }
-
-  try {
-    const response = await fetch(url, { method: "POST", body: formData });
-    const text = await response.text();
-
-    try {
-      const json = JSON.parse(text || "{}");
-      return { success: response.ok, ...json };
-    } catch {
-      return { success: response.ok, message: text || "Invalid response format" };
-    }
-  } catch (error) {
-    console.error("❌ Create Agent Failed:", error);
-    return { success: false, message: error.message || "Network error" };
-  }
-};
-
-// ==================== UPDATE AGENT ====================
-export const updateAgent = async (data) => {
-  // ✅ CORRECT ENDPOINT
-  const url = `${baseUrl}/agent/update-agent`;
-
-  const formData = new FormData();
-
-  // Get ID from data or localStorage
-  const agentId = data.id || localStorage.getItem("agentId");
-  if (agentId) {
-    formData.append("id", agentId);
-  }
-
-  // Required fields
-  formData.append("name", data.name || "");
-  formData.append("email", data.email || "");
-  formData.append("gender", data.gender || "");
-  formData.append("phone_number", data.phone_number || "");
-  formData.append("age", data.age?.toString() || "0");
-  formData.append("service", data.service || "");
-  formData.append("location", data.location || "");
-  formData.append("note", data.note || "");
-  formData.append("isActive", (data.isActive || 1).toString());
-  formData.append("isVerified", (data.isVerified || 0).toString());
-  formData.append("updatedFiles", JSON.stringify(data.updatedFiles || []));
-
-  // Optional: Profile image
-  if (data.image?.file) {
-    formData.append("image", data.image.file);
-  }
-
-  // Optional: Multiple files
-  if (data.files?.length > 0) {
-    data.files.slice(0, 10).forEach((file) => {
-      if (file instanceof File) formData.append("files", file);
-    });
-  }
-
-  try {
-    const response = await fetch(url, { method: "PUT", body: formData });
-    const text = await response.text();
-
-    try {
-      const json = JSON.parse(text || "{}");
-      return { success: response.ok, ...json };
-    } catch {
-      return { success: response.ok, message: text || "Invalid response format" };
-    }
-  } catch (error) {
-    console.error("❌ Update Agent Failed:", error);
-    return { success: false, message: error.message || "Network error" };
-  }
-};
-
-// ==================== CREATE B2B ====================
-export const createB2B = async (data) => {
-  const url = `${baseUrl}/value-added-service/create-value-added-service`;
-
-  const formData = new FormData();
-
-  const userId = localStorage.getItem("userId");
-  if (userId) {
-    formData.append("createdBy", userId);
-  }
-
-  // Required fields
-  formData.append("name", data.name || "");
-  formData.append("age", data.age?.toString() || "0");
-  formData.append("gender", data.gender || "");
-  formData.append("phone_number", data.phone_number || "");
-  formData.append("email", data.email || "");
-  formData.append("location", data.location || "");
-  formData.append("professional", data.professional || "");
-  formData.append("isActive", (data.isActive || 1).toString());
-
-  // Optional: Profile image
-  if (data.image?.file) {
-    formData.append("image", data.image.file);
-  }
-
-  // Optional: Multiple files
-  if (data.files?.length > 0) {
-    data.files.slice(0, 10).forEach((file) => {
-      if (file instanceof File) formData.append("files", file);
-    });
-  }
-
-  try {
-    const response = await fetch(url, { method: "POST", body: formData });
-    const text = await response.text();
-
-    try {
-      const json = JSON.parse(text || "{}");
-      return { success: response.ok, ...json };
-    } catch {
-      return { success: response.ok, message: text || "Invalid response format" };
-    }
-  } catch (error) {
-    console.error("❌ Create B2B Failed:", error);
-    return { success: false, message: error.message || "Network error" };
-  }
-};
-
-// ==================== UPDATE B2B ====================
-export const updateB2B = async (data) => {
-  const url = `${baseUrl}/value-added-service/update-value-added-service`;
-
-  const formData = new FormData();
-
-  // Get ID from data or localStorage
-  const b2bId = data.id || localStorage.getItem("b2bId");
-  if (b2bId) {
-    formData.append("id", b2bId);
-  }
-
-  // Required fields
-  formData.append("name", data.name || "");
-  formData.append("age", data.age?.toString() || "0");
-  formData.append("gender", data.gender || "");
-  formData.append("phone_number", data.phone_number || "");
-  formData.append("email", data.email || "");
-  formData.append("location", data.location || "");
-  formData.append("professional", data.professional || "");
-  formData.append("isActive", (data.isActive || 1).toString());
-  formData.append("isVerifyed", (data.isVerifyed || 0).toString());
-  formData.append("updatedFiles", JSON.stringify(data.updatedFiles || []));
-
-  // Optional: Profile image
-  if (data.image?.file) {
-    formData.append("image", data.image.file);
-  }
-
-  // Optional: Multiple files
-  if (data.files?.length > 0) {
-    data.files.slice(0, 10).forEach((file) => {
-      if (file instanceof File) formData.append("files", file);
-    });
-  }
-
-  try {
-    const response = await fetch(url, { method: "PUT", body: formData });
-    const text = await response.text();
-
-    try {
-      const json = JSON.parse(text || "{}");
-      return { success: response.ok, ...json };
-    } catch {
-      return { success: response.ok, message: text || "Invalid response format" };
-    }
-  } catch (error) {
-    console.error("❌ Update B2B Failed:", error);
-    return { success: false, message: error.message || "Network error" };
-  }
-};
-
 
 export const getUserWishList = async (id) => {
 
@@ -1402,7 +1239,7 @@ export const GoogleAuth = async (data) => {
 
 export const GoogleRegister = async (data) => {
   const url = `${baseUrl}/registration/new-user`;
-  
+
   // Transform the data to match the expected payload format
   const payload = {
     fullName: '', // Empty as requested
@@ -1412,7 +1249,7 @@ export const GoogleRegister = async (data) => {
     type: data.role, // Use the role as type
     credential: data.credential // Google token
   };
-  
+
   const options = {
     method: 'POST',
     headers: {
@@ -1432,3 +1269,110 @@ export const GoogleRegister = async (data) => {
     throw error;
   }
 };
+
+export const createAgent = async (data) => {
+  const url = `${baseUrl}/agent`;
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const text = await response.text();
+    try {
+      const json = JSON.parse(text || '{}');
+      return json;
+    } catch (e) {
+      return { success: response.ok, message: text };
+    }
+  } catch (error) {
+    console.error('Create Agent Failed:', error);
+    return { success: false, message: error.message || 'Network error' };
+  }
+};
+
+export const updateAgent = async (data) => {
+  const url = `${baseUrl}/agent`;
+  const options = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const text = await response.text();
+    try {
+      const json = JSON.parse(text || '{}');
+      return json;
+    } catch (e) {
+      return { success: response.ok, message: text };
+    }
+  } catch (error) {
+    console.error('Update Agent Failed:', error);
+    return { success: false, message: error.message || 'Network error' };
+  }
+};
+
+export const createB2B = async (data) => {
+  const url = `${baseUrl}/value-added-service`;
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const text = await response.text();
+    try {
+      const json = JSON.parse(text || '{}');
+      return json;
+    } catch (e) {
+      return { success: response.ok, message: text };
+    }
+  } catch (error) {
+    console.error('Create B2B Failed:', error);
+    return { success: false, message: error.message || 'Network error' };
+  }
+};
+
+export const updateB2B = async (data) => {
+  const url = `${baseUrl}/value-added-service`;
+  const options = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const text = await response.text();
+    try {
+      const json = JSON.parse(text || '{}');
+      return json;
+    } catch (e) {
+      return { success: response.ok, message: text };
+    }
+  } catch (error) {
+    console.error('Update B2B Failed:', error);
+    return { success: false, message: error.message || 'Network error' };
+  }
+};
+
+
+
+export { baseUrl };
+
+
+

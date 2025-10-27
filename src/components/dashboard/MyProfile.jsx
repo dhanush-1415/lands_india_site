@@ -1,36 +1,1285 @@
 
+// import React, { useState, useEffect } from "react";
+// import { getUserDetails, UpdateUserPassword, getAgentDetails, getB2BDetails } from "@/apiCalls";
+// import { toast } from "react-toastify";
+// import { FaEye, FaEyeSlash } from 'react-icons/fa';
+// import DropdownSelect from "../common/DropdownSelect";
+// import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 
-// ==================== COMPONENT - MyProfile.jsx ====================
+// // Placeholder imports for agent/B2B updates - implement these in apiCalls.js if not present
+// // import { updateAgentDetails, updateB2BDetails } from "@/apiCalls";
 
+// export const UpdateUser = async (data) => {
+//   const baseUrl = "https://api.i5propertystars.com";
+//   const url = `${baseUrl}/registration/update-user`;
+//   const formData = new FormData();
+
+//   // Basic fields
+//   formData.append("id", data.id);
+//   formData.append("phone", data.phone);
+//   formData.append("fullName", data.fullName.trim()); // Trim fullName
+//   formData.append("email", data.email);
+//   formData.append("type", (data.type || "User").toLowerCase()); // Normalize to lowercase
+//   formData.append("isActive", data.isActive ? 1 : 0);
+
+//   // Optional password
+//   if (data.password && data.password.trim() !== "") {
+//     formData.append("password", data.password);
+//   }
+
+//   // ✅ Existing saved files (keep them)
+//   if (data.existingFiles && data.existingFiles.length > 0) {
+//     formData.append("updatedFiles", data.existingFiles.join(","));
+//   }
+
+//   // ✅ Upload new profile image
+//   if (data.image && data.image instanceof File) {
+//     formData.append("image", data.image); // backend req.files.image[0]
+//   }
+
+//   // ✅ Upload new multiple files
+//   if (data.files && data.files.length > 0) {
+//     data.files.forEach((file) => {
+//       if (file instanceof File) {
+//         formData.append("files", file); // backend req.files.files[]
+//       }
+//     });
+//   }
+
+//   // Additional fields for Agent/B2B
+//   if (data.age !== undefined) {
+//     formData.append("age", data.age);
+//   }
+//   if (data.gender !== undefined) {
+//     formData.append("gender", data.gender .toLowerCase());
+//   }
+//   if (data.location !== undefined) {
+//     formData.append("location", data.location);
+//   }
+//   if (data.service !== undefined) {
+//     formData.append("service", data.service);
+//   }
+//   if (data.professional !== undefined) {
+//     formData.append("professional", data.professional);
+//   }
+
+//   try {
+//     const response = await fetch(url, {
+//       method: "PUT",
+//       body: formData,
+//     });
+
+//     if (!response.ok) {
+//       const errorData = await response.json().catch(() => ({}));
+//       return {
+//         success: false,
+//         message: errorData.message || `HTTP error! status: ${response.status}`,
+//         error: errorData,
+//       };
+//     }
+
+//     const result = await response.json();
+//     return result;
+//   } catch (error) {
+//     console.error("Update User Failed:", error);
+//     return {
+//       success: false,
+//       message: "Network error",
+//       error,
+//     };
+//   }
+// };
+
+// export default function MyProfile() {
+
+//   const [avatar, setAvatar] = useState({
+//     file: null,
+//     preview: null,
+//   });
+
+//   const [imgUrl, setimgUrl] = useState("");
+//   const [selectedFiles, setSelectedFiles] = useState([]);
+//   const [existingFiles, setExistingFiles] = useState([]);
+//   const [fileErrors, setFileErrors] = useState([]);
+
+//   const [userData, setUserData] = useState();
+//   const [showOldPassword, setShowOldPassword] = useState(false);
+//   const [showNewPassword, setShowNewPassword] = useState(false);
+//   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+//   const [isAgent, setAgent] = useState(false);
+//   const [isB2B, setIsB2B] = useState(false);
+//   const [isNew, setIsNew] = useState(false);
+//   const [isNewB2B, setIsNewB2B] = useState(false);
+//   const [isUpdating, setIsUpdating] = useState(false);
+
+//   const [B2BData, setB2BData] = useState({
+//     id: '',
+//     B2BAge: "",
+//     B2BGender: "",
+//     B2BService: "",
+//     B2Blocation: "",
+//   });
+
+//   const [agentData, setAgentData] = useState({
+//     id: '',
+//     agentAge: "",
+//     agentGender: "",
+//     agentService: "",
+//     agentLocation: "",
+//   });
+
+//   const AllServices = [
+//     { id: 1, name: "Advocate & Auditor" },
+//     { id: 2, name: "Investor (Project Invest)" },
+//     { id: 3, name: "Reseller (Short Term Invest)" },
+//     { id: 4, name: "Bankers/Loan Provider" },
+//     { id: 5, name: "Builder/Construction" },
+//     { id: 6, name: "Interior" },
+//     { id: 7, name: "Civil Engineer/Architect" },
+//     { id: 8, name: "Plumbing & Electrical" },
+//     { id: 9, name: "Flooring" },
+//     { id: 10, name: "Approval Services" },
+//     { id: 11, name: "Building Valuation" },
+//     { id: 12, name: "Digital Security System" },
+//     { id: 13, name: "Landscaping" }
+//   ];
+
+//   const [validationAgentErrors, setValidationAgentErrors] = useState({});
+//   const [validationB2BErrors, setValidationB2BErrors] = useState({});
+
+//   const fieldLabelsAgent = {
+//     agentAge: 'Age',
+//     agentGender: 'Gender',
+//     agentService: 'Service',
+//     agentLocation: 'Location'
+//   };
+
+//   const fieldLabelsB2B = {
+//     B2BAge: 'Age',
+//     B2BGender: 'Gender',
+//     B2BService: 'Professional',
+//     B2Blocation: 'Location'
+//   };
+
+//   const validateAgentField = (field, value) => {
+//     let error = "";
+//     if (!value || value === "Select") {
+//       const label = fieldLabelsAgent[field] || field;
+//       error = `${label} is required`;
+//     }
+//     setValidationAgentErrors(prev => ({ ...prev, [field]: error }));
+//   };
+
+//   const validateB2BField = (field, value) => {
+//     let error = "";
+//     if (!value || value === "Select") {
+//       const label = fieldLabelsB2B[field] || field;
+//       error = `${label} is required`;
+//     }
+//     setValidationB2BErrors(prev => ({ ...prev, [field]: error }));
+//   };
+
+//   const validateAgentForm = () => {
+//     let newErrors = {};
+//     if (!agentData.agentAge) {
+//       newErrors.agentAge = 'Age is required.';
+//     }
+//     if (!agentData.agentGender || agentData.agentGender === "Select") {
+//       newErrors.agentGender = 'Gender is required.';
+//     }
+//     if (!agentData.agentService || agentData.agentService === "Select") {
+//       newErrors.agentService = 'Service is required.';
+//     }
+//     if (!agentData.agentLocation.trim()) {
+//       newErrors.agentLocation = 'Location is required.';
+//     }
+//     setValidationAgentErrors(newErrors);
+//     return Object.values(newErrors).every(error => !error);
+//   };
+
+//   const validateB2BForm = () => {
+//     let newErrors = {};
+//     if (!B2BData.B2BAge) {
+//       newErrors.B2BAge = 'Age is required.';
+//     }
+//     if (!B2BData.B2BGender || B2BData.B2BGender === "Select") {
+//       newErrors.B2BGender = 'Gender is required.';
+//     }
+//     if (!B2BData.B2BService || B2BData.B2BService === "Select") {
+//       newErrors.B2BService = 'Professional is required.';
+//     }
+//     if (!B2BData.B2Blocation.trim()) {
+//       newErrors.B2Blocation = 'Location is required.';
+//     }
+//     setValidationB2BErrors(newErrors);
+//     return Object.values(newErrors).every(error => !error);
+//   };
+
+//   const updateAgentField = (e) => {
+//     const { name, value } = e.target;
+//     setAgentData({ ...agentData, [name]: value });
+//     validateAgentField(name, value);
+//   };
+
+//   const updateB2BField = (e) => {
+//     const { name, value } = e.target;
+//     setB2BData({ ...B2BData, [name]: value });
+//     validateB2BField(name, value);
+//   };
+
+//   const updateDropdownValue = (field, value) => {
+//     setAgentData({ ...agentData, [field]: value });
+//     validateAgentField(field, value);
+//   };
+
+//   const updateB2BDropdownValue = (field, value) => {
+//     setB2BData({ ...B2BData, [field]: value });
+//     validateB2BField(field, value);
+//   };
+
+//   const loadAgentDetails = async () => {
+//     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+//     const userType = (landsUser?.type || '').toLowerCase(); // Normalize for checks
+
+//     if (userType === 'agent') {
+//       setAgent(true);
+
+//       try {
+//         const data = await getAgentDetails(landsUser.phoneNumber);
+//         if (data.success) {
+//           if (data?.data?.length) {
+//             setIsNew(false);
+//             setAgentData({
+//               id: data.data[0].id,
+//               agentAge: data.data[0].age,
+//               agentGender: data.data[0].gender,
+//               agentService: data.data[0].service,
+//               agentLocation: data.data[0].location,
+//             });
+            
+//             try {
+//               const parsedImage = JSON.parse(data?.data[0]?.image);
+//               setimgUrl(parsedImage);
+//             } catch {
+//               setimgUrl(data?.data[0]?.image);
+//             }
+            
+//             if (data.data[0].files) {
+//               try {
+//                 const files = JSON.parse(data.data[0].files);
+//                 setExistingFiles(Array.isArray(files) ? files : []);
+//               } catch {
+//                 const files = typeof data.data[0].files === 'string' 
+//                   ? data.data[0].files.split(',') 
+//                   : [];
+//                 setExistingFiles(files);
+//               }
+//             }
+//           } else {
+//             setIsNew(true);
+//           }
+//         } else {
+//           toast.error(data.message || data.error || "Something Went Wrong");
+//         }
+//       } catch (error) {
+//         toast.error("Error fetching agent details");
+//       }
+//     }
+//   };
+
+//   const loadB2BDetails = async () => {
+//     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+//     const userType = (landsUser?.type || '').toLowerCase(); // Normalize for checks
+
+//     if (userType === 'b2b') {
+//       setIsB2B(true);
+
+//       try {
+//         const data = await getB2BDetails(landsUser.phoneNumber);
+//         if (data.success) {
+//           if (data.data.length) {
+//             setIsNewB2B(false);
+//             setB2BData({
+//               id: data.data[0].id,
+//               B2BAge: data.data[0].age,
+//               B2BGender: data.data[0].gender,
+//               B2BService: data.data[0].professional,
+//               B2Blocation: data.data[0].location,
+//             });
+//             setimgUrl(data.data[0].image);
+            
+//             if (data.data[0].files) {
+//               try {
+//                 const files = JSON.parse(data.data[0].files);
+//                 setExistingFiles(Array.isArray(files) ? files : []);
+//               } catch {
+//                 const files = typeof data.data[0].files === 'string' 
+//                   ? data.data[0].files.split(',') 
+//                   : [];
+//                 setExistingFiles(files);
+//               }
+//             }
+//           } else {
+//             setIsNewB2B(true);
+//           }
+//         } else {
+//           toast.error(data.message || data.error || "Something Went Wrong");
+//         }
+//       } catch (error) {
+//         toast.error("Error fetching B2B details");
+//       }
+//     }
+//   };
+
+//   useEffect(() => {
+//     const fetchDetails = async () => {
+//       await getUser();
+//       const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+//       const userType = (landsUser?.type || '').toLowerCase();
+//       if (userType === 'agent') {
+//         await loadAgentDetails();
+//       }
+//       if (userType === 'b2b') {
+//         await loadB2BDetails();
+//       }
+//     };
+//     fetchDetails();
+//   }, []);
+
+//   const handleImageUpload = (event) => {
+//     const file = event.target.files?.[0];
+//     if (file) {
+//       const imageUrl = URL.createObjectURL(file);
+//       setAvatar({
+//         file: file,
+//         preview: imageUrl,
+//       });
+//     }
+//   };
+
+//   const handleFileUpload = (event) => {
+//     const files = Array.from(event.target.files);
+//     const maxFileSize = 5 * 1024 * 1024; // 5MB
+//     const allowedTypes = [
+//       'application/pdf', 
+//       'application/msword', 
+//       'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 
+//       'image/jpeg', 
+//       'image/png'
+//     ];
+//     const newErrors = [];
+//     const validFiles = [];
+
+//     files.forEach((file) => {
+//       if (file.size > maxFileSize) {
+//         newErrors.push(`${file.name}: File size exceeds 5MB.`);
+//       } else if (!allowedTypes.includes(file.type)) {
+//         newErrors.push(`${file.name}: Invalid file type. Only PDF, DOC, DOCX, JPG, PNG allowed.`);
+//       } else {
+//         validFiles.push(file);
+//       }
+//     });
+
+//     setFileErrors(newErrors);
+//     if (newErrors.length === 0) {
+//       setFileErrors([]); // Clear previous errors on success
+//     }
+//     setSelectedFiles(prev => [...prev, ...validFiles]);
+//   };
+
+//   const removeFile = (index) => {
+//     setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+//   };
+
+//   const removeExistingFile = (index) => {
+//     if (window.confirm('Are you sure you want to remove this file?')) {
+//       setExistingFiles(prev => prev.filter((_, i) => i !== index));
+//     }
+//   };
+
+//   const togglePasswordVisibility = (field) => {
+//     if (field === 'oldPassword') {
+//       setShowOldPassword(!showOldPassword);
+//     } else if (field === 'newPassword') {
+//       setShowNewPassword(!showNewPassword);
+//     } else if (field === 'confirmPassword') {
+//       setShowConfirmPassword(!showConfirmPassword);
+//     }
+//   };
+
+//   const [formData, setFormData] = useState({
+//     id: 0,
+//     name: '',
+//     mobileNumber: '',
+//     email: '',
+//   });
+
+//   const [errors, setErrors] = useState({
+//     name: '',
+//     mobileNumber: '',
+//     email: '',
+//   });
+
+//   const handleInputChange = (e) => {
+//     const { name, value } = e.target;
+//     setFormData({
+//       ...formData,
+//       [name]: value,
+//     });
+
+//     setErrors({
+//       ...errors,
+//       [name]: '',
+//     });
+//   };
+
+//   const [passwordFields, setPasswordFields] = useState({
+//     oldPassword: '',
+//     newPassword: '',
+//     confirmPassword: '',
+//   });
+
+//   const [validationErrors, setValidationErrors] = useState({
+//     oldPassword: '',
+//     newPassword: '',
+//     confirmPassword: '',
+//   });
+
+//   const updatePasswordField = (e) => {
+//     const { name, value } = e.target;
+//     const prevNewPassword = passwordFields.newPassword; // Capture previous for confirm validation
+
+//     setPasswordFields({
+//       ...passwordFields,
+//       [name]: value,
+//     });
+
+//     let updatedErrors = { ...validationErrors };
+
+//     if (name === 'oldPassword') {
+//       updatedErrors.oldPassword = '';
+//     }
+
+//     if (name === 'newPassword') {
+//       if (value.length < 8) {
+//         updatedErrors.newPassword = 'New password must be at least 8 characters long.';
+//       } else {
+//         updatedErrors.newPassword = '';
+//       }
+//       // Re-validate confirm if new password changed
+//       if (passwordFields.confirmPassword && passwordFields.confirmPassword !== value) {
+//         updatedErrors.confirmPassword = 'Confirm password does not match the new password.';
+//       } else if (passwordFields.confirmPassword) {
+//         updatedErrors.confirmPassword = '';
+//       }
+//     }
+
+//     if (name === 'confirmPassword') {
+//       if (value !== prevNewPassword) {
+//         updatedErrors.confirmPassword = 'Confirm password does not match the new password.';
+//       } else {
+//         updatedErrors.confirmPassword = '';
+//       }
+//     }
+
+//     setValidationErrors(updatedErrors);
+//   };
+
+//   const handleProfileUpdate = async () => {
+//     let valid = true;
+//     let newErrors = { ...errors };
+
+//     // Validate Full name - ensure it's not an email
+//     if (!formData.name.trim()) {
+//       newErrors.name = 'Full name is required.';
+//       valid = false;
+//     } else if (/\S+@\S+\.\S+/.test(formData.name)) {
+//       newErrors.name = 'Full name cannot be an email address.';
+//       valid = false;
+//     }
+
+//     // Validate Mobile Number (10 digits)
+//     if (!/^\d{10}$/.test(formData.mobileNumber)) {
+//       newErrors.mobileNumber = 'Mobile number must be 10 digits.';
+//       valid = false;
+//     }
+
+//     // Validate Email address
+//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//     if (!emailRegex.test(formData.email)) {
+//       newErrors.email = 'Please enter a valid email address.';
+//       valid = false;
+//     }
+
+//     setErrors(newErrors);
+
+//     if (!valid) return;
+
+//     // Validate agent or B2B fields if applicable (for completeness, though not sent to API)
+//     if (isAgent && !validateAgentForm()) {
+//       valid = false;
+//     }
+//     if (isB2B && !validateB2BForm()) {
+//       valid = false;
+//     }
+
+//     if (!valid) return;
+
+//     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+//     if (landsUser) {
+//       setIsUpdating(true);
+//       try {
+//         const payload = {
+//           id: formData.id, // Always use main user ID from formData (Registration table)
+//           fullName: formData.name, // Trim handled in UpdateUser
+//           email: formData.email,
+//           phone: formData.mobileNumber,
+//           type: (landsUser.type || 'User').toLowerCase(), // Normalize to lowercase
+//           isActive: true,
+//         };
+
+//         // Add image if selected
+//         if (avatar.file) {
+//           payload.image = avatar.file;
+//         }
+
+//         // Add new files
+//         if (selectedFiles.length > 0) {
+//           payload.files = selectedFiles;
+//         }
+
+//         // Add existing files (files to keep)
+//         if (existingFiles.length > 0) {
+//           payload.existingFiles = existingFiles;
+//         }
+
+//         // Add Agent fields if applicable
+//         if (isAgent) {
+//           payload.age = agentData.agentAge;
+//           payload.gender = agentData.agentGender;
+//           payload.service = agentData.agentService;
+//           payload.location = agentData.agentLocation;
+//         }
+
+//         // Add B2B fields if applicable
+//         if (isB2B) {
+//           payload.age = B2BData.B2BAge;
+//           payload.gender = B2BData.B2BGender;
+//           payload.professional = B2BData.B2BService;
+//           payload.location = B2BData.B2Blocation;
+//         }
+
+//         // Do NOT add Agent or B2B specific fields here, as they are not expected by the API
+//         // Agent/B2B updates should use separate APIs if available
+
+//         console.log('Sending payload:', payload);
+
+//         const data = await UpdateUser(payload);
+
+//         if (data.success) {
+//           toast.success("Profile updated successfully");
+          
+//           // Update localStorage with normalized type
+//           if (data.data) {
+//             const normalizedType = (data.data.type || landsUser.type || 'user').toLowerCase();
+//             const updatedUser = {
+//               ...landsUser,
+//               type: normalizedType, // Ensure lowercase
+//               full_name: data.data.fullName || formData.name,
+//               email: data.data.email || formData.email,
+//             };
+//             localStorage.setItem('LandsUser', JSON.stringify(updatedUser));
+//           }
+
+//           // Clear new file selection after successful upload
+//           setSelectedFiles([]);
+          
+//           // Update existing files from response if provided
+//           if (data.data?.filePublicURLs) {
+//             const urls = data.data.filePublicURLs;
+//             setExistingFiles(Array.isArray(urls) ? urls : (typeof urls === 'string' ? urls.split(',').filter(Boolean) : []));
+//           }
+
+//           // Update image URL (prefer https if available)
+//           if (data.data?.imagePublicURL) {
+//             setimgUrl(data.data.imagePublicURL.startsWith('https') ? data.data.imagePublicURL : data.data.imagePublicURL.replace('http://', 'https://'));
+//             setAvatar({ file: null, preview: null });
+//           }
+
+//           // Refetch user data to ensure UI is synced with backend (fixes remove not reflecting if backend handles it)
+//           await getUser();
+
+//           // Refetch Agent/B2B details if applicable to sync UI
+//           if (isAgent) {
+//             await loadAgentDetails();
+//           }
+//           if (isB2B) {
+//             await loadB2BDetails();
+//           }
+//         } else {
+//           toast.error(data.message || data.error || "Something Went Wrong");
+//         }
+//       } catch (err) {
+//         console.error('Error updating user:', err);
+//         toast.error(err.message || "Something Went Wrong");
+//       } finally {
+//         setIsUpdating(false);
+//       }
+//     } else {
+//       toast.error("User Not Found");
+//       setTimeout(() => {
+//         window.location.href = "/";
+//       }, 4000);
+//     }
+//   };
+
+//   const getUser = async () => {
+//     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+//     if (landsUser) {
+//       try {
+//         const data = await getUserDetails(landsUser.id);
+//         if (data.success) {
+//           setUserData(data.user);
+//           setFormData({
+//             id: data.user.id,
+//             name: (data.user.full_name || '').trim(), // Trim full_name
+//             mobileNumber: data.user.phone_number,
+//             email: data.user.email || '',
+//           });
+//           // Prefer imageUrl if available, ensure https
+//           const imageSrc = data.user.imageUrl || data.user.image || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=";
+//           setimgUrl(imageSrc.startsWith('https') ? imageSrc : imageSrc.replace('http://', 'https://'));
+          
+//           if (data.user.files) {
+//             try {
+//               const files = JSON.parse(data.user.files);
+//               setExistingFiles(Array.isArray(files) ? files : []);
+//             } catch {
+//               const files = typeof data.user.files === 'string' 
+//                 ? data.user.files.split(',') 
+//                 : [];
+//               setExistingFiles(files);
+//             }
+//           }
+
+//           // Normalize type in localStorage to lowercase for consistency
+//           const normalizedType = (data.user.type || landsUser.type || 'user').toLowerCase();
+//           if (landsUser.type !== normalizedType) {
+//             const updatedUser = { ...landsUser, type: normalizedType };
+//             localStorage.setItem('LandsUser', JSON.stringify(updatedUser));
+//           }
+//         } else {
+//           toast.error(data.message || data.error || "Something Went Wrong");
+//         }
+//       } catch (err) {
+//         console.error('Error fetching user details:', err);
+//       }
+//     } else {
+//       toast.error("User Not Found");
+//       setTimeout(() => {
+//         window.location.href = "/";
+//       }, 4000);
+//     }
+//   };
+
+//   const submitPasswordUpdate = async () => {
+//     let isValid = true;
+//     let updatedErrors = { ...validationErrors };
+
+//     if (!passwordFields.oldPassword.trim()) {
+//       updatedErrors.oldPassword = 'Old password is required.';
+//       isValid = false;
+//     }
+
+//     if (passwordFields.newPassword.length < 8) {
+//       updatedErrors.newPassword = 'New password must be at least 8 characters long.';
+//       isValid = false;
+//     }
+
+//     if (passwordFields.newPassword !== passwordFields.confirmPassword) {
+//       updatedErrors.confirmPassword = 'Confirm password does not match the new password.';
+//       isValid = false;
+//     }
+
+//     setValidationErrors(updatedErrors);
+
+//     if (isValid) {
+//       const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
+
+//       if (landsUser) {
+//         try {
+//           const postData = {
+//             id: landsUser.id,
+//             oldPassword: passwordFields.oldPassword,
+//             newPassword: passwordFields.newPassword,
+//           };
+
+//           const data = await UpdateUserPassword(postData);
+//           if (data.success) {
+//             setPasswordFields({
+//               oldPassword: '',
+//               newPassword: '',
+//               confirmPassword: '',
+//             });
+//             toast.success("Password Updated Successfully");
+//           } else {
+//             toast.error(data.message || data.error || "Something Went Wrong");
+//           }
+//         } catch (err) {
+//           console.error('Error updating password:', err);
+//           toast.error("Error updating password");
+//         }
+//       } else {
+//         toast.error("User Not Found");
+//         setTimeout(() => {
+//           window.location.href = "/";
+//         }, 4000);
+//       }
+//     }
+//   };
+
+//   const handleNav = () => {
+//     window.location.href = "/add-property";
+//   };
+
+//   return (
+//     <div className="main-content">
+//       <style>
+//         {`
+//         .error-message {
+//             color: red;
+//             font-size: 12px;
+//             margin-top: 5px;
+//           }
+//         @media (min-width: 800px) {
+//           .custom-mobile-class {
+//             display: none !important;
+//           }
+//           .custom-desktop-class {
+//             display: flex !important;
+//           }
+//         }
+ 
+//         @media (min-width: 800px) {
+//           .custom-header-text {
+//             display: none !important;
+//           }
+//         }
+//         .custom-header-text {
+//           display: flex ;
+//           justify-content:flex-start;
+//           align-items: center;
+//         }
+//         @media (max-width: 799px) {
+//           .custom-desktop-class {
+//             display: none !important;
+//           }
+//           .custom-mobile-class {
+//             display: flex !important;
+//           }
+//           .custom-bg-dark{
+//             font-weight:bold;
+//             background: #008FF7;
+//             color:#ffffff !important;
+//             padding: 7px 12px;
+//             border-radius: 10%;
+//             border:none;
+//           }
+//         }
+//         .tf-btn.disabled {
+//           opacity: 0.6;
+//           cursor: not-allowed;
+//         }
+//         `}
+//       </style>
+//       <div className="main-content-inner wrap-dashboard-content-2">
+//         <div className="d-flex justify-content-between">
+//           <div className="button-show-hide custom-header-text">
+//             <ArrowCircleLeftIcon sx={{ fontSize: '40px' }} />
+//             <span className="body-1">Menu</span>
+//           </div>
+//           <div className="custom-header-text" onClick={handleNav}>
+//             <span className="custom-bg-dark">Sell Property</span>
+//           </div>
+//         </div>
+//         <div className="button-show-hide" style={{ marginTop: '0px', display: 'flex' }}>
+//           <h3 className="body-1" style={{ color: '#000', padding: '20px 0', fontWeight: '600' }}>My Profile</h3>
+//         </div>
+//         <div className="widget-box-2">
+//           <div className="box">
+//             <h5 className="title">Avatar</h5>
+//             <div className="box-agent-avt">
+//               <div className="avatar">
+//                 <img
+//                   alt="avatar"
+//                   loading="lazy"
+//                   width={128}
+//                   height={128}
+//                   src={avatar.preview || imgUrl || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0="}
+//                 />
+//               </div>
+//               <div className="content uploadfile">
+//                 <p>Upload a new avatar</p>
+//                 <div className="box-ip">
+//                   <input
+//                     type="file"
+//                     className="ip-file"
+//                     accept="image/*"
+//                     onChange={handleImageUpload}
+//                   />
+//                 </div>
+//                 <p>Image Size 100x100, format JPEG</p>
+//               </div>
+//             </div>
+//           </div>
+//           <div className="box">
+//             <h5 className="title">Upload Additional Files</h5>
+//             <div className="content uploadfile">
+//               <p>Upload additional documents (PDF, DOC, DOCX, JPG, PNG)</p>
+//               <div className="box-ip">
+//                 <input
+//                   type="file"
+//                   className="ip-file"
+//                   accept=".pdf,.doc,.docx,.jpg,.png"
+//                   multiple
+//                   onChange={handleFileUpload}
+//                 />
+//               </div>
+//               <p>Max file size: 5MB per file</p>
+//               {fileErrors.length > 0 && (
+//                 <div className="error-message">
+//                   {fileErrors.map((error, index) => (
+//                     <p key={index}>{error}</p>
+//                   ))}
+//                 </div>
+//               )}
+//               {existingFiles.length > 0 && (
+//                 <div className="selected-files" style={{ marginTop: '15px' }}>
+//                   <h6>Existing Files:</h6>
+//                   <ul style={{ listStyle: 'none', padding: 0 }}>
+//                     {existingFiles.map((file, index) => (
+//                       <li key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', padding: '8px', background: '#f5f5f5', borderRadius: '4px' }}>
+//                         <span style={{ fontSize: '14px' }}>
+//                           {typeof file === 'string' ? file.split('/').pop() : file}
+//                         </span>
+//                         <button 
+//                           onClick={() => removeExistingFile(index)} 
+//                           style={{ 
+//                             marginLeft: '10px', 
+//                             color: 'white',
+//                             background: '#dc3545', 
+//                             border: 'none', 
+//                             padding: '4px 12px',
+//                             borderRadius: '4px',
+//                             cursor: 'pointer',
+//                             fontSize: '12px'
+//                           }}
+//                         >
+//                           Remove
+//                         </button>
+//                       </li>
+//                     ))}
+//                   </ul>
+//                 </div>
+//               )}
+//               {selectedFiles.length > 0 && (
+//                 <div className="selected-files" style={{ marginTop: '15px' }}>
+//                   <h6>New Files to Upload:</h6>
+//                   <ul style={{ listStyle: 'none', padding: 0 }}>
+//                     {selectedFiles.map((file, index) => (
+//                       <li key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', padding: '8px', background: '#e8f5e9', borderRadius: '4px' }}>
+//                         <span style={{ fontSize: '14px' }}>
+//                           {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+//                         </span>
+//                         <button 
+//                           onClick={() => removeFile(index)} 
+//                           style={{ 
+//                             marginLeft: '10px', 
+//                             color: 'white',
+//                             background: '#dc3545', 
+//                             border: 'none', 
+//                             padding: '4px 12px',
+//                             borderRadius: '4px',
+//                             cursor: 'pointer',
+//                             fontSize: '12px'
+//                           }}
+//                         >
+//                           Remove
+//                         </button>
+//                       </li>
+//                     ))}
+//                   </ul>
+//                 </div>
+//               )}
+//             </div>
+//           </div>
+//           <h5 className="title">Information</h5>
+//           <div className="box grid-2 gap-30" style={{ marginBottom: '10px' }}>
+//             <div className="box box-fieldset">
+//               <label htmlFor="name">
+//                 Full name:<span>*</span>
+//               </label>
+//               <input
+//                 type="text"
+//                 name="name"
+//                 value={formData.name}
+//                 onChange={handleInputChange}
+//                 className="form-control style-1"
+//               />
+//               {errors.name && <span className="error-message">{errors.name}</span>}
+//             </div>
+//             <div className="box-fieldset">
+//               <label htmlFor="num">
+//                 Mobile Number:<span>*</span>
+//               </label>
+//               <input
+//                 type="number"
+//                 name="mobileNumber"
+//                 disabled
+//                 value={formData.mobileNumber}
+//                 onChange={handleInputChange}
+//                 className="form-control style-1"
+//               />
+//               {errors.mobileNumber && (
+//                 <span className="error-message">{errors.mobileNumber}</span>
+//               )}
+//             </div>
+//           </div>
+//           <div className="box grid-2 gap-30">
+//             <div className="box-fieldset">
+//               <label htmlFor="email">
+//                 Email address:<span>*</span>
+//               </label>
+//               <input
+//                 type="text"
+//                 name="email"
+//                 value={formData.email}
+//                 onChange={handleInputChange}
+//                 className="form-control style-1"
+//               />
+//               {errors.email && <span className="error-message">{errors.email}</span>}
+//             </div>
+//             {isAgent && (
+//               <div className="box-fieldset">
+//                 <label htmlFor="agentAge">
+//                   Age:<span>*</span>
+//                 </label>
+//                 <input
+//                   type="number"
+//                   name="agentAge"
+//                   min="18"
+//                   value={agentData.agentAge}
+//                   onChange={updateAgentField}
+//                   className="form-control style-1"
+//                 />
+//                 {validationAgentErrors.agentAge && (
+//                   <span className="error-message">{validationAgentErrors.agentAge}</span>
+//                 )}
+//               </div>
+//             )}
+//             {isB2B && (
+//               <div className="box-fieldset">
+//                 <label htmlFor="B2BAge">
+//                   Age:<span>*</span>
+//                 </label>
+//                 <input
+//                   type="number"
+//                   name="B2BAge"
+//                   min="18"
+//                   value={B2BData.B2BAge}
+//                   onChange={updateB2BField}
+//                   className="form-control style-1"
+//                 />
+//                 {validationB2BErrors.B2BAge && (
+//                   <span className="error-message">{validationB2BErrors.B2BAge}</span>
+//                 )}
+//               </div>
+//             )}
+//           </div>
+//           {isB2B && (
+//             <div className="box grid-2 gap-30">
+//               <div className="box-fieldset">
+//                 <label htmlFor="B2BGender">
+//                   Gender:<span>*</span>
+//                 </label>
+//                 <DropdownSelect
+//                   options={["Select", "Male", "Female", "Other"]}
+//                   defaultOption={B2BData.B2BGender}
+//                   onChange={(value) => updateB2BDropdownValue("B2BGender", value)}
+//                 />
+//                 {validationB2BErrors.B2BGender && (
+//                   <span className="error-message">{validationB2BErrors.B2BGender}</span>
+//                 )}
+//               </div>
+
+//               <div className="box-fieldset">
+//                 <label htmlFor="B2BService">
+//                   Professional:<span>*</span>
+//                 </label>
+//                 <DropdownSelect
+//                   options={["Select", ...AllServices.map(service => service.name)]}
+//                   defaultOption={B2BData.B2BService}
+//                   onChange={(value) => updateB2BDropdownValue("B2BService", value)}
+//                 />
+//                 {validationB2BErrors.B2BService && (
+//                   <span className="error-message">{validationB2BErrors.B2BService}</span>
+//                 )}
+//               </div>
+//               <div className="box-fieldset">
+//                 <label htmlFor="B2Blocation">
+//                   City/Location:<span>*</span>
+//                 </label>
+//                 <input
+//                   type="text"
+//                   name="B2Blocation"
+//                   value={B2BData.B2Blocation}
+//                   onChange={updateB2BField}
+//                   className="form-control style-1"
+//                 />
+//                 {validationB2BErrors.B2Blocation && (
+//                   <span className="error-message">{validationB2BErrors.B2Blocation}</span>
+//                 )}
+//               </div>
+//             </div>
+//           )}
+//           {isAgent && (
+//             <div className="box grid-2 gap-30">
+//               <div className="box-fieldset">
+//                 <label htmlFor="agentGender">
+//                   Gender:<span>*</span>
+//                 </label>
+//                 <DropdownSelect
+//                   options={["Select", "Male", "Female", "Other"]}
+//                   defaultOption={agentData.agentGender}
+//                   onChange={(value) => updateDropdownValue("agentGender", value)}
+//                 />
+//                 {validationAgentErrors.agentGender && (
+//                   <span className="error-message">{validationAgentErrors.agentGender}</span>
+//                 )}
+//               </div>
+
+//               <div className="box-fieldset">
+//                 <label htmlFor="agentService">
+//                   Service:<span>*</span>
+//                 </label>
+//                 <DropdownSelect
+//                   options={[
+//                     "Select",
+//                     "RealEstate Broker",
+//                     "RealEstate Promoter",
+//                     "RealEstate Marketer",
+//                   ]}
+//                   defaultOption={agentData.agentService}
+//                   onChange={(value) => updateDropdownValue("agentService", value)}
+//                 />
+//                 {validationAgentErrors.agentService && (
+//                   <span className="error-message">{validationAgentErrors.agentService}</span>
+//                 )}
+//               </div>
+//               <div className="box-fieldset">
+//                 <label htmlFor="agentLocation">
+//                   City/Location:<span>*</span>
+//                 </label>
+//                 <input
+//                   type="text"
+//                   name="agentLocation"
+//                   value={agentData.agentLocation}
+//                   onChange={updateAgentField}
+//                   className="form-control style-1"
+//                 />
+//                 {validationAgentErrors.agentLocation && (
+//                   <span className="error-message">{validationAgentErrors.agentLocation}</span>
+//                 )}
+//               </div>
+//             </div>
+//           )}
+//           <div className="box">
+//             <a 
+//               className={`tf-btn primary ${isUpdating ? 'disabled' : ''}`}
+//               onClick={!isUpdating ? handleProfileUpdate : undefined}
+//               style={isUpdating ? { opacity: 0.6, cursor: 'not-allowed' } : {}}
+//             >
+//               {isUpdating ? 'Updating...' : 'Save & Update'}
+//             </a>
+//           </div>
+//           <h5 className="title">Change password</h5>
+//           <div className="box grid-3 gap-30">
+//             <div className="box-fieldset">
+//               <label htmlFor="old-pass">
+//                 Old Password:<span>*</span>
+//               </label>
+//               <div className="box-password">
+//                 <input
+//                   type={showOldPassword ? 'text' : 'password'}
+//                   name="oldPassword"
+//                   value={passwordFields.oldPassword}
+//                   onChange={updatePasswordField}
+//                   className="form-contact style-1 password-field"
+//                   placeholder="Password"
+//                 />
+//                 {validationErrors.oldPassword && <span className="error-message">{validationErrors.oldPassword}</span>}
+//                 <span className="show-pass" onClick={() => togglePasswordVisibility('oldPassword')}>
+//                   {showOldPassword ? <FaEyeSlash style={{ marginBottom: '5px' }} /> : <FaEye style={{ marginBottom: '5px' }} />}
+//                 </span>
+//               </div>
+//             </div>
+//             <div className="box-fieldset">
+//               <label htmlFor="new-pass">
+//                 New Password:<span>*</span>
+//               </label>
+//               <div className="box-password">
+//                 <input
+//                   type={showNewPassword ? 'text' : 'password'}
+//                   name="newPassword"
+//                   value={passwordFields.newPassword}
+//                   onChange={updatePasswordField}
+//                   className="form-contact style-1 password-field2"
+//                   placeholder="Password"
+//                 />
+//                 {validationErrors.newPassword && <span className="error-message">{validationErrors.newPassword}</span>}
+//                 <span className="show-pass2" onClick={() => togglePasswordVisibility('newPassword')}>
+//                   {showNewPassword ? <FaEyeSlash style={{ marginBottom: '5px' }} /> : <FaEye style={{ marginBottom: '5px' }} />}
+//                 </span>
+//               </div>
+//             </div>
+//             <div className="box-fieldset">
+//               <label htmlFor="confirm-pass">
+//                 Confirm Password:<span>*</span>
+//               </label>
+//               <div className="box-password">
+//                 <input
+//                   type={showConfirmPassword ? 'text' : 'password'}
+//                   name="confirmPassword"
+//                   value={passwordFields.confirmPassword}
+//                   onChange={updatePasswordField}
+//                   className="form-contact style-1 password-field3"
+//                   placeholder="Password"
+//                 />
+//                 {validationErrors.confirmPassword && <span className="error-message">{validationErrors.confirmPassword}</span>}
+//                 <span className="show-pass3" onClick={() => togglePasswordVisibility('confirmPassword')}>
+//                   {showConfirmPassword ? <FaEyeSlash style={{ marginBottom: '5px' }} /> : <FaEye style={{ marginBottom: '5px' }} />}
+//                 </span>
+//               </div>
+//             </div>
+//           </div>
+//           <div className="box">
+//             <a className="tf-btn primary" onClick={submitPasswordUpdate}>
+//               Update Password
+//             </a>
+//           </div>
+//         </div>
+//       </div>
+//       <div className="footer-dashboard">
+//         <p>Copyright © 2024 Lands India</p>
+//       </div>
+//     </div>
+//   );
+// }
 import React, { useState, useEffect } from "react";
-import { 
-  UpdateUser, 
-  getUserDetails, 
-  UpdateUserPassword, 
-  getAgentDetails, 
-  createAgent,
-  updateAgent, 
-  getB2BDetails, 
-  createB2B,
-  updateB2B 
-} from "@/apiCalls";
+import { getUserDetails, UpdateUserPassword, getAgentDetails, getB2BDetails } from "@/apiCalls";
 import { toast } from "react-toastify";
-import { FaEye, FaEyeSlash, FaTrash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import DropdownSelect from "../common/DropdownSelect";
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 
+// Placeholder imports for agent/B2B updates - implement these in apiCalls.js if not present
+// import { updateAgentDetails, updateB2BDetails } from "@/apiCalls";
+
+export const UpdateUser = async (data) => {
+  const baseUrl = "https://api.i5propertystars.com";
+  const url = `${baseUrl}/registration/update-user`;
+  const formData = new FormData();
+
+  // Basic fields
+  formData.append("id", data.id);
+  formData.append("phone", data.phone);
+  formData.append("fullName", data.fullName.trim()); // Trim fullName
+  formData.append("email", data.email);
+  formData.append("type", (data.type || "User").toLowerCase()); // Normalize to lowercase
+  formData.append("isActive", data.isActive ? 1 : 0);
+
+  // Optional password
+  if (data.password && data.password.trim() !== "") {
+    formData.append("password", data.password);
+  }
+
+  // ✅ Existing saved files (keep them)
+  if (data.existingFiles && data.existingFiles.length > 0) {
+    formData.append("updatedFiles", data.existingFiles.join(","));
+  }
+
+  // ✅ Upload new profile image
+  if (data.image && data.image instanceof File) {
+    formData.append("image", data.image); // backend req.files.image[0]
+  }
+
+  // ✅ Upload new multiple files
+  if (data.files && data.files.length > 0) {
+    data.files.forEach((file) => {
+      if (file instanceof File) {
+        formData.append("files", file); // backend req.files.files[]
+      }
+    });
+  }
+
+  // Additional fields for Agent/B2B
+  if (data.age !== undefined) {
+    formData.append("age", data.age);
+  }
+  if (data.gender !== undefined && data.gender !== null && data.gender.trim() !== '') {
+    formData.append("gender", data.gender.toLowerCase().trim());
+  }
+  if (data.location !== undefined) {
+    formData.append("location", data.location);
+  }
+  if (data.service !== undefined) {
+    formData.append("service", data.service);
+  }
+  if (data.professional !== undefined) {
+    formData.append("professional", data.professional);
+  }
+
+  try {
+    const response = await fetch(url, {
+      method: "PUT",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || `HTTP error! status: ${response.status}`,
+        error: errorData,
+      };
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Update User Failed:", error);
+    return {
+      success: false,
+      message: "Network error",
+      error,
+    };
+  }
+};
+
 export default function MyProfile() {
+
   const [avatar, setAvatar] = useState({
     file: null,
     preview: null,
   });
 
   const [imgUrl, setimgUrl] = useState("");
-  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [existingFiles, setExistingFiles] = useState([]);
-  const [deletedFileIds, setDeletedFileIds] = useState([]);
-  const [fileInputKey, setFileInputKey] = useState(0);
-  const [savedFileCount, setSavedFileCount] = useState(0);
+  const [fileErrors, setFileErrors] = useState([]);
 
   const [userData, setUserData] = useState();
   const [showOldPassword, setShowOldPassword] = useState(false);
@@ -39,8 +1288,8 @@ export default function MyProfile() {
 
   const [isAgent, setAgent] = useState(false);
   const [isB2B, setIsB2B] = useState(false);
-  const [isNew, setIsNew] = useState(false);
-  const [isNewB2B, setIsNewB2B] = useState(false);
+  const [isVAS, setIsVAS] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const [B2BData, setB2BData] = useState({
     id: '',
@@ -74,246 +1323,104 @@ export default function MyProfile() {
     { id: 13, name: "Landscaping" }
   ];
 
-  const [formData, setFormData] = useState({
-    id: 0,
-    name: '',
-    mobileNumber: '',
-    email: '',
-  });
+  const [validationAgentErrors, setValidationAgentErrors] = useState({});
+  const [validationB2BErrors, setValidationB2BErrors] = useState({});
 
-  const [errors, setErrors] = useState({
-    name: '',
-    mobileNumber: '',
-    email: '',
-  });
-
-  const [passwordFields, setPasswordFields] = useState({
-    oldPassword: '',
-    newPassword: '',
-    confirmPassword: '',
-  });
-
-  const [validationErrors, setValidationErrors] = useState({
-    oldPassword: '',
-    newPassword: '',
-    confirmPassword: '',
-  });
-
-  // Helper function to safely parse JSON
-  const safeJSONParse = (data, fallback = null) => {
-    try {
-      if (typeof data === 'string') {
-        return JSON.parse(data);
-      }
-      return data || fallback;
-    } catch (e) {
-      console.error('JSON parse error:', e);
-      return fallback;
-    }
+  const fieldLabelsAgent = {
+    agentAge: 'Age',
+    agentGender: 'Gender',
+    agentService: 'Service',
+    agentLocation: 'Location'
   };
 
-  // Helper function to check unique constraint errors
-  const isUniqueConstraintError = (error) => {
-    const errorMessage = error?.response?.data?.error?.errors?.[0]?.message || 
-                         error?.message || 
-                         error?.error?.errors?.[0]?.message || 
-                         '';
-    return errorMessage.toLowerCase().includes('unique') || 
-           errorMessage.toLowerCase().includes('already exists');
+  const fieldLabelsB2B = {
+    B2BAge: 'Age',
+    B2BGender: 'Gender',
+    B2BService: 'Professional',
+    B2Blocation: 'Location'
+  };
+
+  const validateAgentField = (field, value) => {
+    let error = "";
+    if (!value || value === "Select") {
+      const label = fieldLabelsAgent[field] || field;
+      error = `${label} is required`;
+    }
+    setValidationAgentErrors(prev => ({ ...prev, [field]: error }));
+  };
+
+  const validateB2BField = (field, value) => {
+    let error = "";
+    if (!value || value === "Select") {
+      const label = fieldLabelsB2B[field] || field;
+      error = `${label} is required`;
+    }
+    setValidationB2BErrors(prev => ({ ...prev, [field]: error }));
+  };
+
+  const validateAgentForm = () => {
+    let newErrors = {};
+    if (!agentData.agentAge) {
+      newErrors.agentAge = 'Age is required.';
+    }
+    if (!agentData.agentGender || agentData.agentGender === "Select") {
+      newErrors.agentGender = 'Gender is required.';
+    }
+    if (!agentData.agentService || agentData.agentService === "Select") {
+      newErrors.agentService = 'Service is required.';
+    }
+    if (!agentData.agentLocation.trim()) {
+      newErrors.agentLocation = 'Location is required.';
+    }
+    setValidationAgentErrors(newErrors);
+    return Object.values(newErrors).every(error => !error);
+  };
+
+  const validateB2BForm = () => {
+    let newErrors = {};
+    if (!B2BData.B2BAge) {
+      newErrors.B2BAge = 'Age is required.';
+    }
+    if (!B2BData.B2BGender || B2BData.B2BGender === "Select") {
+      newErrors.B2BGender = 'Gender is required.';
+    }
+    if (!B2BData.B2BService || B2BData.B2BService === "Select") {
+      newErrors.B2BService = 'Professional is required.';
+    }
+    if (!B2BData.B2Blocation.trim()) {
+      newErrors.B2Blocation = 'Location is required.';
+    }
+    setValidationB2BErrors(newErrors);
+    return Object.values(newErrors).every(error => !error);
+  };
+
+  const updateAgentField = (e) => {
+    const { name, value } = e.target;
+    setAgentData({ ...agentData, [name]: value });
+    validateAgentField(name, value);
+  };
+
+  const updateB2BField = (e) => {
+    const { name, value } = e.target;
+    setB2BData({ ...B2BData, [name]: value });
+    validateB2BField(name, value);
+  };
+
+  const updateDropdownValue = (field, value) => {
+    setAgentData({ ...agentData, [field]: value });
+    validateAgentField(field, value);
+  };
+
+  const updateB2BDropdownValue = (field, value) => {
+    setB2BData({ ...B2BData, [field]: value });
+    validateB2BField(field, value);
   };
 
   useEffect(() => {
-    const fetchUserDetails = async () => {
-      const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
-
-      console.log('🔍 LandsUser from localStorage:', landsUser);
-
-      if (!landsUser) {
-        console.error('❌ No LandsUser found in localStorage');
-        return;
-      }
-
-      // ==================== AGENT LOGIC ====================
-      if (landsUser?.type === 'Agent') {
-        console.log('👤 User is Agent');
-        setAgent(true);
-
-        // Extract phone number from multiple possible sources
-        const phoneNumber = landsUser.phone_number ||
-                           landsUser.phoneNumber ||
-                           landsUser.phone ||
-                           formData.mobileNumber;
-
-        console.log('📞 Phone Number:', phoneNumber);
-        console.log('📞 All landsUser properties:', Object.keys(landsUser));
-
-        if (!phoneNumber) {
-          console.error('❌ No phone number found');
-          console.log('Available properties:', landsUser);
-          return;
-        }
-
-        setFormData(prev => ({
-          ...prev,
-          mobileNumber: phoneNumber,
-          name: landsUser.name || landsUser.full_name || prev.name,
-          email: landsUser.email || prev.email
-        }));
-
-        const storedId = localStorage.getItem('agentId');
-        if (storedId) {
-          setAgentData(prev => ({ ...prev, id: storedId }));
-          setIsNew(false);
-        } else {
-          setIsNew(true);
-        }
-
-        try {
-          console.log('🔄 Fetching agent details...');
-          const data = await getAgentDetails(phoneNumber);
-          console.log('✅ Agent data received:', data);
-
-          if (data.success && data?.data?.length > 0) {
-            const agentInfo = data.data[0];
-            const agentId = agentInfo.id;
-
-            console.log('✅ Agent found with ID:', agentId);
-
-            setIsNew(false);
-            setAgentData({
-              id: agentId,
-              agentAge: agentInfo.age || "",
-              agentGender: agentInfo.gender || "",
-              agentService: agentInfo.service || "",
-              agentLocation: agentInfo.location || "",
-            });
-
-            localStorage.setItem('agentId', agentId.toString());
-
-            // Set image
-            setimgUrl(agentInfo.image || "");
-
-            // Set existing files
-            let filesData = safeJSONParse(agentInfo.files, []);
-            // Handle double stringified files from backend
-            if (Array.isArray(filesData) && filesData.length > 0 && typeof filesData[0] === 'string') {
-              try {
-                const innerData = JSON.parse(filesData[0]);
-                if (Array.isArray(innerData)) {
-                  filesData = innerData;
-                }
-              } catch (e) {
-                // ignore parse error
-              }
-            }
-            setExistingFiles(Array.isArray(filesData) ? filesData : []);
-          } else {
-            console.log('ℹ️ No existing agent profile found');
-            setIsNew(true);
-            localStorage.removeItem('agentId');
-          }
-        } catch (error) {
-          console.error('❌ Error fetching agent details:', error);
-          if (!storedId) {
-            setIsNew(true);
-          }
-        }
-      }
-
-      // ==================== B2B LOGIC ====================
-      else if (landsUser?.type === 'B2B') {
-        console.log('🏢 User is B2B');
-        setIsB2B(true);
-
-        // Extract phone number from multiple possible sources
-        const phoneNumber = landsUser.phone_number ||
-                           landsUser.phoneNumber ||
-                           landsUser.phone ||
-                           formData.mobileNumber;
-
-        console.log('📞 Phone Number:', phoneNumber);
-        console.log('📞 All landsUser properties:', Object.keys(landsUser));
-
-        if (!phoneNumber) {
-          console.error('❌ No phone number found');
-          console.log('Available properties:', landsUser);
-          return;
-        }
-
-        setFormData(prev => ({
-          ...prev,
-          mobileNumber: phoneNumber,
-          name: landsUser.name || landsUser.full_name || prev.name,
-          email: landsUser.email || prev.email
-        }));
-
-        const storedB2bId = localStorage.getItem('b2bId');
-        if (storedB2bId) {
-          setB2BData(prev => ({ ...prev, id: storedB2bId }));
-          setIsNewB2B(false);
-        } else {
-          setIsNewB2B(true);
-        }
-
-        try {
-          console.log('🔄 Fetching B2B details...');
-          const data = await getB2BDetails(phoneNumber);
-          console.log('✅ B2B data received:', data);
-
-          if (data.success && data?.data?.length > 0) {
-            const b2bInfo = data.data[0];
-            const b2bId = b2bInfo.id;
-
-            console.log('✅ B2B found with ID:', b2bId);
-
-            setIsNewB2B(false);
-            setB2BData({
-              id: b2bId,
-              B2BAge: b2bInfo.age || "",
-              B2BGender: b2bInfo.gender || "",
-              B2BService: b2bInfo.professional || "",
-              B2Blocation: b2bInfo.location || "",
-            });
-
-            localStorage.setItem('b2bId', b2bId.toString());
-
-
-            // Set existing files
-            let filesData = safeJSONParse(b2bInfo.files, []);
-            // Handle double stringified files from backend
-            if (Array.isArray(filesData) && filesData.length > 0 && typeof filesData[0] === 'string') {
-              try {
-                const innerData = JSON.parse(filesData[0]);
-                if (Array.isArray(innerData)) {
-                  filesData = innerData;
-                }
-              } catch (e) {
-                // ignore parse error
-              }
-            }
-            setExistingFiles(Array.isArray(filesData) ? filesData : []);
-          } else {
-            console.log('ℹ️ No existing B2B profile found');
-            setIsNewB2B(true);
-            localStorage.removeItem('b2bId');
-          }
-        } catch (error) {
-          console.error('❌ Error fetching B2B details:', error);
-          if (!storedB2bId) {
-            setIsNewB2B(true);
-          }
-        }
-      }
-
-      // ==================== REGULAR USER LOGIC ====================
-      else {
-        console.log('👤 User is Regular (Buyer/Seller)');
-        // For regular users, we still need to call getUserDetails to get their profile
-        await getUser();
-      }
+    const fetchDetails = async () => {
+      await getUser();
     };
-
-    fetchUserDetails();
+    fetchDetails();
   }, []);
 
   const handleImageUpload = (event) => {
@@ -328,50 +1435,43 @@ export default function MyProfile() {
   };
 
   const handleFileUpload = (event) => {
-    const files = event.target.files;
-    if (files) {
-      const newFiles = Array.from(files);
-      const totalFiles = uploadedFiles.length + existingFiles.length + newFiles.length;
+    const files = Array.from(event.target.files);
+    const maxFileSize = 5 * 1024 * 1024; // 5MB
+    const allowedTypes = [
+      'application/pdf', 
+      'application/msword', 
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 
+      'image/jpeg', 
+      'image/png'
+    ];
+    const newErrors = [];
+    const validFiles = [];
 
-      if (totalFiles > 10) {
-        const remaining = 10 - uploadedFiles.length - existingFiles.length;
-        toast.error(`Maximum 10 files allowed. You can add ${remaining} more file(s).`);
-        return;
+    files.forEach((file) => {
+      if (file.size > maxFileSize) {
+        newErrors.push(`${file.name}: File size exceeds 5MB.`);
+      } else if (!allowedTypes.includes(file.type)) {
+        newErrors.push(`${file.name}: Invalid file type. Only PDF, DOC, DOCX, JPG, PNG allowed.`);
+      } else {
+        validFiles.push(file);
       }
+    });
 
-      const processedFiles = newFiles.map(file => ({
-        id: Date.now() + Math.random(),
-        file: file,
-        name: file.name,
-        size: (file.size / 1024).toFixed(2),
-        preview: URL.createObjectURL(file)
-      }));
-
-      setUploadedFiles([...uploadedFiles, ...processedFiles]);
-      setFileInputKey(prev => prev + 1);
-      // Removed toast here - will show on save success
+    setFileErrors(newErrors);
+    if (newErrors.length === 0) {
+      setFileErrors([]); // Clear previous errors on success
     }
+    setSelectedFiles(prev => [...prev, ...validFiles]);
   };
 
-  const removeFile = (fileId, isExisting = false) => {
-    if (isExisting) {
-      setExistingFiles(existingFiles.filter(f => f.id !== fileId));
-      setDeletedFileIds([...deletedFileIds, fileId]);
-      toast.info("Existing file marked for removal");
-    } else {
-      setUploadedFiles(uploadedFiles.filter(f => f.id !== fileId));
-      toast.info("File removed");
-    }
+  const removeFile = (index) => {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
-  const removeAllFiles = () => {
-    if (existingFiles.length > 0) {
-      setDeletedFileIds([...deletedFileIds, ...existingFiles.map(f => f.id)]);
-      setExistingFiles([]);
+  const removeExistingFile = (index) => {
+    if (window.confirm('Are you sure you want to remove this file?')) {
+      setExistingFiles(prev => prev.filter((_, i) => i !== index));
     }
-    setUploadedFiles([]);
-    setFileInputKey(prev => prev + 1);
-    toast.info("All files removed");
   };
 
   const togglePasswordVisibility = (field) => {
@@ -384,20 +1484,48 @@ export default function MyProfile() {
     }
   };
 
+  const [formData, setFormData] = useState({
+    id: 0,
+    name: '',
+    mobileNumber: '',
+    email: '',
+  });
+
+  const [errors, setErrors] = useState({
+    name: '',
+    mobileNumber: '',
+    email: '',
+  });
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
+
     setErrors({
       ...errors,
       [name]: '',
     });
   };
 
+  const [passwordFields, setPasswordFields] = useState({
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+
+  const [validationErrors, setValidationErrors] = useState({
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+
   const updatePasswordField = (e) => {
     const { name, value } = e.target;
+    const prevNewPassword = passwordFields.newPassword; // Capture previous for confirm validation
+
     setPasswordFields({
       ...passwordFields,
       [name]: value,
@@ -405,373 +1533,251 @@ export default function MyProfile() {
 
     let updatedErrors = { ...validationErrors };
 
+    if (name === 'oldPassword') {
+      updatedErrors.oldPassword = '';
+    }
+
     if (name === 'newPassword') {
-      updatedErrors.newPassword = value.length < 8 ? 'New password must be at least 8 characters long.' : '';
+      if (value.length < 8) {
+        updatedErrors.newPassword = 'New password must be at least 8 characters long.';
+      } else {
+        updatedErrors.newPassword = '';
+      }
+      // Re-validate confirm if new password changed
+      if (passwordFields.confirmPassword && passwordFields.confirmPassword !== value) {
+        updatedErrors.confirmPassword = 'Confirm password does not match the new password.';
+      } else if (passwordFields.confirmPassword) {
+        updatedErrors.confirmPassword = '';
+      }
     }
 
     if (name === 'confirmPassword') {
-      updatedErrors.confirmPassword = value !== passwordFields.newPassword ? 'Confirm password does not match the new password.' : '';
-    }
-
-    if (name === 'oldPassword') {
-      updatedErrors.oldPassword = '';
+      if (value !== prevNewPassword) {
+        updatedErrors.confirmPassword = 'Confirm password does not match the new password.';
+      } else {
+        updatedErrors.confirmPassword = '';
+      }
     }
 
     setValidationErrors(updatedErrors);
   };
 
-  const updateAgentField = (e) => {
-    const { name, value } = e.target;
-    setAgentData({ ...agentData, [name]: value });
-  };
-
-  const updateB2BField = (e) => {
-    const { name, value } = e.target;
-    setB2BData({ ...B2BData, [name]: value });
-  };
-
-  const updateDropdownValue = (field, value) => {
-    setAgentData({ ...agentData, [field]: value });
-  };
-
-  const updateB2BDropdownValue = (field, value) => {
-    setB2BData({ ...B2BData, [field]: value });
-  };
-
-  const handleAgentProfileUpdate = async (agentPayload) => {
-    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
-
-    try {
-      let response;
-      
-      if (isNew) {
-        console.log('📤 Creating new agent profile...');
-        response = await createAgent(agentPayload);
-      } else {
-        console.log('📤 Updating existing agent profile...');
-        response = await updateAgent(agentPayload);
-      }
-
-      console.log('📥 Agent response:', response);
-
-      if (response?.success) {
-        const agentId = response.data?.id || response.id || agentData.id;
-        
-        if (agentId && isNew) {
-          localStorage.setItem('agentId', agentId.toString());
-          setIsNew(false);
-          setAgentData(prev => ({ ...prev, id: agentId }));
-        }
-        
-        toast.success(isNew ? 'Agent profile created successfully!' : 'Agent profile updated successfully!');
-        return { success: true };
-      } else {
-        toast.error(response?.message || 'Failed to save agent profile');
-        return { success: false };
-      }
-    } catch (error) {
-      console.error('❌ Agent profile error:', error);
-      toast.error(error?.message || 'Failed to save agent profile');
-      return { success: false, error: error };
-    }
-  };
-
-  const handleB2BProfileUpdate = async (b2bPayload) => {
-    const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
-    
-    try {
-      let response;
-      
-      if (isNewB2B) {
-        console.log('📤 Creating new B2B profile...');
-        response = await createB2B(b2bPayload);
-      } else {
-        console.log('📤 Updating existing B2B profile...');
-        response = await updateB2B(b2bPayload);
-      }
-
-      console.log('📥 B2B response:', response);
-      
-      if (response?.success) {
-        const b2bId = response.data?.id || response.id || B2BData.id;
-        
-        if (b2bId && isNewB2B) {
-          localStorage.setItem('b2bId', b2bId.toString());
-          setIsNewB2B(false);
-          setB2BData(prev => ({ ...prev, id: b2bId }));
-        }
-        
-        toast.success(isNewB2B ? 'B2B profile created successfully!' : 'B2B profile updated successfully!');
-        return { success: true };
-      } else {
-        toast.error(response?.message || 'Failed to save B2B profile');
-        return { success: false };
-      }
-    } catch (error) {
-      console.error('❌ B2B profile error:', error);
-      toast.error(error?.message || 'Failed to save B2B profile');
-      return { success: false, error: error };
-    }
-  };
-
   const handleProfileUpdate = async () => {
+    let valid = true;
+    let newErrors = { ...errors };
+
+    // Validate Full name - ensure it's not an email
+    if (!formData.name.trim()) {
+      newErrors.name = 'Full name is required.';
+      valid = false;
+    } else if (/\S+@\S+\.\S+/.test(formData.name)) {
+      newErrors.name = 'Full name cannot be an email address.';
+      valid = false;
+    }
+
+    // Skip mobile number validation since it's disabled and pre-filled from backend
+    // Validate Email address
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address.';
+      valid = false;
+    }
+
+    setErrors(newErrors);
+
+    if (!valid) return;
+
+    // Validate agent or B2B fields if applicable (for completeness, though not sent to API)
+    if (isAgent && !validateAgentForm()) {
+      valid = false;
+    }
+    if (isB2B && !validateB2BForm()) {
+      valid = false;
+    }
+
+    if (!valid) return;
+
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
-    if (!landsUser) {
-      toast.error("User not found. Please login again.");
+    if (landsUser) {
+      setIsUpdating(true);
+      try {
+        const payload = {
+          id: formData.id, // Always use main user ID from formData (Registration table)
+          fullName: formData.name, // Trim handled in UpdateUser
+          email: formData.email,
+          phone: formData.mobileNumber,
+          type: (landsUser.type || 'User').toLowerCase(), // Normalize to lowercase
+          isActive: true,
+        };
+
+        // Add image if selected
+        if (avatar.file) {
+          payload.image = avatar.file;
+        }
+
+        // Add new files only if agent or b2b or VAS
+        if ((isAgent || isB2B || isVAS) && selectedFiles.length > 0) {
+          payload.files = selectedFiles;
+        }
+
+        // Add existing files (files to keep) only if agent or b2b or VAS
+        if ((isAgent || isB2B || isVAS) && existingFiles.length > 0) {
+          payload.existingFiles = existingFiles;
+        }
+
+        // Add Agent fields if applicable
+        if (isAgent) {
+          payload.age = agentData.agentAge;
+          payload.gender = agentData.agentGender;
+          payload.service = agentData.agentService;
+          payload.location = agentData.agentLocation;
+        }
+
+        // Add B2B fields if applicable
+        if (isB2B) {
+          payload.age = B2BData.B2BAge;
+          payload.gender = B2BData.B2BGender;
+          payload.professional = B2BData.B2BService;
+          payload.location = B2BData.B2Blocation;
+        }
+
+        console.log('Sending payload:', payload);
+
+        const data = await UpdateUser(payload);
+
+        if (data.success) {
+          toast.success("Profile updated successfully");
+          
+          // Update localStorage with normalized type
+          if (data.data) {
+            const normalizedType = (data.data.type || landsUser.type || 'user').toLowerCase();
+            const updatedUser = {
+              ...landsUser,
+              type: normalizedType, // Ensure lowercase
+              full_name: data.data.full_name || formData.name,
+              email: data.data.email || formData.email,
+            };
+            localStorage.setItem('LandsUser', JSON.stringify(updatedUser));
+          }
+
+          // Clear new file selection after successful upload only if agent/b2b/VAS
+          if (isAgent || isB2B || isVAS) {
+            setSelectedFiles([]);
+          }
+          
+          // Update existing files from response if provided and agent/b2b/VAS
+          if ((isAgent || isB2B || isVAS) && data.data?.files) {
+            try {
+              const files = JSON.parse(data.data.files);
+              setExistingFiles(Array.isArray(files) ? files : []);
+            } catch {
+              const files = typeof data.data.files === 'string' 
+                ? data.data.files.split(',') 
+                : [];
+              setExistingFiles(files);
+            }
+          }
+
+          // Update image URL (prefer https if available)
+          if (data.data?.imageUrl || data.data?.image) {
+            const imageSrc = data.data.imageUrl || data.data.image;
+            setimgUrl(imageSrc.startsWith('https') ? imageSrc : imageSrc.replace('http://', 'https://'));
+            setAvatar({ file: null, preview: null });
+          }
+
+          // Refetch user data to ensure UI is synced with backend (fixes remove not reflecting if backend handles it)
+          await getUser();
+        } else {
+          toast.error(data.message || data.error || "Something Went Wrong");
+        }
+      } catch (err) {
+        console.error('Error updating user:', err);
+        toast.error(err.message || "Something Went Wrong");
+      } finally {
+        setIsUpdating(false);
+      }
+    } else {
+      toast.error("User Not Found");
       setTimeout(() => {
         window.location.href = "/";
-      }, 2000);
-      return;
-    }
-
-    try {
-      // Handle Agent profile
-      if (isAgent) {
-        const landsUserPhone = landsUser.phone_number || landsUser.phoneNumber || landsUser.phone;
-        const phoneNumber = landsUserPhone || formData.mobileNumber;
-        
-        if (!phoneNumber) {
-          toast.error('Phone number is required. Please refresh and try again.');
-          return;
-        }
-
-        console.log('📞 Using phone number:', phoneNumber);
-        
-        const agentPayload = {
-          name: formData.name || landsUser.name || landsUser.full_name || "",
-          email: formData.email || landsUser.email || "",
-          phone_number: phoneNumber,
-          gender: agentData.agentGender || "",
-          age: parseInt(agentData.agentAge) || 0,
-          service: agentData.agentService || "",
-          location: agentData.agentLocation || "",
-          note: '',
-          isActive: 1,
-        };
-
-        // Only add ID if updating
-        if (!isNew && agentData.id) {
-          agentPayload.id = agentData.id;
-          agentPayload.isVerified = 0;
-          agentPayload.updatedFiles = existingFiles
-            .filter(file => !deletedFileIds.includes(file.id))
-            .map(file => file.id);
-        }
-
-        if (avatar?.file) {
-          agentPayload.image = avatar;
-        }
-
-        if (uploadedFiles.length > 0) {
-          agentPayload.files = uploadedFiles.map(f => f.file);
-        }
-
-        console.log('📦 Agent Payload:', agentPayload);
-
-        const result = await handleAgentProfileUpdate(agentPayload);
-        
-        if (result.success) {
-          // Cleanup
-          setUploadedFiles([]);
-          setDeletedFileIds([]);
-          setFileInputKey(prev => prev + 1);
-          setAvatar({ file: null, preview: null });
-          
-          // Refresh data
-          const refreshedData = await getAgentDetails(phoneNumber);
-          if (refreshedData.success && refreshedData.data.length > 0) {
-            const agentInfo = refreshedData.data[0];
-            const agentId = agentInfo.id;
-            
-            setAgentData({
-              id: agentId,
-              agentAge: agentInfo.age || "",
-              agentGender: agentInfo.gender || "",
-              agentService: agentInfo.service || "",
-              agentLocation: agentInfo.location || "",
-            });
-            
-            const imageData = safeJSONParse(agentInfo.image);
-            setimgUrl(imageData || agentInfo.image || "");
-            
-            const filesData = safeJSONParse(agentInfo.files, []);
-            setExistingFiles(Array.isArray(filesData) ? filesData : []);
-          }
-        }
-        
-        return;
-      }
-
-      // Handle B2B profile
-      if (isB2B) {
-        const landsUserPhone = landsUser.phone_number || landsUser.phoneNumber || landsUser.phone;
-        const phoneNumber = landsUserPhone || formData.mobileNumber;
-        
-        if (!phoneNumber) {
-          toast.error('Phone number is required. Please refresh and try again.');
-          return;
-        }
-
-        console.log('📞 Using phone number:', phoneNumber);
-        
-        const b2bPayload = {
-          name: formData.name || landsUser.name || landsUser.full_name || "",
-          age: parseInt(B2BData.B2BAge) || 0,
-          gender: B2BData.B2BGender || "",
-          phone_number: phoneNumber,
-          email: formData.email || landsUser.email || "",
-          location: B2BData.B2Blocation || "",
-          professional: B2BData.B2BService || "",
-          isActive: 1,
-        };
-
-        // Only add ID if updating
-        if (!isNewB2B && B2BData.id) {
-          b2bPayload.id = B2BData.id;
-          b2bPayload.isVerifyed = 0;
-          b2bPayload.updatedFiles = existingFiles
-            .filter(file => !deletedFileIds.includes(file.id))
-            .map(file => file.id);
-        }
-
-        if (avatar?.file) {
-          b2bPayload.image = avatar;
-        }
-
-        if (uploadedFiles.length > 0) {
-          b2bPayload.files = uploadedFiles.map(f => f.file);
-        }
-
-        console.log('📦 B2B Payload:', b2bPayload);
-
-        const result = await handleB2BProfileUpdate(b2bPayload);
-        
-        if (result.success) {
-          setUploadedFiles([]);
-          setDeletedFileIds([]);
-          setFileInputKey(prev => prev + 1);
-          setAvatar({ file: null, preview: null });
-          
-          const refreshedData = await getB2BDetails(phoneNumber);
-          if (refreshedData.success && refreshedData.data.length > 0) {
-            const b2bInfo = refreshedData.data[0];
-            const b2bId = b2bInfo.id;
-            
-            setB2BData({
-              id: b2bId,
-              B2BAge: b2bInfo.age || "",
-              B2BGender: b2bInfo.gender || "",
-              B2BService: b2bInfo.professional || "",
-              B2Blocation: b2bInfo.location || "",
-            });
-            
-            const imageData = safeJSONParse(b2bInfo.image);
-            setimgUrl(imageData || b2bInfo.image || "");
-            
-            const filesData = safeJSONParse(b2bInfo.files, []);
-            setExistingFiles(Array.isArray(filesData) ? filesData : []);
-          }
-        }
-        
-        return;
-      }
-
-      // Handle regular user profile (Buyer/Seller)
-      const userPayload = {
-        fullName: formData.name,
-        email: formData.email,
-        phone: formData.mobileNumber,
-        id: formData.id,
-      };
-
-      if (avatar?.file) {
-        userPayload.image = avatar;
-      }
-
-      if (uploadedFiles.length > 0) {
-        userPayload.files = uploadedFiles.map(f => f.file);
-      }
-
-      const userResponse = await UpdateUser(userPayload);
-
-      if (userResponse?.success) {
-        toast.success('Profile updated successfully!');
-        
-        if (uploadedFiles.length > 0) {
-          setUploadedFiles([]);
-          setFileInputKey(prev => prev + 1);
-        }
-        
-        setAvatar({ file: null, preview: null });
-        await getUser();
-      } else {
-        toast.error(userResponse?.message || 'Failed to update profile');
-      }
-
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      toast.error('An error occurred while updating profile');
+      }, 4000);
     }
   };
 
   const getUser = async () => {
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
-    console.log('🔍 getUser - LandsUser:', landsUser);
-
     if (landsUser) {
       try {
-        // If this is Agent/B2B and we have phone data but no user ID, skip getUserDetails
-        if ((isAgent || isB2B) && landsUser.phone_number) {
-          console.log('ℹ️ Agent/B2B user - skipping getUserDetails');
-          
-          // Set form data from landsUser
-          const phoneNumber = landsUser.phone_number || landsUser.phoneNumber || landsUser.phone;
-          setFormData({
-            id: landsUser.id || 0,
-            name: landsUser.name || landsUser.full_name || '',
-            mobileNumber: phoneNumber || '',
-            email: landsUser.email || '',
-          });
-          
-          setimgUrl(landsUser.image || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=");
-          return;
-        }
-
         const data = await getUserDetails(landsUser.id);
         if (data.success) {
           setUserData(data.user);
           setFormData({
             id: data.user.id,
-            name: data.user.full_name,
+            name: (data.user.full_name || '').trim(), // Trim full_name
             mobileNumber: data.user.phone_number,
-            email: data.user.email,
+            email: data.user.email || '',
           });
-          setimgUrl(data.user.image || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=")
-
-          // Set existing files for regular users
+          // Prefer imageUrl if available, ensure https
+          const imageSrc = data.user.imageUrl || data.user.image || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=";
+          setimgUrl(imageSrc.startsWith('https') ? imageSrc : imageSrc.replace('http://', 'https://'));
+          
           if (data.user.files) {
-            let filesData = safeJSONParse(data.user.files, []);
-            setExistingFiles(Array.isArray(filesData) ? filesData : []);
+            try {
+              const files = JSON.parse(data.user.files);
+              setExistingFiles(Array.isArray(files) ? files : []);
+            } catch {
+              const files = typeof data.user.files === 'string' 
+                ? data.user.files.split(',') 
+                : [];
+              setExistingFiles(files);
+            }
+          }
+
+          // Set agent or B2B or VAS specific flags from user data
+          const userType = (data.user.type || '').toLowerCase();
+          if (userType === 'agent') {
+            setAgent(true);
+            setAgentData({
+              id: data.user.id,
+              agentAge: data.user.age || "",
+              agentGender: data.user.gender || "",
+              agentService: data.user.service || "",
+              agentLocation: data.user.location || "",
+            });
+          } else if (userType === 'b2b') {
+            setIsB2B(true);
+            setB2BData({
+              id: data.user.id,
+              B2BAge: data.user.age || "",
+              B2BGender: data.user.gender || "",
+              B2BService: data.user.professional || data.user.service || "",
+              B2Blocation: data.user.location || "",
+            });
+          } else if (userType === 'value-added-services') {
+            setIsVAS(true);
+          }
+
+          // Normalize type in localStorage to lowercase for consistency
+          const normalizedType = (data.user.type || landsUser.type || 'user').toLowerCase();
+          if (landsUser.type !== normalizedType) {
+            const updatedUser = { ...landsUser, type: normalizedType };
+            localStorage.setItem('LandsUser', JSON.stringify(updatedUser));
           }
         } else {
-          toast.error(data.message || data.error || "Something Went Wrong")
+          toast.error(data.message || data.error || "Something Went Wrong");
         }
       } catch (err) {
         console.error('Error fetching user details:', err);
       }
     } else {
-      toast.error("User Not Found")
+      toast.error("User Not Found");
       setTimeout(() => {
-        window.location.href = "/"
+        window.location.href = "/";
       }, 4000);
     }
-  }
-
-  useEffect(() => {
-    getUser();
-  }, [])
+  };
 
   const submitPasswordUpdate = async () => {
     let isValid = true;
@@ -803,36 +1809,48 @@ export default function MyProfile() {
             id: landsUser.id,
             oldPassword: passwordFields.oldPassword,
             newPassword: passwordFields.newPassword,
-          }
+          };
+
+          console.log('Password update payload:', postData);
 
           const data = await UpdateUserPassword(postData);
           if (data.success) {
+            // Clear fields immediately
             setPasswordFields({
               oldPassword: '',
               newPassword: '',
               confirmPassword: '',
             });
-            toast.success("Password Updated Successfully");
+            // Reset visibility
+            setShowOldPassword(false);
+            setShowNewPassword(false);
+            setShowConfirmPassword(false);
+            // Clear validation errors
+            setValidationErrors({
+              oldPassword: '',
+              newPassword: '',
+              confirmPassword: '',
+            });
+            toast.success("Password Updated Successfully. Please use your new password for future logins.");
           } else {
-            toast.error(data.message || data.error || "Something Went Wrong")
+            toast.error(data.message || data.error || "Something Went Wrong");
           }
         } catch (err) {
           console.error('Error updating password:', err);
+          toast.error("Error updating password");
         }
       } else {
-        toast.error("User Not Found")
+        toast.error("User Not Found");
         setTimeout(() => {
-          window.location.href = "/"
+          window.location.href = "/";
         }, 4000);
       }
     }
   };
 
   const handleNav = () => {
-    window.location.href = "/add-property"
-  }
-
-  const totalFiles = uploadedFiles.length + existingFiles.length;
+    window.location.href = "/add-property";
+  };
 
   return (
     <div className="main-content">
@@ -852,16 +1870,16 @@ export default function MyProfile() {
           }
         }
  
-             @media (min-width: 800px) {
+        @media (min-width: 800px) {
           .custom-header-text {
             display: none !important;
           }
         }
-          .custom-header-text {
-            display: flex ;
-            justify-content:flex-start;
-            align-items: center;
-          }
+        .custom-header-text {
+          display: flex ;
+          justify-content:flex-start;
+          align-items: center;
+        }
         @media (max-width: 799px) {
           .custom-desktop-class {
             display: none !important;
@@ -869,7 +1887,7 @@ export default function MyProfile() {
           .custom-mobile-class {
             display: flex !important;
           }
-                .custom-bg-dark{
+          .custom-bg-dark{
             font-weight:bold;
             background: #008FF7;
             color:#ffffff !important;
@@ -878,91 +1896,9 @@ export default function MyProfile() {
             border:none;
           }
         }
-        .file-upload-container {
-          border: 2px dashed #008FF7;
-          border-radius: 8px;
-          padding: 20px;
-          text-align: center;
-          background-color: #f9f9f9;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-        .file-upload-container:hover {
-          background-color: #f0f7ff;
-          border-color: #0066cc;
-        }
-        .file-upload-container.disabled {
-          opacity: 0.5;
+        .tf-btn.disabled {
+          opacity: 0.6;
           cursor: not-allowed;
-        }
-        .file-list {
-          margin-top: 20px;
-          display: grid;
-          gap: 10px;
-        }
-        .file-item {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 12px;
-          background: #f5f5f5;
-          border-radius: 6px;
-          border-left: 4px solid #008FF7;
-        }
-        .file-item.existing {
-          border-left-color: #28a745;
-          background: #f0f8f4;
-        }
-        .file-info {
-          flex: 1;
-          text-align: left;
-        }
-        .file-name {
-          font-weight: 500;
-          color: #333;
-          margin-bottom: 5px;
-        }
-        .file-size {
-          font-size: 12px;
-          color: #666;
-        }
-        .file-badge {
-          display: inline-block;
-          background: #28a745;
-          color: white;
-          padding: 2px 8px;
-          border-radius: 12px;
-          font-size: 10px;
-          margin-left: 8px;
-        }
-        .file-remove-btn {
-          background: #ff4444;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          padding: 6px 12px;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 12px;
-          transition: background 0.3s;
-        }
-        .file-remove-btn:hover {
-          background: #cc0000;
-        }
-        .file-count {
-          display: inline-block;
-          background: #008FF7;
-          color: white;
-          padding: 2px 8px;
-          border-radius: 12px;
-          font-size: 12px;
-          margin-left: 10px;
-        }
-        .section-divider {
-          border-top: 1px solid #e0e0e0;
-          margin: 10px 0;
         }
         `}
       </style>
@@ -1002,11 +1938,93 @@ export default function MyProfile() {
                     onChange={handleImageUpload}
                   />
                 </div>
-                <p>Image Size 100x100 , format JPEG</p>
+                <p>Image Size 100x100, format JPEG</p>
               </div>
             </div>
           </div>
-
+          {(isAgent || isB2B || isVAS) && (
+            <div className="box">
+              <h5 className="title">Upload Additional Files</h5>
+              <div className="content uploadfile">
+                <p>Upload additional documents (PDF, DOC, DOCX, JPG, PNG)</p>
+                <div className="box-ip">
+                  <input
+                    type="file"
+                    className="ip-file"
+                    accept=".pdf,.doc,.docx,.jpg,.png"
+                    multiple
+                    onChange={handleFileUpload}
+                  />
+                </div>
+                <p>Max file size: 5MB per file</p>
+                {fileErrors.length > 0 && (
+                  <div className="error-message">
+                    {fileErrors.map((error, index) => (
+                      <p key={index}>{error}</p>
+                    ))}
+                  </div>
+                )}
+                {existingFiles.length > 0 && (
+                  <div className="selected-files" style={{ marginTop: '15px' }}>
+                    <h6>Existing Files:</h6>
+                    <ul style={{ listStyle: 'none', padding: 0 }}>
+                      {existingFiles.map((file, index) => (
+                        <li key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', padding: '8px', background: '#f5f5f5', borderRadius: '4px' }}>
+                          <span style={{ fontSize: '14px' }}>
+                            {typeof file === 'string' ? file.split('/').pop() : file.name || file}
+                          </span>
+                          <button 
+                            onClick={() => removeExistingFile(index)} 
+                            style={{ 
+                              marginLeft: '10px', 
+                              color: 'white',
+                              background: '#dc3545', 
+                              border: 'none', 
+                              padding: '4px 12px',
+                              borderRadius: '4px',
+                              cursor: 'pointer',
+                              fontSize: '12px'
+                            }}
+                          >
+                            Remove
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {selectedFiles.length > 0 && (
+                  <div className="selected-files" style={{ marginTop: '15px' }}>
+                    <h6>New Files to Upload:</h6>
+                    <ul style={{ listStyle: 'none', padding: 0 }}>
+                      {selectedFiles.map((file, index) => (
+                        <li key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', padding: '8px', background: '#e8f5e9', borderRadius: '4px' }}>
+                          <span style={{ fontSize: '14px' }}>
+                            {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                          </span>
+                          <button 
+                            onClick={() => removeFile(index)} 
+                            style={{ 
+                              marginLeft: '10px', 
+                              color: 'white',
+                              background: '#dc3545', 
+                              border: 'none', 
+                              padding: '4px 12px',
+                              borderRadius: '4px',
+                              cursor: 'pointer',
+                              fontSize: '12px'
+                            }}
+                          >
+                            Remove
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
           <h5 className="title">Information</h5>
           <div className="box grid-2 gap-30" style={{ marginBottom: '10px' }}>
             <div className="box box-fieldset">
@@ -1031,12 +2049,8 @@ export default function MyProfile() {
                 name="mobileNumber"
                 disabled
                 value={formData.mobileNumber}
-                onChange={handleInputChange}
                 className="form-control style-1"
               />
-              {errors.mobileNumber && (
-                <span className="error-message">{errors.mobileNumber}</span>
-              )}
             </div>
           </div>
           <div className="box grid-2 gap-30">
@@ -1045,9 +2059,8 @@ export default function MyProfile() {
                 Email address:<span>*</span>
               </label>
               <input
-                type="text"
+                type="email"
                 name="email"
-                disabled
                 value={formData.email}
                 onChange={handleInputChange}
                 className="form-control style-1"
@@ -1057,34 +2070,36 @@ export default function MyProfile() {
             {isAgent && (
               <div className="box-fieldset">
                 <label htmlFor="agentAge">
-                  Age:
+                  Age:<span>*</span>
                 </label>
                 <input
                   type="number"
                   name="agentAge"
+                  min="18"
                   value={agentData.agentAge}
                   onChange={updateAgentField}
                   className="form-control style-1"
                 />
-                {errors.agentAge && (
-                  <span className="error-message">{errors.agentAge}</span>
+                {validationAgentErrors.agentAge && (
+                  <span className="error-message">{validationAgentErrors.agentAge}</span>
                 )}
               </div>
             )}
             {isB2B && (
               <div className="box-fieldset">
-                <label htmlFor="agentAge">
-                  Age:
+                <label htmlFor="B2BAge">
+                  Age:<span>*</span>
                 </label>
                 <input
                   type="number"
                   name="B2BAge"
+                  min="18"
                   value={B2BData.B2BAge}
                   onChange={updateB2BField}
                   className="form-control style-1"
                 />
-                {errors.B2BAge && (
-                  <span className="error-message">{errors.B2BAge}</span>
+                {validationB2BErrors.B2BAge && (
+                  <span className="error-message">{validationB2BErrors.B2BAge}</span>
                 )}
               </div>
             )}
@@ -1093,35 +2108,34 @@ export default function MyProfile() {
             <div className="box grid-2 gap-30">
               <div className="box-fieldset">
                 <label htmlFor="B2BGender">
-                  Gender:
+                  Gender:<span>*</span>
                 </label>
                 <DropdownSelect
                   options={["Select", "Male", "Female", "Other"]}
-                  defaultOption={B2BData.B2BGender}
+                  defaultOption={B2BData.B2BGender || "Select"}
                   onChange={(value) => updateB2BDropdownValue("B2BGender", value)}
                 />
-                {errors.B2BGender && (
-                  <span className="error-message">{errors.B2BGender}</span>
+                {validationB2BErrors.B2BGender && (
+                  <span className="error-message">{validationB2BErrors.B2BGender}</span>
                 )}
               </div>
 
               <div className="box-fieldset">
                 <label htmlFor="B2BService">
-                  Professional:
+                  Professional:<span>*</span>
                 </label>
                 <DropdownSelect
                   options={["Select", ...AllServices.map(service => service.name)]}
-                  defaultOption={B2BData.B2BService}
+                  defaultOption={B2BData.B2BService || "Select"}
                   onChange={(value) => updateB2BDropdownValue("B2BService", value)}
                 />
-
-                {errors.B2BService && (
-                  <span className="error-message">{errors.B2BService}</span>
+                {validationB2BErrors.B2BService && (
+                  <span className="error-message">{validationB2BErrors.B2BService}</span>
                 )}
               </div>
               <div className="box-fieldset">
                 <label htmlFor="B2Blocation">
-                  City/Location:
+                  City/Location:<span>*</span>
                 </label>
                 <input
                   type="text"
@@ -1130,8 +2144,8 @@ export default function MyProfile() {
                   onChange={updateB2BField}
                   className="form-control style-1"
                 />
-                {errors.B2Blocation && (
-                  <span className="error-message">{errors.B2Blocation}</span>
+                {validationB2BErrors.B2Blocation && (
+                  <span className="error-message">{validationB2BErrors.B2Blocation}</span>
                 )}
               </div>
             </div>
@@ -1140,21 +2154,21 @@ export default function MyProfile() {
             <div className="box grid-2 gap-30">
               <div className="box-fieldset">
                 <label htmlFor="agentGender">
-                  Gender:
+                  Gender:<span>*</span>
                 </label>
                 <DropdownSelect
                   options={["Select", "Male", "Female", "Other"]}
-                  defaultOption={agentData.agentGender}
+                  defaultOption={agentData.agentGender || "Select"}
                   onChange={(value) => updateDropdownValue("agentGender", value)}
                 />
-                {errors.agentGender && (
-                  <span className="error-message">{errors.agentGender}</span>
+                {validationAgentErrors.agentGender && (
+                  <span className="error-message">{validationAgentErrors.agentGender}</span>
                 )}
               </div>
 
               <div className="box-fieldset">
                 <label htmlFor="agentService">
-                  Service:
+                  Service:<span>*</span>
                 </label>
                 <DropdownSelect
                   options={[
@@ -1163,16 +2177,16 @@ export default function MyProfile() {
                     "RealEstate Promoter",
                     "RealEstate Marketer",
                   ]}
-                  defaultOption={agentData.agentService}
+                  defaultOption={agentData.agentService || "Select"}
                   onChange={(value) => updateDropdownValue("agentService", value)}
                 />
-                {errors.agentService && (
-                  <span className="error-message">{errors.agentService}</span>
+                {validationAgentErrors.agentService && (
+                  <span className="error-message">{validationAgentErrors.agentService}</span>
                 )}
               </div>
               <div className="box-fieldset">
                 <label htmlFor="agentLocation">
-                  City/Location:
+                  City/Location:<span>*</span>
                 </label>
                 <input
                   type="text"
@@ -1181,134 +2195,21 @@ export default function MyProfile() {
                   onChange={updateAgentField}
                   className="form-control style-1"
                 />
-                {errors.agentLocation && (
-                  <span className="error-message">{errors.agentLocation}</span>
+                {validationAgentErrors.agentLocation && (
+                  <span className="error-message">{validationAgentErrors.agentLocation}</span>
                 )}
               </div>
             </div>
           )}
-
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h5 className="title">Documents</h5>
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <span className="file-count">{totalFiles}/10 Files</span>
-              {totalFiles > 0 && (
-                <button
-                  type="button"
-                  style={{
-                    background: '#ff6b6b',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    padding: '6px 12px',
-                    cursor: 'pointer',
-                    fontSize: '12px',
-                    fontWeight: '500',
-                    transition: 'background 0.3s'
-                  }}
-                  onMouseEnter={(e) => e.target.style.background = '#cc0000'}
-                  onMouseLeave={(e) => e.target.style.background = '#ff6b6b'}
-                  onClick={removeAllFiles}
-                >
-                  Remove All
-                </button>
-              )}
-            </div>
-          </div>
           <div className="box">
-            <div className={`file-upload-container ${totalFiles >= 10 ? 'disabled' : ''}`}>
-              <input
-                key={fileInputKey}
-                type="file"
-                multiple
-                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx"
-                onChange={handleFileUpload}
-                style={{ display: 'none' }}
-                id="fileInput"
-                disabled={totalFiles >= 10}
-              />
-              <label htmlFor="fileInput" style={{ cursor: totalFiles >= 10 ? 'not-allowed' : 'pointer', margin: 0 }}>
-                <div>
-                  <p style={{ fontSize: '16px', fontWeight: '500', color: '#333', margin: 0 }}>
-                    📁 Click to upload documents
-                  </p>
-                  <p style={{ fontSize: '12px', color: '#666', margin: '8px 0 0 0' }}>
-                    Maximum 10 files supported (including existing files)
-                  </p>
-                  <p style={{ fontSize: '11px', color: '#999', margin: '4px 0 0 0' }}>
-                    Supported formats: PDF, DOC, DOCX, JPG, PNG, XLS, XLSX
-                  </p>
-                  {totalFiles >= 10 && (
-                    <p style={{ fontSize: '12px', color: '#ff4444', margin: '8px 0 0 0', fontWeight: 'bold' }}>
-                      Maximum files reached
-                    </p>
-                  )}
-                </div>
-              </label>
-            </div>
-
-            {existingFiles.length > 0 && (
-              <>
-                <div className="section-divider"></div>
-                <h6 style={{ marginTop: '20px', marginBottom: '10px', color: '#28a745', fontSize: '14px', fontWeight: '600' }}>
-                  Existing Files ({existingFiles.length})
-                </h6>
-                <div className="file-list">
-                  {existingFiles.map((file) => (
-                    <div key={file.id} className="file-item existing">
-                      <div className="file-info">
-                        <div className="file-name">
-                          {file.name || file.filename || 'Document'}
-                          <span className="file-badge">Saved</span>
-                        </div>
-                        <div className="file-size">
-                          {file.size ? `${file.size} KB` : 'Uploaded'}
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        className="file-remove-btn"
-                        onClick={() => removeFile(file.id, true)}
-                      >
-                        <FaTrash /> Remove
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-
-            {uploadedFiles.length > 0 && (
-              <>
-                {existingFiles.length > 0 && <div className="section-divider"></div>}
-                <h6 style={{ marginTop: '20px', marginBottom: '10px', color: '#008FF7', fontSize: '14px', fontWeight: '600' }}>
-                  New Files ({uploadedFiles.length})
-                </h6>
-                <div className="file-list">
-                  {uploadedFiles.map((fileObj) => (
-                    <div key={fileObj.id} className="file-item">
-                      <div className="file-info">
-                        <div className="file-name">{fileObj.name}</div>
-                        <div className="file-size">{fileObj.size} KB</div>
-                      </div>
-                      <button
-                        type="button"
-                        className="file-remove-btn"
-                        onClick={() => removeFile(fileObj.id, false)}
-                      >
-                        <FaTrash /> Remove
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
+            <a 
+              className={`tf-btn primary ${isUpdating ? 'disabled' : ''}`}
+              onClick={!isUpdating ? handleProfileUpdate : undefined}
+              style={isUpdating ? { opacity: 0.6, cursor: 'not-allowed' } : {}}
+            >
+              {isUpdating ? 'Updating...' : 'Save & Update'}
+            </a>
           </div>
-
-          <div className="box" onClick={handleProfileUpdate}>
-            <a className="tf-btn primary">Save &amp; Update</a>
-          </div>
-
           <h5 className="title">Change password</h5>
           <div className="box grid-3 gap-30">
             <div className="box-fieldset">
@@ -1369,8 +2270,10 @@ export default function MyProfile() {
               </div>
             </div>
           </div>
-          <div className="box" onClick={submitPasswordUpdate}>
-            <a className="tf-btn primary">Update Password</a>
+          <div className="box">
+            <a className="tf-btn primary" onClick={submitPasswordUpdate}>
+              Update Password
+            </a>
           </div>
         </div>
       </div>

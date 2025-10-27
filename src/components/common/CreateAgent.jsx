@@ -11,7 +11,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
-import { createAgent } from '@/apiCalls';
+
 import { toast } from 'react-toastify';
 
 const buttonStyle = {
@@ -71,27 +71,18 @@ export default function CreateAgent({ open, handleClose }) {
             return;
         }
 
-        try {
-            const data = await createAgent(formData);
-            if (data.success) {
-                toast.success("Submitted Successfully");
-                setFormData({
-                    name: '',
-                    email: '',
-                    gender: '',
-                    phone_number: '',
-                    age: '',
-                    service: '',
-                    isActive: 'true',
-                });
-                handleClose();
-                window.location.href = "/";
-            } else {
-                toast.error(data.message || data.error || "Something Went Wrong");
-            }
-        } catch (err) {
-            console.error('Error creating agent:', err);
-        }
+        // API call removed - just show success message
+        toast.success("Form submitted successfully (API disabled)");
+        setFormData({
+            name: '',
+            email: '',
+            gender: '',
+            phone_number: '',
+            age: '',
+            service: '',
+            isActive: 'true',
+        });
+        handleClose();
     };
 
     return (

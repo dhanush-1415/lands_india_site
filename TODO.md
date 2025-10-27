@@ -1,8 +1,14 @@
-# TODO: Update API Functions for Agent and Value-Added-Service File Uploads
+# TODO: Integrate File Upload UI in MyProfile Component
 
-## Tasks
-- [ ] Update createAgent function: Remove createdBy field append, ensure fields match task specification.
-- [ ] Update updateAgent function: Use localStorage.getItem("agentId") for ID, append "id" with agentId, remove data.id logic, ensure fields match.
-- [ ] Update createB2B function: Remove createdBy field append, ensure fields match task specification.
-- [ ] Update updateB2B function: Use localStorage.getItem("b2bId") for ID, append "id" with b2bId, remove data.id logic, ensure fields match.
-- [ ] Verify all functions use FormData and handle file uploads correctly (image max 1, files max 10).
+## Steps to Complete
+
+- [ ] Add state for selectedFiles (array of File objects) to manage multiple file uploads.
+- [ ] Add a new UI section "Upload Additional Files" below the avatar section, including:
+  - Multiple file input with restrictions (e.g., accept=".pdf,.doc,.docx,.jpg,.png", max size 5MB per file).
+  - Display selected files with remove options.
+- [ ] Update handleProfileUpdate function to include selectedFiles in the payload for UpdateUser calls (for regular users).
+- [ ] Add basic validation for files (file size, type, count limits) and error handling.
+- [ ] Ensure proper integration: files are appended to FormData in UpdateUser API call.
+- [ ] Test file upload for regular users: select multiple files, submit, verify API call and response.
+- [ ] Verify UI responsiveness and error messages.
+- [ ] Check if agents/B2B need file uploads; if so, note for backend API updates.
