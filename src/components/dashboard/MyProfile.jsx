@@ -1177,7 +1177,7 @@
 //       </div>
 //     </div>
 //   );
-// }
+// }export const UpdateUserPassword = async (data) => {
 import React, { useState, useEffect } from "react";
 import { getUserDetails, UpdateUserPassword, getAgentDetails, getB2BDetails } from "@/apiCalls";
 import { toast } from "react-toastify";
@@ -1307,6 +1307,10 @@ export default function MyProfile() {
     agentLocation: "",
   });
 
+  const [vasData, setVasData] = useState({
+    professional: "",
+  });
+
   const AllServices = [
     { id: 1, name: "Advocate & Auditor" },
     { id: 2, name: "Investor (Project Invest)" },
@@ -1325,6 +1329,7 @@ export default function MyProfile() {
 
   const [validationAgentErrors, setValidationAgentErrors] = useState({});
   const [validationB2BErrors, setValidationB2BErrors] = useState({});
+  const [validationVASErrors, setValidationVASErrors] = useState({});
 
   const fieldLabelsAgent = {
     agentAge: 'Age',
@@ -1356,6 +1361,14 @@ export default function MyProfile() {
       error = `${label} is required`;
     }
     setValidationB2BErrors(prev => ({ ...prev, [field]: error }));
+  };
+
+  const validateVASField = (field, value) => {
+    let error = "";
+    if (!value || value === "Select") {
+      error = 'Professional is required';
+    }
+    setValidationVASErrors(prev => ({ ...prev, [field]: error }));
   };
 
   const validateAgentForm = () => {
@@ -1394,6 +1407,15 @@ export default function MyProfile() {
     return Object.values(newErrors).every(error => !error);
   };
 
+  const validateVASForm = () => {
+    let newErrors = {};
+    if (!vasData.professional || vasData.professional === "Select") {
+      newErrors.professional = 'Professional is required.';
+    }
+    setValidationVASErrors(newErrors);
+    return Object.values(newErrors).every(error => !error);
+  };
+
   const updateAgentField = (e) => {
     const { name, value } = e.target;
     setAgentData({ ...agentData, [name]: value });
@@ -1416,6 +1438,11 @@ export default function MyProfile() {
     validateB2BField(field, value);
   };
 
+  const updateVASTDropdownValue = (field, value) => {
+    setVasData({ ...vasData, [field]: value });
+    validateVASField(field, value);
+  };
+
   useEffect(() => {
     const fetchDetails = async () => {
       await getUser();
@@ -1436,7 +1463,7 @@ export default function MyProfile() {
 
   const handleFileUpload = (event) => {
     const files = Array.from(event.target.files);
-    const maxFileSize = 5 * 1024 * 1024; // 5MB
+    const maxFileSize = 40 * 1024 * 1024; // 40MB
     const allowedTypes = [
       'application/pdf', 
       'application/msword', 
@@ -1449,7 +1476,7 @@ export default function MyProfile() {
 
     files.forEach((file) => {
       if (file.size > maxFileSize) {
-        newErrors.push(`${file.name}: File size exceeds 5MB.`);
+        newErrors.push(`${file.name}: File size exceeds 40MB.`);
       } else if (!allowedTypes.includes(file.type)) {
         newErrors.push(`${file.name}: Invalid file type. Only PDF, DOC, DOCX, JPG, PNG allowed.`);
       } else {
@@ -1524,12 +1551,18 @@ export default function MyProfile() {
 
   const updatePasswordField = (e) => {
     const { name, value } = e.target;
-    const prevNewPassword = passwordFields.newPassword; // Capture previous for confirm validation
 
-    setPasswordFields({
+    const newPasswordFields = {
       ...passwordFields,
       [name]: value,
-    });
+    };
+
+    // If changing newPassword, clear confirm to avoid stale mismatch
+    if (name === 'newPassword') {
+      newPasswordFields.confirmPassword = '';
+    }
+
+    setPasswordFields(newPasswordFields);
 
     let updatedErrors = { ...validationErrors };
 
@@ -1543,16 +1576,14 @@ export default function MyProfile() {
       } else {
         updatedErrors.newPassword = '';
       }
-      // Re-validate confirm if new password changed
-      if (passwordFields.confirmPassword && passwordFields.confirmPassword !== value) {
-        updatedErrors.confirmPassword = 'Confirm password does not match the new password.';
-      } else if (passwordFields.confirmPassword) {
-        updatedErrors.confirmPassword = '';
-      }
+      // Clear confirm error since confirm is now empty
+      updatedErrors.confirmPassword = '';
     }
 
     if (name === 'confirmPassword') {
-      if (value !== prevNewPassword) {
+      if (!value.trim()) {
+        updatedErrors.confirmPassword = 'Confirm password is required.';
+      } else if (value !== newPasswordFields.newPassword) {
         updatedErrors.confirmPassword = 'Confirm password does not match the new password.';
       } else {
         updatedErrors.confirmPassword = '';
@@ -1587,11 +1618,14 @@ export default function MyProfile() {
 
     if (!valid) return;
 
-    // Validate agent or B2B fields if applicable (for completeness, though not sent to API)
+    // Validate agent or B2B or VAS fields if applicable (for completeness, though not sent to API)
     if (isAgent && !validateAgentForm()) {
       valid = false;
     }
     if (isB2B && !validateB2BForm()) {
+      valid = false;
+    }
+    if (isVAS && !validateVASForm()) {
       valid = false;
     }
 
@@ -1640,6 +1674,11 @@ export default function MyProfile() {
           payload.gender = B2BData.B2BGender;
           payload.professional = B2BData.B2BService;
           payload.location = B2BData.B2Blocation;
+        }
+
+        // Add VAS fields if applicable
+        if (isVAS) {
+          payload.professional = vasData.professional;
         }
 
         console.log('Sending payload:', payload);
@@ -1757,6 +1796,9 @@ export default function MyProfile() {
             });
           } else if (userType === 'value-added-services') {
             setIsVAS(true);
+            setVasData({
+              professional: data.user.professional || data.user.service || "",
+            });
           }
 
           // Normalize type in localStorage to lowercase for consistency
@@ -1793,7 +1835,10 @@ export default function MyProfile() {
       isValid = false;
     }
 
-    if (passwordFields.newPassword !== passwordFields.confirmPassword) {
+    if (!passwordFields.confirmPassword.trim()) {
+      updatedErrors.confirmPassword = 'Confirm password is required.';
+      isValid = false;
+    } else if (passwordFields.newPassword !== passwordFields.confirmPassword) {
       updatedErrors.confirmPassword = 'Confirm password does not match the new password.';
       isValid = false;
     }
@@ -1956,7 +2001,7 @@ export default function MyProfile() {
                     onChange={handleFileUpload}
                   />
                 </div>
-                <p>Max file size: 5MB per file</p>
+                <p>Max file size: 40MB per file</p>
                 {fileErrors.length > 0 && (
                   <div className="error-message">
                     {fileErrors.map((error, index) => (
@@ -2197,6 +2242,23 @@ export default function MyProfile() {
                 />
                 {validationAgentErrors.agentLocation && (
                   <span className="error-message">{validationAgentErrors.agentLocation}</span>
+                )}
+              </div>
+            </div>
+          )}
+          {isVAS && (
+            <div className="box grid-2 gap-30">
+              <div className="box-fieldset">
+                <label htmlFor="vasProfessional">
+                  Professional:<span>*</span>
+                </label>
+                <DropdownSelect
+                  options={["Select", ...AllServices.map(service => service.name)]}
+                  defaultOption={vasData.professional || "Select"}
+                  onChange={(value) => updateVASTDropdownValue("professional", value)}
+                />
+                {validationVASErrors.professional && (
+                  <span className="error-message">{validationVASErrors.professional}</span>
                 )}
               </div>
             </div>

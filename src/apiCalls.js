@@ -912,14 +912,14 @@ export const getWishListProperties = async (ids , page) => {
 
 export const getValueAddedServiceList = async (filter) => {
 
-  let url = `${baseUrl}/value-added-service?`;
+  let url = `${baseUrl}/registration/get-user-by-type/${filter.type}?`;
 
   const searchParArr = [];
 
-  const verified = 1;
+  const verified = 1; // Always Verified
 
   if (verified) {
-    searchParArr.push(`isVerifyed=${verified}`);
+    searchParArr.push(`isVerified=${verified}`);
   }
 
   if (filter.page) {
@@ -932,27 +932,27 @@ export const getValueAddedServiceList = async (filter) => {
     searchParArr.push(`location=${filter.location}`);
   }
 
-  url += searchParArr.join('&');
-
+  url += searchParArr.join("&");
 
   const options = {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   };
 
   try {
     const response = await fetch(url, options);
     if (!response.ok) {
-      throw new Error('Failed to fetch data');
+      throw new Error("Failed to fetch data");
     }
     return response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error("Error fetching data:", error);
     throw error;
   }
 };
+
 
 export const getUserQueries = async (id , page) => {
 

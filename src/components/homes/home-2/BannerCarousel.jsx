@@ -10,19 +10,21 @@ import WestIcon from '@mui/icons-material/West';
 import { getEventsList } from "@/apiCalls";
 
 export default function BottomCarousel() {
-
-
-    const [events, setEvents] = useState();
-
+    const [events, setEvents] = useState([]);
     const [activeTab, setActiveTab] = useState('upcoming'); // State for active tab
 
     const fetchEvents = async () => {
         try {
             const flag = activeTab === 'upcoming' ? true : false;
             const currentPage = 1;
-            const data = await getEventsList(flag , currentPage);
+            const data = await getEventsList(flag, currentPage);
             if (data.success) {
-                setEvents(data.data)
+                // Parse image strings to arrays for each event
+                const parsedEvents = data.data.map(event => ({
+                    ...event,
+                    image: JSON.parse(event.image || '[]')
+                }));
+                setEvents(parsedEvents);
             } else {
                 // toast.error(data.message)
             }
@@ -35,7 +37,6 @@ export default function BottomCarousel() {
         fetchEvents();
     }, [activeTab]);
 
-
     const CustomNextArrow = (props) => {
         const { onClick } = props;
         return (
@@ -44,7 +45,7 @@ export default function BottomCarousel() {
                 style={{
                     position: "absolute",
                     bottom: "-25%",
-                    left: "53%",
+                    right: "10%", // Fixed: Position next arrow on the right
                     transform: "translateY(-50%)",
                     zIndex: 10,
                     color: "#000",
@@ -64,7 +65,7 @@ export default function BottomCarousel() {
                 style={{
                     position: "absolute",
                     bottom: "-25%",
-                    right: "52%",
+                    left: "10%", // Fixed: Position prev arrow on the left
                     transform: "translateY(-50%)",
                     zIndex: 10,
                     color: "#000",
@@ -104,6 +105,10 @@ export default function BottomCarousel() {
                 },
             },
         ],
+    };
+
+    const getTabTitle = () => {
+        return activeTab === 'upcoming' ? 'Upcoming Events' : 'Past Events';
     };
 
     return (
@@ -150,26 +155,63 @@ export default function BottomCarousel() {
                     <div>
                         <h3 className="carousel-title">
                             i5 Property Stars <br />
-                            Upcoming Events
+                            {getTabTitle()}
                         </h3>
                     </div>
                     <div className="d-flex gap-3 filter-list" style={{ fontWeight: 'bold', fontSize: '1rem' }}>
                         <div className="custom-two">
-                            <p onClick={() => setActiveTab('upcoming')} style={{ cursor: 'pointer' }} >Upcoming Events</p>
+                            <p 
+                                onClick={() => setActiveTab('upcoming')} 
+                                style={{ cursor: 'pointer', color: activeTab === 'upcoming' ? '#007bff' : 'inherit' }}
+                            >
+                                Upcoming Events
+                            </p>
                         </div>
                         <div className="custom-last-two">
-                            <p onClick={() => { window.location.href = "/events" }} style={{ cursor: 'pointer' }}>Past Events</p>
-                            < NorthEastIcon sx={{ margin: ' -5px 0px 0px 5px' }} />
+                            <p 
+                                onClick={() => setActiveTab('past')} 
+                                style={{ cursor: 'pointer', color: activeTab === 'past' ? '#007bff' : 'inherit' }}
+                            >
+                                Past Events
+                            </p>
+                            <NorthEastIcon sx={{ margin: ' -5px 0px 0px 5px' }} />
                         </div>
                     </div>
                 </div>
                 <div className="custom-multi-banner">
                     <Slider {...settings}>
-                        {events?.length && events.map((elm, index) => (
+                        {events.length > 0 && events.map((elm, index) => (
                             <div style={{ margin: '0 10px' }} key={index}>
-                                <img style={{ width: '90%', borderRadius: '8px', margin: '0px auto', maxHeight: '350px', minHeight: '350px' }} src={elm.image[0] || ""} alt="banner" />
+                                {elm.image.length > 0 ? (
+                                    <img 
+                                        style={{ width: '90%', borderRadius: '8px', margin: '0px auto', maxHeight: '350px', minHeight: '350px' }} 
+                                        src={elm.image[0]} 
+                                        alt={elm.title || "banner"} 
+                                    />
+                                ) : (
+                                    <div 
+                                        style={{ 
+                                            width: '90%', 
+                                            height: '350px', 
+                                            backgroundColor: '#f0f0f0', 
+                                            borderRadius: '8px', 
+                                            margin: '0px auto', 
+                                            display: 'flex', 
+                                            alignItems: 'center', 
+                                            justifyContent: 'center',
+                                            color: '#999'
+                                        }}
+                                    >
+                                        No Image Available
+                                    </div>
+                                )}
                             </div>
                         ))}
+                        {events.length === 0 && (
+                            <div style={{ textAlign: 'center', padding: '100px 0' }}>
+                                No events available.
+                            </div>
+                        )}
                     </Slider>
                 </div>
             </div>
