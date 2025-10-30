@@ -3,7 +3,7 @@ import DropdownSelect from "../common/DropdownSelect";
 import { getCategories, getInputs, createNewProperty, getPropertyEdit, updateProperty } from "@/apiCalls";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { Grid } from "@mui/material";
+import { Grid, Autocomplete, TextField } from "@mui/material";
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -302,6 +302,49 @@ export default function AddProperty() {
   const [menuInputs, setMenuInputs] = useState();
   const [formData, setFormData] = useState({});
 
+  // States and Cities (India) for State/City dropdowns
+  const [indiaStates, setIndiaStates] = useState([]);
+  const [citiesByState, setCitiesByState] = useState({}); // { [stateName]: string[] }
+  const [selectedState, setSelectedState] = useState(""); // create mode
+  const [selectedEditState, setSelectedEditState] = useState(""); // edit mode
+
+  const fetchIndiaStates = async () => {
+    try {
+      const res = await fetch("https://countriesnow.space/api/v0.1/countries/states", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ country: "India" })
+      });
+      const json = await res.json();
+      if (!json.error && json?.data?.states?.length) {
+        setIndiaStates(json.data.states.map((s) => s.name));
+      }
+    } catch (e) {
+      // ignore network errors; user can retry interaction
+    }
+  };
+
+  const fetchCitiesForState = async (stateName) => {
+    if (!stateName || citiesByState[stateName]) return;
+    try {
+      const res = await fetch("https://countriesnow.space/api/v0.1/countries/state/cities", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ country: "India", state: stateName })
+      });
+      const json = await res.json();
+      if (!json.error && Array.isArray(json.data)) {
+        setCitiesByState((prev) => ({ ...prev, [stateName]: json.data }));
+      }
+    } catch (e) {
+      // ignore network errors; user can retry interaction
+    }
+  };
+
+  useEffect(() => {
+    fetchIndiaStates();
+  }, []);
+
 
   const fetchCategories = async () => {
     try {
@@ -364,6 +407,17 @@ export default function AddProperty() {
     // Clear create invalid state when user fills value
     setInvalidCreateIds((prev) => prev.filter((x) => x !== id));
   };
+
+  // When edit data loads, hydrate selected edit state and ensure city list is present
+  useEffect(() => {
+    if (updatedData?.[0]?.inputs?.length) {
+      const st = updatedData[0].inputs.find((i) => i.input_name === "State")?.input_value || "";
+      if (st) {
+        setSelectedEditState(st);
+        fetchCitiesForState(st);
+      }
+    }
+  }, [updatedData]);
 
   const isFilled = (inputDef, value) => {
     if (value === undefined || value === null) return false;
@@ -560,8 +614,68 @@ export default function AddProperty() {
             <div className="box-info-property">
               {updatedData[0]?.inputs?.length ? (
                 <div className="box grid-2 gap-30">
-                  {updatedData[0].inputs.map((input) => {
+                  {(() => {
+                    const inputs = updatedData[0].inputs;
+                    const stateInput = inputs.find((i) => i.input_name === 'State');
+                    const cityInput = inputs.find((i) => i.input_name === 'City');
+                    const otherInputs = inputs.filter((i) => i.input_name !== 'State' && i.input_name !== 'City');
+
+                    const blocks = [];
+
+                    if (stateInput) {
+                      blocks.push(
+                        <fieldset key={stateInput.id} className="box box-fieldset">
+                          <label htmlFor={stateInput.input_name}>
+                            {stateInput.input_name} <span>{stateInput.required ? "*" : ""}</span>
+                          </label>
+                          <Autocomplete
+                            options={indiaStates}
+                            value={stateInput.input_value || ""}
+                            onChange={async (_, val) => {
+                              const selected = val || "";
+                              handlePrevChange(stateInput.id, selected, stateInput.input_name);
+                              setInvalidEditIds((prev)=> prev.filter((x)=> x !== stateInput.input_id));
+                              setSelectedEditState(selected);
+                              await fetchCitiesForState(selected);
+                              if (cityInput) {
+                                handlePrevChange(cityInput.id, "", "City");
+                              }
+                            }}
+                            renderInput={(params) => (
+                              <TextField {...params} placeholder="Select" />
+                            )}
+                          />
+                        </fieldset>
+                      );
+                    }
+
+                    if (cityInput) {
+                      const currentState = (stateInput?.input_value) || selectedEditState || "";
+                      const cityOptions = currentState ? (citiesByState[currentState] || []) : [];
+                      blocks.push(
+                        <fieldset key={cityInput.id} className="box box-fieldset">
+                          <label htmlFor={cityInput.input_name}>
+                            {cityInput.input_name} <span>{cityInput.required ? "*" : ""}</span>
+                          </label>
+                          <Autocomplete
+                            options={cityOptions}
+                            value={cityInput.input_value || ""}
+                            onChange={(_, val) => { const selected = val || ""; handlePrevChange(cityInput.id, selected, cityInput.input_name); setInvalidEditIds((prev)=> prev.filter((x)=> x !== cityInput.input_id)); setLocation(selected); }}
+                            renderInput={(params) => (
+                              <TextField {...params} placeholder="Select" />
+                            )}
+                          />
+                        </fieldset>
+                      );
+                    }
+
+                    return [
+                      ...blocks,
+                      ...otherInputs.map((input) => {
                     const { id, input_name, input_type, options, input_value } = input;
+
+                    // Special handling for State and City in edit mode
+                    if (input_name === "State" || input_name === "City") return null;
 
                     let inputField = null;
                     switch (input_type) {
@@ -763,7 +877,8 @@ export default function AddProperty() {
                     }
 
                     return inputField;
-                  })}
+                  })];
+                  })()}
                 </div>
               ) : (
                 <div className="box grid-2 gap-30">
@@ -775,10 +890,68 @@ export default function AddProperty() {
             <div className="box-info-property">
               {menuInputs?.length ? (
                 <div className="box grid-2 gap-30">
-                  {menuInputs?.length && menuInputs.map((input, index) => {
-                    const { id, input_name, input_type, options, required } = input;
-                    let inputField = null;
-                    switch (input_type) {
+                  {(() => {
+                    const inputs = menuInputs || [];
+                    const stateInput = inputs.find((i) => i.input_name === 'State');
+                    const cityInput = inputs.find((i) => i.input_name === 'City');
+                    const otherInputs = inputs.filter((i) => i.input_name !== 'State' && i.input_name !== 'City');
+
+                    const blocks = [];
+
+                    if (stateInput) {
+                      blocks.push(
+                        <fieldset key={stateInput.id} className="box box-fieldset">
+                          <label htmlFor={stateInput.input_name}>
+                            {stateInput.input_name} <span>{stateInput.required ? "*" : ""}</span>
+                          </label>
+                          <Autocomplete
+                            options={indiaStates}
+                            value={formData[stateInput.id] || ""}
+                            onChange={async (_, val) => {
+                              const selected = val || "";
+                              setSelectedState(selected);
+                              handleChange(stateInput.id, selected, stateInput.input_name);
+                              setInvalidCreateIds((prev) => prev.filter((x) => x !== stateInput.id));
+                              await fetchCitiesForState(selected);
+                              if (cityInput) {
+                                handleChange(cityInput.id, "", "City");
+                              }
+                            }}
+                            renderInput={(params) => (
+                              <TextField {...params} placeholder="Select" />
+                            )}
+                          />
+                        </fieldset>
+                      );
+                    }
+
+                    if (cityInput) {
+                      const currentState = selectedState || (formData[(inputs.find((i)=> i.input_name==='State')||{}).id] || "");
+                      const cityOptions = currentState ? (citiesByState[currentState] || []) : [];
+                      blocks.push(
+                        <fieldset key={cityInput.id} className="box box-fieldset">
+                          <label htmlFor={cityInput.input_name}>
+                            {cityInput.input_name} <span>{cityInput.required ? "*" : ""}</span>
+                          </label>
+                          <Autocomplete
+                            options={cityOptions}
+                            value={formData[cityInput.id] || ""}
+                            onChange={(_, val) => { const selected = val || ""; handleChange(cityInput.id, selected, cityInput.input_name); setInvalidCreateIds((prev) => prev.filter((x) => x !== cityInput.id)); }}
+                            renderInput={(params) => (
+                              <TextField {...params} placeholder="Select" />
+                            )}
+                          />
+                        </fieldset>
+                      );
+                    }
+
+                    return [
+                      ...blocks,
+                      ...otherInputs.map((input) => {
+                        const { id, input_name, input_type, options, required } = input;
+
+                        let inputField = null;
+                        switch (input_type) {
                       case "text":
                         inputField = (
                           <fieldset key={id} className="box box-fieldset">
@@ -988,7 +1161,9 @@ export default function AddProperty() {
                     }
 
                     return inputField;
-                  })}
+                  })
+                    ];
+                  })()}
                 </div>
               ) : (
                 <div className="box grid-2 gap-30">
@@ -1069,577 +1244,6 @@ export default function AddProperty() {
             ))}
           </div>
         </div>
-
-        {/* <div className="widget-box-2 mb-20">
-          <div className="box-info-property">
-            <fieldset className="box box-fieldset">
-              <label htmlFor="title">
-                {" "}
-                Title:<span>*</span>{" "}
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Choose"
-              />
-            </fieldset>
-            <fieldset className="box box-fieldset">
-              <label htmlFor="desc">Description:</label>
-              <textarea
-                className="textarea"
-                placeholder="Your Decscription"
-                defaultValue={""}
-              />
-            </fieldset>
-            <div className="box grid-3 gap-30">
-              <fieldset className="box-fieldset">
-                <label htmlFor="address">
-                  {" "}
-                  Full Address:<span>*</span>{" "}
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter property full address"
-                />
-              </fieldset>
-              <fieldset className="box-fieldset">
-                <label htmlFor="zip">
-                  {" "}
-                  Pin Code:<span>*</span>{" "}
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter property zip code"
-                />
-              </fieldset>
-              <fieldset className="box-fieldset">
-                <label htmlFor="country">
-                  {" "}
-                  Country:<span>*</span>{" "}
-                </label>
-
-                <DropdownSelect
-                  options={["India"]}
-                />
-              </fieldset>
-            </div>
-            <div className="box grid-2 gap-30">
-              <fieldset className="box-fieldset">
-                <label htmlFor="state">
-                  {" "}
-                  Province/State:<span>*</span>{" "}
-                </label>
-
-                <DropdownSelect options={["Tamil Nadu", "Kerala", "Andhra"]} />
-              </fieldset>
-              <fieldset className="box-fieldset">
-                <label htmlFor="neighborhood">
-                  Neighborhood:<span>*</span>
-                </label>
-
-                <DropdownSelect
-                  options={["None", "Little Italy", "Bedford Park"]}
-                />
-              </fieldset>
-            </div>
-            <div className="box box-fieldset">
-              <label htmlFor="location">
-                Location:<span>*</span>
-              </label>
-              <div className="box-ip">
-                <input
-                  type="text"
-                  className="form-control"
-                  defaultValue="None"
-                />
-                <a href="#" className="btn-location">
-                  <i className="icon icon-location" />
-                </a>
-              </div>
-              <iframe
-                className="map"
-                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d135905.11693909427!2d-73.95165795400088!3d41.17584829642291!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1727094281524!5m2!1sen!2s"
-                width="100%"
-                height={456}
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="widget-box-2 mb-20">
-          <h5 className="title">Price</h5>
-          <div className="box-price-property">
-            <div className="box grid-2 gap-30">
-              <fieldset className="box-fieldset">
-                <label htmlFor="price">
-                  Price:<span>*</span>
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Example value: 12345.67"
-                />
-              </fieldset>
-              <fieldset className="box-fieldset">
-                <label htmlFor="neighborhood">
-                  Unit Price:<span>*</span>
-                </label>
-
-                <DropdownSelect options={["None", "1000", "2000"]} />
-              </fieldset>
-            </div>
-            <div className="grid-2 gap-30">
-              <fieldset className="box-fieldset">
-                <label htmlFor="price">
-                  Before Price Label:<span>*</span>
-                </label>
-                <input type="text" className="form-control" />
-              </fieldset>
-              <fieldset className="box-fieldset">
-                <label htmlFor="price">
-                  After Price Label:<span>*</span>
-                </label>
-                <input type="text" className="form-control" />
-              </fieldset>
-            </div>
-          </div>
-        </div>
-        <div className="widget-box-2 mb-20">
-          <h5 className="title">Addtional Infomation</h5>
-          <div className="box grid-3 gap-30">
-            <fieldset className="box-fieldset">
-              <label htmlFor="type">
-                {" "}
-                Property Type:<span>*</span>{" "}
-              </label>
-
-              <DropdownSelect
-                options={[
-                  "Apartment",
-                  "Villa",
-                  "Studio",
-                  "Office",
-                  "Townhouse",
-                ]}
-              />
-            </fieldset>
-            <fieldset className="box-fieldset">
-              <label htmlFor="status">
-                {" "}
-                Property Status:<span>*</span>{" "}
-              </label>
-
-              <DropdownSelect options={["For Rent", "For Sale"]} />
-            </fieldset>
-            <fieldset className="box-fieldset">
-              <label htmlFor="label">
-                {" "}
-                Property Label:<span>*</span>{" "}
-              </label>
-
-              <DropdownSelect options={["New Listing", "Open House"]} />
-            </fieldset>
-          </div>
-          <div className="box grid-3 gap-30">
-            <fieldset className="box-fieldset">
-              <label htmlFor="size">
-                {" "}
-                Size (SqFt):<span>*</span>{" "}
-              </label>
-              <input type="text" className="form-control" />
-            </fieldset>
-            <fieldset className="box-fieldset">
-              <label htmlFor="land">
-                {" "}
-                Land Area (SqFt):<span>*</span>{" "}
-              </label>
-              <input type="text" className="form-control" />
-            </fieldset>
-            <fieldset className="box-fieldset">
-              <label htmlFor="id">
-                {" "}
-                Property ID:<span>*</span>{" "}
-              </label>
-              <input type="text" className="form-control" />
-            </fieldset>
-          </div>
-          <div className="box grid-3 gap-30">
-            <fieldset className="box-fieldset">
-              <label htmlFor="rom">
-                {" "}
-                Rooms:<span>*</span>{" "}
-              </label>
-              <input type="text" className="form-control" />
-            </fieldset>
-            <fieldset className="box-fieldset">
-              <label htmlFor="bedrooms">
-                {" "}
-                Bedrooms:<span>*</span>{" "}
-              </label>
-              <input type="text" className="form-control" />
-            </fieldset>
-            <fieldset className="box-fieldset">
-              <label htmlFor="bathrooms">
-                {" "}
-                Bathrooms:<span>*</span>{" "}
-              </label>
-              <input type="text" className="form-control" />
-            </fieldset>
-          </div>
-          <div className="box grid-3 gap-30">
-            <fieldset className="box-fieldset">
-              <label htmlFor="garages">
-                {" "}
-                Garages:<span>*</span>{" "}
-              </label>
-              <input type="text" className="form-control" />
-            </fieldset>
-            <fieldset className="box-fieldset">
-              <label htmlFor="garages-size">
-                Garages Size (SqFt):<span>*</span>
-              </label>
-              <input type="text" className="form-control" />
-            </fieldset>
-            <fieldset className="box-fieldset">
-              <label htmlFor="year">
-                {" "}
-                Year Built:<span>*</span>{" "}
-              </label>
-              <input type="text" className="form-control" />
-            </fieldset>
-          </div>
-        </div>
-        <div className="widget-box-2 mb-20">
-          <h5 className="title">
-            Amenities<span>*</span>
-          </h5>
-          <div className="box-amenities-property">
-            <div className="box-amenities">
-              <div className="title-amenities text-btn">Home safety:</div>
-              <div className="list-amenities">
-                <fieldset className="amenities-item">
-                  <input
-                    type="checkbox"
-                    className="tf-checkbox style-1"
-                    id="cb1"
-                    defaultChecked=""
-                  />
-                  <label htmlFor="cb1" className="text-cb-amenities">
-                    Smoke alarm
-                  </label>
-                </fieldset>
-                <fieldset className="amenities-item">
-                  <input
-                    type="checkbox"
-                    className="tf-checkbox style-1 primary"
-                    id="cb2"
-                  />
-                  <label htmlFor="cb2" className="text-cb-amenities">
-                    Self check-in with lockbox
-                  </label>
-                </fieldset>
-                <fieldset className="amenities-item">
-                  <input
-                    type="checkbox"
-                    className="tf-checkbox style-1 primary"
-                    id="cb3"
-                    defaultChecked=""
-                  />
-                  <label htmlFor="cb3" className="text-cb-amenities">
-                    Carbon monoxide alarm
-                  </label>
-                </fieldset>
-                <fieldset className="amenities-item">
-                  <input
-                    type="checkbox"
-                    className="tf-checkbox style-1 primary"
-                    id="cb4"
-                  />
-                  <label htmlFor="cb4" className="text-cb-amenities">
-                    Security cameras
-                  </label>
-                </fieldset>
-              </div>
-            </div>
-            <div className="box-amenities">
-              <div className="title-amenities text-btn">Bedroom</div>
-              <div className="list-amenities">
-                <fieldset className="amenities-item">
-                  <input
-                    type="checkbox"
-                    className="tf-checkbox style-1"
-                    id="cb-bed1"
-                  />
-                  <label htmlFor="cb-bed1" className="text-cb-amenities">
-                    Hangers
-                  </label>
-                </fieldset>
-                <fieldset className="amenities-item">
-                  <input
-                    type="checkbox"
-                    className="tf-checkbox style-1 primary"
-                    id="cb-bed2"
-                  />
-                  <label htmlFor="cb-bed2" className="text-cb-amenities">
-                    Extra pillows &amp; blankets
-                  </label>
-                </fieldset>
-                <fieldset className="amenities-item">
-                  <input
-                    type="checkbox"
-                    className="tf-checkbox style-1 primary"
-                    id="cb-bed3"
-                  />
-                  <label htmlFor="cb-bed3" className="text-cb-amenities">
-                    Bed linens
-                  </label>
-                </fieldset>
-                <fieldset className="amenities-item">
-                  <input
-                    type="checkbox"
-                    className="tf-checkbox style-1 primary"
-                    id="cb-bed4"
-                  />
-                  <label htmlFor="cb-bed4" className="text-cb-amenities">
-                    TV with standard cable
-                  </label>
-                </fieldset>
-              </div>
-            </div>
-            <div className="box-amenities">
-              <div className="title-amenities text-btn">Kitchen:</div>
-              <div className="list-amenities">
-                <fieldset className="amenities-item">
-                  <input
-                    type="checkbox"
-                    className="tf-checkbox style-1"
-                    id="cb-kit1"
-                  />
-                  <label htmlFor="cb-kit1" className="text-cb-amenities">
-                    Refrigerator
-                  </label>
-                </fieldset>
-                <fieldset className="amenities-item">
-                  <input
-                    type="checkbox"
-                    className="tf-checkbox style-1 primary"
-                    id="cb-kit2"
-                  />
-                  <label htmlFor="cb-kit2" className="text-cb-amenities">
-                    Dishwasher
-                  </label>
-                </fieldset>
-                <fieldset className="amenities-item">
-                  <input
-                    type="checkbox"
-                    className="tf-checkbox style-1 primary"
-                    id="cb-kit3"
-                  />
-                  <label htmlFor="cb-kit3" className="text-cb-amenities">
-                    Microwave
-                  </label>
-                </fieldset>
-                <fieldset className="amenities-item">
-                  <input
-                    type="checkbox"
-                    className="tf-checkbox style-1 primary"
-                    id="cb-kit4"
-                  />
-                  <label htmlFor="cb-kit4" className="text-cb-amenities">
-                    Coffee maker
-                  </label>
-                </fieldset>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="widget-box-2 mb-20">
-          <h5 className="title">Virtual Tour 360</h5>
-          <div className="box-radio-check">
-            <div className="text-btn mb-16">Virtual Tour Type:</div>
-            <fieldset className="fieldset-radio">
-              <input
-                type="radio"
-                className="tf-checkbox style-1"
-                name="radio"
-                id="radio1"
-                defaultChecked=""
-              />
-              <label htmlFor="radio1" className="text-radio">
-                Embedded code
-              </label>
-            </fieldset>
-            <fieldset className="fieldset-radio">
-              <input
-                type="radio"
-                className="tf-checkbox style-1"
-                name="radio"
-                id="radio2"
-              />
-              <label htmlFor="radio2" className="text-radio">
-                Upload image
-              </label>
-            </fieldset>
-          </div>
-          <fieldset className="box-fieldset">
-            <label htmlFor="embedded">Embedded Code Virtual 360</label>
-            <textarea className="textarea" defaultValue={""} />
-          </fieldset>
-        </div>
-        <div className="widget-box-2 mb-20">
-          <h5 className="title">Videos</h5>
-          <fieldset className="box-fieldset">
-            <label htmlFor="video" className="text-btn">
-              Video URL:
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Youtube, vimeo url"
-            />
-          </fieldset>
-        </div>
-        <div className="widget-box-2 mb-20">
-          <h5 className="title">Floors</h5>
-          <div className="box-radio-check">
-            <div className="text-btn mb-16">Enable Floor Plan:</div>
-            <fieldset className="fieldset-radio">
-              <input
-                type="radio"
-                className="tf-checkbox style-1"
-                name="radio2"
-                id="radio3"
-                defaultChecked=""
-              />
-              <label htmlFor="radio3" className="text-radio">
-                Enable
-              </label>
-            </fieldset>
-            <fieldset className="fieldset-radio">
-              <input
-                type="radio"
-                className="tf-checkbox style-1"
-                name="radio2"
-                id="radio4"
-              />
-              <label htmlFor="radio4" className="text-radio">
-                Disable
-              </label>
-            </fieldset>
-          </div>
-          <div className="box-floor-property file-delete">
-            <div className="top d-flex justify-content-between align-items-center">
-              <h6>Floor 1:</h6>
-              <a href="#" className="remove-file">
-                <span className="icon icon-close2" />
-              </a>
-            </div>
-            <fieldset className="box box-fieldset">
-              <label htmlFor="name">Floor Name:</label>
-              <input type="text" className="form-control style-1" />
-            </fieldset>
-            <div className="grid-2 box gap-30">
-              <fieldset className="box-fieldset">
-                <label htmlFor="floor-price">Floor Price (Only Digits):</label>
-                <input type="text" className="form-control style-1" />
-              </fieldset>
-              <fieldset className="box-fieldset">
-                <label htmlFor="price-postfix">Price Postfix:</label>
-                <input type="text" className="form-control style-1" />
-              </fieldset>
-            </div>
-            <div className="grid-2 box gap-30">
-              <fieldset className="box-fieldset">
-                <label htmlFor="floor-size">Floor Size (Only Digits):</label>
-                <input type="text" className="form-control style-1" />
-              </fieldset>
-              <fieldset className="box-fieldset">
-                <label htmlFor="size-postfix">Size Postfix:</label>
-                <input type="text" className="form-control style-1" />
-              </fieldset>
-            </div>
-            <div className="grid-2 box gap-30">
-              <fieldset className="box-fieldset">
-                <label htmlFor="bedrooms">Bedrooms:</label>
-                <input type="text" className="form-control style-1" />
-              </fieldset>
-              <fieldset className="box-fieldset">
-                <label htmlFor="bathrooms">Bathrooms:</label>
-                <input type="text" className="form-control style-1" />
-              </fieldset>
-            </div>
-            <div className="grid-2 box gap-30">
-              <fieldset className="box-fieldset">
-                <label htmlFor="bedrooms">Floor Image:</label>
-                <div className="box-floor-img uploadfile">
-                  <a href="#" className="btn-upload tf-btn primary">
-                    <svg
-                      width={21}
-                      height={20}
-                      viewBox="0 0 21 20"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M2.375 13.125L6.67417 8.82583C6.84828 8.65172 7.05498 8.51361 7.28246 8.41938C7.50995 8.32515 7.75377 8.27665 8 8.27665C8.24623 8.27665 8.49005 8.32515 8.71754 8.41938C8.94502 8.51361 9.15172 8.65172 9.32583 8.82583L13.625 13.125M12.375 11.875L13.5492 10.7008C13.7233 10.5267 13.93 10.3886 14.1575 10.2944C14.385 10.2001 14.6288 10.1516 14.875 10.1516C15.1212 10.1516 15.365 10.2001 15.5925 10.2944C15.82 10.3886 16.0267 10.5267 16.2008 10.7008L18.625 13.125M3.625 16.25H17.375C17.7065 16.25 18.0245 16.1183 18.2589 15.8839C18.4933 15.6495 18.625 15.3315 18.625 15V5C18.625 4.66848 18.4933 4.35054 18.2589 4.11612C18.0245 3.8817 17.7065 3.75 17.375 3.75H3.625C3.29348 3.75 2.97554 3.8817 2.74112 4.11612C2.5067 4.35054 2.375 4.66848 2.375 5V15C2.375 15.3315 2.5067 15.6495 2.74112 15.8839C2.97554 16.1183 3.29348 16.25 3.625 16.25ZM12.375 6.875H12.3817V6.88167H12.375V6.875ZM12.6875 6.875C12.6875 6.95788 12.6546 7.03737 12.596 7.09597C12.5374 7.15458 12.4579 7.1875 12.375 7.1875C12.2921 7.1875 12.2126 7.15458 12.154 7.09597C12.0954 7.03737 12.0625 6.95788 12.0625 6.875C12.0625 6.79212 12.0954 6.71263 12.154 6.65403C12.2126 6.59542 12.2921 6.5625 12.375 6.5625C12.4579 6.5625 12.5374 6.59542 12.596 6.65403C12.6546 6.71263 12.6875 6.79212 12.6875 6.875Z"
-                        stroke="white"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    Choose File
-                    <input type="file" className="ip-file" />
-                  </a>
-                  <p className="file-name">Or drop file here to upload</p>
-                </div>
-              </fieldset>
-              <fieldset className="box-fieldset">
-                <label htmlFor="bathrooms">Description:</label>
-                <textarea className="textarea" defaultValue={""} />
-              </fieldset>
-            </div>
-          </div>
-          <div className="text-center">
-            <a href="#" className="btn-add-floor">
-              <span className="icon icon-plus" />
-            </a>
-          </div>
-        </div>
-        <div className="widget-box-2 mb-20">
-          <h5 className="title">Agent Infomation</h5>
-          <div className="box-radio-check">
-            <div className="text-btn mb-16">Choose type agent information?</div>
-            <fieldset className="fieldset-radio">
-              <input
-                type="radio"
-                className="tf-checkbox style-1"
-                name="radio3"
-                id="radio5"
-                defaultChecked=""
-              />
-              <label htmlFor="radio5" className="text-radio">
-                Your current user information
-              </label>
-            </fieldset>
-            <fieldset className="fieldset-radio">
-              <input
-                type="radio"
-                className="tf-checkbox style-1"
-                name="radio3"
-                id="radio6"
-              />
-              <label htmlFor="radio6" className="text-radio">
-                Other contact
-              </label>
-            </fieldset>
-          </div>
-        </div> */}
         {editData?.length ? (
           <div className="box-btn">
             <button 
