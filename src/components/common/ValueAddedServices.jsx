@@ -14,7 +14,27 @@ export default function ValueAddedServices() {
   const [service, setService] = useState("");
   const [type, setType] = useState("B2B");
 
-  const [AllLocation, setAllLocations] = useState([]);
+  const [AllLocation, setAllLocations] = useState([{
+         id: 1,
+          name: "chennai",
+          // Keep extra fields for potential future use
+          stateName: "Tamil Nadu",
+          districtName: "chennai",
+      },
+      {
+         id: 2,
+          name: "trichy",
+          // Keep extra fields for potential future use
+          stateName: "Tamil Nadu",
+          districtName: "chennai",
+      },
+      {
+         id: 3,
+          name: "coimbatore",
+          // Keep extra fields for potential future use
+          stateName: "Tamil Nadu",
+          districtName: "chennai",
+      }]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);

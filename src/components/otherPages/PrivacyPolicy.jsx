@@ -3,15 +3,15 @@ import { Link } from "react-router-dom";
 
 export default function PrivacyPolicy() {
   return (
-    <section className="flat-section" style={{ padding: '80px 0', backgroundColor: '#f8f9fa' }}>
+    <section className="flat-section" style={{ padding: '80px 0'}}>
       <style>{`
         .privacy-container {
-          max-width: 900px;
+          {/* max-width: 900px; */}
           margin: 0 auto;
           padding: 0 20px;
         }
         .privacy-header {
-          text-align: center;
+          text-align: left;
           margin-bottom: 50px;
         }
         .privacy-header h1 {
@@ -25,19 +25,19 @@ export default function PrivacyPolicy() {
           font-size: 18px;
           color: #666;
           line-height: 1.8;
-          max-width: 800px;
+          {/* max-width: 800px; */}
           margin: 0 auto;
         }
         .privacy-content {
           background: white;
-          padding: 50px;
+          padding: 0 0 50px ;
           border-radius: 12px;
-          box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+          {/* box-shadow: 0 2px 12px rgba(0,0,0,0.08); */}
         }
         .privacy-section {
           margin-bottom: 35px;
-          padding-bottom: 30px;
-          border-bottom: 1px solid #e5e5e5;
+          {/* padding-bottom: 30px; */}
+          {/* border-bottom: 1px solid #e5e5e5; */}
         }
         .privacy-section:last-child {
           border-bottom: none;
@@ -47,14 +47,14 @@ export default function PrivacyPolicy() {
         .privacy-section h2 {
           font-size: 24px;
           font-weight: 700;
-          color: #008ff7;
+          {/* color: #008ff7; */}
           margin-bottom: 16px;
         }
         .privacy-section p,
         .privacy-section li {
           font-size: 16px;
           line-height: 1.8;
-          color: #4a4a4a;
+          {/* color: #4a4a4a; */}
           margin-bottom: 12px;
         }
         .privacy-section ul {
@@ -68,7 +68,7 @@ export default function PrivacyPolicy() {
         }
         .privacy-section ul li:before {
           content: "•";
-          color: #008ff7;
+          {/* color: #008ff7; */}
           font-weight: bold;
           position: absolute;
           left: 0;
@@ -97,14 +97,14 @@ export default function PrivacyPolicy() {
             font-size: 32px;
           }
           .privacy-content {
-            padding: 30px 20px;
+            padding: 30px 0px;
           }
           .privacy-section h2 {
             font-size: 20px;
           }
         }
       `}</style>
-      <div className="container">
+      <div className="container" style={{ backgroundColor: '#fff'}}>
         <div className="privacy-container">
           <div className="privacy-header">
             <h1>Privacy Policy</h1>
@@ -187,7 +187,7 @@ export default function PrivacyPolicy() {
             </div>
           </div>
 
-          <div className="cta-section">
+          {/* <div className="cta-section">
             <Link
               to={`/contact`}
               className="tf-btn btn-view primary hover-btn-view"
@@ -204,7 +204,7 @@ export default function PrivacyPolicy() {
               Contact Us
               <span className="icon icon-arrow-right2"></span>
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

@@ -122,7 +122,7 @@ export default function MyProperty() {
   }
 
 
-  const handleDeleteProperty = async (id) => {
+  const handleDeleteProperty = async (id ) => {
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
     if (landsUser) {
@@ -447,7 +447,7 @@ export default function MyProperty() {
                             </a>
                           </li>
                           <li>
-                            <a className="item" onClick={() => { handleDelete(elm.id, 'Sold') }} >
+                            <a className="item" onClick={() => { handleStatusUpdate(elm.id, 'Sold') }} >
                               <svg
                                 width={16}
                                 height={16}
@@ -517,7 +517,7 @@ export default function MyProperty() {
         </div>
       )}
       <div className="footer-dashboard">
-        <p>Copyright © 2024 Lands India</p>
+        <p>Copyright © 2025 i5property stars</p>
       </div>
     </div>
   );

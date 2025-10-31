@@ -2340,7 +2340,7 @@ export default function MyProfile() {
         </div>
       </div>
       <div className="footer-dashboard">
-        <p>Copyright © 2024 Lands India</p>
+        <p>Copyright © 2025 i5property stars</p>
       </div>
     </div>
   );

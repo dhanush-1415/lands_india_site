@@ -566,7 +566,7 @@ export const createNewProperty = async (data) => {
 
   // Fetch options
   const options = {
-    method: 'PUT',
+    method: 'POST',
     body: formData,
   };
 

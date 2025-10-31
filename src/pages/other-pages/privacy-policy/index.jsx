@@ -14,7 +14,7 @@ export default function PrivacyPolicyPage() {
     <>
       <MetaComponent meta={metadata} />
       {/* <Header1 /> */}
-      <PageTitle5 />
+      {/* <PageTitle5 /> */}
       <PrivacyPolicy />
       <Footer1 />
     </>

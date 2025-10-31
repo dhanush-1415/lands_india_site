@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 
 export default function About() {
   return (
-    <section className="flat-section" style={{ padding: '80px 0', backgroundColor: '#f8f9fa' }}>
+    <section className="flat-section" style={{ padding: '80px 0' }}>
       <style>{`
         .about-container {
-          max-width: 900px;
+          {/* max-width: 900px; */}
           margin: 0 auto;
           padding: 0 20px;
         }
@@ -65,18 +65,18 @@ export default function About() {
         }
         .content-section {
           background: white;
-          padding: 40px;
+          padding: 40px 40px 0px;
           border-radius: 12px;
-          box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-          margin-bottom: 30px;
+          {/* box-shadow: 0 2px 12px rgba(0,0,0,0.08); */}
+          {/* margin-bottom: 30px; */}
         }
         .content-section h2 {
           font-size: 28px;
           font-weight: 700;
           color: #1a1a1a;
-          margin-bottom: 20px;
-          padding-bottom: 12px;
-          border-bottom: 3px solid #008ff7;
+          {/* margin-bottom: 20px; */}
+          {/* padding-bottom: 12px; */}
+          {/* border-bottom: 3px solid #008ff7; */}
         }
         .content-section p {
           font-size: 16px;
@@ -106,11 +106,11 @@ export default function About() {
           }
         }
       `}</style>
-      <div className="container">
+      <div className="container" style={{backgroundColor: "#fff"}}>
         <div className="about-container">
           <div className="about-header">
             <h1>About Us</h1>
-            <div className="company-name">PropertyStores.in</div>
+            <div className="company-name">www.i5propertystars.com</div>
             <div className="tagline">Guided...Caring...Trusted</div>
             <div className="since">Unit of Lands India Group - Since 2012</div>
             
@@ -130,7 +130,7 @@ export default function About() {
             </div>
           </div>
 
-          <div className="content-section">
+          <div className="content-section" style={{paddingTop: '0'}}>
             <h2>Who We Are</h2>
             <p>
               Welcome to Propertystores.in, your trusted real estate partner. As part of the Lands India Group, we bring a revolutionary approach to real estate with a seamless integration of technology and human expertise. Our platform is designed to simplify real estate transactions, ensuring 100% verified properties and buyers while providing legally sound properties for a stress-free experience.
@@ -157,7 +157,7 @@ export default function About() {
             </p>
           </div>
 
-          <div className="cta-section">
+          {/* <div className="cta-section">
             <Link
               to={`/contact`}
               className="tf-btn btn-view primary hover-btn-view"
@@ -174,7 +174,7 @@ export default function About() {
               Contact Us
               <span className="icon icon-arrow-right2"></span>
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

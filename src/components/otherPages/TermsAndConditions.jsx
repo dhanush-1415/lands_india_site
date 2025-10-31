@@ -3,15 +3,15 @@ import { Link } from "react-router-dom";
 
 export default function TermsAndConditions() {
   return (
-    <section className="flat-section" style={{ padding: '80px 0', backgroundColor: '#f8f9fa' }}>
+    <section className="flat-section" style={{ padding: '80px 0' }}>
       <style>{`
         .terms-container {
-          max-width: 900px;
+          {/* max-width: 900px; */}
           margin: 0 auto;
           padding: 0 20px;
         }
         .terms-header {
-          text-align: center;
+          text-align: left;
           margin-bottom: 50px;
         }
         .terms-header h1 {
@@ -25,19 +25,19 @@ export default function TermsAndConditions() {
           font-size: 18px;
           color: #666;
           line-height: 1.8;
-          max-width: 800px;
+          {/* max-width: 800px; */}
           margin: 0 auto;
         }
         .terms-content {
           background: white;
-          padding: 50px;
+          padding: 0px 0px 0;
           border-radius: 12px;
-          box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+          {/* box-shadow: 0 2px 12px rgba(0,0,0,0.08); */}
         }
         .terms-section {
           margin-bottom: 35px;
-          padding-bottom: 30px;
-          border-bottom: 1px solid #e5e5e5;
+          padding-bottom: 0px;
+          {/* border-bottom: 1px solid #e5e5e5; */}
         }
         .terms-section:last-child {
           border-bottom: none;
@@ -47,14 +47,14 @@ export default function TermsAndConditions() {
         .terms-section h2 {
           font-size: 24px;
           font-weight: 700;
-          color: #008ff7;
+          {/* color: #008ff7; */}
           margin-bottom: 16px;
         }
         .terms-section p,
         .terms-section li {
           font-size: 16px;
           line-height: 1.8;
-          color: #4a4a4a;
+          {/* color: #4a4a4a; */}
           margin-bottom: 12px;
         }
         .terms-section ul {
@@ -68,7 +68,7 @@ export default function TermsAndConditions() {
         }
         .terms-section ul li:before {
           content: "•";
-          color: #008ff7;
+          {/* color: #008ff7; */}
           font-weight: bold;
           position: absolute;
           left: 0;
@@ -102,7 +102,7 @@ export default function TermsAndConditions() {
           }
         }
       `}</style>
-      <div className="container">
+      <div className="container" style={{backgroundColor: "#fff"}}>
         <div className="terms-container">
           <div className="terms-header">
             <h1>Terms and Conditions</h1>
@@ -155,7 +155,7 @@ export default function TermsAndConditions() {
             </div>
           </div>
 
-          <div className="cta-section">
+          {/* <div className="cta-section">
             <Link
               to={`/contact`}
               className="tf-btn btn-view primary hover-btn-view"
@@ -172,7 +172,7 @@ export default function TermsAndConditions() {
               Contact Us
               <span className="icon icon-arrow-right2"></span>
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

@@ -16,7 +16,7 @@ import React from "react";
 
 import MetaComponent from "@/components/common/MetaComponent";
 const metadata = {
-  title: "Lands India",
+  title: "i5property stars",
   description: "Homelengo - Real Estate Reactjs Template",
 };
 export default function HomePage5() {

@@ -36,7 +36,30 @@ export default function FilterTab({
 
 
 
-  const [AllLocation, setAllLocations] = useState([]);
+  const [AllLocation, setAllLocations] = useState(
+    [
+      {
+         id: 1,
+          name: "chennai",
+          // Keep extra fields for potential future use
+          stateName: "Tamil Nadu",
+          districtName: "chennai",
+      },
+      {
+         id: 2,
+          name: "trichy",
+          // Keep extra fields for potential future use
+          stateName: "Tamil Nadu",
+          districtName: "chennai",
+      },
+      {
+         id: 3,
+          name: "coimbatore",
+          // Keep extra fields for potential future use
+          stateName: "Tamil Nadu",
+          districtName: "chennai",
+      }
+    ]);
   const [isLocationLoading, setIsLocationLoading] = useState(false);
 
   // Fetch cities/locations from API - memoized to prevent unnecessary re-renders

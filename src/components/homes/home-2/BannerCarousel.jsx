@@ -207,12 +207,12 @@ export default function BottomCarousel() {
                                 )}
                             </div>
                         ))}
+                    </Slider>
                         {events.length === 0 && (
-                            <div style={{ textAlign: 'center', padding: '100px 0' }}>
+                            <div style={{width: "100%", padding: '100px 0', display: "flex", justifyContent: "center" }}>
                                 No events available.
                             </div>
                         )}
-                    </Slider>
                 </div>
             </div>
         </section>

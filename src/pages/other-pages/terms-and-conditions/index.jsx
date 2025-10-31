@@ -14,7 +14,7 @@ export default function TermsAndConditionsPage() {
     <>
       <MetaComponent meta={metadata} />
       {/* <Header1 /> */}
-      <PageTitle5 title="Terms and Conditions" breadcrumb="Terms and Conditions" />
+      {/* <PageTitle5 title="Terms and Conditions" breadcrumb="Terms and Conditions" /> */}
       <TermsAndConditions />
       <Footer1 />
     </>
