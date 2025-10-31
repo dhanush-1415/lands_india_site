@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DropdownSelect from "../common/DropdownSelect";
+import CityDropdownSelect from "../common/CustomCityDropdownSelect";
 import { Link } from "react-router-dom";
 import AttachEmailSharpIcon from '@mui/icons-material/AttachEmailSharp';
 import CallIcon from '@mui/icons-material/Call';
@@ -9,7 +10,7 @@ import Pagination from "../common/Pagination";
 import Slider from "rc-slider";
 import { allProperties, featureOptions, projectData, indvidualData, props } from "@/data/properties";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { getCategories, getProperties, getUserWishList, updateWishlist, getAllLocation } from "@/apiCalls";
+import { getCategories, getProperties, getUserWishList, updateWishlist } from "@/apiCalls";
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import DraftsTwoToneIcon from '@mui/icons-material/DraftsTwoTone';
@@ -166,30 +167,44 @@ export default function Properties4() {
 
   const [AllLocation, setAllLocations] = useState([]);
 
-  const fetchLocation = async () => {
+  // Fetch cities/locations from India Location Hub API
+  const fetchLocation = async (query = "a") => {
     try {
-      const data = await getAllLocation();
+      const resp = await fetch(`https://india-location-hub.in/api/search?q=${encodeURIComponent(query)}`);
+      const data = await resp.json();
 
-      if (data.success) {
-        const formattedLocations = data.locations
-          .filter(location => location)
-          .map((location, index) => ({
-            id: index + 1,
-            name: location.trim(),
-          }));
+      if (data?.success && Array.isArray(data?.results)) {
+        // Deduplicate by name and keep display-friendly name
+        const uniqueNames = Array.from(
+          new Map(
+            data.results
+              .filter((r) => typeof r?.name === "string" && r.name.trim().length > 0)
+              .map((r) => [r.name.trim(), r])
+          ).values()
+        );
+
+        const formattedLocations = uniqueNames.map((location, index) => ({
+          id: index + 1,
+          name: location.name.trim(),
+          // Keep extra fields for potential future use
+          stateName: location.state_name,
+          districtName: location.district_name,
+          talukaName: location.taluka_name,
+          fullPath: location.full_path,
+          uniqueCode: location.unique_code,
+          type: location.type,
+        }));
 
         setAllLocations(formattedLocations);
-        console.log(formattedLocations);
-      } else {
-        // toast.error(data.message);
       }
     } catch (err) {
-      console.error('Error fetching Location:', err);
+      console.error("Error fetching Location:", err);
     }
   };
 
   useEffect(() => {
-    fetchLocation()
+    // Seed with a broad query to populate initial options
+    fetchLocation("a");
   }, [])
 
   const fetchAllProperties = async () => {
@@ -544,14 +559,19 @@ export default function Properties4() {
                               </div>
                               <div className="form-style">
                                 <div className="group-select" style={{ borderBottom: '1px solid #e4e4e4' }}>
-                                  <DropdownSelect
-                                    options={["Location", ...(AllLocation?.map((loc) => loc.name) || [])]}
-                                    defaultOption={locationFilter}
-                                    onChange={(locationFilter) => {
-                                      const location = AllLocation.find((loc) => loc.name === locationFilter);
-                                      handleLocationChange(location);
+                                  <CityDropdownSelect
+                                    style={{ border: 'none', minWidth: '220px' }}
+                                    searchable={true}
+                                    placeholder="Search location..."
+                                    options={[...(AllLocation?.map((item) => item.name) || [])]}
+                                    onSearchChange={(term) => {
+                                      const q = term && term.trim().length > 0 ? term.trim() : "a";
+                                      fetchLocation(q);
                                     }}
-                                    style={{ border: 'none' }}
+                                    onChange={(locationName) => {
+                                      const item = AllLocation.find((cat) => cat.name === locationName);
+                                      handleLocationChange(item || { name: locationName });
+                                    }}
                                   />
                                 </div>
                               </div>

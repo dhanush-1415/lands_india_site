@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import DropdownSelect from "./CustomDropdownSelect";
+import CityDropdownSelect from "./CustomCityDropdownSelect";
 import AdvanceSearch from "./AdvanceSearch";
-import { getAllLocation } from "@/apiCalls";
 
 export default function FilterTab({
   tabClass = "nav-tab-form style-1 justify-content-start",
@@ -37,30 +37,44 @@ export default function FilterTab({
 
   const [AllLocation, setAllLocations] = useState([]);
 
-  const fetchLocation = async () => {
+  // Fetch cities/locations from India Location Hub API
+  const fetchLocation = async (query = "a") => {
     try {
-      const data = await getAllLocation();
+      const resp = await fetch(`https://india-location-hub.in/api/search?q=${encodeURIComponent(query)}`);
+      const data = await resp.json();
 
-      if (data.success) {
-        const formattedLocations = data.locations
-          .filter(location => location)
-          .map((location, index) => ({
-            id: index + 1,
-            name: location.trim(),
-          }));
+      if (data?.success && Array.isArray(data?.results)) {
+        // Deduplicate by name and keep display-friendly name
+        const uniqueNames = Array.from(
+          new Map(
+            data.results
+              .filter((r) => typeof r?.name === "string" && r.name.trim().length > 0)
+              .map((r) => [r.name.trim(), r])
+          ).values()
+        );
+
+        const formattedLocations = uniqueNames.map((location, index) => ({
+          id: index + 1,
+          name: location.name.trim(),
+          // Keep extra fields for potential future use
+          stateName: location.state_name,
+          districtName: location.district_name,
+          talukaName: location.taluka_name,
+          fullPath: location.full_path,
+          uniqueCode: location.unique_code,
+          type: location.type,
+        }));
 
         setAllLocations(formattedLocations);
-        console.log(formattedLocations);
-      } else {
-        // toast.error(data.message);
       }
     } catch (err) {
-      console.error('Error fetching Location:', err);
+      console.error("Error fetching Location:", err);
     }
   };
 
   useEffect(() => {
-    fetchLocation()
+    // Seed with a broad query to populate initial options
+    fetchLocation("a");
   }, [])
 
   const budgetOptions = [
@@ -422,12 +436,18 @@ export default function FilterTab({
                     </div>
                   </div>
                   <div className="form-group-2 form-style custom-search-field mediatabSpacing">
-                    <DropdownSelect
-                      style={{ paddingTop: '0px' }}
-                      options={["Location", ...(AllLocation?.map((item) => item.name) || [])]} // Prepend "All" to the options
-                      onChange={(location) => {
-                        const item = AllLocation.find((cat) => cat.name === location);
-                        setLocation(item);
+                    <CityDropdownSelect
+                      style={{ paddingTop: '0px', minWidth: '220px' }}
+                      searchable={true}
+                      placeholder="Search location..."
+                      options={[...(AllLocation?.map((item) => item.name) || [])]}
+                      onSearchChange={(term) => {
+                        const q = term && term.trim().length > 0 ? term.trim() : "a";
+                        fetchLocation(q);
+                      }}
+                      onChange={(locationName) => {
+                        const item = AllLocation.find((cat) => cat.name === locationName);
+                        setLocation(item || { name: locationName });
                       }}
                     />
                   </div>
