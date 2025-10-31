@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DropdownSelect from "../common/DropdownSelect";
 import CityDropdownSelect from "../common/CustomCityDropdownSelect";
 import { Link } from "react-router-dom";
@@ -10,7 +10,7 @@ import Pagination from "../common/Pagination";
 import Slider from "rc-slider";
 import { allProperties, featureOptions, projectData, indvidualData, props } from "@/data/properties";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { getCategories, getProperties, getUserWishList, updateWishlist } from "@/apiCalls";
+import { getCategories, getProperties, getUserWishList, updateWishlist, searchCity } from "@/apiCalls";
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import DraftsTwoToneIcon from '@mui/icons-material/DraftsTwoTone';
@@ -166,12 +166,13 @@ export default function Properties4() {
   };
 
   const [AllLocation, setAllLocations] = useState([]);
+  const [isLocationLoading, setIsLocationLoading] = useState(false);
 
-  // Fetch cities/locations from India Location Hub API
-  const fetchLocation = async (query = "a") => {
+  // Fetch cities/locations from API - memoized to prevent unnecessary re-renders
+  const fetchLocation = useCallback(async (query = "a") => {
+    setIsLocationLoading(true);
     try {
-      const resp = await fetch(`https://india-location-hub.in/api/search?q=${encodeURIComponent(query)}`);
-      const data = await resp.json();
+      const data = await searchCity(query);
 
       if (data?.success && Array.isArray(data?.results)) {
         // Deduplicate by name and keep display-friendly name
@@ -199,13 +200,21 @@ export default function Properties4() {
       }
     } catch (err) {
       console.error("Error fetching Location:", err);
+    } finally {
+      setIsLocationLoading(false);
     }
-  };
+  }, []);
+
+  // Memoized callback for search changes
+  const handleSearchChange = useCallback((term) => {
+    const q = term && term.trim().length > 0 ? term.trim() : "a";
+    fetchLocation(q);
+  }, [fetchLocation]);
 
   useEffect(() => {
     // Seed with a broad query to populate initial options
     fetchLocation("a");
-  }, [])
+  }, [fetchLocation])
 
   const fetchAllProperties = async () => {
     setLoading(true);
@@ -564,10 +573,8 @@ export default function Properties4() {
                                     searchable={true}
                                     placeholder="Search location..."
                                     options={[...(AllLocation?.map((item) => item.name) || [])]}
-                                    onSearchChange={(term) => {
-                                      const q = term && term.trim().length > 0 ? term.trim() : "a";
-                                      fetchLocation(q);
-                                    }}
+                                    onSearchChange={handleSearchChange}
+                                    isLoading={isLocationLoading}
                                     onChange={(locationName) => {
                                       const item = AllLocation.find((cat) => cat.name === locationName);
                                       handleLocationChange(item || { name: locationName });

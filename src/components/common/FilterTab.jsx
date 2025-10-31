@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import DropdownSelect from "./CustomDropdownSelect";
 import CityDropdownSelect from "./CustomCityDropdownSelect";
 import AdvanceSearch from "./AdvanceSearch";
+import { searchCity } from "@/apiCalls";
 
 export default function FilterTab({
   tabClass = "nav-tab-form style-1 justify-content-start",
@@ -36,12 +37,13 @@ export default function FilterTab({
 
 
   const [AllLocation, setAllLocations] = useState([]);
+  const [isLocationLoading, setIsLocationLoading] = useState(false);
 
-  // Fetch cities/locations from India Location Hub API
-  const fetchLocation = async (query = "a") => {
+  // Fetch cities/locations from API - memoized to prevent unnecessary re-renders
+  const fetchLocation = useCallback(async (query = "a") => {
+    setIsLocationLoading(true);
     try {
-      const resp = await fetch(`https://india-location-hub.in/api/search?q=${encodeURIComponent(query)}`);
-      const data = await resp.json();
+      const data = await searchCity(query);
 
       if (data?.success && Array.isArray(data?.results)) {
         // Deduplicate by name and keep display-friendly name
@@ -69,13 +71,21 @@ export default function FilterTab({
       }
     } catch (err) {
       console.error("Error fetching Location:", err);
+    } finally {
+      setIsLocationLoading(false);
     }
-  };
+  }, []);
+
+  // Memoized callback for search changes
+  const handleSearchChange = useCallback((term) => {
+    const q = term && term.trim().length > 0 ? term.trim() : "a";
+    fetchLocation(q);
+  }, [fetchLocation]);
 
   useEffect(() => {
     // Seed with a broad query to populate initial options
     fetchLocation("a");
-  }, [])
+  }, [fetchLocation])
 
   const budgetOptions = [
     { label: "Below 5Lakhs", minValue: 0, maxValue: 500000 },
@@ -441,10 +451,8 @@ export default function FilterTab({
                       searchable={true}
                       placeholder="Search location..."
                       options={[...(AllLocation?.map((item) => item.name) || [])]}
-                      onSearchChange={(term) => {
-                        const q = term && term.trim().length > 0 ? term.trim() : "a";
-                        fetchLocation(q);
-                      }}
+                      onSearchChange={handleSearchChange}
+                      isLoading={isLocationLoading}
                       onChange={(locationName) => {
                         const item = AllLocation.find((cat) => cat.name === locationName);
                         setLocation(item || { name: locationName });

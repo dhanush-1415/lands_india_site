@@ -3,94 +3,173 @@ import { Link } from "react-router-dom";
 
 export default function About() {
   return (
-    <section className="flat-section">
-      <div className="container flat-header-wrapper-about">
-        <div className="row justify-content-center">
-          <div className="col-lg-8 text-center">
-            <h1 className="title">About Us</h1>
-            <h2 className="text-variant-1">PropertyStores.in</h2>
-            <p className="text-variant-1 desc">Guided...Caring...Trusted</p>
-            <p className="text-variant-1 desc">Unit of Lands India Group - Since 2012</p>
-            <ul className="text-variant-1 desc list-unstyled">
-              <li>100% verified properties</li>
-              <li>100% verified buyers</li>
-              <li>100yrs legal properties</li>
-            </ul>
-            <p className="text-variant-1 desc">
+    <section className="flat-section" style={{ padding: '80px 0', backgroundColor: '#f8f9fa' }}>
+      <style>{`
+        .about-container {
+          max-width: 900px;
+          margin: 0 auto;
+          padding: 0 20px;
+        }
+        .about-header {
+          text-align: center;
+          margin-bottom: 60px;
+        }
+        .about-header h1 {
+          font-size: 48px;
+          font-weight: 700;
+          color: #1a1a1a;
+          margin-bottom: 16px;
+          line-height: 1.2;
+        }
+        .about-header .company-name {
+          font-size: 32px;
+          font-weight: 600;
+          color: #008ff7;
+          margin-bottom: 12px;
+        }
+        .about-header .tagline {
+          font-size: 18px;
+          color: #666;
+          margin-bottom: 8px;
+          font-weight: 500;
+        }
+        .about-header .since {
+          font-size: 16px;
+          color: #999;
+          margin-bottom: 30px;
+        }
+        .features-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 24px;
+          margin: 40px 0;
+        }
+        .feature-item {
+          background: white;
+          padding: 24px;
+          border-radius: 8px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+          text-align: center;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-item:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+        .feature-item strong {
+          display: block;
+          font-size: 18px;
+          color: #008ff7;
+          margin-bottom: 8px;
+          font-weight: 600;
+        }
+        .content-section {
+          background: white;
+          padding: 40px;
+          border-radius: 12px;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+          margin-bottom: 30px;
+        }
+        .content-section h2 {
+          font-size: 28px;
+          font-weight: 700;
+          color: #1a1a1a;
+          margin-bottom: 20px;
+          padding-bottom: 12px;
+          border-bottom: 3px solid #008ff7;
+        }
+        .content-section p {
+          font-size: 16px;
+          line-height: 1.8;
+          color: #4a4a4a;
+          margin-bottom: 20px;
+        }
+        .content-section p:last-child {
+          margin-bottom: 0;
+        }
+        .cta-section {
+          text-align: center;
+          margin-top: 50px;
+        }
+        @media (max-width: 768px) {
+          .about-header h1 {
+            font-size: 36px;
+          }
+          .about-header .company-name {
+            font-size: 24px;
+          }
+          .content-section {
+            padding: 24px;
+          }
+          .features-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
+      <div className="container">
+        <div className="about-container">
+          <div className="about-header">
+            <h1>About Us</h1>
+            <div className="company-name">PropertyStores.in</div>
+            <div className="tagline">Guided...Caring...Trusted</div>
+            <div className="since">Unit of Lands India Group - Since 2012</div>
+            
+            <div className="features-grid">
+              <div className="feature-item">
+                <strong>100% Verified Properties</strong>
+                <span>Authenticated listings</span>
+              </div>
+              <div className="feature-item">
+                <strong>100% Verified Buyers</strong>
+                <span>Trusted users</span>
+              </div>
+              <div className="feature-item">
+                <strong>100 Years Legal Properties</strong>
+                <span>Legally sound deals</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="content-section">
+            <h2>Who We Are</h2>
+            <p>
               Welcome to Propertystores.in, your trusted real estate partner. As part of the Lands India Group, we bring a revolutionary approach to real estate with a seamless integration of technology and human expertise. Our platform is designed to simplify real estate transactions, ensuring 100% verified properties and buyers while providing legally sound properties for a stress-free experience.
             </p>
-            <p className="text-variant-1 desc">
+            <p>
               At Property Stores, we cater to a diverse audience, including individual property buyers, project developers, and investors. Our comprehensive suite of services includes property listings, premium rental solutions, real estate event management, and value-added services, all designed to meet the dynamic needs of the real estate industry.
             </p>
-            <p className="text-variant-1 desc">
-              Our commitment is to Building Trust and Simplifying Real Estate, making property transactions transparent, efficient, and rewarding for all stakeholders.
+            <p>
+              Our commitment is to <strong>Building Trust and Simplifying Real Estate</strong>, making property transactions transparent, efficient, and rewarding for all stakeholders.
             </p>
-            <h2 className="title">Our Mission</h2>
-            <p className="text-variant-1 desc">
+          </div>
+
+          <div className="content-section">
+            <h2>Our Mission</h2>
+            <p>
               To transform real estate buying and selling with the right mix of digital technology and human interventions.
             </p>
-            <h2 className="title">Our Vision</h2>
-            <p className="text-variant-1 desc">
+          </div>
+
+          <div className="content-section">
+            <h2>Our Vision</h2>
+            <p>
               To unite all real estate entities under one roof, creating an India-based real estate network that is trusted and provides amazing human experiences.
             </p>
-            <h2 className="title">Terms and Conditions</h2>
-            <p className="text-variant-1 desc">
-              Welcome to Propertystores.in. By using our website, you agree to comply with the following terms and conditions. If you do not agree with any part of these terms, please do not use our services.
-            </p>
-            <ol className="text-variant-1 desc">
-              <li><strong>General Terms</strong><br />
-                Eligibility: You must be at least 18 years old to use our platform.<br />
-                User Responsibility: Users must provide accurate and lawful information. Any fraudulent activity may lead to account suspension.<br />
-                Service Modifications: We reserve the right to modify or discontinue any service without prior notice.
-              </li>
-              <li><strong>Property Listings and Verification</strong><br />
-                Property Stores ensures that all listed properties undergo a verification process to maintain authenticity.
-              </li>
-              <li><strong>Limitation of Liability</strong><br />
-                Property Stores shall not be liable for any direct, indirect, incidental, or consequential damages resulting from the use of our platform.
-              </li>
-              <li><strong>Termination of Services</strong><br />
-                We reserve the right to suspend or terminate accounts found in violation of our policies.
-              </li>
-            </ol>
-            <p className="text-variant-1 desc">
-              By using our services, you acknowledge that you have read and agree to these terms.
-            </p>
-            <h2 className="title">Privacy Policy</h2>
-            <p className="text-variant-1 desc">
-              At Propertystores.in, we value your privacy and are committed to protecting your personal information. This Privacy Policy explains how we collect, use, and protect your data.
-            </p>
-            <ol className="text-variant-1 desc">
-              <li><strong>Information We Collect</strong><br />
-                Personal Information: Name, contact details, email, and property preferences.<br />
-                Usage Data: Information on how you interact with our website.
-              </li>
-              <li><strong>How We Use Your Information</strong><br />
-                To provide and improve our services.<br />
-                To communicate with users regarding property listings and updates.<br />
-                To ensure compliance with legal and regulatory obligations.
-              </li>
-              <li><strong>Data Protection</strong><br />
-                We implement advanced security measures to protect user data.<br />
-                User data is not sold or shared with third parties except for service fulfillment.
-              </li>
-              <li><strong>Cookies and Tracking Technologies</strong><br />
-                We use cookies to enhance user experience and analyze website traffic.<br />
-                Users can manage cookie preferences through their browser settings.
-              </li>
-              <li><strong>Your Rights</strong><br />
-                Users can request access to their data or opt out of marketing communications at any time.
-              </li>
-              <li><strong>Updates to Privacy Policy</strong><br />
-                We may update this policy periodically. Users are advised to review this page for any changes.
-              </li>
-            </ol>
-            <p className="text-variant-1 desc">
-              For any privacy-related queries, contact us at admin@propertystores.in.
-            </p>
+          </div>
+
+          <div className="cta-section">
             <Link
               to={`/contact`}
               className="tf-btn btn-view primary hover-btn-view"
+              style={{
+                padding: '14px 32px',
+                fontSize: '16px',
+                fontWeight: '600',
+                borderRadius: '8px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}
             >
               Contact Us
               <span className="icon icon-arrow-right2"></span>

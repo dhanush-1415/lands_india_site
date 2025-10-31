@@ -233,10 +233,10 @@ const Footer1 = () => {
           }}
         >
           <Box>
-            <Link href="#" color="inherit" underline="hover" sx={{ mr: 2 }}>
+            <Link href="/terms-and-conditions" color="inherit" underline="hover" sx={{ mr: 2 }}>
               Terms and Conditions
             </Link>
-            <Link href="#" color="inherit" underline="hover">
+            <Link href="/privacy-policy" color="inherit" underline="hover">
               Privacy Policy
             </Link>
           </Box>

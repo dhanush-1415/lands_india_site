@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-export default function PageTitle5() {
+export default function PageTitle5({ title = "Privacy Policy", breadcrumb = "Privacy Policy" }) {
   return (
     <section
       className="flat-title-page"
@@ -15,9 +15,9 @@ export default function PageTitle5() {
               </Link>
             </li>
             <li className="text-white">/ Pages</li>
-            <li className="text-white">/ Privacy Policy</li>
+            <li className="text-white">/ {breadcrumb}</li>
           </ul>
-          <h1 className="text-center text-white title">Privacy Policy</h1>
+          <h1 className="text-center text-white title">{title}</h1>
         </div>
       </div>
     </section>

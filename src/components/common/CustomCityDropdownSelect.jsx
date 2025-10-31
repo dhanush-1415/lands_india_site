@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function CustomCityDropdownSelect({
   options = [],
@@ -9,6 +10,7 @@ export default function CustomCityDropdownSelect({
   onSearchChange = () => {},
   searchable = true,
   defaultOption,
+  isLoading = false,
 }) {
   const selectRef = useRef();
   const inputRef = useRef();
@@ -46,13 +48,23 @@ export default function CustomCityDropdownSelect({
     };
   }, []);
 
-  // Debounce query for API calls
+  // Debounce query for API calls - only when user types
   useEffect(() => {
     if (!searchable || !isOpen) return;
-    const q = query && query.trim().length > 0 ? query.trim() : "a";
-    const id = setTimeout(() => onSearchChange(q), 250);
+    
+    // Only make API call if query has at least 2 characters or is empty (for initial load)
+    const trimmedQuery = query.trim();
+    if (trimmedQuery.length === 0) return; // Don't call API for empty query
+    
+    const id = setTimeout(() => {
+      if (trimmedQuery.length >= 1) {
+        onSearchChange(trimmedQuery);
+      }
+    }, 300); // Increased debounce to 300ms
+    
     return () => clearTimeout(id);
-  }, [query, onSearchChange, searchable, isOpen]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, searchable, isOpen]); // Removed onSearchChange from deps to prevent re-triggers
 
   const visibleOptions = useMemo(() => {
     if (!searchable) return options;
@@ -140,6 +152,12 @@ export default function CustomCityDropdownSelect({
               background: #f1f6ff;
               color: #008ff7;
             }
+            .city-loader {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: 12px;
+            }
           `}
         </style>
         <span onClick={toggleDropdown} className="custom-current">
@@ -162,7 +180,11 @@ export default function CustomCityDropdownSelect({
           )}
         </span>
         <ul className="list" ref={listRef}>
-          {visibleOptions?.length ? (
+          {isLoading ? (
+            <li className="option city-loader">
+              <CircularProgress size={18} sx={{ color: '#008ff7' }} />
+            </li>
+          ) : visibleOptions?.length ? (
             visibleOptions.map((elm, i) => (
               <li
                 key={`${elm}-${i}`}

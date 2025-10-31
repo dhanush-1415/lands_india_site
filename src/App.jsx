@@ -32,6 +32,7 @@ import PricingPage from "./pages/other-pages/pricing";
 import ContactPage from "./pages/other-pages/contact";
 import FaqPage from "./pages/other-pages/faq";
 import PrivacyPolicyPage from "./pages/other-pages/privacy-policy";
+import TermsAndConditionsPage from "./pages/other-pages/terms-and-conditions";
 import BlogPage from "./pages/blogs/blog";
 import BlogGridPage from "./pages/blogs/blog-grid";
 import BlogDetailsPage from "./pages/blogs/blog-detail";
@@ -158,6 +159,7 @@ function App() {
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/faq" element={<FaqPage />} />
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="/terms-and-conditions" element={<TermsAndConditionsPage />} />
 
               <Route path="blog" element={<BlogPage />} />
               <Route path="blog-detail/:id" element={<BlogDetailsPage />} />

@@ -121,6 +121,28 @@ export const getAllLocation = async () => {
   }
 };
 
+export const searchCity = async (query = "a") => {
+  const url = `${baseUrl}/api/location/search-city?q=${encodeURIComponent(query)}`;
+
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error('Failed to fetch city data');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching city data:', error);
+    throw error;
+  }
+};
+
 
 export const UpdateUser = async (data) => {
   const url = `${baseUrl}/registration/update-user`;
