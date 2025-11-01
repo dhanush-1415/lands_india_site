@@ -1,12 +1,13 @@
 import { agents } from "@/data/agents";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Divider } from "@mui/material";
 import { Button } from "react-bootstrap";
-import { getAgents, getAllLocation } from "@/apiCalls";
+import { getAgents, searchCity } from "@/apiCalls";
 
 import Pagination from "./Pagination";
 import DropdownSelect from "./DropdownSelect";
+import CityDropdownSelect from "./CustomCityDropdownSelect";
 import Footer2 from "../footer/Footer2";
 import CreateAgent from "./CreateAgent";
 import { BorderBottom } from "@mui/icons-material";
@@ -26,29 +27,70 @@ export default function Agents() {
   const [totalPages, setTotalPages] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
-  const [AllLocation, setAllLocations] = useState([]);
+  const [AllLocation, setAllLocations] = useState([
+    {
+      id: 1,
+      name: "chennai",
+      stateName: "Tamil Nadu",
+      districtName: "chennai",
+    },
+    {
+      id: 2,
+      name: "trichy",
+      stateName: "Tamil Nadu",
+      districtName: "chennai",
+    },
+    {
+      id: 3,
+      name: "coimbatore",
+      stateName: "Tamil Nadu",
+      districtName: "chennai",
+    }
+  ]);
+  const [isLocationLoading, setIsLocationLoading] = useState(false);
 
-  const fetchLocation = async () => {
+  // Fetch cities/locations from API - memoized to prevent unnecessary re-renders
+  const fetchLocation = useCallback(async (query = "a") => {
+    setIsLocationLoading(true);
     try {
-      const data = await getAllLocation();
+      const data = await searchCity(query);
 
-      if (data.success) {
-        const formattedLocations = data.locations
-          .filter(location => location)
-          .map((location, index) => ({
-            id: index + 1,
-            name: location.trim(),
-          }));
+      if (data?.success && Array.isArray(data?.results)) {
+        // Deduplicate by name and keep display-friendly name
+        const uniqueNames = Array.from(
+          new Map(
+            data.results
+              .filter((r) => typeof r?.name === "string" && r.name.trim().length > 0)
+              .map((r) => [r.name.trim(), r])
+          ).values()
+        );
+
+        const formattedLocations = uniqueNames.map((location, index) => ({
+          id: index + 1,
+          name: location.name.trim(),
+          // Keep extra fields for potential future use
+          stateName: location.state_name,
+          districtName: location.district_name,
+          talukaName: location.taluka_name,
+          fullPath: location.full_path,
+          uniqueCode: location.unique_code,
+          type: location.type,
+        }));
 
         setAllLocations(formattedLocations);
-        console.log(formattedLocations);
-      } else {
-        // toast.error(data.message);
       }
     } catch (err) {
-      console.error('Error fetching Location:', err);
+      console.error("Error fetching Location:", err);
+    } finally {
+      setIsLocationLoading(false);
     }
-  };
+  }, []);
+
+  // Memoized callback for search changes
+  const handleSearchChange = useCallback((term) => {
+    const q = term && term.trim().length > 0 ? term.trim() : "a";
+    fetchLocation(q);
+  }, [fetchLocation]);
 
 
   useEffect(() => {
@@ -91,8 +133,9 @@ export default function Agents() {
   }, [location, service, currentPage]);
 
   useEffect(() => {
-    fetchLocation()
-  }, [])
+    // Seed with a broad query to populate initial options
+    fetchLocation("a");
+  }, [fetchLocation])
 
 
   const [open, setOpen] = useState(false);
@@ -173,13 +216,17 @@ export default function Agents() {
           </div>
         )}
 
-        <div className="d-flex align-items-center justify-content-end container custom-container-header mt-5">
+        <div className="d-flex align-items-center justify-content-end container  custom-container-header mt-5">
           <div className="custom-drop">
-            <DropdownSelect
-              options={["Location", ...(AllLocation?.map((item) => item.name) || [])]} // Prepend "All" to the options
-              onChange={(location) => {
-                const item = AllLocation.find((cat) => cat.name === location);
-                setLocation(item.name);
+            <CityDropdownSelect
+              searchable={true}
+              placeholder="Search location..."
+              options={[...(AllLocation?.map((item) => item.name) || [])]}
+              onSearchChange={handleSearchChange}
+              isLoading={isLocationLoading}
+              onChange={(locationName) => {
+                const item = AllLocation.find((cat) => cat.name === locationName);
+                setLocation(item?.name || null);
               }}
               style={{ border: 'none', borderBottom: '1px solid gray', borderRadius: '0' }}
             />
@@ -189,8 +236,12 @@ export default function Agents() {
             <DropdownSelect
               options={["Service", ...(realEstateServices?.map((item) => item.name) || [])]} // Prepend "All" to the options
               onChange={(service) => {
-                const item = realEstateServices.find((cat) => cat.name === service);
-                setService(item.name);
+                if (service === "Service") {
+                  setService(null);
+                } else {
+                  const item = realEstateServices.find((cat) => cat.name === service);
+                  setService(item?.name || null);
+                }
               }}
               style={{ border: 'none', borderBottom: '1px solid gray', borderRadius: '0' }}
             />
