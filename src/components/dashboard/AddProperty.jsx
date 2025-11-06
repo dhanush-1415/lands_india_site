@@ -211,13 +211,23 @@ export default function AddProperty() {
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files); // Convert FileList to Array
     const maxFiles = 10 - images.length; // Calculate remaining slots
+    const maxFileSize = 1 * 1024 * 1024; // 1MB in bytes
 
     if (files.length > maxFiles) {
-      alert(`You can only add ${maxFiles} more images.`);
+      toast.error(`You can only add ${maxFiles} more images.`);
       return;
     }
 
-    const newFiles = files.slice(0, maxFiles).map((file, index) => ({
+    // Check file sizes
+    const oversizedFiles = files.filter(file => file.size > maxFileSize);
+    if (oversizedFiles.length > 0) {
+      const oversizedNames = oversizedFiles.map(f => f.name).join(', ');
+      toast.error(`File size exceeds 1MB limit: ${oversizedNames}`);
+      return;
+    }
+
+    const validFiles = files.filter(file => file.size <= maxFileSize).slice(0, maxFiles);
+    const newFiles = validFiles.map((file, index) => ({
       id: `${Date.now()}-${index}`, // Generate a unique ID for each file
       file,
       preview: URL.createObjectURL(file),
@@ -233,8 +243,27 @@ export default function AddProperty() {
 
   const handleDrop = (e) => {
     e.preventDefault();
-    const files = Array.from(e.dataTransfer.files).slice(0, 10 - images.length);
-    files.forEach((file, index) => {
+    const files = Array.from(e.dataTransfer.files);
+    const maxFiles = 10 - images.length;
+    const maxFileSize = 1 * 1024 * 1024; // 1MB in bytes
+
+    if (files.length > maxFiles) {
+      toast.error(`You can only add ${maxFiles} more images.`);
+      setIsDragging(false);
+      return;
+    }
+
+    // Check file sizes
+    const oversizedFiles = files.filter(file => file.size > maxFileSize);
+    if (oversizedFiles.length > 0) {
+      const oversizedNames = oversizedFiles.map(f => f.name).join(', ');
+      toast.error(`File size exceeds 1MB limit: ${oversizedNames}`);
+      setIsDragging(false);
+      return;
+    }
+
+    const validFiles = files.filter(file => file.size <= maxFileSize).slice(0, maxFiles);
+    validFiles.forEach((file, index) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImages((prevImages) => {
@@ -1211,7 +1240,7 @@ export default function AddProperty() {
               </a>
               <p className="file-name fw-5">
                 or drag photos here <br />
-                <span>(Up to {10 - images.length} photos)</span>
+                <span>(Up to {10 - images.length} photos, max 1MB per file)</span>
               </p>
             </div>
           </div>
