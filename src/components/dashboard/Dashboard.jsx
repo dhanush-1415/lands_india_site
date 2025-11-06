@@ -41,10 +41,6 @@ export default function Dashboard() {
     fetchDashboard();
   }, [])
 
-  const handleNav =  () => {
-    window.location.href = "/add-property"
-  }
-
   return (
     <div className="main-content" style={{ width: '100%' }}>
       <style>{`
@@ -78,9 +74,6 @@ export default function Dashboard() {
           <div className="button-show-hide custom-header-text">
             < ArrowCircleLeftIcon sx={{ fontSize: '40px' }} />
             <span className="body-1">Menu</span>
-          </div>
-          <div className="custom-header-text" onClick={handleNav}>
-            <span className="custom-bg-dark">Sell Property</span>
           </div>
         </div>
 
