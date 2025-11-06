@@ -1602,17 +1602,34 @@ const handleSignup = async () => {
                   </div>
 
                 </div>
-                {!isLogin ? (
-                  <div className="custom-mob-bar" onClick={handleDialogOpen}>
-                    <h6 style={{ marginBottom: '0' }}><AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#ffffff', marginRight: '5px' }} />Signup</h6>
-                  </div>
-                ) : (
-                  <div className="custom-mob-bar" onClick={() => { window.location.href = "/dashboard" }}>
-                    <h6 style={{ marginBottom: '0' }}>{userDetails?.image ? (
-                      <img src={userDetails?.image || ""} alt='profile' width="30px" style={{ marginRight: '5px' }} className="custom-image" />
-                    ) : (<AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#ffffff', marginRight: '5px' }} />)}{userDetails?.fullName}</h6>
-                  </div>
-                )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', position: 'absolute', right: '40px', top: '50%', transform: 'translateY(-50%)' }}>
+                  {isLogin ? (
+                    <a 
+                      href="/add-property"
+                      className="custom-mob-bar custom-mob-sell"
+                      style={{
+                        textDecoration: 'none',
+                      }}
+                    >
+                      Sell Property
+                    </a>
+                  ) : (
+                    <div className="custom-mob-bar custom-mob-sell" onClick={handleDialogOpen}>
+                      Sell Property
+                    </div>
+                  )}
+                  {!isLogin ? (
+                    <div className="custom-mob-bar custom-mob-user" onClick={handleDialogOpen}>
+                      <h6 style={{ marginBottom: '0' }}><AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#ffffff', marginRight: '5px' }} />Signup</h6>
+                    </div>
+                  ) : (
+                    <div className="custom-mob-bar custom-mob-user" onClick={() => { window.location.href = "/dashboard" }}>
+                      <h6 style={{ marginBottom: '0' }}>{userDetails?.image ? (
+                        <img src={userDetails?.image || ""} alt='profile' width="30px" style={{ marginRight: '5px' }} className="custom-image" />
+                      ) : (<AccountCircleOutlinedIcon sx={{ fontSize: 28, marginBottom: 0.45, color: '#ffffff', marginRight: '5px' }} />)}{userDetails?.fullName}</h6>
+                    </div>
+                  )}
+                </div>
                 <div
                   className="mobile-nav-toggler mobile-button"
                   onClick={() => {
@@ -1733,14 +1750,53 @@ const handleSignup = async () => {
               border-radius: 17px !important;
             }
             .custom-mob-bar {
-              position: absolute;
-              right: 50px;
+              position: relative;
               background: #161e2d;
               color:#ffffff;
               padding: 5px 10px 3px;
               border-radius: 17px !important;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              cursor: pointer;
+              transition: all 0.3s ease;
+              box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             }
-             @media (min-width: 991px) {
+            .custom-mob-bar:hover {
+              opacity: 0.9;
+              transform: scale(1.02);
+            }
+            .custom-mob-sell {
+              background: #008FF7 !important;
+              padding: 9px 16px !important;
+              border-radius: 20px !important;
+              font-size: 15px !important;
+              font-weight: 600 !important;
+              line-height: 21.86px !important;
+              text-transform: capitalize !important;
+              color: #ffffff !important;
+              white-space: nowrap;
+              position: relative !important;
+              right: auto !important;
+              left: auto !important;
+            }
+            .custom-mob-user {
+              position: relative !important;
+              right: auto !important;
+            }
+            @media (max-width: 480px) {
+              .custom-mob-sell {
+                padding: 8px 14px !important;
+                font-size: 14px !important;
+              }
+            }
+            @media (max-width: 375px) {
+              .custom-mob-sell {
+                padding: 7px 12px !important;
+                font-size: 13px !important;
+              }
+            }
+            @media (min-width: 991px) {
               .custom-mob-bar {
                 display: none;
               }

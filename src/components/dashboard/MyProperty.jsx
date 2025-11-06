@@ -174,10 +174,6 @@ export default function MyProperty() {
     closeConfirm();
   };
 
-  const handleNav = () => {
-    window.location.href = "/add-property"
-  }
-
   const handleScroll = (event) => {
     const bottom = event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight;
 
@@ -316,9 +312,6 @@ export default function MyProperty() {
           <div className="button-show-hide custom-header-text">
             < ArrowCircleLeftIcon sx={{ fontSize: '40px' }} />
             <span className="body-1">Menu</span>
-          </div>
-          <div className="custom-header-text" onClick={handleNav}>
-            <span className="custom-bg-dark">Sell Property</span>
           </div>
         </div>
         <div className="button-show-hide" style={{ marginTop: '0px', display: 'flex' }}>
