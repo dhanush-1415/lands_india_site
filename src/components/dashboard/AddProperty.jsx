@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import DropdownSelect from "../common/DropdownSelect";
 import { getCategories, getInputs, createNewProperty, getPropertyEdit, updateProperty } from "@/apiCalls";
 import { toast } from "react-toastify";
@@ -14,26 +14,26 @@ export default function AddProperty() {
 
   const [editData, setEditData] = useState();
 
-  console.log(editData, "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")
-
   const [updatedData, setUpdatedData] = useState();
 
   const [images, setImages] = useState([]);
+  const [invalidCreateIds, setInvalidCreateIds] = useState([]);
+  const [invalidEditIds, setInvalidEditIds] = useState([]);
 
   const [location, setLocation] = useState('');
 
   const [price, setPrice] = useState('');
 
   const [submitBtn, setSubmitBtn] = useState("Add Property")
-
   const [prevBtn, setPrevBtn] = useState("Update Property");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
 
   const handlePrevChange = (inputId, value, input_name) => {
 
     setUpdatedData(prevState => {
       const updatedInputs = prevState[0]?.inputs?.map(input =>
-        input.id === inputId ? { ...input, input_value: value } : input
+        input.id === inputId ? { ...input, input_value: value || "" } : input
       );
       return [{ ...prevState[0], inputs: updatedInputs }];
     });
@@ -90,12 +90,27 @@ export default function AddProperty() {
   };
 
   const handlePrevSubmit = async () => {
+    // Prevent multiple submissions
+    if (isSubmitting) {
+      return;
+    }
 
     if (!images.length) {
-      toast.error("Please add Properties Images")
+      toast.error("Please fill in all required fields before submitting the form")
       return
     }
 
+    // Validate required edit inputs
+    const editInputs = (updatedData?.[0]?.inputs) || [];
+    const missingEdit = editInputs.filter((inp) => inp.required && !isFilled(inp, inp.input_value));
+    if (missingEdit.length) {
+      setInvalidEditIds(missingEdit.map((m) => m.input_id));
+      const firstMissing = missingEdit[0]?.input_name || 'required fields';
+      toast.error(`Please fill the required fields (e.g., ${firstMissing}).`);
+      return;
+    }
+
+    setIsSubmitting(true); // Start loader
     setPrevBtn("Uploading...")
 
     const structuredData = transformData(updatedData, images);
@@ -112,18 +127,20 @@ export default function AddProperty() {
         const data = await updateProperty(payLoad);
         if (data.success) {
           toast.success("Updated Successfully")
-          setPrevBtn("Update Property")
         } else {
           toast.error(data.message);
-          setPrevBtn("Update Property")
         }
       } catch (err) {
-        console.error('Error fetching categories:', err);
-        setPrevBtn("Update Property")
+        console.error('Error updating property:', err);
+        toast.error("An error occurred while updating the property. Please try again.");
+      } finally {
+        setIsSubmitting(false); // Stop loader
+        setPrevBtn("Update Property") // Reset button text
       }
     } else {
       toast.error('You must be logged in to access this page');
-      setPrevBtn("Update Property")
+      setIsSubmitting(false); // Stop loader
+      setPrevBtn("Update Property") // Reset button text
     }
   };
 
@@ -147,6 +164,7 @@ export default function AddProperty() {
                     input_name: inputData ? inputData.input_name : '',
                     input_type: inputData ? inputData.input_type : '',
                     options: inputData ? inputData.options : [],
+                    required: inputData ? !!inputData.required : false,
                   };
                 });
 
@@ -187,6 +205,8 @@ export default function AddProperty() {
 
 
   const [isDragging, setIsDragging] = useState(false); // Track drag state
+  const dragItemIndexRef = useRef(null);
+  const dragOverIndexRef = useRef(null);
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files); // Convert FileList to Array
@@ -219,12 +239,17 @@ export default function AddProperty() {
       reader.onloadend = () => {
         setImages((prevImages) => {
           const newImages = [...prevImages];
-          newImages[prevImages.length + index] = reader.result;
+          newImages[prevImages.length + index] = {
+            id: `${Date.now()}-${index}`,
+            file,
+            preview: reader.result,
+          };
           return newImages;
         });
       };
       reader.readAsDataURL(file);
     });
+    setIsDragging(false);
   };
 
   const handleDragOver = (e) => {
@@ -233,6 +258,40 @@ export default function AddProperty() {
   };
 
   const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleItemDragStart = (index) => (e) => {
+    dragItemIndexRef.current = index;
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', '');
+  };
+
+  const handleItemDragEnter = (index) => (e) => {
+    e.preventDefault();
+    dragOverIndexRef.current = index;
+  };
+
+  const handleItemDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleItemDrop = (e) => {
+    e.preventDefault();
+    const fromIndex = dragItemIndexRef.current;
+    const toIndex = dragOverIndexRef.current;
+    if (fromIndex == null || toIndex == null || fromIndex === toIndex) {
+      dragItemIndexRef.current = null;
+      dragOverIndexRef.current = null;
+      setIsDragging(false);
+      return;
+    }
+    const updated = [...images];
+    const [moved] = updated.splice(fromIndex, 1);
+    updated.splice(toIndex, 0, moved);
+    setImages(updated);
+    dragItemIndexRef.current = null;
+    dragOverIndexRef.current = null;
     setIsDragging(false);
   };
 
@@ -299,27 +358,55 @@ export default function AddProperty() {
 
     setFormData((prev) => ({
       ...prev,
-      [id]: value,
+      [id]: value || "", // Ensure empty string for empty values
     }));
+
+    // Clear create invalid state when user fills value
+    setInvalidCreateIds((prev) => prev.filter((x) => x !== id));
   };
 
+  const isFilled = (inputDef, value) => {
+    if (value === undefined || value === null) return false;
+    const v = typeof value === 'string' ? value.trim() : value;
+    if (inputDef.input_type === 'dropdown') return v !== '' && v !== 'Select';
+    if (inputDef.input_type === 'checkbox') return v !== '';
+    if (inputDef.input_type === 'radio') return v !== '';
+    if (inputDef.input_type === 'file') return !!value;
+    return v !== '';
+  };
 
   const handleSubmit = async () => {
+    // Prevent multiple submissions
+    if (isSubmitting) {
+      return;
+    }
 
     if (!images.length) {
-      toast.error("Please add Properties Images")
+      toast.error("Please fill in all required fields before submitting the form")
       return
     }
 
+    // Validate required create inputs
+    const requiredInputs = (menuInputs || []).filter((inp) => inp.required);
+    const missing = requiredInputs.filter((inp) => !isFilled(inp, formData[inp.id]));
+    if (missing.length) {
+      setInvalidCreateIds(missing.map((m) => m.id));
+      const firstMissing = missing[0]?.input_name || 'required fields';
+      toast.error(`Please fill the required fields (e.g., ${firstMissing}).`);
+      return;
+    }
+
+    setIsSubmitting(true); // Start loader
     setSubmitBtn("Uploading...")
 
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
     if (landsUser) {
 
-      const PropertiesInput = Object.entries(formData).map(([inputId, value]) => ({
-        inputId: Number(inputId),
-        value: value,
+      // Ensure all inputs (both mandatory and non-mandatory) are included
+      const PropertiesInput = (menuInputs || []).map((input) => ({
+        inputId: Number(input.id),
+        value: formData[input.id] || "", // Use empty string if not filled
       }));
 
       const payload = {
@@ -340,14 +427,17 @@ export default function AddProperty() {
           setMenuInputs(null)
           toast.success("Property Created Successfully");
           setImages([]);
-          setSubmitBtn("Update Property")
+          setFormData({}); // Reset form data
+          setSubmitBtn("Add Property") // Reset button text
         } else {
           toast.error(data.message || data.error || "Something Went Wrong")
-          setSubmitBtn("Update Property")
         }
       } catch (err) {
-        console.error('Error fetching categories:', err);
-        setSubmitBtn("Update Property")
+        console.error('Error creating property:', err);
+        toast.error("An error occurred while creating the property. Please try again.");
+      } finally {
+        setIsSubmitting(false); // Stop loader
+        setSubmitBtn("Add Property") // Reset button text
       }
 
     } else {
@@ -392,6 +482,29 @@ export default function AddProperty() {
             border-radius: 10%;
             border:none;
           }
+        }
+        .invalid-control {
+          border-color: #dc3545 !important;
+        }
+        .invalid-control:focus {
+          box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+        }
+        .tf-btn:disabled {
+          background-color: #6c757d !important;
+          color: #ffffff !important;
+        }
+        .tf-btn button {
+          background: none;
+          border: none;
+          color: inherit;
+          font: inherit;
+          cursor: pointer;
+          padding: 0;
+          margin: 0;
+        }
+        .tf-btn button:disabled {
+          background: none !important;
+          border: none !important;
         }
       `}</style>
       <div className="main-content-inner">
@@ -456,16 +569,16 @@ export default function AddProperty() {
                         inputField = (
                           <fieldset key={id} className="box box-fieldset">
                             <label htmlFor={input_name}>
-                              {input_name}
+                              {input_name} <span>{input.required ? "*" : ""}</span>
                             </label>
                             <input
                               type="text"
                               id={input_name}
                               name={input_name}
-                              className="form-control"
+                              className={`form-control ${invalidEditIds.includes(input.input_id) ? 'invalid-control' : ''}`}
                               placeholder={`Enter ${input_name}`}
                               value={input_value || ""}
-                              onChange={(e) => handlePrevChange(input.id, e.target.value, input_name)}
+                              onChange={(e) => { handlePrevChange(input.id, e.target.value, input_name); setInvalidEditIds((prev)=> prev.filter((x)=> x !== input.input_id)); }}
                             />
                           </fieldset>
                         );
@@ -475,15 +588,15 @@ export default function AddProperty() {
                         inputField = (
                           <fieldset key={id} className="box box-fieldset">
                             <label htmlFor={input_name}>
-                              {input_name}
+                              {input_name} <span>{input.required ? "*" : ""}</span>
                             </label>
                             <textarea
                               id={input_name}
                               name={input_name}
-                              className="textarea"
+                              className={`textarea ${invalidEditIds.includes(input.input_id) ? 'invalid-control' : ''}`}
                               placeholder={`Enter ${input_name}`}
                               value={input_value || ""}
-                              onChange={(e) => handlePrevChange(input.id, e.target.value)}
+                              onChange={(e) => { handlePrevChange(input.id, e.target.value); setInvalidEditIds((prev)=> prev.filter((x)=> x !== input.input_id)); }}
                             />
                           </fieldset>
                         );
@@ -493,16 +606,16 @@ export default function AddProperty() {
                         inputField = (
                           <fieldset key={id} className="box box-fieldset">
                             <label htmlFor={input_name}>
-                              {input_name}
+                              {input_name} <span>{input.required ? "*" : ""}</span>
                             </label>
                             <input
                               type="number"
                               id={input_name}
                               name={input_name}
-                              className="form-control"
+                              className={`form-control ${invalidEditIds.includes(input.input_id) ? 'invalid-control' : ''}`}
                               placeholder={`Enter ${input_name}`}
                               value={input_value || ""}
-                              onChange={(e) => handlePrevChange(input.id, e.target.value, input_name)}
+                              onChange={(e) => { handlePrevChange(input.id, e.target.value, input_name); setInvalidEditIds((prev)=> prev.filter((x)=> x !== input.input_id)); }}
                             />
                           </fieldset>
                         );
@@ -512,14 +625,14 @@ export default function AddProperty() {
                         inputField = (
                           <fieldset key={id} className="box box-fieldset">
                             <label htmlFor={input_name}>
-                              {input_name}
+                              {input_name} <span>{input.required ? "*" : ""}</span>
                             </label>
                             <select
                               id={input_name}
                               name={input_name}
-                              className="form-control"
+                              className={`form-control ${invalidEditIds.includes(input.input_id) ? 'invalid-control' : ''}`}
                               value={input_value || ""}
-                              onChange={(e) => handlePrevChange(input.id, e.target.value)}
+                              onChange={(e) => { handlePrevChange(input.id, e.target.value); setInvalidEditIds((prev)=> prev.filter((x)=> x !== input.input_id)); }}
                             >
                               <option value="">Select</option>
                               {options?.map((option, idx) => (
@@ -536,7 +649,7 @@ export default function AddProperty() {
                         inputField = (
                           <fieldset key={id} className="box box-fieldset">
                             <label htmlFor={input_name}>
-                              {input_name}
+                              {input_name} <span>{input.required ? "*" : ""}</span>
                             </label>
                             <div className="d-flex flex-row">
                               {options?.map((option, idx) => (
@@ -553,6 +666,7 @@ export default function AddProperty() {
                                         ? [...newValue, option]
                                         : newValue.filter((val) => val !== option);
                                       handlePrevChange(input.id, updatedValue.join(","));
+                                      setInvalidEditIds((prev)=> prev.filter((x)=> x !== input.input_id));
                                     }}
                                   />
                                   <label htmlFor={`${input_name}-${option}`}>{option}</label>
@@ -567,7 +681,7 @@ export default function AddProperty() {
                         inputField = (
                           <fieldset key={id} className="box box-fieldset">
                             <label htmlFor={input_name}>
-                              {input_name}
+                              {input_name} <span>{input.required ? "*" : ""}</span>
                             </label>
                             <div className="d-flex flex-row">
                               {options?.map((option, idx) => (
@@ -578,7 +692,7 @@ export default function AddProperty() {
                                     name={input_name}
                                     value={option}
                                     checked={input_value === option}
-                                    onChange={(e) => handlePrevChange(input.id, e.target.value)}
+                                    onChange={(e) => { handlePrevChange(input.id, e.target.value); setInvalidEditIds((prev)=> prev.filter((x)=> x !== input.input_id)); }}
                                   />
                                   <label htmlFor={`${input_name}-${option}`}>{option}</label>
                                 </div>
@@ -592,15 +706,15 @@ export default function AddProperty() {
                         inputField = (
                           <fieldset key={id} className="box box-fieldset">
                             <label htmlFor={input_name}>
-                              {input_name}
+                              {input_name} <span>{input.required ? "*" : ""}</span>
                             </label>
                             <input
                               type="date"
                               id={input_name}
                               name={input_name}
-                              className="form-control"
+                              className={`form-control ${invalidEditIds.includes(input.input_id) ? 'invalid-control' : ''}`}
                               value={input_value || ""}
-                              onChange={(e) => handlePrevChange(input.id, e.target.value)}
+                              onChange={(e) => { handlePrevChange(input.id, e.target.value); setInvalidEditIds((prev)=> prev.filter((x)=> x !== input.input_id)); }}
                             />
                           </fieldset>
                         );
@@ -610,16 +724,16 @@ export default function AddProperty() {
                         inputField = (
                           <fieldset key={id} className="box box-fieldset">
                             <label htmlFor={input_name}>
-                              {input_name}
+                              {input_name} <span>{input.required ? "*" : ""}</span>
                             </label>
                             <input
                               type="email"
                               id={input_name}
                               name={input_name}
-                              className="form-control"
+                              className={`form-control ${invalidEditIds.includes(input.input_id) ? 'invalid-control' : ''}`}
                               placeholder={`Enter ${input_name}`}
                               value={input_value || ""}
-                              onChange={(e) => handlePrevChange(input.id, e.target.value)}
+                              onChange={(e) => { handlePrevChange(input.id, e.target.value); setInvalidEditIds((prev)=> prev.filter((x)=> x !== input.input_id)); }}
                             />
                           </fieldset>
                         );
@@ -629,16 +743,16 @@ export default function AddProperty() {
                         inputField = (
                           <fieldset key={id} className="box box-fieldset">
                             <label htmlFor={input_name}>
-                              {input_name}
+                              {input_name} <span>{input.required ? "*" : ""}</span>
                             </label>
                             <input
                               type="password"
                               id={input_name}
                               name={input_name}
-                              className="form-control"
+                              className={`form-control ${invalidEditIds.includes(input.input_id) ? 'invalid-control' : ''}`}
                               placeholder={`Enter ${input_name}`}
                               value={input_value || ""}
-                              onChange={(e) => handleChange(input.id, e.target.value)}
+                              onChange={(e) => { handlePrevChange(input.id, e.target.value); setInvalidEditIds((prev)=> prev.filter((x)=> x !== input.input_id)); }}
                             />
                           </fieldset>
                         );
@@ -675,7 +789,7 @@ export default function AddProperty() {
                               type="text"
                               id={input_name}
                               name={input_name}
-                              className="form-control"
+                              className={`form-control ${invalidCreateIds.includes(id) ? 'invalid-control' : ''}`}
                               placeholder={`Enter ${input_name}`}
                               onChange={(e) => handleChange(input.id, e.target.value, input_name)}
                             />
@@ -692,7 +806,7 @@ export default function AddProperty() {
                             <textarea
                               id={input_name}
                               name={input_name}
-                              className="textarea"
+                              className={`textarea ${invalidCreateIds.includes(id) ? 'invalid-control' : ''}`}
                               placeholder={`Enter ${input_name}`}
                               onChange={(e) => handleChange(input.id, e.target.value, input_name)}
                             />
@@ -710,7 +824,7 @@ export default function AddProperty() {
                               type="number"
                               id={input_name}
                               name={input_name}
-                              className="form-control"
+                              className={`form-control ${invalidCreateIds.includes(id) ? 'invalid-control' : ''}`}
                               placeholder={`Enter ${input_name}`}
                               onChange={(e) => handleChange(input.id, e.target.value, input_name)}
                             />
@@ -727,7 +841,7 @@ export default function AddProperty() {
                             <select
                               id={input_name}
                               name={input_name}
-                              className="form-control"
+                              className={`form-control ${invalidCreateIds.includes(id) ? 'invalid-control' : ''}`}
                               onChange={(e) => handleChange(input.id, e.target.value, input_name)}
                             >
                               <option>
@@ -763,6 +877,7 @@ export default function AddProperty() {
                                         ? [...newValue, option] // Add the new option if checked
                                         : newValue.filter((val) => val !== option); // Remove the option if unchecked
                                       handleChange(input.id, updatedValue.join(",")); // Convert the array back to a comma-separated string
+                                      setInvalidCreateIds((prev) => prev.filter((x) => x !== id));
                                     }}
                                   />
                                   <label htmlFor={`${input_name}-${option}`}>{option}</label>
@@ -788,7 +903,7 @@ export default function AddProperty() {
                                     id={`${input_name}-${option}`}
                                     name={input_name}
                                     value={option}
-                                    onChange={(e) => handleChange(input.id, e.target.value)}
+                                    onChange={(e) => { handleChange(input.id, e.target.value); setInvalidCreateIds((prev) => prev.filter((x) => x !== id)); }}
                                   />
                                   <label htmlFor={`${input_name}-${option}`}>{option}</label>
                                 </div>
@@ -808,8 +923,8 @@ export default function AddProperty() {
                               type="date"
                               id={input_name}
                               name={input_name}
-                              className="form-control"
-                              onChange={(e) => handleChange(input.id, e.target.value)}
+                              className={`form-control ${invalidCreateIds.includes(id) ? 'invalid-control' : ''}`}
+                              onChange={(e) => { handleChange(input.id, e.target.value); setInvalidCreateIds((prev) => prev.filter((x) => x !== id)); }}
                             />
                           </fieldset>
                         );
@@ -825,9 +940,9 @@ export default function AddProperty() {
                               type="email"
                               id={input_name}
                               name={input_name}
-                              className="form-control"
+                              className={`form-control ${invalidCreateIds.includes(id) ? 'invalid-control' : ''}`}
                               placeholder={`Enter ${input_name}`}
-                              onChange={(e) => handleChange(input.id, e.target.value)}
+                              onChange={(e) => { handleChange(input.id, e.target.value); setInvalidCreateIds((prev) => prev.filter((x) => x !== id)); }}
                             />
                           </fieldset>
                         );
@@ -843,9 +958,9 @@ export default function AddProperty() {
                               type="password"
                               id={input_name}
                               name={input_name}
-                              className="form-control"
+                              className={`form-control ${invalidCreateIds.includes(id) ? 'invalid-control' : ''}`}
                               placeholder={`Enter ${input_name}`}
-                              onChange={(e) => handleChange(input.id, e.target.value)}
+                              onChange={(e) => { handleChange(input.id, e.target.value); setInvalidCreateIds((prev) => prev.filter((x) => x !== id)); }}
                             />
                           </fieldset>
                         );
@@ -861,8 +976,8 @@ export default function AddProperty() {
                               type="file"
                               id={input_name}
                               name={input_name}
-                              className="form-control"
-                              onChange={(e) => handleChange(input.id, e.target.files[0])}
+                              className={`form-control ${invalidCreateIds.includes(id) ? 'invalid-control' : ''}`}
+                              onChange={(e) => { handleChange(input.id, e.target.files[0]); setInvalidCreateIds((prev) => prev.filter((x) => x !== id)); }}
                             />
                           </fieldset>
                         );
@@ -916,13 +1031,6 @@ export default function AddProperty() {
                   />
                 </svg>
                 Select photos
-                {/* <input
-                  type="file"
-                  className="ip-file"
-                  accept="image/*"
-                  multiple
-                  onChange={(e) => handleImageChange(e, images.length)}
-                /> */}
                 <input
                   type="file"
                   className="ip-file"
@@ -941,7 +1049,17 @@ export default function AddProperty() {
           </div>
           <div className="box-img-upload">
             {images?.map((img, index) => (
-              <div key={index} className="item-upload file-delete">
+              <div
+                key={index}
+                className="item-upload file-delete"
+                draggable
+                onDragStart={handleItemDragStart(index)}
+                onDragEnter={handleItemDragEnter(index)}
+                onDragOver={handleItemDragOver}
+                onDrop={handleItemDrop}
+                aria-grabbed={dragItemIndexRef.current === index}
+                style={{ cursor: 'move' }}
+              >
                 <img alt={`Uploaded preview ${index + 1}`} src={img.preview} width={615} height={405} />
                 <span
                   className="icon icon-trash remove-file"
@@ -1523,22 +1641,60 @@ export default function AddProperty() {
           </div>
         </div> */}
         {editData?.length ? (
-          <div className="box-btn" onClick={handlePrevSubmit}>
-            <a className="tf-btn primary">
-              {prevBtn}
-            </a>
-            {/* <a href="#" className="tf-btn btn-line">
-          Save &amp; Preview
-        </a> */}
+          <div className="box-btn">
+            <button 
+              className="tf-btn primary" 
+              onClick={handlePrevSubmit}
+              disabled={isSubmitting}
+              style={{ 
+                cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                opacity: isSubmitting ? 0.7 : 1,
+                position: 'relative',
+                minHeight: '48px',
+                border: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
+              }}
+            >
+              {isSubmitting ? (
+                <>
+                  <CircularProgress size={20} color="inherit" />
+                  Updating...
+                </>
+              ) : (
+                prevBtn
+              )}
+            </button>
           </div>
         ) : (
-          <div className="box-btn" onClick={handleSubmit}>
-            <a className="tf-btn primary">
-              {submitBtn}
-            </a>
-            {/* <a href="#" className="tf-btn btn-line">
-            Save &amp; Preview
-          </a> */}
+          <div className="box-btn">
+            <button 
+              className="tf-btn primary" 
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+              style={{ 
+                cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                opacity: isSubmitting ? 0.7 : 1,
+                position: 'relative',
+                minHeight: '48px',
+                border: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
+              }}
+            >
+              {isSubmitting ? (
+                <>
+                  <CircularProgress size={20} color="inherit" />
+                  Creating...
+                </>
+              ) : (
+                submitBtn
+              )}
+            </button>
           </div>
         )}
 

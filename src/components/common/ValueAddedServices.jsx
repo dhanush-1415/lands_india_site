@@ -152,7 +152,16 @@ export default function ValueAddedServices() {
                 <h5>Enhance Effeciency and Achieve More With Our Extra Services.</h5>
               </div>
               <div>
-                <button style={{ backgroundColor: "rgb(0, 143, 247)", border: 'none', padding: '15px', color: '#ffffff', fontWeight: 'bold' }} >Register Now</button>
+                <button 
+                  onClick={() => {
+                    // Open login popup by triggering a custom event
+                    const event = new CustomEvent('openLoginPopup');
+                    window.dispatchEvent(event);
+                  }}
+                  style={{ backgroundColor: "rgb(0, 247)", border: 'none', padding: '15px', color: '#ffffff', fontWeight: 'bold', cursor: 'pointer' }} 
+                >
+                  Register Now
+                </button>
               </div>
             </div>
           </div>

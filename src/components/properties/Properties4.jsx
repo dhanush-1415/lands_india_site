@@ -109,6 +109,10 @@ export default function Properties4() {
     params.append("minPrice", price[0].toString());
     params.append("maxPrice", price[1].toString());
 
+    // Clear current properties data before navigating
+    setProperties([]);
+    setPage(1);
+
     navigate(`/properties/all?${params.toString()}`);
   };
 
@@ -193,7 +197,7 @@ export default function Properties4() {
     fetchLocation()
   }, [])
 
-  const fetchProperties = async () => {
+  const fetchProperties = async (isNewSearch = false) => {
     const location = searchParams.get("location");
     const minPrice = searchParams.get("minPrice");
     const maxPrice = searchParams.get("maxPrice");
@@ -209,13 +213,13 @@ export default function Properties4() {
       category: category || "",
       subCategory: subCategory || "",
       staus: "Verified",
-      page
+      page: isNewSearch ? 1 : page
     };
 
     try {
       const data = await getProperties(filter);
       if (data.success) {
-        const combined = data.properties.map((property) => {
+        let combined = data.properties.map((property) => {
           const propertyInputs = data.propertyInputs.filter(input => input.properties_postId === property.id);
 
           const inputsWithNames = propertyInputs.map((input) => {
@@ -235,17 +239,35 @@ export default function Properties4() {
           };
         });
 
-        setProperties((prevProperties) => {
-          const uniqueProperties = [
-            ...new Map(
-              [...prevProperties, ...combined].map((property) => [property.id, property])
-            ).values(),
-          ];
-          return uniqueProperties;
-        });
+        // Filter by location if location filter is applied
+        if (location && location.trim() !== "") {
+          combined = combined.filter((property) => {
+            // Find the City input value for this property
+            const cityInput = property.inputs.find(input => input.input_name === "City");
+            if (cityInput && cityInput.input_value) {
+              // Case-insensitive comparison
+              return cityInput.input_value.toLowerCase().includes(location.toLowerCase());
+            }
+            return false; // Exclude properties without city information
+          });
+        }
 
-        // setProperties((prevProperties) => [...prevProperties, ...combined]);
-        setPage(page + 1);
+        if (isNewSearch) {
+          // Replace properties for new search
+          setProperties(combined);
+          setPage(2); // Reset page to 2 for next load
+        } else {
+          // Append properties for pagination
+          setProperties((prevProperties) => {
+            const uniqueProperties = [
+              ...new Map(
+                [...prevProperties, ...combined].map((property) => [property.id, property])
+              ).values(),
+            ];
+            return uniqueProperties;
+          });
+          setPage(page + 1);
+        }
       } else {
         // toast.error(data.message);
       }
@@ -257,7 +279,7 @@ export default function Properties4() {
 
   useEffect(() => {
     if (wishlistLoaded) {
-      fetchProperties();
+      fetchProperties(true); // Pass true for new search
     }
   }, [wishlistLoaded])
 
@@ -273,7 +295,10 @@ export default function Properties4() {
 
   useEffect(() => {
     fetchWishlist();
-    fetchProperties();
+    // Clear properties and reset page when search params change
+    setProperties([]);
+    setPage(1);
+    fetchProperties(true); // Pass true for new search
   }, [searchParams]);
 
   const handleWishlist = async (elm, act) => {
@@ -356,14 +381,13 @@ export default function Properties4() {
   };
 
   const handleScroll = (event) => {
-    // fetchProperties();
     const bottom = event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight;
     console.log(bottom, loading, "Scroll Position");
 
     // Allow a small tolerance, e.g., 5px, to trigger loading when close to the bottom
     if (bottom || event.target.scrollHeight - event.target.scrollTop <= event.target.clientHeight + 5) {
       if (!loading) {
-        fetchProperties();
+        fetchProperties(false); // Pass false for pagination
       }
     }
   };
@@ -372,7 +396,7 @@ export default function Properties4() {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          handleScroll(); // Call the function when loader is visible
+          fetchProperties(false); // Pass false for pagination
         }
       },
       {
@@ -391,7 +415,7 @@ export default function Properties4() {
         observer.unobserve(loaderRef.current);
       }
     };
-  }, [handleScroll]);
+  }, []);
 
 
   const sortProperties = (option) => {
@@ -463,6 +487,26 @@ export default function Properties4() {
         }
         .custom-sort-bar{
           width: 17%;
+        }
+        .infinite-scroll-container{
+          scrollbar-width: thin;
+          scrollbar-color: #c1c1c1 transparent;
+          overscroll-behavior: contain;
+        } 
+        .infinite-scroll-container::-webkit-scrollbar{
+          width: 10px;
+        }
+        .infinite-scroll-container::-webkit-scrollbar-track{
+          background: transparent;
+        }
+        .infinite-scroll-container::-webkit-scrollbar-thumb{
+          background-color: #c1c1c1;
+          border-radius: 8px;
+          border: 2px solid transparent;
+          background-clip: padding-box;
+        }
+        .infinite-scroll-container::-webkit-scrollbar-thumb:hover{
+          background-color: #a8a8a8;
         }
         @media (max-width: 750px) {
           .custom-col-one, .custom-col-two {
@@ -693,10 +737,9 @@ export default function Properties4() {
                 role="tabpanel"
               >
 
-                <div className="row"
+                <div className="row infinite-scroll-container"
                   style={{
-                    maxHeight: '700px', overflow: 'auto', scrollbarWidth: 'none', /* For Firefox */
-                    msOverflowStyle: 'none',
+                    maxHeight: '700px', overflow: 'auto',
                   }} // Set height and enable scrolling - 
                   onScroll={handleScroll} // Listen for scroll events
                 >
@@ -705,7 +748,7 @@ export default function Properties4() {
                       <div key={index} className="col-xl-4 col-lg-6 col-md-6">
                         <div className="homelengo-box">
                           <div className="archive-top">
-                            <Link className="images-group">
+                            <Link className="images-group" to={`/property-details/${elm.id}`}>
                               <div className="images-style" style={{ position: "relative" }}>
                                 <img
                                   className="lazyload"
@@ -718,43 +761,9 @@ export default function Properties4() {
                                     objectFit: "cover",
                                   }}
                                 />
-                                <div
-                                  style={{
-                                    position: "absolute",
-                                    bottom: 0,
-                                    left: 0,
-                                    right: 0,
-                                    height: "50%",
-                                    background: "linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0))",
-                                  }}
-                                />
+
                               </div>
-                              <div className="bottom" style={{ fontSize: "14px", position: "absolute", bottom: "10px", left: "10px", color: "white" }}>
-                                <svg
-                                  width={16}
-                                  height={16}
-                                  viewBox="0 0 16 16"
-                                  fill="none"
-                                >
-                                  <path
-                                    d="M10 7C10 7.53043 9.78929 8.03914 9.41421 8.41421C9.03914 8.78929 8.53043 9 8 9C7.46957 9 6.96086 8.78929 6.58579 8.41421C6.21071 8.03914 6 7.53043 6 7C6 6.46957 6.21071 5.96086 6.58579 5.58579C6.96086 5.21071 7.46957 5 8 5C8.53043 5 9.03914 5.21071 9.41421 5.58579C9.78929 5.96086 10 6.46957 10 7Z"
-                                    stroke="white"
-                                    strokeWidth="1.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  />
-                                  <path
-                                    d="M13 7C13 11.7613 8 14.5 8 14.5C8 14.5 3 11.7613 3 7C3 5.67392 3.52678 4.40215 4.46447 3.46447C5.40215 2.52678 6.67392 2 8 2C9.32608 2 10.5979 2.52678 11.5355 3.46447C12.4732 4.40215 13 5.67392 13 7Z"
-                                    stroke="white"
-                                    strokeWidth="1.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  />
-                                </svg>
-                                {
-                                  elm.inputs.find(item => item.input_name === "City")?.input_value || ""
-                                }
-                              </div>
+
                               {elm.isWishlist ? (
                                 <div
                                   style={{
@@ -772,12 +781,13 @@ export default function Properties4() {
                                   <FavoriteIcon sx={{
                                     backgroundColor: '#fff',
                                     position: 'absolute',
+                                    color: 'red',
                                     top: '0px',
                                     left: '0px',
                                     padding: '3px',
                                     borderRadius: '2px',
                                     fontSize: '30px !important',
-                                  }} onClick={() => handleWishlist(elm, "remove")} />{/* You can use Font Awesome for the heart icon */}
+                                  }} onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleWishlist(elm, "remove"); }} />{/* You can use Font Awesome for the heart icon */}
                                 </div>
                               ) : (
                                 <div
@@ -794,13 +804,14 @@ export default function Properties4() {
                                 >
                                   <FavoriteBorderIcon sx={{
                                     backgroundColor: '#fff',
+                                    color: 'red',
                                     position: 'absolute',
                                     top: '0px',
                                     left: '0px',
                                     padding: '3px',
                                     borderRadius: '2px',
                                     fontSize: '30px !important',
-                                  }} onClick={() => handleWishlist(elm, 'add')} />{/* You can use Font Awesome for the heart icon */}
+                                  }} onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleWishlist(elm, 'add'); }} />{/* You can use Font Awesome for the heart icon */}
                                 </div>
                               )}
                             </Link>
@@ -808,16 +819,39 @@ export default function Properties4() {
 
                           <div className="archive-bottom" style={{ backgroundColor: '#ffffff' }}>
                             <div className="content-top">
-                              {/* <h6 className="text-capitalize">
-                              <Link
-                                to={`/property-details/${elm.id}`}
-                                className="link"
-                              >
-                                {
-                                  elm.inputs.find(item => item.input_name === "Title")?.input_value || ""
-                                }
-                              </Link>
-                            </h6> */}
+                              {/* Location above the title */}
+                              <div style={{ 
+                                fontSize: "14px", 
+                                color: "#666", 
+                                marginBottom: "8px",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "4px"
+                              }}>
+                                <svg
+                                  width={14}
+                                  height={14}
+                                  viewBox="0 0 16 16"
+                                  fill="none"
+                                >
+                                  <path
+                                    d="M10 7C10 7.53043 9.78929 8.03914 9.41421 8.41421C9.03914 8.78929 8.53043 9 8 9C7.46957 9 6.96086 8.78929 6.58579 8.41421C6.21071 8.03914 6 7.53043 6 7C6 6.46957 6.21071 5.96086 6.58579 5.58579C6.96086 5.21071 7.46957 5 8 5C8.53043 5 9.03914 5.21071 9.41421 5.58579C9.78929 5.96086 10 6.46957 10 7Z"
+                                    stroke="#666"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                  <path
+                                    d="M13 7C13 11.7613 8 14.5 8 14.5C8 14.5 3 11.7613 3 7C3 5.67392 3.52678 4.40215 4.46447 3.46447C5.40215 2.52678 6.67392 2 8 2C9.32608 2 10.5979 2.52678 11.5355 3.46447C12.4732 4.40215 13 5.67392 13 7Z"
+                                    stroke="#666"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
+                                {elm.inputs.find(item => item.input_name === "City")?.input_value || ""}
+                              </div>
+                              
                               <h6
                                 className="text-capitalize"
                                 style={{

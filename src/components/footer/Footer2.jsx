@@ -8,6 +8,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 
 const Footer2 = () => {
@@ -19,7 +20,7 @@ const Footer2 = () => {
       if (landsUser) {
         window.location.href = `/${path}`
       } else {
-        toast.info("Please Login to Continue")
+        toast.error("Please Login to Continue")
       }
     } else {
 
@@ -322,7 +323,9 @@ const Footer2 = () => {
         </Box>
 
         <Typography variant="body2" sx={{ textAlign: 'center', mt: 2 }}>
-          Copyright © 2025 Property Store. All Rights Reserved. Developed by
+          Copyright © 2025 i5 Property Stars. All Rights Reserved. Developed by <a href="https://berrybeans.co/" target='_blank'>
+            <img src="/BerryBeans.png" style={{maxWidth: "30px"}} alt="Berrybeans Technologies Pvt Lte" />
+          </a>
         </Typography>
       </Box>
     </Grid>

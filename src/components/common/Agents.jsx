@@ -158,7 +158,16 @@ export default function Agents() {
                 <h5>Sign Up to Start Your Journey as a Top-Tire Agent</h5>
               </div>
               <div>
-                <button style={{ backgroundColor: "rgb(0, 143, 247)", border: 'none', padding: '15px', color: '#ffffff', fontWeight: 'bold' }} >Register As Agent</button>
+                <button 
+                  onClick={() => {
+                    // Open login popup by triggering a custom event
+                    const event = new CustomEvent('openLoginPopup');
+                    window.dispatchEvent(event);
+                  }}
+                  style={{ backgroundColor: "rgb(0, 143, 247)", border: 'none', padding: '15px', color: '#ffffff', fontWeight: 'bold', cursor: 'pointer' }} 
+                >
+                  Register As Agent
+                </button>
               </div>
             </div>
           </div>

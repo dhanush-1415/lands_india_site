@@ -128,7 +128,9 @@ export default function FilterTab({
 
 
   const handlSelect = (name) => {
-    setSelectedcat(name);
+    const slug = name.trim().toLowerCase().replace(/\s+/g, '_');
+    const url = `/properties/all?category=${encodeURIComponent(slug)}`;
+    window.location.href = url;
   }
 
 

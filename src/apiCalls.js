@@ -1,6 +1,6 @@
 // const baseUrl = "http://luxcycs.com:4400"
 
-const baseUrl = "https://api.dev.propertystores.in"
+const baseUrl = "https://api.i5propertystars.com"
 
 export const verifyMobileOtp = async (data) => {
   const url = `${baseUrl}/registration`;
@@ -1179,6 +1179,61 @@ export const getBlogDetail = async (id) => {
     return response.json();
   } catch (error) {
     console.error('Error fetching data:', error);
+    throw error;
+  }
+};
+
+export const GoogleAuth = async (data) => {
+  const url = `${baseUrl}/login`;
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error('Failed to authenticate with Google');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Google Auth Failed:', error);
+    throw error;
+  }
+};
+
+export const GoogleRegister = async (data) => {
+  const url = `${baseUrl}/registration/new-user`;
+  
+  // Transform the data to match the expected payload format
+  const payload = {
+    fullName: '', // Empty as requested
+    phone: '', // Empty as requested
+    email: '', // Empty as requested
+    password: '', // Empty as requested
+    type: data.role, // Use the role as type
+    credential: data.credential // Google token
+  };
+  
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error('Failed to register with Google');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Google Registration Failed:', error);
     throw error;
   }
 };

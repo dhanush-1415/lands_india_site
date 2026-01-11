@@ -13,16 +13,23 @@ import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 export default function MyProperty() {
 
 
-  const [properties, setProperties] = useState();
+  const [properties, setProperties] = useState([]);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmExiting, setConfirmExiting] = useState(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState(null);
 
   const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const getProperties = async () => {
+  const getProperties = async (isLoadMore = false) => {
+    if (loading || (!isLoadMore && !hasMore)) return;
 
     const landsUser = JSON.parse(localStorage.getItem('LandsUser'));
 
     if (landsUser) {
       try {
+        setLoading(true);
         const data = await getSellerProperties(landsUser.id, page);
 
         if (data.success) {
@@ -45,19 +52,25 @@ export default function MyProperty() {
             };
           });
 
-
-          if (combined.length > 1) {
-            setProperties((prev) => [...(prev || []), ...combined]);
+          if (isLoadMore) {
+            // Append for load more
+            setProperties(prev => [...prev, ...combined]);
           } else {
+            // Replace for initial load or refresh
             setProperties(combined);
           }
 
-          setPage(page + 1);
+          // Check if there are more properties
+          setHasMore(combined.length > 0);
+          setPage(prev => prev + 1);
         } else {
-          // toast.error(data.message || data.error || "Something Went Wrong")
+          setHasMore(false);
         }
       } catch (err) {
-        console.error('Error fetching categories:', err);
+        console.error('Error fetching properties:', err);
+        setHasMore(false);
+      } finally {
+        setLoading(false);
       }
     } else {
       toast.error("Seller Not Found")
@@ -65,11 +78,10 @@ export default function MyProperty() {
         window.location.href = "/"
       }, 4000);
     }
-
   }
 
   useEffect(() => {
-    getProperties();
+    getProperties(false); // Initial load
   }, [])
 
 
@@ -90,7 +102,11 @@ export default function MyProperty() {
         if (data.success) {
           console.log(data)
           toast.success(data.message)
-          getProperties();
+          // Refresh the properties list
+          setPage(1); // Reset to first page
+          setProperties([]); // Clear current properties
+          setHasMore(true); // Reset hasMore flag
+          getProperties(false); // Fetch fresh data
         } else {
           toast.error(data.message || data.error || "Something Went Wrong")
         }
@@ -117,7 +133,11 @@ export default function MyProperty() {
         if (data.success) {
           console.log(data)
           toast.success(data.message)
-          getProperties();
+          // Refresh the properties list
+          setPage(1); // Reset to first page
+          setProperties([]); // Clear current properties
+          setHasMore(true); // Reset hasMore flag
+          getProperties(false); // Fetch fresh data
         } else {
           toast.error(data.message || data.error || "Something Went Wrong")
         }
@@ -132,20 +152,38 @@ export default function MyProperty() {
     }
   }
 
+  const openConfirm = (id) => {
+    setPendingDeleteId(id);
+    setConfirmExiting(false);
+    setShowConfirm(true);
+  };
+
+  const closeConfirm = () => {
+    setConfirmExiting(true);
+    setTimeout(() => {
+      setShowConfirm(false);
+      setPendingDeleteId(null);
+      setConfirmExiting(false);
+    }, 200);
+  };
+
+  const confirmDelete = async () => {
+    if (pendingDeleteId) {
+      await handleDeleteProperty(pendingDeleteId);
+    }
+    closeConfirm();
+  };
+
   const handleNav = () => {
     window.location.href = "/add-property"
   }
 
   const handleScroll = (event) => {
-    // fetchProperties();
     const bottom = event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight;
-    console.log(bottom, "Scroll Position");
 
     // Allow a small tolerance, e.g., 5px, to trigger loading when close to the bottom
-    if (bottom || event.target.scrollHeight - event.target.scrollTop <= event.target.clientHeight + 5) {
-      // if (!loading) {
-        getProperties();
-      // }
+    if ((bottom || event.target.scrollHeight - event.target.scrollTop <= event.target.clientHeight + 5) && hasMore && !loading) {
+      getProperties(true); // Load more
     }
   };
 
@@ -156,6 +194,97 @@ export default function MyProperty() {
           max-height:600px !important;
           overflow:scroll;
           scrollbar-width: none;
+        }
+        .confirm-backdrop {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.45);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 9999;
+          animation: fadeIn 200ms ease-out forwards;
+        }
+        .confirm-backdrop.exit {
+          animation: fadeOut 200ms ease-in forwards;
+        }
+        .confirm-modal {
+          width: 92%;
+          max-width: 420px;
+          background: #ffffff;
+          border-radius: 12px;
+          box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+          overflow: hidden;
+          transform-origin: center;
+          animation: popIn 200ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        .exit .confirm-modal {
+          animation: popOut 200ms cubic-bezier(0.4, 0.0, 1, 1) forwards;
+        }
+        .confirm-header {
+          padding: 16px 20px;
+          background: #F6FAFF;
+          border-bottom: 1px solid #EEF3F7;
+        }
+        .confirm-title {
+          margin: 0;
+          font-size: 18px;
+          font-weight: 600;
+          color: #0B1F35;
+        }
+        .confirm-body {
+          padding: 16px 20px;
+          color: #394B59;
+          font-size: 14px;
+          line-height: 1.5;
+        }
+        .confirm-actions {
+          display: flex;
+          gap: 12px;
+          justify-content: flex-end;
+          padding: 14px 20px 18px;
+          background: #ffffff;
+          border-top: 1px solid #EEF3F7;
+        }
+        .btn-cancel {
+          background: #ffffff;
+          border: 1px solid #D6DFE6;
+          color: #0B1F35;
+          padding: 8px 14px;
+          border-radius: 8px;
+          cursor: pointer;
+        }
+        .btn-cancel:hover {
+          background: #F7FAFC;
+        }
+        .btn-confirm {
+          background: #EB5757;
+          color: #ffffff;
+          border: none;
+          padding: 8px 14px;
+          border-radius: 8px;
+          cursor: pointer;
+        }
+        .btn-confirm:hover {
+          background: #D94C4C;
+        }
+        
+
+        @keyframes popIn {
+          0% { transform: scale(0.92); opacity: 0; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes popOut {
+          0% { transform: scale(1); opacity: 1; }
+          100% { transform: scale(0.96); opacity: 0; }
+        }
+        @keyframes fadeIn {
+          0% { opacity: 0; }
+          100% { opacity: 1; }
+        }
+        @keyframes fadeOut {
+          0% { opacity: 1; }
+          100% { opacity: 0; }
         }
         @media (min-width: 800px) {
           .custom-header-text {
@@ -337,7 +466,7 @@ export default function MyProperty() {
                             </a>
                           </li>
                           <li>
-                            <a className="remove-file item" onClick={() => { handleDeleteProperty(elm.id) }}>
+                            <a className="remove-file item" onClick={() => { openConfirm(elm.id) }}>
                               <svg
                                 width={16}
                                 height={16}
@@ -371,6 +500,22 @@ export default function MyProperty() {
           </div>
         </div>
       </div>
+      {showConfirm && (
+        <div className={`confirm-backdrop ${confirmExiting ? 'exit' : 'enter'}`}>
+          <div className="confirm-modal">
+            <div className="confirm-header">
+              <h4 className="confirm-title">Delete property?</h4>
+            </div>
+            <div className="confirm-body">
+              <p>This action cannot be undone. Are you sure you want to proceed?</p>
+            </div>
+            <div className="confirm-actions">
+              <button type="button" className="btn-cancel" onClick={closeConfirm}>Cancel</button>
+              <button type="button" className="btn-confirm" onClick={confirmDelete}>Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="footer-dashboard">
         <p>Copyright © 2024 Lands India</p>
       </div>

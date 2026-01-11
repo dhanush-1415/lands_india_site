@@ -132,6 +132,7 @@ const AddPropertyPage = () => {
           transform: scale(1.07);
           transition: transform 0.3s ease;
         }
+        
 
         @media (min-width: 800px) {
           .custom-mobile-class {

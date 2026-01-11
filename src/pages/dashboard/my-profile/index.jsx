@@ -152,7 +152,7 @@ const MyProfilePage = () => {
         )}
         <div className="overlay-dashboard" />
       </div>
-      <div className="d-flex vh-100 custom-desktop-class">
+      <div className="d-flex  custom-desktop-class">
         {/* Sidebar */}
         <div
           className={`bg-light text-dark sidebar ${isCollapsed ? "collapsed" : ""}`}
